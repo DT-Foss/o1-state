@@ -34,7 +34,7 @@ Formal statements, each over the *class* of systems it applies to, in
 | F3 | **Phase–magnitude separation** — in complex bound states, content (phase) is written and never evolves; persistence (magnitude) decays; the two never mix | zero-drive phase invariance \|Δφ\| ≈ 1e-8; knee moved 32→2176+ via the disclosed clamp+refresh pair, an interaction of both axes (§10) |
 | F4 | **The two-system law** — sharp gated readouts have a capacity cliff, so unbounded accumulation belongs to an external index the stream writes and consults | cliff slope 1.32 vs 0.57 (§8); hybrid recall at P=16: base 0.10–0.20 → 0.41–0.62 (§12); reminded reads ~1.0 (§12); the frozen file answers by key (§18) |
 | F5 | **Family-generic operating modes** — every mode above attaches to the affine-scan operator class (Mamba/S6, S5, LRU), not to one architecture | family reduction ~1e-15 (§1); POS-on-S6 at 0.98× of POS-on-GSSM, GSSM ahead 0.156 nats head-to-head (§13) |
-| F6 | **Train short, deploy unbounded** — no absolute position + exactness ⇒ tiny training horizons, unbounded deployment | ×0.98 PPL at 4096×; 1B tokens at flat 4.36 GB (§4); recall flat across 8 detached boundaries (§10) |
+| F6 | **Train short, deploy unbounded** — no absolute position + exactness ⇒ tiny training horizons, unbounded deployment | ×0.98 PPL at 4096×; 1B-token eval at flat 4.36 GB and a 7.4B+-token training LIFE at 0.69–0.83 GB (§4, §19); recall flat across 8 detached boundaries (§10) |
 | F7 | **The portable organism** — the living system is a ~53 MB serializable asset; organs couple through kilobytes (spans, reminders, deltas), not activations: migratable, forkable, shardable, seedable, offline-capable | live ARM→x86 mid-stream migration behaviorally identical to six decimals (§15); stranger verification across ISAs, 19/20 bit-exact with the one divergence pinned to a ULP (§16); a 7.4B-token life forked and measured (§19); fork cost measured (twin, §9) |
 
 ---
@@ -1002,7 +1002,9 @@ scan is gradient-identical to the loop in fp64 and 4–7× faster on MPS, a key-
 holographic write gives a bounded scalar state content-addressable recall at 5.7× its floor, and
 — the structural headline — the position-free variant holds **flat perplexity across 524,288×
 length extrapolation** (train T=32, eval to a single 16.7-million-token sequence at constant
-2.5 GB, perplexity *improving* the whole way) and **streams a billion tokens at a flat 4.36 GB**.
+2.5 GB, perplexity *improving* the whole way), **streams a billion eval tokens at a flat
+4.36 GB — and has LIVED past 7.4 billion training tokens in one continuous process at
+0.69–0.83 GB**.
 Out of the box, with no years-long tuning, the operator already **matches** years-tuned SOTA
 perplexity at the WikiText-2 data ceiling (135 PPL) — and on its own axes it does not compete, it
 stands alone: flat perplexity to 524,288× length and a billion-token stream at constant memory,
