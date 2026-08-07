@@ -299,14 +299,16 @@ result is *eval*. The same persistent state also makes *training* O(1), and lets
 across a pause in the input — two things a turn-based, KV-cache model structurally cannot do.
 
 **The 7-billion-token life (running).** A 1,713,673-parameter organism has now *learned online*
-through **7.05 billion streamed tokens** in one continuous life — no dataset stored, no epochs, no
-growing context — at a process memory that never left the band **0.69–0.83 GB**. The stretch from
-0.87B to 7.05B ran in a *single OS process* for ~12 days without any intervention; the one stall in
-the life (an upstream HF-stream hang) was self-healed from the run's own atomic checkpoint, resuming
-51,200 tokens back with ~3 minutes of stream lost. The cost of having lived 70,000 books is zero
-memory. (Stated plainly: at 1.7M parameters the loss EMA is at its capacity floor, 4.25 → 4.17 over
-the logged stretch — this artifact measures the *constancy of resources over experience*, not
-continued learning.)
+through **more than 7.4 billion streamed tokens** in one continuous life — no dataset stored, no
+epochs, no growing context — at a process memory that never left the band **0.69–0.83 GB**. The
+stretch from 0.87B past 7B ran in a *single OS process* for ~12 days without any intervention; the
+one stall in the life (an upstream HF-stream hang) was self-healed from the run's own atomic
+checkpoint, resuming 51,200 tokens back with ~3 minutes of stream lost. The cost of having lived
+70,000 books is zero memory. (Stated plainly: at 1.7M parameters the loss EMA is at its capacity
+floor, 4.25 → 4.17 over the logged stretch — this artifact measures the *constancy of resources
+over experience*, not continued learning.) The life is now also an experimental substrate: its
+checkpoint was forked read-only at 7,442,664,960 tokens and measured against a fresh twin — the
+age axis, §19.
 
 ![The 7-billion-token life: constant memory across the whole of experience](plots/lifetime_7b.png)
 
@@ -473,7 +475,7 @@ in the data alone.
 The contributions above are the substrate. The results below make it an *organism*: one
 process that decides from its own surprise when to learn, what to remember, and when to
 sleep — measured under a pre-registered, auto-scored ledger
-([analysis/PREDICTIONS.md](analysis/PREDICTIONS.md), scored by `src/score_predictions.py`;
+([analysis/PREDICTIONS.md](analysis/PREDICTIONS.md), scored by `src/score_predictions_v2.py`;
 predictions committed before the data, falsifications kept in the record).
 
 ### 9 — Plasticity on surprise (POS): ~25% of the gradients, ~100% of the learning
@@ -973,7 +975,13 @@ o1-state/
 │   ├── pos_sleep*.py, pos_dream.py                               sleep + dreams (§11)
 │   ├── holo_index_hybrid.py, holo_reminded.py, holo_heldout_keys.py   two-system closed loop (§12)
 │   ├── pos_family_transfer.py                                    family transfer (§13)
-│   └── score_predictions.py                                      the auto-falsifier
+│   ├── hot_swap_growth.py, state_weight_swap.py, beacon_swap.py  deployment primitives (§14)
+│   ├── portable_organism.py, pos_shared_index.py, replay_law_run.py   portability + replication (§15)
+│   ├── pixel_body_run.py, vizdoom_run.py, stranger_verify_run.py embodiment + review (§16)
+│   ├── chimera.py                                                the composed organism (§17)
+│   ├── knowledge_file_run.py, keyed_file_run.py, surprise_filter_run.py, filter_file_run.py   the knowledge file (§18)
+│   ├── aged_brain_run.py, age_ladder_run.py                      the age axis (§19)
+│   └── score_predictions_v2.py                                   the auto-falsifier
 ├── vendor/fabel/            the .causal deterministic knowledge engine (the index)
 ├── analysis/                theory, pre-registered predictions, research logs
 ├── results/                 measured JSON + logs — the evidence
