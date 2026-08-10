@@ -38,6 +38,31 @@ from core.confidence import (
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from core.knowledge import KnowledgeStore
+
+# ----------------------------------------------------------------------
+# LiveCausalAdapter switch (revival-probe Phase 2, experimental).
+# OFF by default -- self.knowledge stays the original in-memory
+# KnowledgeStore unless explicitly requested, so no existing behavior
+# changes for a caller that does nothing differently. Opt in via either
+# the FOSSKI_LIVECAUSAL_STORE env var (a store_dir path -- the simplest
+# switch for a shell/demo-script caller) or FossKIRepl(..., live_causal_store=...)
+# (a constructor kwarg -- for a caller building the REPL programmatically,
+# e.g. this file's own demo scripts). The adapter package lives OUTSIDE
+# this repo (~/livecausal_bridge, ~/fosski-venv/adapter) -- it is never
+# imported unless one of these two switches is actually used, so a
+# machine without that experimental code present is unaffected.
+# ----------------------------------------------------------------------
+def _maybe_load_live_causal_adapter(store_dir):
+    if not store_dir:
+        return None
+    adapter_dir = os.path.expanduser("~/fosski-venv/adapter")
+    if adapter_dir not in sys.path:
+        sys.path.insert(0, adapter_dir)
+    home_dir = os.path.expanduser("~")
+    if home_dir not in sys.path:
+        sys.path.insert(0, home_dir)
+    from live_causal_adapter import LiveCausalAdapter  # noqa: E402
+    return LiveCausalAdapter(store_dir)
 from core.foss_lm import FossLanguageModel
 from core.router import VortexRouter
 from core.chain import ChainOfThought
@@ -74,9 +99,18 @@ from core.ricci_attention import RicciAttention
 class FossKIRepl:
     """Interactive REPL for FOSS-KI."""
 
-    def __init__(self, knowledge_dim=128, lm_order=5):
+    def __init__(self, knowledge_dim=128, lm_order=5, live_causal_store=None):
         # Core components
-        self.knowledge = KnowledgeStore(dim=knowledge_dim)
+        # LiveCausalAdapter switch: live_causal_store kwarg takes priority
+        # over the FOSSKI_LIVECAUSAL_STORE env var; both default to unset,
+        # which means self.knowledge is the original KnowledgeStore --
+        # byte-identical to every FossKIRepl() call before this switch
+        # existed. See _maybe_load_live_causal_adapter's module-level
+        # docstring above for the full rationale.
+        store_dir = live_causal_store or os.environ.get('FOSSKI_LIVECAUSAL_STORE')
+        live_causal_knowledge = _maybe_load_live_causal_adapter(store_dir)
+        self.knowledge = live_causal_knowledge or KnowledgeStore(dim=knowledge_dim)
+        self.using_live_causal = live_causal_knowledge is not None
         self.lm = None  # Lazy-loaded
         self.router = VortexRouter(
             knowledge_store=self.knowledge,
@@ -110,15 +144,32 @@ class FossKIRepl:
                                         knowledge=self.knowledge)
         self.formulas = FormulaEngine()
 
-        # Load brain if it exists, otherwise fall back to bootstrap
-        brain_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                  'data', 'foss-ki.brain')
-        if os.path.exists(brain_path):
-            self.load_brain(brain_path)
-        else:
-            # Fallback: bootstrap from knowledge_full.json
+        # Load brain if it exists, otherwise fall back to bootstrap.
+        # SKIPPED entirely when using_live_causal: load_brain() and
+        # _load_knowledge_base() both REASSIGN self.knowledge wholesale
+        # (load_brain: `self.knowledge = parts['knowledge']`;
+        # _load_knowledge_base: `self.knowledge.store_facts(facts)` against
+        # whatever self.knowledge currently is) -- either would silently
+        # discard the LiveCausalAdapter this constructor just installed,
+        # or attempt to write into it via store_facts(), which the
+        # adapter's narrow MVP contract does not implement (see
+        # live_causal_adapter.py's module docstring: query/find_by_entity
+        # only). The adapter is meant to REPLACE this loading path, not
+        # layer under it -- self.commonsense (ConceptNet/common-sense
+        # facts) still loads normally either way, only the
+        # KnowledgeStore-shaped self.knowledge swap is skipped.
+        if self.using_live_causal:
+            print(f"LiveCausalAdapter active: store_dir={store_dir}")
             load_bootstrap_to_engine(self.commonsense)
-            self._load_knowledge_base()
+        else:
+            brain_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      'data', 'foss-ki.brain')
+            if os.path.exists(brain_path):
+                self.load_brain(brain_path)
+            else:
+                # Fallback: bootstrap from knowledge_full.json
+                load_bootstrap_to_engine(self.commonsense)
+                self._load_knowledge_base()
 
         # Auto-load language models
         base = os.path.dirname(os.path.abspath(__file__))
