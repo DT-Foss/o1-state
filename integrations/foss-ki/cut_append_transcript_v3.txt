@@ -1,0 +1,115 @@
+========================================================================
+LIVE-CAUSAL cut/append demo v3 (Phase 4, multi-source forgetting)
+Two independent sources both assert the France<->Paris relationship
+========================================================================
+
+Total segments in merged store (knowledge_full.json + ConceptNet slice): 323
+
+find_segments_citing('france', 'paris') [forward, knowledge_full.json]: 2 segments
+find_segments_citing('paris', 'france') [reverse, ConceptNet AtLocation]: 10 segments
+Union (the complete evidence set for this relationship): 11 segments
+
+========================================================================
+Booting ONE FossKIRepl(live_causal_store=..., knowledge_only=True)
+========================================================================
+using_live_causal = True
+knowledge_only    = True
+
+========================================================================
+STEP (i): baseline, all segments present
+========================================================================
+
+--- [i: baseline] Q: what is the capital of France? ---
+A: Paris
+
+[Trace]
+    Intent: question_factual (0.87)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+
+--- [i: control] Q: who wrote Hamlet? ---
+A: Shakespeare
+
+[Trace]
+    Intent: question_factual (0.70)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+
+========================================================================
+STEP (ii-partial): cut ONLY the forward (knowledge_full.json)
+  citations -- checking the adapter directly (not the full repl,
+  which still has other fast-path solvers that could mask this)
+========================================================================
+Direct query('France', 'capital') after PARTIAL cut: {'fact': None, 'confidence': 0.0, 'confidence_level': 'REJECTED', 'attractor_distance': 0.0, 'input_similarity': 0.0, 'top2_gap': 0.0, 'steps': 0, 'thresholds': (0.7, 0.4)}
+Direct query('paris') after PARTIAL cut (reverse ConceptNet citation untouched): {'fact': ('Paris', 'location', 'France'), 'confidence': 0.7, 'confidence_level': 'HIGH', 'attractor_distance': 0.0, 'input_similarity': 0.7, 'top2_gap': 1.0, 'steps': 0, 'thresholds': (0.7, 0.4), 'evidence_count': 2, 'edge_kind': 'base'}
+
+========================================================================
+STEP (ii-full): ALSO cut the reverse (ConceptNet AtLocation)
+  citations -- now the FULL repl.process() answer must forget.
+========================================================================
+Segments remaining in store: 312
+
+--- [ii-full: after BOTH directions cut] Q: what is the capital of France? ---
+A: I don't have information about that topic.
+
+[Trace]
+    Intent: question_factual (0.87)
+    Winner: ConfidenceScore(instructor, cal=0.50, raw=0.50, method='instructor_route')
+  Parsed 1 actions
+    Executing: Action(knowledge:query)
+    → I don't have information about that topic. [REJECTED]
+    Instructor: ConfidenceScore(instructor, cal=0.50, raw=0.50, method='instructor_route')
+
+--- [ii-full: control] Q: who wrote Hamlet? ---
+A: Shakespeare
+
+[Trace]
+    Intent: question_factual (0.70)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+
+========================================================================
+STEP (iii): re-append all segments from both sources
+========================================================================
+Re-appended 11 segments
+All shas content-addressed identical to originals: True
+
+--- [iii: after re-append] Q: what is the capital of France? ---
+A: Paris
+
+[Trace]
+    Intent: question_factual (0.87)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+
+--- [iii: control] Q: who wrote Hamlet? ---
+A: Shakespeare
+
+[Trace]
+    Intent: question_factual (0.70)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+
+========================================================================
+VERDICT
+========================================================================
+  [PASS] (i) baseline answers Paris
+  [PASS] (ii-partial) cutting ONLY the forward direction is NOT enough -- the reverse ConceptNet citation is still queryable (honest negative result, not a failure of the tool)
+  [PASS] (ii-partial) forward direction itself IS rejected after its own cut
+  [PASS] (ii-full) FULL repl answer after cutting BOTH directions is honest IDK
+  [PASS] (ii-full) FULL repl answer does NOT contain Paris
+  [PASS] (ii-full) control question unaffected
+  [PASS] (iii) FULL repl answer after full re-append contains Paris again
+  [PASS] (iii) re-appended shas == original shas (content-addressed)
+  [PASS] control question identical across all 3 main steps
+
+OVERALL: PASS
+
+The story: forgetting means cutting ALL evidence segments for a
+relationship, not just the ones from the source you happen to be
+thinking about. find_segments_citing(subject, obj) lets a caller
+find every segment citing a given directed edge; a caller building
+a real 'forget this relationship' feature must query BOTH
+(subject, obj) and (obj, subject) and union the results, because
+different converted sources can and do encode the same real-world
+relationship in different directions with different mechanism labels.
