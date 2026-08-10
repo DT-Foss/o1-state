@@ -302,6 +302,33 @@ class LiveGraph:
     def base_edge_citations(self, from_key, to_key):
         return [list(p) for p in self._base_edges.get(from_key, {}).get(to_key, [])]
 
+    def edge_keys_for_derivation(self, derivation):
+        """The one hook the evidence calculus needs from infer.py
+        (analysis/EVIDENCE_CALCULUS_DRAFT.md SS2.3): for an inferred
+        edge's derivation ([[sha, idx], ...], root-to-leaf hop order),
+        return the list of (from_key, to_key) base edge_keys, one per
+        hop, in the same order. Reads each cited record fresh via the
+        store (not the inferred-edge cache) -- the same re-derivation
+        discipline on_append/query already use, so this stays "re-
+        derivable by a stranger from the cited base edges alone." infer.py
+        does not know what "contested" means; a caller (src/livecausal/
+        evidence.py's contested_for_derivation) combines this list with
+        its own per-edge contested lookup. This is the ONLY evidence-
+        calculus-shaped addition to this file -- everything else about
+        evidence/use/dominance lives in evidence.py.
+        """
+        keys = []
+        for sha, idx in derivation:
+            record = None
+            for seg_sha, rec_idx, rec in self.store.iter_records(sha):
+                if rec_idx == idx:
+                    record = rec
+                    break
+            if record is None:
+                raise ValueError("derivation cites unknown record ({}, {})".format(sha, idx))
+            keys.append((record["trigger_key"], record["outcome_key"]))
+        return keys
+
     # ------------------------------------------------------------------
     # Append: semi-naive delta closure
     # ------------------------------------------------------------------
