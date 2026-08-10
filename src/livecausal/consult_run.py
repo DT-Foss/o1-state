@@ -47,6 +47,24 @@ best_edge_for_key's docstring). The random-arm control stays on raw
 edges regardless of --canon (run_consult's docstring explains why). Off
 by default: byte-identical to every pre-P75 invocation.
   python3 src/livecausal/consult_run.py --store results/p72_store_run1 --source wt103 --canon
+
+P77 addition (the injection-mechanism study): P75 scored canonicalization
+itself as sound (keys join correctly) but the READ-side b2 falsifier still
+fired -- real does not beat random. P77 asks whether the INJECTION
+MECHANISM itself (which text, how much of it, how long the reader scores
+after it) is the confound, independent of which edge got selected.
+--inject-form picks WHAT text gets pushed through the model for both
+arms (real AND random -- see build_injection_text's docstring for why
+both arms always get the same form treatment); --inject-repeat pushes
+that text N times in a row (a dosed-replay analog to P55); --grid runs a
+full (form x repeat x lookahead) sweep in one process, one result cell
+per combination, alongside --lookahead-sweep (a list; --lookahead alone
+still works for a single-cell run). All three are no-ops at their
+defaults (outcome_text / repeat=1 / the single --lookahead value) --
+byte-identical to every pre-P77 invocation when omitted.
+  python3 src/livecausal/consult_run.py --store results/p72_store_run1 --source wt103 --canon \
+      --grid --inject-form outcome_text full_record_text chain_text \
+      --inject-repeat 1 3 --lookahead-sweep 6 12 24
 """
 import argparse
 import json
@@ -196,10 +214,20 @@ def best_edge_for_key(graph, evidence_ledger, valid_segments, key, canon=False):
     return None, None
 
 
-def random_edge_for_key(graph, valid_segments, exclude_key, rng):
+def random_edge_for_key(graph, valid_segments, exclude_key, rng, return_edge=False):
     """A random OTHER base edge in the graph (not `exclude_key`'s own
     edges), for the random-injection control arm. Returns (edge_key_tuple,
-    outcome_text) or (None, None) if the graph has no other edges at all."""
+    outcome_text) or (None, None) if the graph has no other edges at all --
+    UNCHANGED pre-P77 contract when return_edge is left at its default.
+
+    return_edge=True (P77 addition, for build_injection_text callers that
+    need the full edge-dict shape, not just the pre-selected outcome
+    text): returns (edge_dict, outcome_text) instead, where edge_dict is
+    {"from_key", "to_key", "derivation": [[sha, idx]]} -- a base edge
+    always has exactly one hop, so this is the same single citation
+    build_injection_text's chain_text/full_record_text branches would
+    otherwise re-derive from edge_key_tuple alone; passing it directly
+    avoids a second, redundant citation lookup."""
     candidates = []
     for from_key, targets in graph._base_edges.items():
         if from_key == exclude_key:
@@ -212,7 +240,74 @@ def random_edge_for_key(graph, valid_segments, exclude_key, rng):
     record = _record_for_citation(graph, sha, idx)
     if record is None or not record.get("outcome"):
         return None, None
+    if return_edge:
+        edge_dict = {"from_key": from_key, "to_key": to_key, "derivation": [[sha, idx]]}
+        return edge_dict, record["outcome"]
     return (from_key, to_key), record["outcome"]
+
+
+INJECT_FORMS = ("outcome_text", "full_record_text", "chain_text")
+
+
+def _record_text_for_form(record, form):
+    """The text a single cited record contributes, per --inject-form:
+    outcome_text: record["outcome"] alone (pre-P77 behavior, unchanged).
+    full_record_text: "trigger mechanism outcome" -- the whole asserted
+    sentence, not just the outcome half, on the theory that the model may
+    need the trigger context to actually USE the outcome prose for state
+    building (see the P77 build brief's "mehr Kontext" rationale).
+    chain_text uses this same per-record text per hop -- see
+    build_injection_text below for how hops are joined."""
+    if form == "full_record_text":
+        return " ".join(
+            part for part in (record.get("trigger"), record.get("mechanism"), record.get("outcome")) if part
+        )
+    return record.get("outcome") or ""
+
+
+def build_injection_text(graph, edge, form="outcome_text"):
+    """The text to inject for `edge`, per --inject-form. Applied IDENTICALLY
+    to the real arm and the random-arm control (the caller passes whatever
+    edge it has -- a graph-selected edge for the real arm, a
+    random_edge_for_key result reshaped into the same edge-dict shape for
+    the random arm) so a real-vs-random comparison never conflates "which
+    edge" with "which form" -- see run_consult's docstring for why the
+    random arm's EDGE SELECTION stays on raw adjacency regardless of
+    --canon; --inject-form is an orthogonal axis on top of that, applied
+    the same way to both arms.
+
+    outcome_text (default): edge["derivation"][-1]'s cited record's
+    outcome text alone -- byte-identical to every pre-P77 call.
+    full_record_text: the same single citing record's full trigger+
+    mechanism+outcome sentence.
+    chain_text: for a multi-hop inferred edge, EVERY hop's citing record's
+    outcome text, concatenated root-to-leaf in derivation order (a base
+    edge's derivation has exactly one hop, so chain_text degenerates to
+    outcome_text for base edges -- there is nothing to chain).
+
+    Returns "" if no citing record's text could be recovered (caller
+    treats this the same as best_edge_for_key returning None: no
+    injection possible for this edge)."""
+    derivation = edge.get("derivation") or []
+    if not derivation:
+        return ""
+
+    if form == "chain_text":
+        parts = []
+        for sha, idx in derivation:
+            record = _record_for_citation(graph, sha, idx)
+            if record is None:
+                continue
+            text = _record_text_for_form(record, "outcome_text")
+            if text:
+                parts.append(text)
+        return " ".join(parts)
+
+    sha, idx = derivation[-1]
+    record = _record_for_citation(graph, sha, idx)
+    if record is None:
+        return ""
+    return _record_text_for_form(record, form)
 
 
 def calibrate_surprise_threshold(words, stoi, unk, model, dev, torch_mod, quantile=0.9, n_calib_words=500):
@@ -252,6 +347,8 @@ def run_consult(
     max_gaps=40,
     seed=60,
     canon=False,
+    inject_form="outcome_text",
+    inject_repeat=1,
 ):
     """The loop itself, factored out of main() so tests can drive it
     directly. Returns the result dict (also the JSON payload's shape).
@@ -268,7 +365,22 @@ def run_consult(
     denser than raw adjacency, not whether path SELECTION quality survives
     canonicalization). `graph` must be LiveGraph(..., canon=True) when
     canon=True is passed here (RuntimeError otherwise, from query() itself,
-    not caught -- see best_edge_for_key's docstring)."""
+    not caught -- see best_edge_for_key's docstring).
+
+    inject_form="outcome_text" (default): EXACT pre-P77 behavior -- uses
+    best_edge_for_key's own pre-fetched outcome_text directly, no extra
+    store lookup, byte-identical token stream to every call written before
+    this parameter existed. Any other form (see build_injection_text)
+    re-derives the injection text from the edge's derivation instead, and
+    is applied to BOTH arms identically -- the random arm's edge (from
+    random_edge_for_key(..., return_edge=True)) gets the SAME form
+    treatment as the real arm's edge, so a real-vs-random comparison never
+    conflates "which edge" with "which text form" (P77 build brief).
+
+    inject_repeat=1 (default): the injection text's tokens are pushed
+    through the model once, same as every pre-P77 call. N>1 pushes the
+    SAME token sequence through N times in a row before scoring resumes
+    (a dosed-replay analog to P55) -- applied identically to both arms."""
     rng = random.Random(seed)
     ids = [stoi.get(w, unk) for w in words]
     valid_segments = graph.store.segments()
@@ -304,14 +416,31 @@ def run_consult(
 
         s_without, _ = _read(model, [ids[i]] + cont, _clone_state(pre_state), dev, torch_mod)
 
-        real_path_ids = [stoi.get(t, unk) for t in _WORD_RE.findall(outcome_text.lower())]
+        # inject_form="outcome_text": reuse best_edge_for_key's own
+        # pre-fetched outcome_text directly -- no extra store lookup, the
+        # exact pre-P77 token stream. Any other form re-derives the text
+        # from edge["derivation"] via build_injection_text.
+        real_text = outcome_text if inject_form == "outcome_text" else build_injection_text(graph, edge, inject_form)
+        real_path_ids = [stoi.get(t, unk) for t in _WORD_RE.findall(real_text.lower())] if real_text else []
+        real_path_ids = real_path_ids * max(1, inject_repeat)
         st_after_real = _advance(model, real_path_ids, _clone_state(pre_state), dev, torch_mod)
         s_with_real, _ = _read(model, [ids[i]] + cont, st_after_real, dev, torch_mod)
 
-        rand_key, rand_text = random_edge_for_key(graph, valid_segments, w, rng)
+        # Random-arm control: SAME form treatment as the real arm (see
+        # run_consult's docstring) -- edge SELECTION stays on raw
+        # adjacency regardless of --canon (a single rng.choice draw,
+        # identical to every pre-P77 call -- return_edge only changes
+        # the SHAPE of what's returned, not which candidate is drawn or
+        # how many random calls consume the rng stream), but the chosen
+        # edge's text is built via the identical build_injection_text
+        # path so a real-vs-random comparison never conflates "which
+        # edge" with "which text form."
+        rand_edge, rand_text = random_edge_for_key(graph, valid_segments, w, rng, return_edge=True)
         s_with_random = None
         if rand_text is not None:
-            rand_path_ids = [stoi.get(t, unk) for t in _WORD_RE.findall(rand_text.lower())]
+            rand_inject_text = rand_text if inject_form == "outcome_text" else build_injection_text(graph, rand_edge, inject_form)
+            rand_path_ids = [stoi.get(t, unk) for t in _WORD_RE.findall(rand_inject_text.lower())] if rand_inject_text else []
+            rand_path_ids = rand_path_ids * max(1, inject_repeat)
             st_after_rand = _advance(model, rand_path_ids, _clone_state(pre_state), dev, torch_mod)
             s_with_random, _ = _read(model, [ids[i]] + cont, st_after_rand, dev, torch_mod)
 
@@ -529,6 +658,26 @@ def main():
                          "The random-arm control is deliberately left on raw edges "
                          "regardless of this flag (see run_consult's docstring). Default "
                          "off: byte-identical to every pre-P75 invocation.")
+    ap.add_argument("--inject-form", nargs="+", default=["outcome_text"], choices=list(INJECT_FORMS),
+                    help="P77: which text gets injected for BOTH arms (real and random) -- see "
+                         "build_injection_text's docstring. Single value for a normal run; "
+                         "multiple values only meaningful together with --grid (one axis of the "
+                         "sweep). Default outcome_text alone: byte-identical to every pre-P77 run.")
+    ap.add_argument("--inject-repeat", type=int, nargs="+", default=[1],
+                    help="P77: inject the chosen text N times in a row (dosed-replay analog to "
+                         "P55). Single value for a normal run; multiple values only meaningful "
+                         "together with --grid. Default 1: byte-identical to every pre-P77 run.")
+    ap.add_argument("--lookahead-sweep", type=int, nargs="+", default=None,
+                    help="P77: list of lookahead values for --grid's third axis. If omitted, "
+                         "--grid uses [--lookahead] as its single lookahead cell (still a grid "
+                         "over form x repeat only). Non-grid runs ignore this and use --lookahead.")
+    ap.add_argument("--grid", action="store_true",
+                    help="P77: run every (--inject-form x --inject-repeat x --lookahead-sweep) "
+                         "combination in this one process (one model warmup, one surprise-thresh "
+                         "calibration, reused across all cells -- only the consult phase itself "
+                         "reruns per cell, from the SAME post-warmup model state each time, so "
+                         "cells are comparable to each other). Writes one JSON with a top-level "
+                         "'grid' list of per-cell results instead of a single result dict.")
     args = ap.parse_args()
 
     smoke_dir = None
@@ -564,7 +713,16 @@ def main():
 
     graph = LiveGraph(args.store, canon=args.canon)
     evidence_ledger = EvidenceLedger(args.store)
-    use_ledger = UseLedger(args.store)
+    # UseLedger's own constructor writes a header file if none exists yet
+    # (_ensure_header) -- for --grid this must NEVER touch args.store (see
+    # the grid block below, which builds one isolated UseLedger per cell
+    # instead): constructing it here unconditionally was the exact P77
+    # regression of the use.ledger incident this session's server-access
+    # rule was written after (caught by this build's own manual grid
+    # smoke test against a real store directory, not by the automated
+    # suite -- see test_grid_never_touches_store_use_ledger below for the
+    # regression test this bug earned).
+    use_ledger = None if args.grid else UseLedger(args.store)
 
     if args.text_file:
         words = load_text_file_words(args.text_file)
@@ -632,14 +790,113 @@ def main():
             surprise_thresh, args.surprise_quantile), flush=True)
 
     print("[consult] store={} words={} gaps<={}".format(args.store, len(consult_words), args.max_gaps), flush=True)
-    t0 = time.time()
-    result = run_consult(
-        graph, evidence_ledger, use_ledger, consult_words, stoi, unk, model, dev, torch,
+
+    base_kwargs = dict(
         surprise_thresh=surprise_thresh,
-        lookahead=args.lookahead,
         max_gaps=args.max_gaps,
         seed=args.seed,
         canon=args.canon,
+    )
+
+    if args.grid:
+        # P77 grid: every (form x repeat x lookahead) cell runs from the
+        # SAME post-warmup model state (states=None fresh inside
+        # run_consult each call -- no cross-cell state leakage), so cells
+        # are comparable to each other. Each cell gets its OWN isolated
+        # UseLedger directory (a fresh tempdir, never args.store) --
+        # running N cells against the real store's use.ledger in one
+        # process would inflate it with N runs' worth of entries under
+        # one seed's gap sequence, which is not what a single-cell run's
+        # use.ledger semantics promise. --grid therefore NEVER grows
+        # args.store's own use.ledger, unlike a plain (non-grid) run.
+        import itertools
+        import shutil as _shutil
+        import tempfile
+
+        lookaheads = args.lookahead_sweep if args.lookahead_sweep else [args.lookahead]
+        cells = []
+        t0 = time.time()
+        for form, repeat, la in itertools.product(args.inject_form, args.inject_repeat, lookaheads):
+            cell_dir = tempfile.mkdtemp(prefix="livecausal_grid_cell_")
+            try:
+                cell_use_ledger = UseLedger(cell_dir)
+                cell_result = run_consult(
+                    graph, evidence_ledger, cell_use_ledger, consult_words, stoi, unk, model, dev, torch,
+                    lookahead=la, inject_form=form, inject_repeat=repeat, **base_kwargs,
+                )
+            finally:
+                _shutil.rmtree(cell_dir, ignore_errors=True)
+            cells.append({
+                "inject_form": form,
+                "inject_repeat": repeat,
+                "lookahead": la,
+                "n_spikes": cell_result["n_spikes"],
+                "n_consults": cell_result["n_consults"],
+                "coverage": cell_result["coverage"],
+                "mean_delta_real": cell_result["mean_delta_real"],
+                "mean_delta_random": cell_result["mean_delta_random"],
+                "n_helped_real": cell_result["n_helped_real"],
+            })
+            print("[grid] form={:<17} repeat={} lookahead={:<3} -> real={:+.4f} random={}".format(
+                form, repeat, la, cell_result["mean_delta_real"],
+                "{:+.4f}".format(cell_result["mean_delta_random"]) if cell_result["mean_delta_random"] is not None else "n/a",
+            ), flush=True)
+        elapsed = time.time() - t0
+
+        best_cell = max(
+            (c for c in cells if c["mean_delta_random"] is not None),
+            key=lambda c: c["mean_delta_real"] - c["mean_delta_random"],
+            default=None,
+        )
+
+        payload = {
+            "store": args.store,
+            "text_file": args.text_file,
+            "source": args.source,
+            "surprise_thresh": round(surprise_thresh, 4),
+            "surprise_thresh_was_calibrated": args.surprise_thresh is None,
+            "max_gaps": args.max_gaps,
+            "seed": args.seed,
+            "warmup_chunks": args.warmup_chunks,
+            "n_warmup_words": len(warmup_words) if args.warmup_chunks > 0 else 0,
+            "n_consult_words": len(consult_words),
+            "n_warmup_grad_steps": organism.n_bwd if args.warmup_chunks > 0 else 0,
+            "elapsed_seconds": round(elapsed, 2),
+            "canon": args.canon,
+            "canon_env_pin": graph.canon_env_pin if args.canon else None,
+            "grid": cells,
+            "best_cell_by_real_minus_random": best_cell,
+        }
+        os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
+        with open(args.out, "w", encoding="utf-8") as f:
+            json.dump(payload, f, indent=2)
+
+        print("=" * 74)
+        print("P77 GRID: {} cells, real vs random by (form x repeat x lookahead)".format(len(cells)))
+        for c in cells:
+            gap = c["mean_delta_real"] - c["mean_delta_random"] if c["mean_delta_random"] is not None else None
+            print("  form={:<17} repeat={} lookahead={:<3} real={:+.4f} random={} gap={}".format(
+                c["inject_form"], c["inject_repeat"], c["lookahead"], c["mean_delta_real"],
+                "{:+.4f}".format(c["mean_delta_random"]) if c["mean_delta_random"] is not None else "n/a",
+                "{:+.4f}".format(gap) if gap is not None else "n/a",
+            ))
+        if best_cell:
+            print("best cell (real - random): form={} repeat={} lookahead={}".format(
+                best_cell["inject_form"], best_cell["inject_repeat"], best_cell["lookahead"]))
+        print("wrote {}".format(args.out))
+
+        if smoke_dir:
+            import shutil
+            shutil.rmtree(smoke_dir, ignore_errors=True)
+        return
+
+    t0 = time.time()
+    result = run_consult(
+        graph, evidence_ledger, use_ledger, consult_words, stoi, unk, model, dev, torch,
+        lookahead=args.lookahead,
+        inject_form=args.inject_form[0],
+        inject_repeat=args.inject_repeat[0],
+        **base_kwargs,
     )
     elapsed = time.time() - t0
 
@@ -665,6 +922,8 @@ def main():
         # omitted) when --canon is off, so a reader can tell "canon was
         # off" apart from "canon was on but env_pin failed to record."
         "canon_env_pin": graph.canon_env_pin if args.canon else None,
+        "inject_form": args.inject_form[0],
+        "inject_repeat": args.inject_repeat[0],
         **result,
     }
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)

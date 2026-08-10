@@ -25,6 +25,7 @@ from livecausal.store import LiveStore  # noqa: E402
 from livecausal.evidence import EvidenceLedger, UseLedger  # noqa: E402
 from livecausal.consult_run import (  # noqa: E402
     best_edge_for_key,
+    build_injection_text,
     calibrate_surprise_threshold,
     generate_smoke_store,
     generate_vocab_aware_smoke_corpus,
@@ -380,6 +381,172 @@ def test_consult_canon_false_is_regression_identical(d):
     assert result_default["coverage"] == result_explicit["coverage"]
 
 
+# ---------------------------------------------------------------------
+# P77: build_injection_text's three forms select the right text, and
+# chain_text actually differs from outcome_text when a multi-hop
+# derivation is present (otherwise the "form" axis would be vacuous for
+# inferred edges, the exact case the P77 build brief calls out).
+# ---------------------------------------------------------------------
+
+def test_build_injection_text_forms(d):
+    store_dir = os.path.join(d, "store")
+    store = LiveStore(store_dir)
+    store.append_segment([_make_record("a spark", "a fire", 0)])
+    store.append_segment([_make_record("a fire", "a evacuation", 1)])
+
+    graph = LiveGraph(store_dir, canon=False)
+    base_edges = graph.query("a spark")
+    base_edge = next(e for e in base_edges if e["kind"] == "base")
+    assert build_injection_text(graph, base_edge, "outcome_text") == "a fire"
+    assert build_injection_text(graph, base_edge, "full_record_text") == "a spark causes a fire"
+    # base edge has exactly one hop -- chain_text degenerates to outcome_text.
+    assert build_injection_text(graph, base_edge, "chain_text") == "a fire"
+
+    inferred_edges = [e for e in base_edges if e["kind"] == "inferred"]
+    assert inferred_edges, "expected a spark -> a fire -> a evacuation inferred edge"
+    inferred = inferred_edges[0]
+    assert build_injection_text(graph, inferred, "outcome_text") == "a evacuation", (
+        "outcome_text must be the LAST hop's outcome only"
+    )
+    chain = build_injection_text(graph, inferred, "chain_text")
+    assert chain == "a fire a evacuation", (
+        "chain_text must concatenate EVERY hop's outcome text, root-to-leaf: got {!r}".format(chain)
+    )
+    assert chain != build_injection_text(graph, inferred, "outcome_text"), (
+        "chain_text must differ from outcome_text for a real multi-hop edge -- "
+        "otherwise the form axis is vacuous for inferred edges"
+    )
+    full = build_injection_text(graph, inferred, "full_record_text")
+    assert full == "a fire causes a evacuation", (
+        "full_record_text on a multi-hop edge uses the LAST hop's full sentence, same hop outcome_text uses"
+    )
+    print("test_build_injection_text_forms: OK (base={!r}, inferred outcome={!r}, chain={!r}, full={!r})".format(
+        build_injection_text(graph, base_edge, "outcome_text"),
+        build_injection_text(graph, inferred, "outcome_text"), chain, full,
+    ))
+
+
+def test_build_injection_text_empty_derivation_returns_empty(d):
+    graph, chains, store_dir, corpus_path = _build_smoke_graph(d)
+    fake_edge = {"from_key": "x", "to_key": "y", "derivation": []}
+    for form in ("outcome_text", "full_record_text", "chain_text"):
+        assert build_injection_text(graph, fake_edge, form) == "", (
+            "an edge with no derivation must yield '' regardless of form ({})".format(form)
+        )
+    print("test_build_injection_text_empty_derivation_returns_empty: OK")
+
+
+# ---------------------------------------------------------------------
+# P77: random_edge_for_key(..., return_edge=True) draws the SAME
+# candidate as the pre-P77 call shape (same rng stream, same choice) --
+# only the RETURN SHAPE changes, so run_consult's random arm sees exactly
+# the edge the control arm has always seen, just wrapped for
+# build_injection_text.
+# ---------------------------------------------------------------------
+
+def test_random_edge_for_key_return_edge_shape_matches_legacy(d):
+    graph, chains, store_dir, corpus_path = _build_smoke_graph(d)
+    valid = graph.store.segments()
+    start_key = chains[0][0]
+
+    key_tuple, text_legacy = random_edge_for_key(graph, valid, start_key, random.Random(9))
+    edge_dict, text_new = random_edge_for_key(graph, valid, start_key, random.Random(9), return_edge=True)
+
+    if key_tuple is None:
+        print("test_random_edge_for_key_return_edge_shape_matches_legacy: SKIPPED (no candidates)")
+        return
+    assert (edge_dict["from_key"], edge_dict["to_key"]) == key_tuple, "return_edge=True must draw the SAME candidate as the legacy call"
+    assert text_new == text_legacy
+    assert edge_dict["derivation"] and len(edge_dict["derivation"]) == 1, "a base edge has exactly one citation hop"
+    print("test_random_edge_for_key_return_edge_shape_matches_legacy: OK (key={})".format(key_tuple))
+
+
+# ---------------------------------------------------------------------
+# P77: run_consult with a non-default inject_form/inject_repeat still
+# respects the use-ledger-only-grows-on-positive-delta invariant, and the
+# random arm's text visibly changes form the same way the real arm's does
+# (both go through build_injection_text once inject_form != outcome_text).
+# ---------------------------------------------------------------------
+
+def test_run_consult_with_full_record_text_form(d):
+    graph, chains, store_dir, corpus_path = _build_smoke_graph(d)
+    evidence_ledger = EvidenceLedger(store_dir)
+    use_ledger = UseLedger(store_dir)
+
+    import torch
+    import portable_organism as po
+    import re
+
+    torch.set_num_threads(1)
+    vocab, stoi, unk, mask, val_ids = po.get_vocab()
+    torch.manual_seed(11)
+    organism = po.Organism("form-test", len(vocab), mask, seed=11)
+    model = organism.model
+    model.eval()
+    dev = next(model.parameters()).device
+
+    with open(corpus_path, "r", encoding="utf-8") as f:
+        words = re.findall(r"[a-zA-Z]{2,}", f.read().lower())
+
+    thresh = calibrate_surprise_threshold(words, stoi, unk, model, dev, torch, quantile=0.9, n_calib_words=300)
+
+    result = run_consult(
+        graph, evidence_ledger, use_ledger, words, stoi, unk, model, dev, torch,
+        surprise_thresh=thresh, lookahead=8, max_gaps=15, seed=1,
+        inject_form="full_record_text", inject_repeat=2,
+    )
+    assert isinstance(result["mean_delta_real"], float)
+    n_helped = sum(1 for r in result["results"] if r["drop_real"] > 0)
+    assert n_helped == result["n_helped_real"]
+    n_used_edges_in_unhelped_rows = sum(len(r["used_edges"]) for r in result["results"] if r["drop_real"] <= 0)
+    assert n_used_edges_in_unhelped_rows == 0, "non-default inject_form must still respect the positive-delta-only use logging invariant"
+    print("test_run_consult_with_full_record_text_form: OK (n_consults={}, mean_delta_real={:+.4f})".format(
+        result["n_consults"], result["mean_delta_real"]))
+
+
+# ---------------------------------------------------------------------
+# P77 regression: --grid must NEVER write into the real --store directory
+# -- caught by hand during this build (UseLedger's own constructor writes
+# a header file the instant it's called, so constructing `use_ledger =
+# UseLedger(args.store)` unconditionally in main(), before branching on
+# args.grid, put a use.ledger into the real store even though the grid
+# path never calls append_use on it). Runs main() as a real subprocess
+# (not an import) since the bug lived in main()'s own setup code, not in
+# run_consult -- an in-process call would not have exercised the path
+# that broke.
+# ---------------------------------------------------------------------
+
+def test_grid_never_touches_store_use_ledger(d):
+    import subprocess
+
+    store_dir = os.path.join(d, "store")
+    corpus_path = os.path.join(d, "corpus.txt")
+    generate_smoke_store(store_dir, corpus_path, seed=5)
+
+    use_ledger_path = os.path.join(store_dir, "use.ledger")
+    assert not os.path.exists(use_ledger_path), "test setup assumption broken: use.ledger already existed before the grid run"
+
+    out_path = os.path.join(d, "grid_out.json")
+    consult_run_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "consult_run.py")
+    env = dict(os.environ)
+    env["HF_HUB_OFFLINE"] = "1"
+    env["HF_DATASETS_OFFLINE"] = "1"
+    env["OMP_NUM_THREADS"] = "1"
+    proc = subprocess.run(
+        [sys.executable, consult_run_path, "--store", store_dir, "--text-file", corpus_path,
+         "--grid", "--inject-form", "outcome_text", "full_record_text", "--inject-repeat", "1",
+         "--max-gaps", "6", "--warmup-chunks", "0", "--out", out_path],
+        capture_output=True, text=True, env=env, timeout=120,
+    )
+    assert proc.returncode == 0, "grid subprocess failed: {}\n{}".format(proc.stdout[-2000:], proc.stderr[-2000:])
+    assert not os.path.exists(use_ledger_path), (
+        "--grid wrote a use.ledger into the real --store directory -- "
+        "the exact class of bug the 'gescorte Stores sind read-only' rule exists to prevent"
+    )
+    assert os.path.exists(out_path), "grid run did not write its output JSON"
+    print("test_grid_never_touches_store_use_ledger: OK (store={} has no use.ledger after --grid)".format(store_dir))
+
+
 def run_all():
     tests = [
         test_best_edge_for_key_finds_real_edge,
@@ -390,6 +557,11 @@ def run_all():
         test_run_consult_is_deterministic,
         test_best_edge_for_key_canon_finds_edge_exact_string_misses,
         test_consult_canon_false_is_regression_identical,
+        test_build_injection_text_forms,
+        test_build_injection_text_empty_derivation_returns_empty,
+        test_random_edge_for_key_return_edge_shape_matches_legacy,
+        test_run_consult_with_full_record_text_form,
+        test_grid_never_touches_store_use_ledger,
     ]
     for t in tests:
         with_tmpdir(t)
