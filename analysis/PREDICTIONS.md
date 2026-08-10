@@ -2175,3 +2175,33 @@ artifact is a number about the defaults, not about the system.
   5/5 bit-equal to the batch rebuild without the dropped segment,
   drop median 8.4ms ≤ append median 10.6ms. The three mechanics the
   LIVE-CAUSAL spec §2 claims are now measured mechanics.
+
+- **P72 — the builder builds, end to end (registered 2026-08-10,
+  BEFORE the run; every component individually green and committed
+  through 52ce3dc).** The full MVP loop on a real corpus for the
+  first time: the organism streams WT-103 (3,000 post-ignition
+  chunks, the P70 cadence, q0.75), every window's raw text runs
+  through the deterministic extractor UNGATED (the P70 policy), the
+  validated triplets become sealed segments in a LiveStore with
+  delta inference and evidence ledger, and the builder's own output
+  is audited by the direction-3 verifier. Second x86 runner, beside
+  the P69 run.
+  (a) THE GRAPH GROWS: ≥ 1,000 validated base records from the
+      3,000-chunk stream (deliberately conservative against the
+      measured ~18/kilotoken) and ≥ 200 inferred edges.
+  (b) THE MECHANICS HOLD IN THE WILD: zero full rebuilds across the
+      whole run (the P71 closure counter instrumented), and the
+      graph is REPRODUCIBLE — a second identical run yields the
+      same manifest segment shas, bit for bit.
+  (c) THE AUDIT PASSES: direction-3 verifier over ≥ 30 sampled
+      edges of both classes — 100% verified and consensus.
+  (d) THE SIGNAL RIDES ALONG: every record carries meta.surprise /
+      meta.gated, and the run's gated fraction lands in the q0.75
+      dial band (0.20–0.30) post-ignition.
+  Falsifiers: (a) fails ⇒ WT-103 full-stream prose yields unlike
+  the P70 window sample — the measured yield becomes the corpus
+  constant, stated as such; (b) fails ⇒ real extraction graphs
+  break delta locality or stream determinism — localize the layer
+  (extractor, store, stream) before any scale-up; (c) fails ⇒ the
+  builder writes records the verifier cannot re-derive — that gap
+  IS the finding and blocks everything until closed.
