@@ -1,0 +1,312 @@
+{
+  "clause_a_write_side": {
+    "compression_ratio": 1.8799807969275084,
+    "lift_factor": 827.9473684210526,
+    "n_inferred_canon": 62924,
+    "n_inferred_raw": 76
+  },
+  "clause_b1_coverage": {
+    "coverage": 0.1509
+  },
+  "clause_b2_real_beats_random": {
+    "mean_delta_random": 0.0004,
+    "mean_delta_real": -0.0007,
+    "real_beats_random": false
+  },
+  "clause_c_cost": {
+    "cold_mount_seconds": 17.714553331956267,
+    "cold_was_rebuilt_on_mount": true,
+    "warm_loaded_from_cache": true,
+    "warm_mount_seconds": 17.805634768679738
+  },
+  "clause_d_moat": {
+    "all_rederived_ok": true,
+    "n_rederived_ok": 30,
+    "n_sampled": 30,
+    "segment_shas_unchanged": true,
+    "store_verify_true": true
+  },
+  "copy_dir": "/tmp/livecausal-p75-r3h5jcnk/copy",
+  "cost": {
+    "cold_mount_seconds": 17.714553331956267,
+    "cold_was_rebuilt_on_mount": true,
+    "warm_loaded_from_cache": true,
+    "warm_mount_seconds": 17.805634768679738
+  },
+  "env_pin": {
+    "canon_version": "1",
+    "model_available": true,
+    "spacy_available": true,
+    "spacy_version": "3.8.15"
+  },
+  "moat": {
+    "all_rederived_ok": true,
+    "env_pin_used": {
+      "canon_version": "1",
+      "model_available": true,
+      "spacy_available": true,
+      "spacy_version": "3.8.15"
+    },
+    "n_rederived_ok": 30,
+    "n_sampled": 30,
+    "rows": [
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "first to",
+        "ok": true,
+        "to_key": "record"
+      },
+      {
+        "depth": 2,
+        "detail": null,
+        "from_key": "genre",
+        "ok": true,
+        "to_key": "gun"
+      },
+      {
+        "depth": 4,
+        "detail": null,
+        "from_key": "governor",
+        "ok": true,
+        "to_key": "who"
+      },
+      {
+        "depth": 4,
+        "detail": null,
+        "from_key": "line",
+        "ok": true,
+        "to_key": "time"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "command",
+        "ok": true,
+        "to_key": "they"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "captain",
+        "ok": true,
+        "to_key": "fleetwood"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "essay",
+        "ok": true,
+        "to_key": "tribe"
+      },
+      {
+        "depth": 3,
+        "detail": null,
+        "from_key": "campaign",
+        "ok": true,
+        "to_key": "coast"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "hurricane",
+        "ok": true,
+        "to_key": "home"
+      },
+      {
+        "depth": 3,
+        "detail": null,
+        "from_key": "decade",
+        "ok": true,
+        "to_key": "tribe"
+      },
+      {
+        "depth": 4,
+        "detail": null,
+        "from_key": "they",
+        "ok": true,
+        "to_key": "seven before being turned back"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "transalta",
+        "ok": true,
+        "to_key": "veteran"
+      },
+      {
+        "depth": 4,
+        "detail": null,
+        "from_key": "rain",
+        "ok": true,
+        "to_key": "majority"
+      },
+      {
+        "depth": 4,
+        "detail": null,
+        "from_key": "railroad",
+        "ok": true,
+        "to_key": "storm"
+      },
+      {
+        "depth": 3,
+        "detail": null,
+        "from_key": "company",
+        "ok": true,
+        "to_key": "restriction"
+      },
+      {
+        "depth": 3,
+        "detail": null,
+        "from_key": "christian",
+        "ok": true,
+        "to_key": "year"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "musician",
+        "ok": true,
+        "to_key": "creature"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "defeat",
+        "ok": true,
+        "to_key": "status"
+      },
+      {
+        "depth": 3,
+        "detail": null,
+        "from_key": "period",
+        "ok": true,
+        "to_key": "album"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "economy",
+        "ok": true,
+        "to_key": "physicist"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "carving",
+        "ok": true,
+        "to_key": "florida"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "award",
+        "ok": true,
+        "to_key": "characteristic"
+      },
+      {
+        "depth": 4,
+        "detail": null,
+        "from_key": "january",
+        "ok": true,
+        "to_key": "line"
+      },
+      {
+        "depth": 4,
+        "detail": null,
+        "from_key": "cystidia",
+        "ok": true,
+        "to_key": "ship"
+      },
+      {
+        "depth": 4,
+        "detail": null,
+        "from_key": "period",
+        "ok": true,
+        "to_key": "run"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "borough",
+        "ok": true,
+        "to_key": "northampton"
+      },
+      {
+        "depth": 2,
+        "detail": null,
+        "from_key": "prosser",
+        "ok": true,
+        "to_key": "bettered only"
+      },
+      {
+        "depth": 5,
+        "detail": null,
+        "from_key": "education",
+        "ok": true,
+        "to_key": "visit"
+      },
+      {
+        "depth": 2,
+        "detail": null,
+        "from_key": "america",
+        "ok": true,
+        "to_key": "fruit"
+      },
+      {
+        "depth": 2,
+        "detail": null,
+        "from_key": "point",
+        "ok": true,
+        "to_key": "town"
+      }
+    ]
+  },
+  "n_source_segments": 644,
+  "no_mutation_after_read": {
+    "n_segments": 644,
+    "segment_shas_unchanged": true,
+    "store_verify_true": true
+  },
+  "no_mutation_before_read": {
+    "n_segments": 644,
+    "segment_shas_unchanged": true,
+    "store_verify_true": true
+  },
+  "read_side": {
+    "canon_env_pin": {
+      "canon_version": "1",
+      "model_available": true,
+      "spacy_available": true,
+      "spacy_version": "3.8.15"
+    },
+    "coverage": 0.1509,
+    "elapsed_seconds": 58.91230273246765,
+    "error": false,
+    "exit_code": 0,
+    "mean_delta_random": 0.0004,
+    "mean_delta_real": -0.0007,
+    "n_consults": 40,
+    "n_spikes": 265,
+    "out_path": "/tmp/p75_consult_96t67chn.json"
+  },
+  "source_dir": "results/p72_store_run1",
+  "write_side": {
+    "canon_env_pin": {
+      "canon_version": "1",
+      "model_available": true,
+      "spacy_available": true,
+      "spacy_version": "3.8.15"
+    },
+    "canon_mount_seconds": 23.208846796303988,
+    "lift_factor_canon_over_raw": 827.9473684210526,
+    "n_base_edges_raw": 2046,
+    "n_canon_base_pairs": 2021,
+    "n_distinct_canon_keys": 2083,
+    "n_distinct_raw_keys": 3916,
+    "n_inferred_edges_canon": 62924,
+    "n_inferred_edges_raw": 76,
+    "raw_mount_seconds": 0.03168458864092827,
+    "raw_to_canon_compression_ratio": 1.8799807969275084
+  }
+}

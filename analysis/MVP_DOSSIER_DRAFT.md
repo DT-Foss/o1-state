@@ -123,36 +123,42 @@ own pre-committed bar.
 
 ## 4. What's missing, honestly
 
-**The measured constraint: entity canonicalization.** P72's clause (a)
-split: **2,046 base records** cleared the bar (≥1,000) decisively, but the
-graph produced only **76 inferred (multi-hop) edges** against the
-registered bar of **200 — a clear fail.** The cause is precisely
-localized, not vague: 2,047 extracted triplets collapsed to 2,046
-*distinct* trigger/outcome key pairs — near-zero key collisions. Real
-prose almost never repeats an exact trigger/outcome string twice, so
-chains that are semantically the same but worded differently never join
-in the graph's exact-string key space. This is not a bug in the
-delta-inference engine (P71's closure math
-is proven exact); it is a missing layer, named twice before this run and
-now measured as the binding constraint on graph connectivity: entity
-canonicalization, or the deferred fuzzy-matching pass v1's inference
-engine already documents as flagged-not-implemented scope. This is the
-next organ to build, not a caveat to hedge around.
+**The measured constraint was entity canonicalization — and the organ
+that removes it is built, measured, and verified (P75).** P72 localized
+the constraint on the write side (2,047 extracted triplets → 2,046
+distinct exact-string key pairs, only **76 inferred edges** against the
+registered bar of 200); P73 confirmed it from the read side (coverage
+0.0162). The canonicalization organ — a deterministic read-time layer
+(first-noun-chunk head lemma, sealed segments untouched, every
+derivation still citing raw records) — was then measured against the
+same artifact under its own pre-registered bars: canon=False reproduces
+exactly 76; canon=True yields **62,924 inferred edges** (lift 828×,
+raw keys folding 1.88:1), and read-side coverage rises to **0.1509**
+(9.3× the baseline). Canonical keys are measured fleet-stable across
+spaCy versions (964/964 probe phrases identical between 3.8.11 and
+3.8.15), and 30/30 sampled canonical edges re-derive from nothing but
+the cited raw records plus the pinned canon function. Two honest bills
+came with it, both pre-committed: the canon mount cost fails its warm
+bar (17.8s — the raw→canon spaCy fold runs on every mount; a persisted
+canon map plus the semi-naive canon delta are now mandatory before
+builder integration), and the graph thereby enters exactly the dense
+regime whose append-cost curve P74 measured.
 
-**Consult-back is built, measured, and blocked on the same organ.** The
-spec's fifth stage — the organism reading the graph back in flight — ran
-against the real P72 store (P73, two runs): the machinery is proven
-sound (0 ledger-discipline violations, 14/14 citations resolve, both
-runs byte-identical down to the use.ledger sha), but its VALUE is
-measured as blocked on canonicalization from the read side too. Coverage
-0.0162 — of 2,471 surprise spikes on a live WT-103 stream, only 40 gap
-words found any edge in the exact-string key space — and at that
-coverage the matched paths are semantically unrelated to the
-continuation, so the real-vs-random injection arm shows no separation
-(mean Δ −0.0040 vs −0.0023, noise scale; the pre-registered falsifier,
-reported at full strength). Write side (P72: 76/200 inferred edges) and
-read side (P73: 1.6% coverage) now agree on the single binding
-constraint. One organ, two measured numbers waiting on it.
+**Consult-back: machinery proven, value now isolated to the injection
+mechanism itself.** The spec's fifth stage ran twice against the real
+store. P73 (exact keys): sound machinery — 0 ledger-discipline
+violations, 14/14 citations resolve, byte-identical runs down to the
+use.ledger sha — but coverage 0.0162 left nothing for injection to
+work with. P75 (canonical keys) re-ran the identical measurement with
+coverage at 0.1509 and semantically related paths available — and the
+real-vs-random arm STILL shows no separation (−0.0007 vs +0.0004,
+noise scale; the pre-registered falsifier, reported at full strength).
+That is a genuine mechanism finding, not a key problem anymore: at
+this reader scale, injecting a relevant path's outcome text into the
+forked state does not lower continuation surprise. The next registered
+attack targets the injected text's form (length, position, phrasing)
+and the reader's scale — named in the register before any fix is
+attempted.
 
 **Scale is measured at 10×, and it taught us something (P74).** The
 natural falsifier ran: a 30,000-chunk build (6,401 segments, 20,648

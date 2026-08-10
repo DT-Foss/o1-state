@@ -2435,3 +2435,40 @@ artifact is a number about the defaults, not about the system.
   before builder integration. (d) fails ⇒ the canon layer breaks
   stranger verifiability — blocks everything; the moat is
   non-negotiable.
+
+  **P75 SCORED (2026-08-10, results/livecausal_p75.json on the x86
+  runner that built the store, quiet machine, copy per the
+  read-only rule; env_pin spacy 3.8.15 / canon_version 1;
+  cross-version stability separately measured 964/964,
+  results/canon_probe_cross.json).** (a) PASS, and not narrowly:
+  canon=False reproduces EXACTLY 76 inferred edges (the P72 number,
+  regression inside the measurement) — canon=True yields **62,924**
+  against the bar of 200. Lift 828x. Raw keys fold 1.88:1 into
+  canonical keys on real prose. The constraint P72 and P73 both
+  localized is not eased — it is removed, and the graph crosses
+  into the dense regime P74 just mapped (30.8 inferred per base
+  edge): the two results interlock, canon delivers the density
+  whose append-cost curve P74 measured. (b1) PASS: coverage 0.1509
+  vs bar 0.08 — 9.3x the P73 baseline; one in seven surprise
+  spikes now finds a queryable edge, up from one in sixty-two.
+  (b2) FAIL, and this one is now a mechanism finding as
+  pre-committed: real -0.0007 vs random +0.0004, both noise-scale
+  — WITH coverage cleared and semantically related paths
+  available, injection into the forked state still does not lower
+  continuation surprise. The keys are exonerated; the next attack
+  is the injected text's form (length, position, phrasing) and the
+  reader's scale, exactly as registered. (c) SPLIT: cold mount
+  17.71s clears the 30s bar — but warm 17.81s fails the 5s bar,
+  and the artifact localizes why: warm_loaded_from_cache=True, so
+  the inferred-edge cache works; what dominates is the raw->canon
+  fold itself (spaCy re-parse of every distinct key on EVERY
+  mount). The pre-committed consequence binds: a persisted,
+  env_pin-stamped canon map plus the semi-naive canon delta are
+  now MANDATORY before builder integration, not a debt note.
+  (d) PASS: 30/30 canonical inferred edges re-derived from raw
+  citations plus the pinned canon function, store.verify() True,
+  every segment sha unchanged — on real data, across a measured
+  spaCy version boundary. The organ works: both numbers it owed
+  moved by an order of magnitude or three; what it exposed next
+  (injection mechanics, mount cost) is named, bounded, and
+  registered against.
