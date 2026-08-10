@@ -64,6 +64,7 @@ if REPO_ROOT not in sys.path:
 
 from livecausal.infer import LiveGraph  # noqa: E402
 from livecausal.store import LiveStore  # noqa: E402
+from livecausal.evidence import EvidenceLedger  # noqa: E402
 
 _WORD_RE = re.compile(r"[a-zA-Z]+")
 
@@ -371,6 +372,38 @@ def make_record(triplet, tape_pos, surprise, gated, extractor_version="builder_v
 
 
 # ─────────────────────────────────────────────────────────────────────────
+#  Environment pin: which optional extraction path was actually active.
+#  Traced back to a REAL cross-machine divergence (build report, this
+#  bridge-integration pass): vendor/fabel/extract/rule_extractor.py lazily
+#  imports spaCy (en_core_web_sm) to POS-tag verb candidates; when spaCy is
+#  absent it silently falls back to a looser surface-regex verb scanner
+#  (own try/except, _NLP=None on failure) -- same extract_validated
+#  function, same code path, DIFFERENT extraction behavior depending on
+#  what's installed on the host. Mac had spaCy 3.8.11; beast had none at
+#  all -- a same-text, same-seed direct comparison showed 0 vs 1 triplets
+#  with materially different trigger/outcome strings. This is recorded in
+#  every run's status/metrics so a run's numbers are never read without
+#  knowing which extraction behavior produced them.
+# ─────────────────────────────────────────────────────────────────────────
+def env_pin():
+    """One-shot host environment fingerprint for the fields that are known
+    to change extract_validated's behavior. Cheap (spaCy import only, no
+    model load) -- safe to call once per run."""
+    spacy_available = False
+    spacy_version = None
+    try:
+        import spacy  # noqa: E402
+        spacy_available = True
+        spacy_version = spacy.__version__
+    except Exception:
+        pass
+    return {
+        "spacy_available": spacy_available,
+        "spacy_version": spacy_version,
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────
 #  status / metrics I/O (pos_run.py's pattern: atomic status, appended
 #  jsonl metrics).
 # ─────────────────────────────────────────────────────────────────────────
@@ -415,6 +448,18 @@ def run_builder(
     path and the metric falls back to n_windows_total (still monotonic,
     just coarser)."""
     graph = LiveGraph(store_dir)
+    # Evidence ledger hook (found missing by mvp3's demo integration test:
+    # this loop sealed segments into the graph but never observed them
+    # into evidence.ledger, so evidence_count would read 0 for every edge
+    # after any build -- the P72 registration explicitly names "evidence
+    # ledger" as part of what the end-to-end run produces). One
+    # EvidenceLedger per store, appended to right after each segment's
+    # on_append below -- additive, and append_observations_for_segment is
+    # itself idempotent per (edge_key, evidence_key) at the FOLD level
+    # (evidence_count dedups on evidence_key, so even a defensive re-call
+    # over the same segment cannot inflate the count), so this cannot
+    # double-count even if called more than once for the same sha.
+    evidence_ledger = EvidenceLedger(store_dir)
     t0 = time.time()
 
     # P70 policy update (MVP-3): extraction runs on EVERY window, gated or
@@ -438,6 +483,7 @@ def run_builder(
         "phase": "running",
         "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "store_dir": store_dir,
+        "env_pin": env_pin(),
     }
 
     def current_metrics():
@@ -472,6 +518,7 @@ def run_builder(
         t_append0 = time.perf_counter()
         sha = graph.store.append_segment(records)
         new_inferred = graph.on_append(sha)
+        evidence_ledger.append_observations_for_segment(graph, sha)
         t_append1 = time.perf_counter()
         append_s = t_append1 - t_append0
         append_seconds_total += append_s

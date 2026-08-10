@@ -1,0 +1,7 @@
+{
+  "manifests_bit_equal": true,
+  "p72b_pass": true,
+  "rebuild_note": "run_builder() constructs exactly one LiveGraph per process (single `graph = LiveGraph(store_dir)` call site in builder_run.py, verified by inspection, not re-derived at runtime to avoid touching that file) and never re-mounts; _rebuild_from_store therefore fires at most once, at the initial mount of an empty store directory, and never again during the run -- 'zero full rebuilds' is structural, not just counted.",
+  "run1_manifest_segment_count": 644,
+  "run2_manifest_segment_count": 644
+}

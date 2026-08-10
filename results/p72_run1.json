@@ -1,0 +1,116 @@
+{
+  "cadence": {
+    "batch": 8,
+    "chunk-size": 64,
+    "d-model": 128,
+    "ignition-chunks": 100,
+    "min-window": 100,
+    "q": 0.75,
+    "window": 500
+  },
+  "chunks": 3000,
+  "clause_a_graph_grows": {
+    "n_base_edges": 2046,
+    "n_inferred_edges": 76,
+    "p72a_base_pass": true,
+    "p72a_inferred_pass": false,
+    "p72a_pass": false
+  },
+  "clause_b_mechanics_hold": {
+    "manifests_bit_equal": true,
+    "p72b_pass": true,
+    "rebuild_note": "run_builder() constructs exactly one LiveGraph per process (single `graph = LiveGraph(store_dir)` call site in builder_run.py, verified by inspection, not re-derived at runtime to avoid touching that file) and never re-mounts; _rebuild_from_store therefore fires at most once, at the initial mount of an empty store directory, and never again during the run -- 'zero full rebuilds' is structural, not just counted.",
+    "run1_manifest_segment_count": 644,
+    "run2_manifest_segment_count": 644
+  },
+  "clause_c_audit_passes": {
+    "n_base_sampled": 15,
+    "n_inferred_sampled": 15,
+    "n_sampled": 30,
+    "p60a_fraction": "30/30",
+    "p60b_fraction": "30/30",
+    "p72c_consensus_pass": true,
+    "p72c_pass": true,
+    "p72c_verified_pass": true
+  },
+  "clause_d_signal_rides_along": {
+    "band": [
+      0.2,
+      0.3
+    ],
+    "gated_fraction": 0.2053,
+    "n_windows_gated": 616,
+    "n_windows_total": 3000,
+    "p72d_pass": true
+  },
+  "elapsed_seconds": 580.6084454059601,
+  "finished_unix": 1786372138.5412755,
+  "host": "bhkmie-ubuntu",
+  "p72a_pass": false,
+  "p72b_pass": true,
+  "p72c_pass": true,
+  "p72d_pass": true,
+  "prediction": "P72",
+  "run1": {
+    "elapsed_seconds": 284.65505266189575,
+    "env_pin": {
+      "spacy_available": true,
+      "spacy_version": "3.8.15"
+    },
+    "exit_code": 0,
+    "out_prefix": "/root/o1lab/results/p72_builder_run1",
+    "status": {
+      "env_pin": {
+        "spacy_available": true,
+        "spacy_version": "3.8.15"
+      },
+      "n_base_edges": 2046,
+      "n_inferred_edges": 76,
+      "n_segments": 644,
+      "n_streamed_tape_pos": 3000,
+      "n_triplets_from_gated": 448,
+      "n_triplets_total": 2047,
+      "n_windows_gated": 616,
+      "n_windows_total": 3000,
+      "phase": "done",
+      "pid": 4134104,
+      "started_utc": "2026-08-10T14:19:19Z",
+      "store_dir": "/root/o1lab/results/p72_store_run1",
+      "wall_s": 281.84
+    },
+    "store_dir": "/root/o1lab/results/p72_store_run1"
+  },
+  "run2": {
+    "elapsed_seconds": 295.9006872177124,
+    "env_pin": {
+      "spacy_available": true,
+      "spacy_version": "3.8.15"
+    },
+    "exit_code": 0,
+    "out_prefix": "/root/o1lab/results/p72_builder_run2",
+    "status": {
+      "env_pin": {
+        "spacy_available": true,
+        "spacy_version": "3.8.15"
+      },
+      "n_base_edges": 2046,
+      "n_inferred_edges": 76,
+      "n_segments": 644,
+      "n_streamed_tape_pos": 3000,
+      "n_triplets_from_gated": 448,
+      "n_triplets_total": 2047,
+      "n_windows_gated": 616,
+      "n_windows_total": 3000,
+      "phase": "done",
+      "pid": 4135595,
+      "started_utc": "2026-08-10T14:24:04Z",
+      "store_dir": "/root/o1lab/results/p72_store_run2",
+      "wall_s": 292.75
+    },
+    "store_dir": "/root/o1lab/results/p72_store_run2"
+  },
+  "seed": 42,
+  "spec_ref": "analysis/PREDICTIONS.md P72",
+  "started_unix": 1786371557.93283,
+  "window_tokens": 128
+}

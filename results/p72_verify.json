@@ -1,0 +1,620 @@
+{
+  "checks": [
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 4,
+        "segment_sha": "22a99ae746be57b9c6d8346c3c21442c4dcc30726baa30cba4073d02fffc2e41"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "flood damage would",
+        "to_key": "largest mexican relief operation ever executed"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 3,
+        "segment_sha": "ce05264f76a4c7c6d8a42c4d8090fde1a995cb1c2236c9af1235d0fc18d0d827"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "even if it cannot",
+        "to_key": "assumption is considered \" safe \""
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 1,
+        "segment_sha": "86167d9ba6526c8c908123b6475ee64070022161d9864a3750ed6b59ea2f8a10"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "on march 12 , she",
+        "to_key": "california king bed"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 0,
+        "segment_sha": "ac2d869238f086274ffe84d605910dc1d59ab7dbe85876051bee80152b37b4c3"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "between april 29 and 30 , the commission",
+        "to_key": "technical presentations"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 2,
+        "segment_sha": "57aca66f11b70edbd94d655b8c7927fa7caaeea80cfe1e0e7d0ba7b7d75b39ba"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "early 1990s , their membership",
+        "to_key": "numbering as few as 26"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 3,
+        "segment_sha": "79b8bf30defad29de666ad7c480ce266e77b4ed76f96e6738d49d127ed572223"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "crew",
+        "to_key": "small explosive charges"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 1,
+        "segment_sha": "b9497751893566f5fc743f7bdd0f15dd6e5bd5a8bd9e001a7f1811ecb9872376"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "the indian engineers",
+        "to_key": "bridge across the moro"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 1,
+        "segment_sha": "afe5664c26121d5c96e3b2d4c0757e09768c450993dccc98321e712e2b90aed0"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "khitan script , from the chinese family of scripts",
+        "to_key": "basis of a national writing system for the empire"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 0,
+        "segment_sha": "b3a3b757071baf66876d2d0d8df9148c6048c3d768f7ab1c4856879a79d43e9e"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "its predecessors",
+        "to_key": "story"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 3,
+        "segment_sha": "f8e8e6b3da2faf4bb8068b2962737eafb3b7a1a4be62144a87cdead754c1f050"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "the university scholars program",
+        "to_key": "special honors seminars"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 2,
+        "segment_sha": "e560f5df6fa808bac45da8fe155434be4c0035342ed7edf7376b949e0c652fb7"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "game those regions",
+        "to_key": "other video games"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 3,
+        "segment_sha": "3bdddba3a76cee7222c1e66446ac5ecf581e782344ae2873724f6a5c5c28af01"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "which",
+        "to_key": "their opponents from getting full experience"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 0,
+        "segment_sha": "c789c55bdb9c04ecd984db852572831db9488bda81b6a14a13aa5d8f5d10d593"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "their land rovers",
+        "to_key": "french flag"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 0,
+        "segment_sha": "e7da27ce3b9c12f9272405fec6d609ddf26ff7c1f2f1e86288d56e0f46e9ac94"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "@-@ accumulate metal toxins",
+        "to_key": "organic fertilizers yield a product"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "base",
+      "consensus": true,
+      "coords": {
+        "record_idx": 0,
+        "segment_sha": "d88058b44dc94475442b7856f635c4602453ce4955775167775697b59267a8b7"
+      },
+      "corpus_replay": null,
+      "edge": {
+        "from_key": "the fort",
+        "to_key": "a defensible battery"
+      },
+      "found": true,
+      "segment_sha_verified": true
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "2ead20aa7bf537eba65d4e5cf524c3d0364e1ee58da453940a7262c2d48a15c1",
+            4
+          ],
+          [
+            "3200febfb4f15d8b2f3fb3f13a9cd14f2a49537cb4365a59b0ff143331f9d8ed",
+            0
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "a foreign species",
+        "to_key": "production controls for farmers"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "014cb6d5355e1a4dbff7e04c2b9d277e7bd7524ae5f5998b1301258f55bf3602",
+            1
+          ],
+          [
+            "c0d352f61c8540040f52db7b8d120d302b912e1986ea33e44b3973f025fed008",
+            0
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "candidate city",
+        "to_key": "member of the belgian olympic committee"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "305534a14df9a59f52957cc34c331a573607c95c2ff9a975c6ad74f18a8dbc2b",
+            0
+          ],
+          [
+            "305534a14df9a59f52957cc34c331a573607c95c2ff9a975c6ad74f18a8dbc2b",
+            1
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "base",
+        "to_key": "1983 damage , also"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "65f7e24b9064bd10da5df181c6c0739d90e814e8baf7a3b68023a23e7992b333",
+            1
+          ],
+          [
+            "c67ad8d841efab3f639b176fb2e7a04eb27002fd8348d7a439b0682cf2e3c64b",
+            0
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "its incompleteness",
+        "to_key": "these tracks"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "9ec4e579d476e445d0ebeedd777e67f8ca8a2bd3e3b08c033bf42a16ffa140c3",
+            1
+          ],
+          [
+            "851148702542ee2262c7f813a21542768563ed900e3432e42e34242390ceb943",
+            0
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "11 november",
+        "to_key": "integrated formation"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "8b4031d985ab39ce9a0ba1ff78f48da6e3c33f8377fd7be8b052244e76fd0e37",
+            2
+          ],
+          [
+            "d4a019b916ddaf414a8a8eca96cceb560e0c3dd22c94ff3e591873321b6f21fd",
+            2
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "deal then",
+        "to_key": "freezing to death"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "294a31adf697619945294852657c514266af0f0014c251aa79ec77c350be67f3",
+            1
+          ],
+          [
+            "46ef96b6532ada1b41523b0183c83d6d7222b73db2cc10a1c619d7e67b55fbc6",
+            3
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": ", it may have",
+        "to_key": "tides 4 ft ( 1 @.@ 2 m ) above average"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "56ed432a87a88d81bdf7ba84b495ccb397a9dad442bef6e0abc2f9384d897471",
+            3
+          ],
+          [
+            "81c7e6183256113eee5b7a957d8b9686574cd0ec2062c2862820f8a708db2896",
+            0
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "other states",
+        "to_key": "a simple arms depot"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "35cdb5bd0352081f6a22dfc763b3dafb700477e5bc814ae10d4ff6d140ad8c81",
+            2
+          ],
+          [
+            "35cdb5bd0352081f6a22dfc763b3dafb700477e5bc814ae10d4ff6d140ad8c81",
+            0
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "bread , root crops , and vegetables also",
+        "to_key": "calcium channels in chicken neurons"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "3200febfb4f15d8b2f3fb3f13a9cd14f2a49537cb4365a59b0ff143331f9d8ed",
+            1
+          ],
+          [
+            "c4361bce6e1ffcc200be5b9a8c54f30427aed127c640307bebd1b1b221550e31",
+            1
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "an amendment",
+        "to_key": "regulations"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "5933be783b3eae7ef0268e2700dfbce83bb516d3b368328a931ffc8731b186d8",
+            3
+          ],
+          [
+            "83c6f7c677747f9027dfc786bc9fc918f07d0af5b1ca47a720b9eb3da8291c78",
+            2
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "exclusion of british companies",
+        "to_key": "standards"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "5b6c06506c8e575c2f3afdc74f11b45ce896b583ca8862a472f8b457f8b11432",
+            0
+          ],
+          [
+            "04f3ab553b45900f66ad84d2a494c0cfad87b8ae9e7f02e5e053d1483bcb056c",
+            0
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "to remedy this , god",
+        "to_key": "his followers to see him as christ"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 3,
+        "derivation": [
+          [
+            "9ec4e579d476e445d0ebeedd777e67f8ca8a2bd3e3b08c033bf42a16ffa140c3",
+            1
+          ],
+          [
+            "5c5fce4c40cf39c468d15a286d9da1d5158c6aa3ae2ef9129cb79c143eec3ee0",
+            0
+          ],
+          [
+            "f4f57293215b3dd26ae39f76203906b65caf6a6ef12a666be4604211ab1497bc",
+            0
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 3,
+        "from_key": "11 november",
+        "to_key": "resettlement"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "5933be783b3eae7ef0268e2700dfbce83bb516d3b368328a931ffc8731b186d8",
+            3
+          ],
+          [
+            "86167d9ba6526c8c908123b6475ee64070022161d9864a3750ed6b59ea2f8a10",
+            2
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "exclusion of british companies",
+        "to_key": "may 13 release of \" california king bed \""
+      },
+      "found": true,
+      "segment_sha_verified": null
+    },
+    {
+      "class": "inferred",
+      "consensus": true,
+      "coords": {
+        "depth": 2,
+        "derivation": [
+          [
+            "5933be783b3eae7ef0268e2700dfbce83bb516d3b368328a931ffc8731b186d8",
+            3
+          ],
+          [
+            "8e4506050920055b29c3a24772e4dfa488583a5744b4e6fc4dec02dd5d437106",
+            1
+          ]
+        ]
+      },
+      "corpus_replay": null,
+      "edge": {
+        "depth": 2,
+        "from_key": "exclusion of british companies",
+        "to_key": "firm presence"
+      },
+      "found": true,
+      "segment_sha_verified": null
+    }
+  ],
+  "n_base": 15,
+  "n_inferred": 15,
+  "n_sampled": 30,
+  "scoring": {
+    "n_consensus": 30,
+    "n_sampled": 30,
+    "n_verified": 30,
+    "p60a_fraction": "30/30",
+    "p60a_verified_all": true,
+    "p60b_consensus_all": true,
+    "p60b_fraction": "30/30"
+  }
+}

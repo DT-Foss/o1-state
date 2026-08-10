@@ -2216,3 +2216,31 @@ artifact is a number about the defaults, not about the system.
   (extractor, store, stream) before any scale-up; (c) fails ⇒ the
   builder writes records the verifier cannot re-derive — that gap
   IS the finding and blocks everything until closed.
+
+  **P72 SCORED (2026-08-10, results/p72_run1.json + p72_compare.json
+  + p72_verify.json, two full runs on the second x86 runner beside
+  the P69 run, env_pin spacy 3.8.15 strict path, 281.8s wall for
+  3,000 windows).** THE BUILDER BUILDS — three clauses pass outright,
+  one half fails and localizes its layer. (a) SPLIT: 2,046 base
+  records from the 3,000-chunk WT-103 stream (bar 1,000 — PASS,
+  full-stream yield ~5.3 validated triplets/kilotoken, below the
+  P70 window sample's ~18/kt and recorded as the corpus constant
+  per the falsifier) — but only 76 inferred edges against the 200
+  bar (FAIL): real-prose trigger/outcome keys almost never chain
+  exactly (2,047 triplets → 2,046 distinct pairs, near-zero key
+  collisions), which localizes the missing layer PRECISELY — entity
+  canonicalization / the deferred fuzzy pass, named twice before
+  this run and now measured as the binding constraint on graph
+  connectivity. (b) PASS, the wild-mechanics headline: the second
+  identical run reproduces ALL 644 segment shas bit-identically —
+  a real HF-streamed, spaCy-tagged, organism-gated extraction graph
+  is deterministic end to end; zero full rebuilds (structural: one
+  mount, never re-derived). (c) PASS: the direction-3 verifier
+  re-derives 30/30 sampled edges with 30/30 two-mount consensus on
+  the builder's own output. (d) PASS: gated fraction 0.2053 —
+  inside the q0.75 dial band; the P56 dial law holds inside the
+  builder loop with the extraction riding ungated. The MVP loop is
+  closed: stream → curate → extract → seal → infer → audit, in
+  under five minutes on four cores, every edge citable to its
+  stream coordinate. The one open constraint (key canonicalization
+  for connectivity) is the next organ, not a patch.

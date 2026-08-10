@@ -23,6 +23,7 @@ if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
 from livecausal.infer import LiveGraph  # noqa: E402
+from livecausal.evidence import EvidenceLedger  # noqa: E402
 from livecausal.builder_run import (  # noqa: E402
     TextFileStream,
     fake_extractor,
@@ -95,6 +96,66 @@ def test_smoke_loop_produces_graph(d):
     # extraction, unlike the pre-P70 gated-only loop.
     assert metrics["n_windows_total"] >= metrics["n_windows_gated"] >= 0
     assert metrics["n_triplets_total"] >= metrics["n_triplets_from_gated"] >= 0
+
+
+# ---------------------------------------------------------------------
+# Test 1b: the evidence ledger hook (found missing by mvp3's demo
+# integration test) is actually wired into the loop -- after a smoke
+# build, evidence_count for at least one base edge must be > 0, and a
+# FRESH EvidenceLedger mount over the same store reproduces the same
+# count (the fold-reproducibility guarantee test_evidence.py already
+# covers in isolation, exercised here end to end through the loop).
+# ---------------------------------------------------------------------
+
+def test_evidence_ledger_populated_after_build(d):
+    graph, chains, metrics, store_dir = _build_smoke_graph(d)
+    assert metrics["n_base_edges"] > 0, "fixture too small to test evidence"
+
+    valid_segments = graph.store.segments()
+    led = EvidenceLedger(store_dir)
+
+    any_nonzero = False
+    for from_key, targets in graph._base_edges.items():
+        for to_key in targets:
+            count = led.evidence_count((from_key, to_key), valid_segments)
+            if count > 0:
+                any_nonzero = True
+                break
+        if any_nonzero:
+            break
+    assert any_nonzero, (
+        "evidence_count is 0 for every base edge after a build -- the "
+        "evidence-ledger hook is not actually being called from run_builder"
+    )
+
+    # Fresh mount reproduces the same fold (no double-counting from the
+    # hook being called more than once per segment across this run).
+    led2 = EvidenceLedger(store_dir)
+    sample_key = next(
+        (from_key, to_key)
+        for from_key, targets in graph._base_edges.items()
+        for to_key in targets
+    )
+    assert led2.evidence_count(sample_key, valid_segments) == led.evidence_count(sample_key, valid_segments)
+
+    # mvp3's demo.py does a REDUNDANT post-loop replay of
+    # append_observations_for_segment over every sealed segment (its own
+    # workaround, written before this hook existed in run_builder itself).
+    # Now that run_builder observes each segment once already, a second
+    # (demo-style) pass over the same segments must be a harmless no-op AT
+    # THE FOLD LEVEL: evidence_count must not double, even though the
+    # ledger FILE grows (more lines, same distinct evidence_key values --
+    # append_observation's fold dedupes on evidence_key, per evidence.py).
+    count_before = led.evidence_count(sample_key, valid_segments)
+    for sha in graph.store.segments():
+        led.append_observations_for_segment(graph, sha)
+    count_after = led.evidence_count(sample_key, valid_segments)
+    assert count_before == count_after, (
+        "a redundant replay of append_observations_for_segment (mvp3 demo's "
+        "own pattern) changed evidence_count -- not idempotent at the fold "
+        "level, which means run_builder's hook + demo.py's hook would "
+        "double-count if both ever ran against the same store"
+    )
 
 
 # ---------------------------------------------------------------------
@@ -266,6 +327,7 @@ def test_extractor_override_is_used_not_default(d):
 def run_all():
     tests = [
         test_smoke_loop_produces_graph,
+        test_evidence_ledger_populated_after_build,
         test_expected_chain_present,
         test_record_schema,
         test_extraction_is_ungated,
