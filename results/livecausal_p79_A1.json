@@ -1,0 +1,4392 @@
+{
+  "store": "results/p79_store_A1",
+  "text_file": null,
+  "source": "wt103",
+  "surprise_thresh": 9.081,
+  "surprise_thresh_was_calibrated": true,
+  "lookahead": 6,
+  "max_gaps": 250,
+  "seed": 60,
+  "warmup_chunks": 0,
+  "n_warmup_words": 0,
+  "n_consult_words": 60000,
+  "n_warmup_grad_steps": 0,
+  "elapsed_seconds": 103.63,
+  "canon": true,
+  "canon_env_pin": {
+    "spacy_available": true,
+    "spacy_version": "3.8.11",
+    "model_available": true,
+    "canon_version": "1"
+  },
+  "reader_ckpt": "results/p79_reader_A1.pt",
+  "reader_ckpt_config": {
+    "d_model": 128,
+    "n_layers": 2,
+    "n_heads": 4,
+    "batch": 4,
+    "chunk": 32,
+    "lr": 0.003,
+    "seed": 42,
+    "gate_q": 0.75,
+    "gate_window": 200
+  },
+  "inject_form": "full_record_text",
+  "inject_repeat": 3,
+  "n_spikes": 714,
+  "n_consults": 250,
+  "coverage": 0.3501,
+  "mean_delta_real": -0.0004,
+  "mean_delta_random": -0.0008,
+  "n_helped_real": 112,
+  "n_use_entries": 112,
+  "top5_used_edges": [
+    {
+      "edge_key": [
+        "to",
+        "from happening"
+      ],
+      "use_count": 31
+    },
+    {
+      "edge_key": [
+        "266 @,@ 000 games",
+        "54 @.@ 1767 %"
+      ],
+      "use_count": 15
+    },
+    {
+      "edge_key": [
+        "against the",
+        "in gun caliber"
+      ],
+      "use_count": 5
+    },
+    {
+      "edge_key": [
+        "character and",
+        "traveler new energy"
+      ],
+      "use_count": 5
+    },
+    {
+      "edge_key": [
+        "proposed mission",
+        "europa after a 6 @.@ 5 year cruise"
+      ],
+      "use_count": 3
+    }
+  ],
+  "results": [
+    {
+      "gap": "to",
+      "gap_surprise": 9.1806,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9782,
+      "cont_surprise_with_real_path": 8.9825,
+      "drop_real": -0.0043,
+      "cont_surprise_with_random_path": 8.9838,
+      "drop_random": -0.0055,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.1008,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5726,
+      "cont_surprise_with_real_path": 8.5791,
+      "drop_real": -0.0065,
+      "cont_surprise_with_random_path": 8.5792,
+      "drop_random": -0.0065,
+      "used_edges": []
+    },
+    {
+      "gap": "january",
+      "gap_surprise": 9.083,
+      "edge": {
+        "from_key": "january",
+        "to_key": "2015",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6993,
+      "cont_surprise_with_real_path": 8.6926,
+      "drop_real": 0.0067,
+      "cont_surprise_with_random_path": 8.6966,
+      "drop_random": 0.0028,
+      "used_edges": [
+        [
+          "of january 12",
+          "2015"
+        ]
+      ]
+    },
+    {
+      "gap": "unit",
+      "gap_surprise": 9.7724,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6822,
+      "cont_surprise_with_real_path": 8.6829,
+      "drop_real": -0.0007,
+      "cont_surprise_with_random_path": 8.6811,
+      "drop_random": 0.001,
+      "used_edges": []
+    },
+    {
+      "gap": "war",
+      "gap_surprise": 9.1062,
+      "edge": {
+        "from_key": "war",
+        "to_key": "brien",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.865,
+      "cont_surprise_with_real_path": 8.862,
+      "drop_real": 0.003,
+      "cont_surprise_with_random_path": 8.8692,
+      "drop_random": -0.0042,
+      "used_edges": [
+        [
+          "the american revolutionary war",
+          "o 'brien 's may 1915 commissioning"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2411,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5744,
+      "cont_surprise_with_real_path": 8.5667,
+      "drop_real": 0.0077,
+      "cont_surprise_with_random_path": 8.5594,
+      "drop_random": 0.015,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "work",
+      "gap_surprise": 9.2454,
+      "edge": {
+        "from_key": "work",
+        "to_key": "role",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8337,
+      "cont_surprise_with_real_path": 8.8349,
+      "drop_real": -0.0013,
+      "cont_surprise_with_random_path": 8.8267,
+      "drop_random": 0.0069,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.7232,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0096,
+      "cont_surprise_with_real_path": 9.0147,
+      "drop_real": -0.0051,
+      "cont_surprise_with_random_path": 9.0105,
+      "drop_random": -0.0009,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2727,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8775,
+      "cont_surprise_with_real_path": 8.8867,
+      "drop_real": -0.0092,
+      "cont_surprise_with_random_path": 8.8791,
+      "drop_random": -0.0016,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2277,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7268,
+      "cont_surprise_with_real_path": 8.7126,
+      "drop_real": 0.0142,
+      "cont_surprise_with_random_path": 8.7268,
+      "drop_random": -0.0,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.4042,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9215,
+      "cont_surprise_with_real_path": 8.9332,
+      "drop_real": -0.0117,
+      "cont_surprise_with_random_path": 8.9303,
+      "drop_random": -0.0088,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2668,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7931,
+      "cont_surprise_with_real_path": 8.801,
+      "drop_real": -0.0079,
+      "cont_surprise_with_random_path": 8.8033,
+      "drop_random": -0.0102,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1537,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7884,
+      "cont_surprise_with_real_path": 8.8026,
+      "drop_real": -0.0142,
+      "cont_surprise_with_random_path": 8.7975,
+      "drop_random": -0.0092,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1845,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6416,
+      "cont_surprise_with_real_path": 8.6455,
+      "drop_real": -0.0038,
+      "cont_surprise_with_random_path": 8.6511,
+      "drop_random": -0.0095,
+      "used_edges": []
+    },
+    {
+      "gap": "it",
+      "gap_surprise": 9.1745,
+      "edge": {
+        "from_key": "it",
+        "to_key": "anchorage",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.986,
+      "cont_surprise_with_real_path": 8.9786,
+      "drop_real": 0.0074,
+      "cont_surprise_with_random_path": 8.9792,
+      "drop_random": 0.0068,
+      "used_edges": [
+        [
+          "built it was designed to",
+          "both semaphore 's anchorage"
+        ]
+      ]
+    },
+    {
+      "gap": "sales",
+      "gap_surprise": 9.1654,
+      "edge": {
+        "from_key": "sale",
+        "to_key": "extent",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2534,
+      "cont_surprise_with_real_path": 9.2524,
+      "drop_real": 0.001,
+      "cont_surprise_with_random_path": 9.2615,
+      "drop_random": -0.0082,
+      "used_edges": [
+        [
+          "book sales",
+          "to the extent"
+        ]
+      ]
+    },
+    {
+      "gap": "after",
+      "gap_surprise": 9.8909,
+      "edge": {
+        "from_key": "after",
+        "to_key": "gulf",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9965,
+      "cont_surprise_with_real_path": 8.9865,
+      "drop_real": 0.01,
+      "cont_surprise_with_random_path": 8.9863,
+      "drop_random": 0.0103,
+      "used_edges": [
+        [
+          "after",
+          "gulf of mexico"
+        ]
+      ]
+    },
+    {
+      "gap": "november",
+      "gap_surprise": 9.3326,
+      "edge": {
+        "from_key": "november",
+        "to_key": "agreement",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5441,
+      "cont_surprise_with_real_path": 8.5387,
+      "drop_real": 0.0055,
+      "cont_surprise_with_random_path": 8.5469,
+      "drop_random": -0.0028,
+      "used_edges": [
+        [
+          "11 november",
+          "agreement"
+        ]
+      ]
+    },
+    {
+      "gap": "it",
+      "gap_surprise": 9.6049,
+      "edge": {
+        "from_key": "it",
+        "to_key": "anchorage",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.955,
+      "cont_surprise_with_real_path": 8.9605,
+      "drop_real": -0.0055,
+      "cont_surprise_with_random_path": 8.9668,
+      "drop_random": -0.0117,
+      "used_edges": []
+    },
+    {
+      "gap": "video",
+      "gap_surprise": 9.1919,
+      "edge": {
+        "from_key": "video",
+        "to_key": "death",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.809,
+      "cont_surprise_with_real_path": 8.8112,
+      "drop_real": -0.0022,
+      "cont_surprise_with_random_path": 8.8086,
+      "drop_random": 0.0004,
+      "used_edges": []
+    },
+    {
+      "gap": "series",
+      "gap_surprise": 9.1224,
+      "edge": {
+        "from_key": "series",
+        "to_key": "estate",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0673,
+      "cont_surprise_with_real_path": 9.0674,
+      "drop_real": -0.0001,
+      "cont_surprise_with_random_path": 9.0726,
+      "drop_random": -0.0053,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3675,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0924,
+      "cont_surprise_with_real_path": 9.0934,
+      "drop_real": -0.0009,
+      "cont_surprise_with_random_path": 9.0899,
+      "drop_random": 0.0026,
+      "used_edges": []
+    },
+    {
+      "gap": "sales",
+      "gap_surprise": 9.5669,
+      "edge": {
+        "from_key": "sale",
+        "to_key": "extent",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1619,
+      "cont_surprise_with_real_path": 9.1612,
+      "drop_real": 0.0007,
+      "cont_surprise_with_random_path": 9.1653,
+      "drop_random": -0.0033,
+      "used_edges": [
+        [
+          "book sales",
+          "to the extent"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.7231,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9484,
+      "cont_surprise_with_real_path": 8.9492,
+      "drop_real": -0.0008,
+      "cont_surprise_with_random_path": 8.9478,
+      "drop_random": 0.0006,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2464,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8313,
+      "cont_surprise_with_real_path": 8.8367,
+      "drop_real": -0.0054,
+      "cont_surprise_with_random_path": 8.8359,
+      "drop_random": -0.0046,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.186,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4968,
+      "cont_surprise_with_real_path": 8.4965,
+      "drop_real": 0.0003,
+      "cont_surprise_with_random_path": 8.4959,
+      "drop_random": 0.0009,
+      "used_edges": [
+        [
+          "against the",
+          "in gun caliber"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2062,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4536,
+      "cont_surprise_with_real_path": 8.4557,
+      "drop_real": -0.002,
+      "cont_surprise_with_random_path": 8.4674,
+      "drop_random": -0.0138,
+      "used_edges": []
+    },
+    {
+      "gap": "media",
+      "gap_surprise": 9.0876,
+      "edge": {
+        "from_key": "medium",
+        "to_key": "demand",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9765,
+      "cont_surprise_with_real_path": 8.9849,
+      "drop_real": -0.0085,
+      "cont_surprise_with_random_path": 8.9837,
+      "drop_random": -0.0072,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 10.7498,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.4551,
+      "cont_surprise_with_real_path": 9.45,
+      "drop_real": 0.005,
+      "cont_surprise_with_random_path": 9.4612,
+      "drop_random": -0.0061,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1365,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.064,
+      "cont_surprise_with_real_path": 9.0704,
+      "drop_real": -0.0064,
+      "cont_surprise_with_random_path": 9.0623,
+      "drop_random": 0.0017,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.7453,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.706,
+      "cont_surprise_with_real_path": 8.6985,
+      "drop_real": 0.0074,
+      "cont_surprise_with_random_path": 8.7102,
+      "drop_random": -0.0042,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "military",
+      "gap_surprise": 9.2788,
+      "edge": {
+        "from_key": "military",
+        "to_key": "operation",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9969,
+      "cont_surprise_with_real_path": 8.9995,
+      "drop_real": -0.0026,
+      "cont_surprise_with_random_path": 8.9986,
+      "drop_random": -0.0017,
+      "used_edges": []
+    },
+    {
+      "gap": "unit",
+      "gap_surprise": 9.7993,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9777,
+      "cont_surprise_with_real_path": 8.9813,
+      "drop_real": -0.0037,
+      "cont_surprise_with_random_path": 8.9836,
+      "drop_random": -0.006,
+      "used_edges": []
+    },
+    {
+      "gap": "missions",
+      "gap_surprise": 9.1634,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6298,
+      "cont_surprise_with_real_path": 8.6343,
+      "drop_real": -0.0044,
+      "cont_surprise_with_random_path": 8.6244,
+      "drop_random": 0.0054,
+      "used_edges": []
+    },
+    {
+      "gap": "stories",
+      "gap_surprise": 9.1914,
+      "edge": {
+        "from_key": "story",
+        "to_key": "\"",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6885,
+      "cont_surprise_with_real_path": 8.6923,
+      "drop_real": -0.0039,
+      "cont_surprise_with_random_path": 8.6829,
+      "drop_random": 0.0056,
+      "used_edges": []
+    },
+    {
+      "gap": "series",
+      "gap_surprise": 9.521,
+      "edge": {
+        "from_key": "series",
+        "to_key": "estate",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4743,
+      "cont_surprise_with_real_path": 8.4747,
+      "drop_real": -0.0004,
+      "cont_surprise_with_random_path": 8.4686,
+      "drop_random": 0.0057,
+      "used_edges": []
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.1134,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9189,
+      "cont_surprise_with_real_path": 8.9287,
+      "drop_real": -0.0098,
+      "cont_surprise_with_random_path": 8.922,
+      "drop_random": -0.0031,
+      "used_edges": []
+    },
+    {
+      "gap": "location",
+      "gap_surprise": 9.0914,
+      "edge": {
+        "from_key": "location",
+        "to_key": "foot",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0599,
+      "cont_surprise_with_real_path": 9.0594,
+      "drop_real": 0.0004,
+      "cont_surprise_with_random_path": 9.045,
+      "drop_random": 0.0149,
+      "used_edges": [
+        [
+          "in some locations , floodwaters",
+          "about 1 foot ( 300 mm ) in depth"
+        ]
+      ]
+    },
+    {
+      "gap": "individual",
+      "gap_surprise": 10.0823,
+      "edge": {
+        "from_key": "individual",
+        "to_key": "had cured and had stopped contracting",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.006,
+      "cont_surprise_with_real_path": 9.0103,
+      "drop_real": -0.0043,
+      "cont_surprise_with_random_path": 9.0139,
+      "drop_random": -0.0079,
+      "used_edges": []
+    },
+    {
+      "gap": "character",
+      "gap_surprise": 9.1355,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9396,
+      "cont_surprise_with_real_path": 8.9362,
+      "drop_real": 0.0034,
+      "cont_surprise_with_random_path": 8.9368,
+      "drop_random": 0.0028,
+      "used_edges": [
+        [
+          "character and",
+          "traveler new energy"
+        ]
+      ]
+    },
+    {
+      "gap": "missions",
+      "gap_surprise": 9.3138,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8109,
+      "cont_surprise_with_real_path": 8.8088,
+      "drop_real": 0.0021,
+      "cont_surprise_with_random_path": 8.818,
+      "drop_random": -0.0071,
+      "used_edges": [
+        [
+          "proposed mission",
+          "europa after a 6 @.@ 5 year cruise"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4378,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7217,
+      "cont_surprise_with_real_path": 8.7192,
+      "drop_real": 0.0025,
+      "cont_surprise_with_random_path": 8.7178,
+      "drop_random": 0.0039,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1856,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.042,
+      "cont_surprise_with_real_path": 9.0433,
+      "drop_real": -0.0013,
+      "cont_surprise_with_random_path": 9.043,
+      "drop_random": -0.001,
+      "used_edges": []
+    },
+    {
+      "gap": "completion",
+      "gap_surprise": 9.1801,
+      "edge": {
+        "from_key": "completion",
+        "to_key": "traffic",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0268,
+      "cont_surprise_with_real_path": 9.0206,
+      "drop_real": 0.0063,
+      "cont_surprise_with_random_path": 9.0173,
+      "drop_random": 0.0095,
+      "used_edges": [
+        [
+          "pending the completion of the bypass",
+          "traffic was permitted over hoover dam"
+        ]
+      ]
+    },
+    {
+      "gap": "episodes",
+      "gap_surprise": 9.5512,
+      "edge": {
+        "from_key": "episode",
+        "to_key": "avatar",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0034,
+      "cont_surprise_with_real_path": 9.0023,
+      "drop_real": 0.0011,
+      "cont_surprise_with_random_path": 8.993,
+      "drop_random": 0.0105,
+      "used_edges": [
+        [
+          "the prior episodes",
+          "avatar as a threat"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1605,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6767,
+      "cont_surprise_with_real_path": 8.6818,
+      "drop_real": -0.0051,
+      "cont_surprise_with_random_path": 8.68,
+      "drop_random": -0.0033,
+      "used_edges": []
+    },
+    {
+      "gap": "love",
+      "gap_surprise": 9.4743,
+      "edge": {
+        "from_key": "love",
+        "to_key": "recording",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8756,
+      "cont_surprise_with_real_path": 8.8787,
+      "drop_real": -0.003,
+      "cont_surprise_with_random_path": 8.8802,
+      "drop_random": -0.0046,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2155,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8628,
+      "cont_surprise_with_real_path": 8.8512,
+      "drop_real": 0.0116,
+      "cont_surprise_with_random_path": 8.8642,
+      "drop_random": -0.0014,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "they",
+      "gap_surprise": 9.5153,
+      "edge": {
+        "from_key": "they",
+        "to_key": "burning out",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.0906,
+      "cont_surprise_with_real_path": 8.0934,
+      "drop_real": -0.0027,
+      "cont_surprise_with_random_path": 8.0866,
+      "drop_random": 0.0041,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1904,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6652,
+      "cont_surprise_with_real_path": 8.6611,
+      "drop_real": 0.004,
+      "cont_surprise_with_random_path": 8.6623,
+      "drop_random": 0.0029,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "person",
+      "gap_surprise": 9.2034,
+      "edge": {
+        "from_key": "person",
+        "to_key": "activity",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7548,
+      "cont_surprise_with_real_path": 8.7542,
+      "drop_real": 0.0006,
+      "cont_surprise_with_random_path": 8.757,
+      "drop_random": -0.0022,
+      "used_edges": [
+        [
+          "looking around for a suitable person to",
+          "activity"
+        ]
+      ]
+    },
+    {
+      "gap": "characters",
+      "gap_surprise": 9.3558,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8892,
+      "cont_surprise_with_real_path": 8.8802,
+      "drop_real": 0.0091,
+      "cont_surprise_with_random_path": 8.8865,
+      "drop_random": 0.0027,
+      "used_edges": [
+        [
+          "character and",
+          "traveler new energy"
+        ]
+      ]
+    },
+    {
+      "gap": "each",
+      "gap_surprise": 9.3754,
+      "edge": {
+        "from_key": "each",
+        "to_key": "illustration",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6041,
+      "cont_surprise_with_real_path": 8.6093,
+      "drop_real": -0.0051,
+      "cont_surprise_with_random_path": 8.6077,
+      "drop_random": -0.0036,
+      "used_edges": []
+    },
+    {
+      "gap": "characters",
+      "gap_surprise": 9.6855,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7699,
+      "cont_surprise_with_real_path": 8.7715,
+      "drop_real": -0.0016,
+      "cont_surprise_with_random_path": 8.7703,
+      "drop_random": -0.0005,
+      "used_edges": []
+    },
+    {
+      "gap": "characters",
+      "gap_surprise": 9.1714,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0689,
+      "cont_surprise_with_real_path": 9.0714,
+      "drop_real": -0.0025,
+      "cont_surprise_with_random_path": 9.0664,
+      "drop_random": 0.0025,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4603,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8609,
+      "cont_surprise_with_real_path": 8.8597,
+      "drop_real": 0.0012,
+      "cont_surprise_with_random_path": 8.855,
+      "drop_random": 0.0059,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "their",
+      "gap_surprise": 9.1008,
+      "edge": {
+        "from_key": "their",
+        "to_key": "margin",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6205,
+      "cont_surprise_with_real_path": 8.6066,
+      "drop_real": 0.0139,
+      "cont_surprise_with_random_path": 8.6173,
+      "drop_random": 0.0032,
+      "used_edges": [
+        [
+          "although their",
+          "margin was reduced to four points"
+        ]
+      ]
+    },
+    {
+      "gap": "being",
+      "gap_surprise": 9.8745,
+      "edge": {
+        "from_key": "being",
+        "to_key": "brother",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7894,
+      "cont_surprise_with_real_path": 8.7861,
+      "drop_real": 0.0034,
+      "cont_surprise_with_random_path": 8.7791,
+      "drop_random": 0.0103,
+      "used_edges": [
+        [
+          "human beings",
+          "\" older brother \" in haddock"
+        ]
+      ]
+    },
+    {
+      "gap": "battle",
+      "gap_surprise": 9.1831,
+      "edge": {
+        "from_key": "battle",
+        "to_key": "force",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7687,
+      "cont_surprise_with_real_path": 8.7782,
+      "drop_real": -0.0095,
+      "cont_surprise_with_random_path": 8.7753,
+      "drop_random": -0.0067,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2167,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.874,
+      "cont_surprise_with_real_path": 8.8591,
+      "drop_real": 0.015,
+      "cont_surprise_with_random_path": 8.8601,
+      "drop_random": 0.0139,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4758,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9889,
+      "cont_surprise_with_real_path": 8.9767,
+      "drop_real": 0.0122,
+      "cont_surprise_with_random_path": 8.9864,
+      "drop_random": 0.0025,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 10.1462,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8063,
+      "cont_surprise_with_real_path": 8.7995,
+      "drop_real": 0.0068,
+      "cont_surprise_with_random_path": 8.8058,
+      "drop_random": 0.0006,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "them",
+      "gap_surprise": 9.6843,
+      "edge": {
+        "from_key": "they",
+        "to_key": "burning out",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9608,
+      "cont_surprise_with_real_path": 8.9618,
+      "drop_real": -0.001,
+      "cont_surprise_with_random_path": 8.964,
+      "drop_random": -0.0032,
+      "used_edges": []
+    },
+    {
+      "gap": "command",
+      "gap_surprise": 9.099,
+      "edge": {
+        "from_key": "command",
+        "to_key": "@-@",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.3734,
+      "cont_surprise_with_real_path": 8.38,
+      "drop_real": -0.0066,
+      "cont_surprise_with_random_path": 8.3799,
+      "drop_random": -0.0065,
+      "used_edges": []
+    },
+    {
+      "gap": "point",
+      "gap_surprise": 9.2885,
+      "edge": {
+        "from_key": "point",
+        "to_key": "line",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6389,
+      "cont_surprise_with_real_path": 8.6341,
+      "drop_real": 0.0048,
+      "cont_surprise_with_random_path": 8.6366,
+      "drop_random": 0.0023,
+      "used_edges": [
+        [
+          ", the point where the red river",
+          "line was not marked until 1823"
+        ]
+      ]
+    },
+    {
+      "gap": "battle",
+      "gap_surprise": 9.1626,
+      "edge": {
+        "from_key": "battle",
+        "to_key": "force",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6805,
+      "cont_surprise_with_real_path": 8.6742,
+      "drop_real": 0.0064,
+      "cont_surprise_with_random_path": 8.6773,
+      "drop_random": 0.0032,
+      "used_edges": [
+        [
+          "the battle",
+          "to the british battlecruiser force as well"
+        ]
+      ]
+    },
+    {
+      "gap": "experience",
+      "gap_surprise": 9.2666,
+      "edge": {
+        "from_key": "experience",
+        "to_key": "score",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6413,
+      "cont_surprise_with_real_path": 8.6352,
+      "drop_real": 0.0061,
+      "cont_surprise_with_random_path": 8.6357,
+      "drop_random": 0.0055,
+      "used_edges": [
+        [
+          "experience in major events also",
+          "good scores"
+        ]
+      ]
+    },
+    {
+      "gap": "which",
+      "gap_surprise": 9.1927,
+      "edge": {
+        "from_key": "which",
+        "to_key": "strength",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7125,
+      "cont_surprise_with_real_path": 8.7094,
+      "drop_real": 0.0031,
+      "cont_surprise_with_random_path": 8.708,
+      "drop_random": 0.0046,
+      "used_edges": [
+        [
+          "which",
+          "strength"
+        ]
+      ]
+    },
+    {
+      "gap": "games",
+      "gap_surprise": 9.8623,
+      "edge": {
+        "from_key": "games",
+        "to_key": "game",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2166,
+      "cont_surprise_with_real_path": 9.2143,
+      "drop_real": 0.0022,
+      "cont_surprise_with_random_path": 9.2187,
+      "drop_random": -0.0021,
+      "used_edges": [
+        [
+          "the games rio de janeiro",
+          "games at a cost of usd 14 @.@ 4 billion"
+        ]
+      ]
+    },
+    {
+      "gap": "method",
+      "gap_surprise": 9.7014,
+      "edge": {
+        "from_key": "method",
+        "to_key": "antimony",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1203,
+      "cont_surprise_with_real_path": 9.1192,
+      "drop_real": 0.0011,
+      "cont_surprise_with_random_path": 9.1185,
+      "drop_random": 0.0019,
+      "used_edges": [
+        [
+          "industrial methods to",
+          "antimony"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4518,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0395,
+      "cont_surprise_with_real_path": 9.0345,
+      "drop_real": 0.005,
+      "cont_surprise_with_random_path": 9.0422,
+      "drop_random": -0.0026,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "unit",
+      "gap_surprise": 9.285,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9906,
+      "cont_surprise_with_real_path": 8.9938,
+      "drop_real": -0.0032,
+      "cont_surprise_with_random_path": 8.9904,
+      "drop_random": 0.0003,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1595,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.869,
+      "cont_surprise_with_real_path": 8.8749,
+      "drop_real": -0.006,
+      "cont_surprise_with_random_path": 8.8727,
+      "drop_random": -0.0037,
+      "used_edges": []
+    },
+    {
+      "gap": "war",
+      "gap_surprise": 9.0961,
+      "edge": {
+        "from_key": "war",
+        "to_key": "brien",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.372,
+      "cont_surprise_with_real_path": 8.3743,
+      "drop_real": -0.0024,
+      "cont_surprise_with_random_path": 8.3669,
+      "drop_random": 0.005,
+      "used_edges": []
+    },
+    {
+      "gap": "unit",
+      "gap_surprise": 9.7914,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7754,
+      "cont_surprise_with_real_path": 8.7736,
+      "drop_real": 0.0018,
+      "cont_surprise_with_random_path": 8.7745,
+      "drop_random": 0.0009,
+      "used_edges": [
+        [
+          "where units",
+          "character growth occurs"
+        ]
+      ]
+    },
+    {
+      "gap": "records",
+      "gap_surprise": 9.5499,
+      "edge": {
+        "from_key": "record",
+        "to_key": "noisescape",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.914,
+      "cont_surprise_with_real_path": 8.9174,
+      "drop_real": -0.0034,
+      "cont_surprise_with_random_path": 8.9217,
+      "drop_random": -0.0077,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.207,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5776,
+      "cont_surprise_with_real_path": 8.5775,
+      "drop_real": 0.0001,
+      "cont_surprise_with_random_path": 8.5886,
+      "drop_random": -0.0109,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "numbers",
+      "gap_surprise": 9.5934,
+      "edge": {
+        "from_key": "number",
+        "to_key": "rhodophyta",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4449,
+      "cont_surprise_with_real_path": 8.4286,
+      "drop_real": 0.0163,
+      "cont_surprise_with_random_path": 8.4291,
+      "drop_random": 0.0158,
+      "used_edges": [
+        [
+          "total number of species is 574 and",
+          "264 rhodophyta"
+        ]
+      ]
+    },
+    {
+      "gap": "they",
+      "gap_surprise": 9.5217,
+      "edge": {
+        "from_key": "they",
+        "to_key": "burning out",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1185,
+      "cont_surprise_with_real_path": 9.1215,
+      "drop_real": -0.003,
+      "cont_surprise_with_random_path": 9.1206,
+      "drop_random": -0.0021,
+      "used_edges": []
+    },
+    {
+      "gap": "army",
+      "gap_surprise": 9.2546,
+      "edge": {
+        "from_key": "army",
+        "to_key": "further killing",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6432,
+      "cont_surprise_with_real_path": 8.6345,
+      "drop_real": 0.0088,
+      "cont_surprise_with_random_path": 8.6456,
+      "drop_random": -0.0024,
+      "used_edges": [
+        [
+          "the german army",
+          "further killing"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.0869,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5798,
+      "cont_surprise_with_real_path": 8.5772,
+      "drop_real": 0.0026,
+      "cont_surprise_with_random_path": 8.5853,
+      "drop_random": -0.0056,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.9617,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9494,
+      "cont_surprise_with_real_path": 8.9517,
+      "drop_real": -0.0023,
+      "cont_surprise_with_random_path": 8.9608,
+      "drop_random": -0.0114,
+      "used_edges": []
+    },
+    {
+      "gap": "missions",
+      "gap_surprise": 9.4523,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.255,
+      "cont_surprise_with_real_path": 9.2542,
+      "drop_real": 0.0007,
+      "cont_surprise_with_random_path": 9.2483,
+      "drop_random": 0.0067,
+      "used_edges": [
+        [
+          "proposed mission",
+          "europa after a 6 @.@ 5 year cruise"
+        ]
+      ]
+    },
+    {
+      "gap": "times",
+      "gap_surprise": 9.3196,
+      "edge": {
+        "from_key": "time",
+        "to_key": "boundary",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.642,
+      "cont_surprise_with_real_path": 8.6311,
+      "drop_real": 0.0109,
+      "cont_surprise_with_random_path": 8.6401,
+      "drop_random": 0.0019,
+      "used_edges": [
+        [
+          "the time",
+          "the boundary"
+        ]
+      ]
+    },
+    {
+      "gap": "advantage",
+      "gap_surprise": 9.5937,
+      "edge": {
+        "from_key": "advantage",
+        "to_key": "adam",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2529,
+      "cont_surprise_with_real_path": 9.2614,
+      "drop_real": -0.0085,
+      "cont_surprise_with_random_path": 9.2576,
+      "drop_random": -0.0047,
+      "used_edges": []
+    },
+    {
+      "gap": "orders",
+      "gap_surprise": 9.2087,
+      "edge": {
+        "from_key": "order",
+        "to_key": "death",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6647,
+      "cont_surprise_with_real_path": 8.6655,
+      "drop_real": -0.0008,
+      "cont_surprise_with_random_path": 8.658,
+      "drop_random": 0.0067,
+      "used_edges": []
+    },
+    {
+      "gap": "member",
+      "gap_surprise": 9.3357,
+      "edge": {
+        "from_key": "member",
+        "to_key": "unit",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7394,
+      "cont_surprise_with_real_path": 8.7267,
+      "drop_real": 0.0128,
+      "cont_surprise_with_random_path": 8.7283,
+      "drop_random": 0.0111,
+      "used_edges": [
+        [
+          "their fellow squad members",
+          "a mysterious imperial unit"
+        ]
+      ]
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.1143,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4282,
+      "cont_surprise_with_real_path": 8.4424,
+      "drop_real": -0.0142,
+      "cont_surprise_with_random_path": 8.4331,
+      "drop_random": -0.0049,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.1129,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5213,
+      "cont_surprise_with_real_path": 8.5135,
+      "drop_real": 0.0079,
+      "cont_surprise_with_random_path": 8.5171,
+      "drop_random": 0.0042,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1401,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.3914,
+      "cont_surprise_with_real_path": 8.3858,
+      "drop_real": 0.0056,
+      "cont_surprise_with_random_path": 8.3848,
+      "drop_random": 0.0066,
+      "used_edges": [
+        [
+          "against the",
+          "in gun caliber"
+        ]
+      ]
+    },
+    {
+      "gap": "command",
+      "gap_surprise": 9.4845,
+      "edge": {
+        "from_key": "command",
+        "to_key": "@-@",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8179,
+      "cont_surprise_with_real_path": 8.8203,
+      "drop_real": -0.0024,
+      "cont_surprise_with_random_path": 8.81,
+      "drop_random": 0.0079,
+      "used_edges": []
+    },
+    {
+      "gap": "move",
+      "gap_surprise": 9.095,
+      "edge": {
+        "from_key": "move",
+        "to_key": "development",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7789,
+      "cont_surprise_with_real_path": 8.7763,
+      "drop_real": 0.0025,
+      "cont_surprise_with_random_path": 8.7858,
+      "drop_random": -0.0069,
+      "used_edges": [
+        [
+          "platform move",
+          "development"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.961,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8993,
+      "cont_surprise_with_real_path": 8.8949,
+      "drop_real": 0.0045,
+      "cont_surprise_with_random_path": 8.9005,
+      "drop_random": -0.0012,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1255,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4783,
+      "cont_surprise_with_real_path": 8.4843,
+      "drop_real": -0.006,
+      "cont_surprise_with_random_path": 8.4831,
+      "drop_random": -0.0048,
+      "used_edges": []
+    },
+    {
+      "gap": "war",
+      "gap_surprise": 9.0923,
+      "edge": {
+        "from_key": "war",
+        "to_key": "brien",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8581,
+      "cont_surprise_with_real_path": 8.8562,
+      "drop_real": 0.0019,
+      "cont_surprise_with_random_path": 8.8585,
+      "drop_random": -0.0004,
+      "used_edges": [
+        [
+          "the american revolutionary war",
+          "o 'brien 's may 1915 commissioning"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4421,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8657,
+      "cont_surprise_with_real_path": 8.8672,
+      "drop_real": -0.0015,
+      "cont_surprise_with_random_path": 8.8763,
+      "drop_random": -0.0106,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.9491,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7588,
+      "cont_surprise_with_real_path": 8.7647,
+      "drop_real": -0.0059,
+      "cont_surprise_with_random_path": 8.7648,
+      "drop_random": -0.0061,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3677,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.3599,
+      "cont_surprise_with_real_path": 8.3555,
+      "drop_real": 0.0045,
+      "cont_surprise_with_random_path": 8.3639,
+      "drop_random": -0.004,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3651,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8753,
+      "cont_surprise_with_real_path": 8.8687,
+      "drop_real": 0.0067,
+      "cont_surprise_with_random_path": 8.8734,
+      "drop_random": 0.0019,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1257,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7077,
+      "cont_surprise_with_real_path": 8.7276,
+      "drop_real": -0.0199,
+      "cont_surprise_with_random_path": 8.7165,
+      "drop_random": -0.0088,
+      "used_edges": []
+    },
+    {
+      "gap": "support",
+      "gap_surprise": 9.1105,
+      "edge": {
+        "from_key": "support",
+        "to_key": "themselves",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.3915,
+      "cont_surprise_with_real_path": 8.396,
+      "drop_real": -0.0045,
+      "cont_surprise_with_random_path": 8.3869,
+      "drop_random": 0.0046,
+      "used_edges": []
+    },
+    {
+      "gap": "chance",
+      "gap_surprise": 9.163,
+      "edge": {
+        "from_key": "chance",
+        "to_key": "string",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.547,
+      "cont_surprise_with_real_path": 8.5451,
+      "drop_real": 0.0019,
+      "cont_surprise_with_random_path": 8.5429,
+      "drop_random": 0.0041,
+      "used_edges": [
+        [
+          "his chance",
+          "string of other players were signed"
+        ]
+      ]
+    },
+    {
+      "gap": "themselves",
+      "gap_surprise": 9.3447,
+      "edge": {
+        "from_key": "themselves",
+        "to_key": "u",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4232,
+      "cont_surprise_with_real_path": 8.4199,
+      "drop_real": 0.0033,
+      "cont_surprise_with_random_path": 8.4326,
+      "drop_random": -0.0094,
+      "used_edges": [
+        [
+          "themselves",
+          "sink u @-@ 58 in november 1917"
+        ]
+      ]
+    },
+    {
+      "gap": "their",
+      "gap_surprise": 9.1969,
+      "edge": {
+        "from_key": "their",
+        "to_key": "margin",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5741,
+      "cont_surprise_with_real_path": 8.5739,
+      "drop_real": 0.0002,
+      "cont_surprise_with_random_path": 8.5771,
+      "drop_random": -0.003,
+      "used_edges": [
+        [
+          "although their",
+          "margin was reduced to four points"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.0831,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8534,
+      "cont_surprise_with_real_path": 8.8567,
+      "drop_real": -0.0032,
+      "cont_surprise_with_random_path": 8.8635,
+      "drop_random": -0.0101,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4424,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7768,
+      "cont_surprise_with_real_path": 8.7729,
+      "drop_real": 0.0039,
+      "cont_surprise_with_random_path": 8.776,
+      "drop_random": 0.0008,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "allegiance",
+      "gap_surprise": 9.1587,
+      "edge": {
+        "from_key": "allegiance",
+        "to_key": "perception",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8319,
+      "cont_surprise_with_real_path": 8.824,
+      "drop_real": 0.0078,
+      "cont_surprise_with_random_path": 8.8363,
+      "drop_random": -0.0044,
+      "used_edges": [
+        [
+          "religious allegiance now",
+          "perception"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4292,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7002,
+      "cont_surprise_with_real_path": 8.6949,
+      "drop_real": 0.0053,
+      "cont_surprise_with_random_path": 8.7044,
+      "drop_random": -0.0042,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.9669,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9418,
+      "cont_surprise_with_real_path": 8.9377,
+      "drop_real": 0.0041,
+      "cont_surprise_with_random_path": 8.9448,
+      "drop_random": -0.003,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 9.3249,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1739,
+      "cont_surprise_with_real_path": 9.1764,
+      "drop_real": -0.0025,
+      "cont_surprise_with_random_path": 9.1697,
+      "drop_random": 0.0042,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.4624,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6903,
+      "cont_surprise_with_real_path": 8.6993,
+      "drop_real": -0.009,
+      "cont_surprise_with_random_path": 8.6992,
+      "drop_random": -0.0089,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.7007,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9451,
+      "cont_surprise_with_real_path": 8.9453,
+      "drop_real": -0.0002,
+      "cont_surprise_with_random_path": 8.9395,
+      "drop_random": 0.0056,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2839,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8741,
+      "cont_surprise_with_real_path": 8.8758,
+      "drop_real": -0.0017,
+      "cont_surprise_with_random_path": 8.8794,
+      "drop_random": -0.0054,
+      "used_edges": []
+    },
+    {
+      "gap": "this",
+      "gap_surprise": 9.5957,
+      "edge": {
+        "from_key": "this",
+        "to_key": "insubordination",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2489,
+      "cont_surprise_with_real_path": 9.2658,
+      "drop_real": -0.0169,
+      "cont_surprise_with_random_path": 9.2651,
+      "drop_random": -0.0162,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1206,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1919,
+      "cont_surprise_with_real_path": 9.2054,
+      "drop_real": -0.0135,
+      "cont_surprise_with_random_path": 9.1994,
+      "drop_random": -0.0074,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.7105,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1702,
+      "cont_surprise_with_real_path": 9.1729,
+      "drop_real": -0.0027,
+      "cont_surprise_with_random_path": 9.1752,
+      "drop_random": -0.005,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2541,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0185,
+      "cont_surprise_with_real_path": 9.0312,
+      "drop_real": -0.0127,
+      "cont_surprise_with_random_path": 9.0225,
+      "drop_random": -0.004,
+      "used_edges": []
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.4751,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9248,
+      "cont_surprise_with_real_path": 8.929,
+      "drop_real": -0.0042,
+      "cont_surprise_with_random_path": 8.9251,
+      "drop_random": -0.0003,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.4666,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6443,
+      "cont_surprise_with_real_path": 8.6514,
+      "drop_real": -0.0071,
+      "cont_surprise_with_random_path": 8.6499,
+      "drop_random": -0.0056,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.7182,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9316,
+      "cont_surprise_with_real_path": 8.9324,
+      "drop_real": -0.0009,
+      "cont_surprise_with_random_path": 8.9352,
+      "drop_random": -0.0036,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2561,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8397,
+      "cont_surprise_with_real_path": 8.8466,
+      "drop_real": -0.0069,
+      "cont_surprise_with_random_path": 8.8473,
+      "drop_random": -0.0076,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.2241,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.807,
+      "cont_surprise_with_real_path": 8.8078,
+      "drop_real": -0.0007,
+      "cont_surprise_with_random_path": 8.8066,
+      "drop_random": 0.0004,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1666,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2036,
+      "cont_surprise_with_real_path": 9.2031,
+      "drop_real": 0.0005,
+      "cont_surprise_with_random_path": 9.2127,
+      "drop_random": -0.0091,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "they",
+      "gap_surprise": 10.2586,
+      "edge": {
+        "from_key": "they",
+        "to_key": "burning out",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.3015,
+      "cont_surprise_with_real_path": 9.3111,
+      "drop_real": -0.0095,
+      "cont_surprise_with_random_path": 9.2976,
+      "drop_random": 0.0039,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3011,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9896,
+      "cont_surprise_with_real_path": 8.988,
+      "drop_real": 0.0015,
+      "cont_surprise_with_random_path": 8.9867,
+      "drop_random": 0.0029,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.3725,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.662,
+      "cont_surprise_with_real_path": 8.6768,
+      "drop_real": -0.0148,
+      "cont_surprise_with_random_path": 8.6706,
+      "drop_random": -0.0086,
+      "used_edges": []
+    },
+    {
+      "gap": "playstation",
+      "gap_surprise": 9.2682,
+      "edge": {
+        "from_key": "playstation",
+        "to_key": "beginning",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9367,
+      "cont_surprise_with_real_path": 8.9413,
+      "drop_real": -0.0046,
+      "cont_surprise_with_random_path": 8.9354,
+      "drop_random": 0.0013,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3891,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1855,
+      "cont_surprise_with_real_path": 9.1773,
+      "drop_real": 0.0082,
+      "cont_surprise_with_random_path": 9.1806,
+      "drop_random": 0.0049,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "team",
+      "gap_surprise": 9.1143,
+      "edge": {
+        "from_key": "team",
+        "to_key": "=",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9187,
+      "cont_surprise_with_real_path": 8.9166,
+      "drop_real": 0.002,
+      "cont_surprise_with_random_path": 8.9201,
+      "drop_random": -0.0015,
+      "used_edges": [
+        [
+          "the home team",
+          "= september york"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4773,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5579,
+      "cont_surprise_with_real_path": 8.5483,
+      "drop_real": 0.0096,
+      "cont_surprise_with_random_path": 8.5539,
+      "drop_random": 0.004,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.4732,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.975,
+      "cont_surprise_with_real_path": 8.9781,
+      "drop_real": -0.0031,
+      "cont_surprise_with_random_path": 8.9742,
+      "drop_random": 0.0008,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2561,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8375,
+      "cont_surprise_with_real_path": 8.8452,
+      "drop_real": -0.0078,
+      "cont_surprise_with_random_path": 8.8451,
+      "drop_random": -0.0076,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.166,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9716,
+      "cont_surprise_with_real_path": 8.9738,
+      "drop_real": -0.0022,
+      "cont_surprise_with_random_path": 8.9793,
+      "drop_random": -0.0076,
+      "used_edges": []
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.8299,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8521,
+      "cont_surprise_with_real_path": 8.8664,
+      "drop_real": -0.0142,
+      "cont_surprise_with_random_path": 8.8634,
+      "drop_random": -0.0112,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2678,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9218,
+      "cont_surprise_with_real_path": 8.928,
+      "drop_real": -0.0062,
+      "cont_surprise_with_random_path": 8.9232,
+      "drop_random": -0.0014,
+      "used_edges": []
+    },
+    {
+      "gap": "amount",
+      "gap_surprise": 9.9772,
+      "edge": {
+        "from_key": "amount",
+        "to_key": "end",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7087,
+      "cont_surprise_with_real_path": 8.7282,
+      "drop_real": -0.0196,
+      "cont_surprise_with_random_path": 8.7147,
+      "drop_random": -0.006,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3691,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5388,
+      "cont_surprise_with_real_path": 8.5389,
+      "drop_real": -0.0,
+      "cont_surprise_with_random_path": 8.5467,
+      "drop_random": -0.0078,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.7474,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1249,
+      "cont_surprise_with_real_path": 9.1203,
+      "drop_real": 0.0047,
+      "cont_surprise_with_random_path": 9.1094,
+      "drop_random": 0.0155,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2606,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9226,
+      "cont_surprise_with_real_path": 8.9312,
+      "drop_real": -0.0085,
+      "cont_surprise_with_random_path": 8.926,
+      "drop_random": -0.0033,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.323,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4957,
+      "cont_surprise_with_real_path": 8.5017,
+      "drop_real": -0.006,
+      "cont_surprise_with_random_path": 8.5093,
+      "drop_random": -0.0136,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3392,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8494,
+      "cont_surprise_with_real_path": 8.8445,
+      "drop_real": 0.0049,
+      "cont_surprise_with_random_path": 8.8496,
+      "drop_random": -0.0003,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.469,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6091,
+      "cont_surprise_with_real_path": 8.617,
+      "drop_real": -0.0079,
+      "cont_surprise_with_random_path": 8.608,
+      "drop_random": 0.0011,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1757,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9131,
+      "cont_surprise_with_real_path": 8.9167,
+      "drop_real": -0.0035,
+      "cont_surprise_with_random_path": 8.9276,
+      "drop_random": -0.0144,
+      "used_edges": []
+    },
+    {
+      "gap": "map",
+      "gap_surprise": 9.6097,
+      "edge": {
+        "from_key": "map",
+        "to_key": "astronomer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7135,
+      "cont_surprise_with_real_path": 8.7164,
+      "drop_real": -0.003,
+      "cont_surprise_with_random_path": 8.726,
+      "drop_random": -0.0125,
+      "used_edges": []
+    },
+    {
+      "gap": "mission",
+      "gap_surprise": 9.1933,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6953,
+      "cont_surprise_with_real_path": 8.6811,
+      "drop_real": 0.0142,
+      "cont_surprise_with_random_path": 8.6891,
+      "drop_random": 0.0062,
+      "used_edges": [
+        [
+          "proposed mission",
+          "europa after a 6 @.@ 5 year cruise"
+        ]
+      ]
+    },
+    {
+      "gap": "number",
+      "gap_surprise": 9.1035,
+      "edge": {
+        "from_key": "number",
+        "to_key": "rhodophyta",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4763,
+      "cont_surprise_with_real_path": 8.4729,
+      "drop_real": 0.0033,
+      "cont_surprise_with_random_path": 8.4707,
+      "drop_random": 0.0056,
+      "used_edges": [
+        [
+          "total number of species is 574 and",
+          "264 rhodophyta"
+        ]
+      ]
+    },
+    {
+      "gap": "part",
+      "gap_surprise": 10.2192,
+      "edge": {
+        "from_key": "part",
+        "to_key": "debate",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1351,
+      "cont_surprise_with_real_path": 9.1388,
+      "drop_real": -0.0037,
+      "cont_surprise_with_random_path": 9.1315,
+      "drop_random": 0.0036,
+      "used_edges": []
+    },
+    {
+      "gap": "this",
+      "gap_surprise": 9.163,
+      "edge": {
+        "from_key": "this",
+        "to_key": "insubordination",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7343,
+      "cont_surprise_with_real_path": 8.7291,
+      "drop_real": 0.0052,
+      "cont_surprise_with_random_path": 8.7282,
+      "drop_random": 0.0061,
+      "used_edges": [
+        [
+          "this",
+          "insubordination"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.9987,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1405,
+      "cont_surprise_with_real_path": 9.1296,
+      "drop_real": 0.0109,
+      "cont_surprise_with_random_path": 9.1426,
+      "drop_random": -0.0021,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1164,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6641,
+      "cont_surprise_with_real_path": 8.6779,
+      "drop_real": -0.0137,
+      "cont_surprise_with_random_path": 8.6786,
+      "drop_random": -0.0145,
+      "used_edges": []
+    },
+    {
+      "gap": "systems",
+      "gap_surprise": 9.3659,
+      "edge": {
+        "from_key": "system",
+        "to_key": "1890",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8444,
+      "cont_surprise_with_real_path": 8.8429,
+      "drop_real": 0.0015,
+      "cont_surprise_with_random_path": 8.8491,
+      "drop_random": -0.0047,
+      "used_edges": [
+        [
+          "either side mechanical systems",
+          "unsuccessful and were removed in the 1890s"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1526,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6775,
+      "cont_surprise_with_real_path": 8.6802,
+      "drop_real": -0.0027,
+      "cont_surprise_with_random_path": 8.6764,
+      "drop_random": 0.0011,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1649,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5122,
+      "cont_surprise_with_real_path": 8.5193,
+      "drop_real": -0.0071,
+      "cont_surprise_with_random_path": 8.505,
+      "drop_random": 0.0072,
+      "used_edges": []
+    },
+    {
+      "gap": "character",
+      "gap_surprise": 9.0994,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7821,
+      "cont_surprise_with_real_path": 8.7912,
+      "drop_real": -0.0091,
+      "cont_surprise_with_random_path": 8.7926,
+      "drop_random": -0.0104,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.447,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7639,
+      "cont_surprise_with_real_path": 8.7601,
+      "drop_real": 0.0038,
+      "cont_surprise_with_random_path": 8.7609,
+      "drop_random": 0.003,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.4897,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8246,
+      "cont_surprise_with_real_path": 8.828,
+      "drop_real": -0.0034,
+      "cont_surprise_with_random_path": 8.821,
+      "drop_random": 0.0036,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1355,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6436,
+      "cont_surprise_with_real_path": 8.6512,
+      "drop_real": -0.0075,
+      "cont_surprise_with_random_path": 8.6546,
+      "drop_random": -0.011,
+      "used_edges": []
+    },
+    {
+      "gap": "opening",
+      "gap_surprise": 9.3615,
+      "edge": {
+        "from_key": "opening",
+        "to_key": "run",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6828,
+      "cont_surprise_with_real_path": 8.687,
+      "drop_real": -0.0042,
+      "cont_surprise_with_random_path": 8.6815,
+      "drop_random": 0.0013,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.7586,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0162,
+      "cont_surprise_with_real_path": 9.0177,
+      "drop_real": -0.0015,
+      "cont_surprise_with_random_path": 9.011,
+      "drop_random": 0.0052,
+      "used_edges": []
+    },
+    {
+      "gap": "he",
+      "gap_surprise": 9.6211,
+      "edge": {
+        "from_key": "he",
+        "to_key": "account",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1533,
+      "cont_surprise_with_real_path": 9.1536,
+      "drop_real": -0.0003,
+      "cont_surprise_with_random_path": 9.1384,
+      "drop_random": 0.0149,
+      "used_edges": []
+    },
+    {
+      "gap": "it",
+      "gap_surprise": 9.5611,
+      "edge": {
+        "from_key": "it",
+        "to_key": "anchorage",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.001,
+      "cont_surprise_with_real_path": 8.9987,
+      "drop_real": 0.0024,
+      "cont_surprise_with_random_path": 9.0011,
+      "drop_random": -0.0,
+      "used_edges": [
+        [
+          "built it was designed to",
+          "both semaphore 's anchorage"
+        ]
+      ]
+    },
+    {
+      "gap": "he",
+      "gap_surprise": 9.195,
+      "edge": {
+        "from_key": "he",
+        "to_key": "account",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.596,
+      "cont_surprise_with_real_path": 8.5996,
+      "drop_real": -0.0036,
+      "cont_surprise_with_random_path": 8.5968,
+      "drop_random": -0.0009,
+      "used_edges": []
+    },
+    {
+      "gap": "seven",
+      "gap_surprise": 9.5363,
+      "edge": {
+        "from_key": "seven",
+        "to_key": "ny",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6798,
+      "cont_surprise_with_real_path": 8.6777,
+      "drop_real": 0.0021,
+      "cont_surprise_with_random_path": 8.6729,
+      "drop_random": 0.0069,
+      "used_edges": [
+        [
+          "seven",
+          "to ny 34 ( south street"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3366,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9133,
+      "cont_surprise_with_real_path": 8.914,
+      "drop_real": -0.0007,
+      "cont_surprise_with_random_path": 8.9188,
+      "drop_random": -0.0055,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2503,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7099,
+      "cont_surprise_with_real_path": 8.6908,
+      "drop_real": 0.0191,
+      "cont_surprise_with_random_path": 8.7017,
+      "drop_random": 0.0082,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "elements",
+      "gap_surprise": 9.3202,
+      "edge": {
+        "from_key": "element",
+        "to_key": "paralympic",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0183,
+      "cont_surprise_with_real_path": 9.0146,
+      "drop_real": 0.0037,
+      "cont_surprise_with_random_path": 9.0152,
+      "drop_random": 0.0031,
+      "used_edges": [
+        [
+          "another element that will",
+          "paralympics"
+        ]
+      ]
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.1155,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6581,
+      "cont_surprise_with_real_path": 8.6644,
+      "drop_real": -0.0063,
+      "cont_surprise_with_random_path": 8.6564,
+      "drop_random": 0.0017,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1921,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0892,
+      "cont_surprise_with_real_path": 9.09,
+      "drop_real": -0.0009,
+      "cont_surprise_with_random_path": 9.0868,
+      "drop_random": 0.0024,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1135,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8365,
+      "cont_surprise_with_real_path": 8.8428,
+      "drop_real": -0.0063,
+      "cont_surprise_with_random_path": 8.8382,
+      "drop_random": -0.0017,
+      "used_edges": []
+    },
+    {
+      "gap": "battle",
+      "gap_surprise": 9.3565,
+      "edge": {
+        "from_key": "battle",
+        "to_key": "force",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5099,
+      "cont_surprise_with_real_path": 8.5177,
+      "drop_real": -0.0078,
+      "cont_surprise_with_random_path": 8.5167,
+      "drop_random": -0.0068,
+      "used_edges": []
+    },
+    {
+      "gap": "battle",
+      "gap_surprise": 9.5227,
+      "edge": {
+        "from_key": "battle",
+        "to_key": "force",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.503,
+      "cont_surprise_with_real_path": 8.5065,
+      "drop_real": -0.0036,
+      "cont_surprise_with_random_path": 8.5023,
+      "drop_random": 0.0006,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.7594,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6398,
+      "cont_surprise_with_real_path": 8.6305,
+      "drop_real": 0.0093,
+      "cont_surprise_with_random_path": 8.6416,
+      "drop_random": -0.0018,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "music",
+      "gap_surprise": 9.2084,
+      "edge": {
+        "from_key": "music",
+        "to_key": "instrument",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8774,
+      "cont_surprise_with_real_path": 8.8709,
+      "drop_real": 0.0065,
+      "cont_surprise_with_random_path": 8.8723,
+      "drop_random": 0.0051,
+      "used_edges": [
+        [
+          "that music",
+          "nearly all the instruments"
+        ]
+      ]
+    },
+    {
+      "gap": "tracks",
+      "gap_surprise": 9.5529,
+      "edge": {
+        "from_key": "track",
+        "to_key": "accent",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6311,
+      "cont_surprise_with_real_path": 8.6448,
+      "drop_real": -0.0138,
+      "cont_surprise_with_random_path": 8.6347,
+      "drop_random": -0.0036,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1589,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5248,
+      "cont_surprise_with_real_path": 8.5299,
+      "drop_real": -0.0051,
+      "cont_surprise_with_random_path": 8.5314,
+      "drop_random": -0.0066,
+      "used_edges": []
+    },
+    {
+      "gap": "may",
+      "gap_surprise": 9.1867,
+      "edge": {
+        "from_key": "may",
+        "to_key": "website",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6949,
+      "cont_surprise_with_real_path": 8.6943,
+      "drop_real": 0.0007,
+      "cont_surprise_with_random_path": 8.6959,
+      "drop_random": -0.001,
+      "used_edges": [
+        [
+          "in may 2009 ,",
+          "a new community website"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4909,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5116,
+      "cont_surprise_with_real_path": 8.499,
+      "drop_real": 0.0127,
+      "cont_surprise_with_random_path": 8.501,
+      "drop_random": 0.0107,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "responsibility",
+      "gap_surprise": 9.351,
+      "edge": {
+        "from_key": "responsibility",
+        "to_key": "regulation",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6946,
+      "cont_surprise_with_real_path": 8.6952,
+      "drop_real": -0.0006,
+      "cont_surprise_with_random_path": 8.6982,
+      "drop_random": -0.0036,
+      "used_edges": []
+    },
+    {
+      "gap": "duty",
+      "gap_surprise": 9.354,
+      "edge": {
+        "from_key": "duty",
+        "to_key": "defence",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6904,
+      "cont_surprise_with_real_path": 8.6929,
+      "drop_real": -0.0025,
+      "cont_surprise_with_random_path": 8.6891,
+      "drop_random": 0.0014,
+      "used_edges": []
+    },
+    {
+      "gap": "september",
+      "gap_surprise": 9.3374,
+      "edge": {
+        "from_key": "september",
+        "to_key": "is unknown",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6799,
+      "cont_surprise_with_real_path": 8.6821,
+      "drop_real": -0.0022,
+      "cont_surprise_with_random_path": 8.6725,
+      "drop_random": 0.0074,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.0816,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9722,
+      "cont_surprise_with_real_path": 8.9766,
+      "drop_real": -0.0044,
+      "cont_surprise_with_random_path": 8.9664,
+      "drop_random": 0.0058,
+      "used_edges": []
+    },
+    {
+      "gap": "players",
+      "gap_surprise": 9.8058,
+      "edge": {
+        "from_key": "player",
+        "to_key": "each other",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6596,
+      "cont_surprise_with_real_path": 8.6528,
+      "drop_real": 0.0068,
+      "cont_surprise_with_random_path": 8.6553,
+      "drop_random": 0.0043,
+      "used_edges": [
+        [
+          "discovered , and two players can meet and",
+          "each other"
+        ]
+      ]
+    },
+    {
+      "gap": "content",
+      "gap_surprise": 9.2922,
+      "edge": {
+        "from_key": "content",
+        "to_key": "edition",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0677,
+      "cont_surprise_with_real_path": 9.0629,
+      "drop_real": 0.0048,
+      "cont_surprise_with_random_path": 9.0584,
+      "drop_random": 0.0093,
+      "used_edges": [
+        [
+          "downloadable content",
+          "edition in november of"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1076,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.626,
+      "cont_surprise_with_real_path": 8.6276,
+      "drop_real": -0.0016,
+      "cont_surprise_with_random_path": 8.6238,
+      "drop_random": 0.0022,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.194,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6845,
+      "cont_surprise_with_real_path": 8.68,
+      "drop_real": 0.0045,
+      "cont_surprise_with_random_path": 8.6866,
+      "drop_random": -0.0021,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.179,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.926,
+      "cont_surprise_with_real_path": 8.9262,
+      "drop_real": -0.0002,
+      "cont_surprise_with_random_path": 8.9315,
+      "drop_random": -0.0055,
+      "used_edges": []
+    },
+    {
+      "gap": "events",
+      "gap_surprise": 9.3267,
+      "edge": {
+        "from_key": "event",
+        "to_key": "encounter",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.737,
+      "cont_surprise_with_real_path": 8.7283,
+      "drop_real": 0.0087,
+      "cont_surprise_with_random_path": 8.7305,
+      "drop_random": 0.0065,
+      "used_edges": [
+        [
+          "no other data loss events",
+          "encounter"
+        ]
+      ]
+    },
+    {
+      "gap": "january",
+      "gap_surprise": 9.1189,
+      "edge": {
+        "from_key": "january",
+        "to_key": "2015",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7394,
+      "cont_surprise_with_real_path": 8.7233,
+      "drop_real": 0.0161,
+      "cont_surprise_with_random_path": 8.7214,
+      "drop_random": 0.018,
+      "used_edges": [
+        [
+          "of january 12",
+          "2015"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1827,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7096,
+      "cont_surprise_with_real_path": 8.7124,
+      "drop_real": -0.0028,
+      "cont_surprise_with_random_path": 8.7179,
+      "drop_random": -0.0083,
+      "used_edges": []
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.3902,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8888,
+      "cont_surprise_with_real_path": 8.897,
+      "drop_real": -0.0082,
+      "cont_surprise_with_random_path": 8.882,
+      "drop_random": 0.0068,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1718,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8331,
+      "cont_surprise_with_real_path": 8.8276,
+      "drop_real": 0.0054,
+      "cont_surprise_with_random_path": 8.8353,
+      "drop_random": -0.0023,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.6818,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9898,
+      "cont_surprise_with_real_path": 8.9985,
+      "drop_real": -0.0087,
+      "cont_surprise_with_random_path": 8.9894,
+      "drop_random": 0.0005,
+      "used_edges": []
+    },
+    {
+      "gap": "maps",
+      "gap_surprise": 9.1654,
+      "edge": {
+        "from_key": "map",
+        "to_key": "astronomer",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.229,
+      "cont_surprise_with_real_path": 9.2336,
+      "drop_real": -0.0046,
+      "cont_surprise_with_random_path": 9.2315,
+      "drop_random": -0.0024,
+      "used_edges": []
+    },
+    {
+      "gap": "missions",
+      "gap_surprise": 9.8125,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.975,
+      "cont_surprise_with_real_path": 8.983,
+      "drop_real": -0.008,
+      "cont_surprise_with_random_path": 8.9821,
+      "drop_random": -0.0071,
+      "used_edges": []
+    },
+    {
+      "gap": "characters",
+      "gap_surprise": 9.3086,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8627,
+      "cont_surprise_with_real_path": 8.8612,
+      "drop_real": 0.0015,
+      "cont_surprise_with_random_path": 8.8488,
+      "drop_random": 0.0139,
+      "used_edges": [
+        [
+          "character and",
+          "traveler new energy"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1506,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6716,
+      "cont_surprise_with_real_path": 8.6739,
+      "drop_real": -0.0023,
+      "cont_surprise_with_random_path": 8.6842,
+      "drop_random": -0.0125,
+      "used_edges": []
+    },
+    {
+      "gap": "episodes",
+      "gap_surprise": 9.5593,
+      "edge": {
+        "from_key": "episode",
+        "to_key": "avatar",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1029,
+      "cont_surprise_with_real_path": 9.1038,
+      "drop_real": -0.0009,
+      "cont_surprise_with_random_path": 9.108,
+      "drop_random": -0.0051,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1659,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4145,
+      "cont_surprise_with_real_path": 8.407,
+      "drop_real": 0.0075,
+      "cont_surprise_with_random_path": 8.4202,
+      "drop_random": -0.0056,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "people",
+      "gap_surprise": 9.4612,
+      "edge": {
+        "from_key": "people",
+        "to_key": "awareness",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2024,
+      "cont_surprise_with_real_path": 9.2042,
+      "drop_real": -0.0019,
+      "cont_surprise_with_random_path": 9.2069,
+      "drop_random": -0.0046,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.5384,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7771,
+      "cont_surprise_with_real_path": 8.79,
+      "drop_real": -0.0129,
+      "cont_surprise_with_random_path": 8.7943,
+      "drop_random": -0.0172,
+      "used_edges": []
+    },
+    {
+      "gap": "predecessors",
+      "gap_surprise": 9.1037,
+      "edge": {
+        "from_key": "predecessor",
+        "to_key": "story",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7372,
+      "cont_surprise_with_real_path": 8.7283,
+      "drop_real": 0.0089,
+      "cont_surprise_with_random_path": 8.7301,
+      "drop_random": 0.007,
+      "used_edges": [
+        [
+          "its predecessors",
+          "story"
+        ]
+      ]
+    },
+    {
+      "gap": "west",
+      "gap_surprise": 9.2684,
+      "edge": {
+        "from_key": "west",
+        "to_key": "strength",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1029,
+      "cont_surprise_with_real_path": 9.0864,
+      "drop_real": 0.0166,
+      "cont_surprise_with_random_path": 9.0971,
+      "drop_random": 0.0058,
+      "used_edges": [
+        [
+          "the west",
+          "reaching tropical storm strength at"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4234,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1131,
+      "cont_surprise_with_real_path": 9.1104,
+      "drop_real": 0.0027,
+      "cont_surprise_with_random_path": 9.1208,
+      "drop_random": -0.0077,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3805,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7419,
+      "cont_surprise_with_real_path": 8.7344,
+      "drop_real": 0.0075,
+      "cont_surprise_with_random_path": 8.7376,
+      "drop_random": 0.0043,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.7141,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8944,
+      "cont_surprise_with_real_path": 8.8982,
+      "drop_real": -0.0038,
+      "cont_surprise_with_random_path": 8.9059,
+      "drop_random": -0.0116,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2432,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6612,
+      "cont_surprise_with_real_path": 8.6713,
+      "drop_real": -0.0102,
+      "cont_surprise_with_random_path": 8.672,
+      "drop_random": -0.0108,
+      "used_edges": []
+    },
+    {
+      "gap": "west",
+      "gap_surprise": 9.2679,
+      "edge": {
+        "from_key": "west",
+        "to_key": "strength",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8177,
+      "cont_surprise_with_real_path": 8.8064,
+      "drop_real": 0.0113,
+      "cont_surprise_with_random_path": 8.8155,
+      "drop_random": 0.0022,
+      "used_edges": [
+        [
+          "the west",
+          "reaching tropical storm strength at"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.689,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6962,
+      "cont_surprise_with_real_path": 8.7067,
+      "drop_real": -0.0105,
+      "cont_surprise_with_random_path": 8.7045,
+      "drop_random": -0.0083,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2239,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8975,
+      "cont_surprise_with_real_path": 8.8916,
+      "drop_real": 0.0059,
+      "cont_surprise_with_random_path": 8.8982,
+      "drop_random": -0.0007,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.2095,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5116,
+      "cont_surprise_with_real_path": 8.5081,
+      "drop_real": 0.0035,
+      "cont_surprise_with_random_path": 8.5034,
+      "drop_random": 0.0082,
+      "used_edges": [
+        [
+          "against the",
+          "in gun caliber"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.5068,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8239,
+      "cont_surprise_with_real_path": 8.8258,
+      "drop_real": -0.0019,
+      "cont_surprise_with_random_path": 8.825,
+      "drop_random": -0.0011,
+      "used_edges": []
+    },
+    {
+      "gap": "charts",
+      "gap_surprise": 9.3211,
+      "edge": {
+        "from_key": "chart",
+        "to_key": "number",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8327,
+      "cont_surprise_with_real_path": 8.8291,
+      "drop_real": 0.0036,
+      "cont_surprise_with_random_path": 8.8387,
+      "drop_random": -0.006,
+      "used_edges": [
+        [
+          "of the album chart until late january 2007 , when",
+          "number one again for two weeks"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1832,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6604,
+      "cont_surprise_with_real_path": 8.6587,
+      "drop_real": 0.0017,
+      "cont_surprise_with_random_path": 8.659,
+      "drop_random": 0.0014,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.1432,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6569,
+      "cont_surprise_with_real_path": 8.6555,
+      "drop_real": 0.0015,
+      "cont_surprise_with_random_path": 8.6451,
+      "drop_random": 0.0118,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2009,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4025,
+      "cont_surprise_with_real_path": 8.393,
+      "drop_real": 0.0095,
+      "cont_surprise_with_random_path": 8.4001,
+      "drop_random": 0.0024,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.2019,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0124,
+      "cont_surprise_with_real_path": 9.0077,
+      "drop_real": 0.0047,
+      "cont_surprise_with_random_path": 9.0118,
+      "drop_random": 0.0006,
+      "used_edges": [
+        [
+          "against the",
+          "in gun caliber"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4747,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9062,
+      "cont_surprise_with_real_path": 8.8955,
+      "drop_real": 0.0107,
+      "cont_surprise_with_random_path": 8.8987,
+      "drop_random": 0.0076,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "characters",
+      "gap_surprise": 10.064,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9328,
+      "cont_surprise_with_real_path": 8.9236,
+      "drop_real": 0.0092,
+      "cont_surprise_with_random_path": 8.9286,
+      "drop_random": 0.0042,
+      "used_edges": [
+        [
+          "character and",
+          "traveler new energy"
+        ]
+      ]
+    },
+    {
+      "gap": "difficulty",
+      "gap_surprise": 9.1264,
+      "edge": {
+        "from_key": "difficulty",
+        "to_key": "progress",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0302,
+      "cont_surprise_with_real_path": 9.0358,
+      "drop_real": -0.0056,
+      "cont_surprise_with_random_path": 9.0288,
+      "drop_random": 0.0014,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2276,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6592,
+      "cont_surprise_with_real_path": 8.6346,
+      "drop_real": 0.0246,
+      "cont_surprise_with_random_path": 8.642,
+      "drop_random": 0.0172,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "he",
+      "gap_surprise": 9.1141,
+      "edge": {
+        "from_key": "he",
+        "to_key": "account",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8394,
+      "cont_surprise_with_real_path": 8.8448,
+      "drop_real": -0.0054,
+      "cont_surprise_with_random_path": 8.8445,
+      "drop_random": -0.0051,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4536,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2132,
+      "cont_surprise_with_real_path": 9.2079,
+      "drop_real": 0.0053,
+      "cont_surprise_with_random_path": 9.2192,
+      "drop_random": -0.0059,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.1417,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9492,
+      "cont_surprise_with_real_path": 8.9538,
+      "drop_real": -0.0045,
+      "cont_surprise_with_random_path": 8.9556,
+      "drop_random": -0.0063,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.4358,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6174,
+      "cont_surprise_with_real_path": 8.6141,
+      "drop_real": 0.0033,
+      "cont_surprise_with_random_path": 8.6134,
+      "drop_random": 0.004,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "major",
+      "gap_surprise": 9.4723,
+      "edge": {
+        "from_key": "major",
+        "to_key": "introduction",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8727,
+      "cont_surprise_with_real_path": 8.8671,
+      "drop_real": 0.0056,
+      "cont_surprise_with_random_path": 8.8722,
+      "drop_random": 0.0005,
+      "used_edges": [
+        [
+          "a dota 2 major",
+          "introduction of the majors"
+        ]
+      ]
+    },
+    {
+      "gap": "hindman",
+      "gap_surprise": 9.1559,
+      "edge": {
+        "from_key": "hindman",
+        "to_key": "cap",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.64,
+      "cont_surprise_with_real_path": 8.6467,
+      "drop_real": -0.0067,
+      "cont_surprise_with_random_path": 8.645,
+      "drop_random": -0.005,
+      "used_edges": []
+    },
+    {
+      "gap": "addition",
+      "gap_surprise": 9.2188,
+      "edge": {
+        "from_key": "addition",
+        "to_key": "buffer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7132,
+      "cont_surprise_with_real_path": 8.6995,
+      "drop_real": 0.0137,
+      "cont_surprise_with_random_path": 8.6985,
+      "drop_random": 0.0147,
+      "used_edges": [
+        [
+          "in addition it helped to",
+          "a buffer"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.3432,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8348,
+      "cont_surprise_with_real_path": 8.8376,
+      "drop_real": -0.0028,
+      "cont_surprise_with_random_path": 8.8334,
+      "drop_random": 0.0014,
+      "used_edges": []
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2733,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8201,
+      "cont_surprise_with_real_path": 8.8223,
+      "drop_real": -0.0022,
+      "cont_surprise_with_random_path": 8.8235,
+      "drop_random": -0.0034,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 9.3114,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8047,
+      "cont_surprise_with_real_path": 8.8126,
+      "drop_real": -0.0079,
+      "cont_surprise_with_random_path": 8.8113,
+      "drop_random": -0.0066,
+      "used_edges": []
+    },
+    {
+      "gap": "he",
+      "gap_surprise": 9.4692,
+      "edge": {
+        "from_key": "he",
+        "to_key": "account",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0094,
+      "cont_surprise_with_real_path": 9.0089,
+      "drop_real": 0.0004,
+      "cont_surprise_with_random_path": 9.0064,
+      "drop_random": 0.0029,
+      "used_edges": [
+        [
+          "he relates",
+          "from gardner 's account"
+        ]
+      ]
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.3932,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8119,
+      "cont_surprise_with_real_path": 8.82,
+      "drop_real": -0.0081,
+      "cont_surprise_with_random_path": 8.8119,
+      "drop_random": -0.0001,
+      "used_edges": []
+    },
+    {
+      "gap": "points",
+      "gap_surprise": 9.4709,
+      "edge": {
+        "from_key": "point",
+        "to_key": "line",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6976,
+      "cont_surprise_with_real_path": 8.7075,
+      "drop_real": -0.01,
+      "cont_surprise_with_random_path": 8.7048,
+      "drop_random": -0.0073,
+      "used_edges": []
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.0936,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7741,
+      "cont_surprise_with_real_path": 8.7848,
+      "drop_real": -0.0107,
+      "cont_surprise_with_random_path": 8.7748,
+      "drop_random": -0.0007,
+      "used_edges": []
+    },
+    {
+      "gap": "characters",
+      "gap_surprise": 9.1764,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4332,
+      "cont_surprise_with_real_path": 8.4319,
+      "drop_real": 0.0014,
+      "cont_surprise_with_random_path": 8.4384,
+      "drop_random": -0.0052,
+      "used_edges": [
+        [
+          "character and",
+          "traveler new energy"
+        ]
+      ]
+    },
+    {
+      "gap": "problems",
+      "gap_surprise": 9.3443,
+      "edge": {
+        "from_key": "problem",
+        "to_key": "band",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0738,
+      "cont_surprise_with_real_path": 9.0831,
+      "drop_real": -0.0093,
+      "cont_surprise_with_random_path": 9.073,
+      "drop_random": 0.0008,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.1497,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1896,
+      "cont_surprise_with_real_path": 9.1972,
+      "drop_real": -0.0076,
+      "cont_surprise_with_random_path": 9.1881,
+      "drop_random": 0.0015,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1897,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1365,
+      "cont_surprise_with_real_path": 9.1369,
+      "drop_real": -0.0005,
+      "cont_surprise_with_random_path": 9.1478,
+      "drop_random": -0.0113,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.1371,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1314,
+      "cont_surprise_with_real_path": 9.1384,
+      "drop_real": -0.007,
+      "cont_surprise_with_random_path": 9.1496,
+      "drop_random": -0.0182,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 10.3725,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.3895,
+      "cont_surprise_with_real_path": 8.3894,
+      "drop_real": 0.0002,
+      "cont_surprise_with_random_path": 8.3972,
+      "drop_random": -0.0077,
+      "used_edges": [
+        [
+          "against the",
+          "in gun caliber"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 9.591,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1711,
+      "cont_surprise_with_real_path": 9.1672,
+      "drop_real": 0.0038,
+      "cont_surprise_with_random_path": 9.1578,
+      "drop_random": 0.0132,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.2422,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.01,
+      "cont_surprise_with_real_path": 9.0267,
+      "drop_real": -0.0167,
+      "cont_surprise_with_random_path": 9.0155,
+      "drop_random": -0.0055,
+      "used_edges": []
+    },
+    {
+      "gap": "the",
+      "gap_surprise": 9.79,
+      "edge": {
+        "from_key": "the",
+        "to_key": "caliber",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9456,
+      "cont_surprise_with_real_path": 8.952,
+      "drop_real": -0.0064,
+      "cont_surprise_with_random_path": 8.9473,
+      "drop_random": -0.0017,
+      "used_edges": []
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.2214,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6976,
+      "cont_surprise_with_real_path": 8.6925,
+      "drop_real": 0.0051,
+      "cont_surprise_with_random_path": 8.6878,
+      "drop_random": 0.0098,
+      "used_edges": [
+        [
+          "266 @,@ 000 games",
+          "54 @.@ 1767 %"
+        ]
+      ]
+    },
+    {
+      "gap": "story",
+      "gap_surprise": 9.5565,
+      "edge": {
+        "from_key": "story",
+        "to_key": "\"",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9613,
+      "cont_surprise_with_real_path": 8.9656,
+      "drop_real": -0.0043,
+      "cont_surprise_with_random_path": 8.9726,
+      "drop_random": -0.0114,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 10.7357,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0086,
+      "cont_surprise_with_real_path": 8.9951,
+      "drop_real": 0.0134,
+      "cont_surprise_with_random_path": 9.004,
+      "drop_random": 0.0046,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "ii",
+      "gap_surprise": 9.265,
+      "edge": {
+        "from_key": "ii",
+        "to_key": "dominion",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4936,
+      "cont_surprise_with_real_path": 8.4988,
+      "drop_real": -0.0053,
+      "cont_surprise_with_random_path": 8.4922,
+      "drop_random": 0.0014,
+      "used_edges": []
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.1142,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.752,
+      "cont_surprise_with_real_path": 8.7629,
+      "drop_real": -0.0109,
+      "cont_surprise_with_random_path": 8.7546,
+      "drop_random": -0.0026,
+      "used_edges": []
+    },
+    {
+      "gap": "to",
+      "gap_surprise": 10.7446,
+      "edge": {
+        "from_key": "to",
+        "to_key": "from happening",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2174,
+      "cont_surprise_with_real_path": 9.2142,
+      "drop_real": 0.0032,
+      "cont_surprise_with_random_path": 9.2156,
+      "drop_random": 0.0018,
+      "used_edges": [
+        [
+          "to",
+          "from happening"
+        ]
+      ]
+    },
+    {
+      "gap": "that",
+      "gap_surprise": 9.4422,
+      "edge": {
+        "from_key": "that",
+        "to_key": "cancer",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7791,
+      "cont_surprise_with_real_path": 8.7894,
+      "drop_real": -0.0103,
+      "cont_surprise_with_random_path": 8.7862,
+      "drop_random": -0.0071,
+      "used_edges": []
+    }
+  ]
+}

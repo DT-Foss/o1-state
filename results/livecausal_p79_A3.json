@@ -1,0 +1,4359 @@
+{
+  "store": "results/p79_store_A3",
+  "text_file": null,
+  "source": "wt103",
+  "surprise_thresh": 7.6243,
+  "surprise_thresh_was_calibrated": true,
+  "lookahead": 6,
+  "max_gaps": 250,
+  "seed": 60,
+  "warmup_chunks": 0,
+  "n_warmup_words": 0,
+  "n_consult_words": 60000,
+  "n_warmup_grad_steps": 0,
+  "elapsed_seconds": 36.31,
+  "canon": true,
+  "canon_env_pin": {
+    "spacy_available": true,
+    "spacy_version": "3.8.11",
+    "model_available": true,
+    "canon_version": "1"
+  },
+  "reader_ckpt": "results/p78_reader_A3.pt",
+  "reader_ckpt_config": {
+    "d_model": 128,
+    "n_layers": 2,
+    "n_heads": 4,
+    "batch": 4,
+    "chunk": 32,
+    "lr": 0.003,
+    "seed": 42,
+    "gate_q": 0.75,
+    "gate_window": 200
+  },
+  "inject_form": "full_record_text",
+  "inject_repeat": 3,
+  "n_spikes": 678,
+  "n_consults": 250,
+  "coverage": 0.3687,
+  "mean_delta_real": -0.1057,
+  "mean_delta_random": -0.2936,
+  "n_helped_real": 103,
+  "n_use_entries": 106,
+  "top5_used_edges": [
+    {
+      "edge_key": [
+        "the valkyria",
+        "her home"
+      ],
+      "use_count": 11
+    },
+    {
+      "edge_key": [
+        "by early 1947 , the military decided to",
+        "future radar training operations"
+      ],
+      "use_count": 4
+    },
+    {
+      "edge_key": [
+        "coco = = development",
+        "mobile phone version of crash boom bang !"
+      ],
+      "use_count": 4
+    },
+    {
+      "edge_key": [
+        "where units",
+        "character growth occurs"
+      ],
+      "use_count": 4
+    },
+    {
+      "edge_key": [
+        "both media , innis argued",
+        "demand"
+      ],
+      "use_count": 3
+    }
+  ],
+  "results": [
+    {
+      "gap": "iii",
+      "gap_surprise": 7.7391,
+      "edge": {
+        "from_key": "iii",
+        "to_key": "henry",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6307,
+      "cont_surprise_with_real_path": 9.0556,
+      "drop_real": -0.4249,
+      "cont_surprise_with_random_path": 9.5806,
+      "drop_random": -0.9499,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 23.4095,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 11.3876,
+      "cont_surprise_with_real_path": 12.2034,
+      "drop_real": -0.8159,
+      "cont_surprise_with_random_path": 11.2028,
+      "drop_random": 0.1848,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.2351,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.21,
+      "cont_surprise_with_real_path": 8.8738,
+      "drop_real": -0.6637,
+      "cont_surprise_with_random_path": 8.7494,
+      "drop_random": -0.5393,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 18.4581,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0092,
+      "cont_surprise_with_real_path": 9.9954,
+      "drop_real": -0.9863,
+      "cont_surprise_with_random_path": 9.4983,
+      "drop_random": -0.4892,
+      "used_edges": []
+    },
+    {
+      "gap": "role",
+      "gap_surprise": 10.2587,
+      "edge": {
+        "from_key": "role",
+        "to_key": "adelaide",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.4287,
+      "cont_surprise_with_real_path": 6.1184,
+      "drop_real": 0.3102,
+      "cont_surprise_with_random_path": 6.4502,
+      "drop_random": -0.0216,
+      "used_edges": [
+        [
+          "guns ' primary role was to",
+          "port adelaide"
+        ]
+      ]
+    },
+    {
+      "gap": "video",
+      "gap_surprise": 8.4089,
+      "edge": {
+        "from_key": "video",
+        "to_key": "death",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.1372,
+      "cont_surprise_with_real_path": 3.9,
+      "drop_real": 0.2373,
+      "cont_surprise_with_random_path": 4.6709,
+      "drop_random": -0.5337,
+      "used_edges": [
+        [
+          "applewhite recorded a video shortly",
+          "his death"
+        ]
+      ]
+    },
+    {
+      "gap": "media",
+      "gap_surprise": 7.9428,
+      "edge": {
+        "from_key": "medium",
+        "to_key": "demand",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.1814,
+      "cont_surprise_with_real_path": 5.1453,
+      "drop_real": 0.036,
+      "cont_surprise_with_random_path": 5.6207,
+      "drop_random": -0.4393,
+      "used_edges": [
+        [
+          "both media , innis argued",
+          "demand"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 20.7926,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.8842,
+      "cont_surprise_with_real_path": 8.558,
+      "drop_real": -0.6739,
+      "cont_surprise_with_random_path": 8.7674,
+      "drop_random": -0.8832,
+      "used_edges": []
+    },
+    {
+      "gap": "military",
+      "gap_surprise": 11.0724,
+      "edge": {
+        "from_key": "military",
+        "to_key": "operation",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3715,
+      "cont_surprise_with_real_path": 5.5469,
+      "drop_real": 0.8245,
+      "cont_surprise_with_random_path": 6.4226,
+      "drop_random": -0.0512,
+      "used_edges": [
+        [
+          "by early 1947 , the military decided to",
+          "future radar training operations"
+        ]
+      ]
+    },
+    {
+      "gap": "operations",
+      "gap_surprise": 10.1607,
+      "edge": {
+        "from_key": "operation",
+        "to_key": "automation",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.1592,
+      "cont_surprise_with_real_path": 4.2529,
+      "drop_real": -0.0938,
+      "cont_surprise_with_random_path": 4.3155,
+      "drop_random": -0.1563,
+      "used_edges": []
+    },
+    {
+      "gap": "unit",
+      "gap_surprise": 7.9998,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.4144,
+      "cont_surprise_with_real_path": 4.6522,
+      "drop_real": -0.2378,
+      "cont_surprise_with_random_path": 4.5989,
+      "drop_random": -0.1846,
+      "used_edges": []
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 9.4726,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.1449,
+      "cont_surprise_with_real_path": 6.8896,
+      "drop_real": 0.2553,
+      "cont_surprise_with_random_path": 6.6629,
+      "drop_random": 0.482,
+      "used_edges": [
+        [
+          "coco = = development",
+          "mobile phone version of crash boom bang !"
+        ]
+      ]
+    },
+    {
+      "gap": "work",
+      "gap_surprise": 7.7485,
+      "edge": {
+        "from_key": "work",
+        "to_key": "role",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.114,
+      "cont_surprise_with_real_path": 9.1353,
+      "drop_real": -0.0213,
+      "cont_surprise_with_random_path": 9.8601,
+      "drop_random": -0.746,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 20.6156,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.4786,
+      "cont_surprise_with_real_path": 10.031,
+      "drop_real": -0.5524,
+      "cont_surprise_with_random_path": 9.6905,
+      "drop_random": -0.212,
+      "used_edges": []
+    },
+    {
+      "gap": "series",
+      "gap_surprise": 8.0308,
+      "edge": {
+        "from_key": "series",
+        "to_key": "estate",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.8604,
+      "cont_surprise_with_real_path": 5.4885,
+      "drop_real": -0.628,
+      "cont_surprise_with_random_path": 5.2762,
+      "drop_random": -0.4158,
+      "used_edges": []
+    },
+    {
+      "gap": "designer",
+      "gap_surprise": 9.7974,
+      "edge": {
+        "from_key": "designer",
+        "to_key": "fears",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.8881,
+      "cont_surprise_with_real_path": 3.7404,
+      "drop_real": 0.1477,
+      "cont_surprise_with_random_path": 4.2412,
+      "drop_random": -0.3531,
+      "used_edges": [
+        [
+          "pioneer 's designers",
+          "fears"
+        ]
+      ]
+    },
+    {
+      "gap": "composer",
+      "gap_surprise": 8.056,
+      "edge": {
+        "from_key": "composer",
+        "to_key": "house",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.5843,
+      "cont_surprise_with_real_path": 4.4684,
+      "drop_real": 0.1159,
+      "cont_surprise_with_random_path": 4.904,
+      "drop_random": -0.3197,
+      "used_edges": [
+        [
+          "composer",
+          "opera houses"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 20.9259,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.7974,
+      "cont_surprise_with_real_path": 8.087,
+      "drop_real": -0.2896,
+      "cont_surprise_with_random_path": 7.5461,
+      "drop_random": 0.2513,
+      "used_edges": []
+    },
+    {
+      "gap": "team",
+      "gap_surprise": 7.6441,
+      "edge": {
+        "from_key": "team",
+        "to_key": "=",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.5943,
+      "cont_surprise_with_real_path": 5.3614,
+      "drop_real": 0.2329,
+      "cont_surprise_with_random_path": 6.3127,
+      "drop_random": -0.7184,
+      "used_edges": [
+        [
+          "the home team",
+          "= september york"
+        ]
+      ]
+    },
+    {
+      "gap": "opening",
+      "gap_surprise": 9.8136,
+      "edge": {
+        "from_key": "opening",
+        "to_key": "run",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3374,
+      "cont_surprise_with_real_path": 6.9286,
+      "drop_real": -0.5912,
+      "cont_surprise_with_random_path": 7.7713,
+      "drop_random": -1.4339,
+      "used_edges": []
+    },
+    {
+      "gap": "may",
+      "gap_surprise": 8.5862,
+      "edge": {
+        "from_key": "may",
+        "to_key": "website",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.2405,
+      "cont_surprise_with_real_path": 6.9591,
+      "drop_real": 0.2814,
+      "cont_surprise_with_random_path": 7.7024,
+      "drop_random": -0.4619,
+      "used_edges": [
+        [
+          "in may 2009 ,",
+          "a new community website"
+        ]
+      ]
+    },
+    {
+      "gap": "sales",
+      "gap_surprise": 8.6367,
+      "edge": {
+        "from_key": "sale",
+        "to_key": "extent",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.5425,
+      "cont_surprise_with_real_path": 5.8077,
+      "drop_real": -0.2652,
+      "cont_surprise_with_random_path": 6.3567,
+      "drop_random": -0.8143,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.5691,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 12.8279,
+      "cont_surprise_with_real_path": 12.6862,
+      "drop_real": 0.1417,
+      "cont_surprise_with_random_path": 13.3634,
+      "drop_random": -0.5355,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.1361,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.044,
+      "cont_surprise_with_real_path": 7.9883,
+      "drop_real": 0.0557,
+      "cont_surprise_with_random_path": 8.794,
+      "drop_random": -0.75,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "media",
+      "gap_surprise": 8.8031,
+      "edge": {
+        "from_key": "medium",
+        "to_key": "demand",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.2081,
+      "cont_surprise_with_real_path": 5.5437,
+      "drop_real": 0.6644,
+      "cont_surprise_with_random_path": 6.2784,
+      "drop_random": -0.0703,
+      "used_edges": [
+        [
+          "both media , innis argued",
+          "demand"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 20.8665,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.5069,
+      "cont_surprise_with_real_path": 8.1573,
+      "drop_real": -0.6504,
+      "cont_surprise_with_random_path": 8.7101,
+      "drop_random": -1.2032,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.7102,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1591,
+      "cont_surprise_with_real_path": 9.3227,
+      "drop_real": -0.1637,
+      "cont_surprise_with_random_path": 9.0142,
+      "drop_random": 0.1449,
+      "used_edges": []
+    },
+    {
+      "gap": "role",
+      "gap_surprise": 9.7192,
+      "edge": {
+        "from_key": "role",
+        "to_key": "adelaide",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.744,
+      "cont_surprise_with_real_path": 6.4637,
+      "drop_real": -0.7197,
+      "cont_surprise_with_random_path": 6.098,
+      "drop_random": -0.354,
+      "used_edges": []
+    },
+    {
+      "gap": "military",
+      "gap_surprise": 9.6403,
+      "edge": {
+        "from_key": "military",
+        "to_key": "operation",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.5281,
+      "cont_surprise_with_real_path": 4.1181,
+      "drop_real": 1.41,
+      "cont_surprise_with_random_path": 5.6729,
+      "drop_random": -0.1448,
+      "used_edges": [
+        [
+          "by early 1947 , the military decided to",
+          "future radar training operations"
+        ]
+      ]
+    },
+    {
+      "gap": "unit",
+      "gap_surprise": 8.7656,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.1459,
+      "cont_surprise_with_real_path": 5.2988,
+      "drop_real": -0.1529,
+      "cont_surprise_with_random_path": 5.153,
+      "drop_random": -0.007,
+      "used_edges": []
+    },
+    {
+      "gap": "stories",
+      "gap_surprise": 11.316,
+      "edge": {
+        "from_key": "story",
+        "to_key": "\"",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.2092,
+      "cont_surprise_with_real_path": 6.3637,
+      "drop_real": 0.8454,
+      "cont_surprise_with_random_path": 7.0096,
+      "drop_random": 0.1996,
+      "used_edges": [
+        [
+          "the story",
+          "\""
+        ]
+      ]
+    },
+    {
+      "gap": "series",
+      "gap_surprise": 7.7214,
+      "edge": {
+        "from_key": "series",
+        "to_key": "estate",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.2535,
+      "cont_surprise_with_real_path": 6.5247,
+      "drop_real": -0.2712,
+      "cont_surprise_with_random_path": 6.5862,
+      "drop_random": -0.3328,
+      "used_edges": []
+    },
+    {
+      "gap": "route",
+      "gap_surprise": 8.2706,
+      "edge": {
+        "from_key": "route",
+        "to_key": "development",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.7853,
+      "cont_surprise_with_real_path": 6.1435,
+      "drop_real": -0.3582,
+      "cont_surprise_with_random_path": 5.8377,
+      "drop_random": -0.0523,
+      "used_edges": []
+    },
+    {
+      "gap": "location",
+      "gap_surprise": 8.6439,
+      "edge": {
+        "from_key": "location",
+        "to_key": "foot",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.0098,
+      "cont_surprise_with_real_path": 5.0499,
+      "drop_real": -0.0401,
+      "cont_surprise_with_random_path": 5.3766,
+      "drop_random": -0.3668,
+      "used_edges": []
+    },
+    {
+      "gap": "player",
+      "gap_surprise": 8.4789,
+      "edge": {
+        "from_key": "player",
+        "to_key": "each other",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.4598,
+      "cont_surprise_with_real_path": 5.6178,
+      "drop_real": 0.8421,
+      "cont_surprise_with_random_path": 6.0985,
+      "drop_random": 0.3614,
+      "used_edges": [
+        [
+          "discovered , and two players can meet and",
+          "each other"
+        ]
+      ]
+    },
+    {
+      "gap": "approach",
+      "gap_surprise": 9.4905,
+      "edge": {
+        "from_key": "approach",
+        "to_key": "album",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.9331,
+      "cont_surprise_with_real_path": 5.6548,
+      "drop_real": 0.2783,
+      "cont_surprise_with_random_path": 6.239,
+      "drop_random": -0.306,
+      "used_edges": [
+        [
+          "a more collaborative approach",
+          "album"
+        ]
+      ]
+    },
+    {
+      "gap": "option",
+      "gap_surprise": 8.498,
+      "edge": {
+        "from_key": "option",
+        "to_key": "creator",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.8112,
+      "cont_surprise_with_real_path": 5.0316,
+      "drop_real": -0.2204,
+      "cont_surprise_with_random_path": 5.7223,
+      "drop_random": -0.9111,
+      "used_edges": []
+    },
+    {
+      "gap": "missions",
+      "gap_surprise": 11.35,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.5067,
+      "cont_surprise_with_real_path": 7.7461,
+      "drop_real": -1.2394,
+      "cont_surprise_with_random_path": 7.2241,
+      "drop_random": -0.7174,
+      "used_edges": []
+    },
+    {
+      "gap": "characters",
+      "gap_surprise": 8.323,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.6314,
+      "cont_surprise_with_real_path": 7.6723,
+      "drop_real": -0.0408,
+      "cont_surprise_with_random_path": 7.9425,
+      "drop_random": -0.3111,
+      "used_edges": []
+    },
+    {
+      "gap": "camp",
+      "gap_surprise": 9.9827,
+      "edge": {
+        "from_key": "camp",
+        "to_key": "the",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.9359,
+      "cont_surprise_with_real_path": 4.4566,
+      "drop_real": 0.4792,
+      "cont_surprise_with_random_path": 4.3535,
+      "drop_random": 0.5824,
+      "used_edges": [
+        [
+          "their camps",
+          "against the"
+        ]
+      ]
+    },
+    {
+      "gap": "units",
+      "gap_surprise": 8.6866,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.0896,
+      "cont_surprise_with_real_path": 4.0103,
+      "drop_real": 0.0793,
+      "cont_surprise_with_random_path": 4.3099,
+      "drop_random": -0.2203,
+      "used_edges": [
+        [
+          "where units",
+          "character growth occurs"
+        ]
+      ]
+    },
+    {
+      "gap": "growth",
+      "gap_surprise": 10.1227,
+      "edge": {
+        "from_key": "growth",
+        "to_key": "harbour",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.1886,
+      "cont_surprise_with_real_path": 5.9881,
+      "drop_real": 0.2004,
+      "cont_surprise_with_random_path": 5.8839,
+      "drop_random": 0.3047,
+      "used_edges": [
+        [
+          "growth",
+          "the mumbai harbour"
+        ]
+      ]
+    },
+    {
+      "gap": "missions",
+      "gap_surprise": 9.1895,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.3782,
+      "cont_surprise_with_real_path": 7.5045,
+      "drop_real": -0.1263,
+      "cont_surprise_with_random_path": 7.8598,
+      "drop_random": -0.4817,
+      "used_edges": []
+    },
+    {
+      "gap": "character",
+      "gap_surprise": 8.3776,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.0906,
+      "cont_surprise_with_real_path": 5.9904,
+      "drop_real": 0.1001,
+      "cont_surprise_with_random_path": 6.12,
+      "drop_random": -0.0295,
+      "used_edges": [
+        [
+          "character and",
+          "traveler new energy"
+        ]
+      ]
+    },
+    {
+      "gap": "completion",
+      "gap_surprise": 10.29,
+      "edge": {
+        "from_key": "completion",
+        "to_key": "traffic",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.6516,
+      "cont_surprise_with_real_path": 6.9122,
+      "drop_real": -0.2606,
+      "cont_surprise_with_random_path": 6.8603,
+      "drop_random": -0.2087,
+      "used_edges": []
+    },
+    {
+      "gap": "love",
+      "gap_surprise": 12.7837,
+      "edge": {
+        "from_key": "love",
+        "to_key": "recording",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2288,
+      "cont_surprise_with_real_path": 4.7818,
+      "drop_real": 0.447,
+      "cont_surprise_with_random_path": 5.1267,
+      "drop_random": 0.1022,
+      "used_edges": [
+        [
+          "love",
+          "during the recording of loose"
+        ]
+      ]
+    },
+    {
+      "gap": "battle",
+      "gap_surprise": 9.8578,
+      "edge": {
+        "from_key": "battle",
+        "to_key": "force",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.9835,
+      "cont_surprise_with_real_path": 4.5998,
+      "drop_real": 0.3837,
+      "cont_surprise_with_random_path": 5.0406,
+      "drop_random": -0.0571,
+      "used_edges": [
+        [
+          "the battle",
+          "to the british battlecruiser force as well"
+        ]
+      ]
+    },
+    {
+      "gap": "missions",
+      "gap_surprise": 9.8662,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.996,
+      "cont_surprise_with_real_path": 8.1616,
+      "drop_real": -1.1655,
+      "cont_surprise_with_random_path": 6.8217,
+      "drop_random": 0.1743,
+      "used_edges": []
+    },
+    {
+      "gap": "character",
+      "gap_surprise": 10.054,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.706,
+      "cont_surprise_with_real_path": 4.8362,
+      "drop_real": -0.1302,
+      "cont_surprise_with_random_path": 5.4481,
+      "drop_random": -0.7421,
+      "used_edges": []
+    },
+    {
+      "gap": "field",
+      "gap_surprise": 10.0683,
+      "edge": {
+        "from_key": "field",
+        "to_key": "album",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.8247,
+      "cont_surprise_with_real_path": 7.4321,
+      "drop_real": -0.6074,
+      "cont_surprise_with_random_path": 6.7735,
+      "drop_random": 0.0512,
+      "used_edges": []
+    },
+    {
+      "gap": "action",
+      "gap_surprise": 8.1559,
+      "edge": {
+        "from_key": "action",
+        "to_key": "opponent",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.9517,
+      "cont_surprise_with_real_path": 5.0431,
+      "drop_real": -0.0915,
+      "cont_surprise_with_random_path": 5.5952,
+      "drop_random": -0.6435,
+      "used_edges": []
+    },
+    {
+      "gap": "mission",
+      "gap_surprise": 10.4545,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.77,
+      "cont_surprise_with_real_path": 8.0849,
+      "drop_real": -0.3149,
+      "cont_surprise_with_random_path": 7.9683,
+      "drop_random": -0.1983,
+      "used_edges": []
+    },
+    {
+      "gap": "health",
+      "gap_surprise": 10.6252,
+      "edge": {
+        "from_key": "health",
+        "to_key": "creep",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.9326,
+      "cont_surprise_with_real_path": 6.171,
+      "drop_real": 0.7616,
+      "cont_surprise_with_random_path": 6.5967,
+      "drop_random": 0.3359,
+      "used_edges": [
+        [
+          "significantly enhanced health",
+          "known as \" mega creeps \""
+        ]
+      ]
+    },
+    {
+      "gap": "points",
+      "gap_surprise": 7.983,
+      "edge": {
+        "from_key": "point",
+        "to_key": "line",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3797,
+      "cont_surprise_with_real_path": 6.2311,
+      "drop_real": 0.1486,
+      "cont_surprise_with_random_path": 6.3919,
+      "drop_random": -0.0122,
+      "used_edges": [
+        [
+          ", the point where the red river",
+          "line was not marked until 1823"
+        ]
+      ]
+    },
+    {
+      "gap": "personal",
+      "gap_surprise": 8.1515,
+      "edge": {
+        "from_key": "personal",
+        "to_key": "he",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.8003,
+      "cont_surprise_with_real_path": 6.6935,
+      "drop_real": -0.8932,
+      "cont_surprise_with_random_path": 6.7587,
+      "drop_random": -0.9584,
+      "used_edges": []
+    },
+    {
+      "gap": "potential",
+      "gap_surprise": 7.6714,
+      "edge": {
+        "from_key": "potential",
+        "to_key": "formation",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.9982,
+      "cont_surprise_with_real_path": 5.4451,
+      "drop_real": -0.447,
+      "cont_surprise_with_random_path": 5.4965,
+      "drop_random": -0.4983,
+      "used_edges": []
+    },
+    {
+      "gap": "story",
+      "gap_surprise": 7.8154,
+      "edge": {
+        "from_key": "story",
+        "to_key": "\"",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.0748,
+      "cont_surprise_with_real_path": 4.5776,
+      "drop_real": 0.4972,
+      "cont_surprise_with_random_path": 5.3067,
+      "drop_random": -0.2319,
+      "used_edges": [
+        [
+          "the story",
+          "\""
+        ]
+      ]
+    },
+    {
+      "gap": "battle",
+      "gap_surprise": 8.7535,
+      "edge": {
+        "from_key": "battle",
+        "to_key": "force",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.0967,
+      "cont_surprise_with_real_path": 5.654,
+      "drop_real": 0.4426,
+      "cont_surprise_with_random_path": 6.8184,
+      "drop_random": -0.7218,
+      "used_edges": [
+        [
+          "the battle",
+          "to the british battlecruiser force as well"
+        ]
+      ]
+    },
+    {
+      "gap": "grant",
+      "gap_surprise": 12.3722,
+      "edge": {
+        "from_key": "grant",
+        "to_key": "operation",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.4103,
+      "cont_surprise_with_real_path": 5.6449,
+      "drop_real": -0.2347,
+      "cont_surprise_with_random_path": 5.4422,
+      "drop_random": -0.0319,
+      "used_edges": []
+    },
+    {
+      "gap": "battle",
+      "gap_surprise": 9.673,
+      "edge": {
+        "from_key": "battle",
+        "to_key": "force",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.1261,
+      "cont_surprise_with_real_path": 5.3326,
+      "drop_real": -0.2065,
+      "cont_surprise_with_random_path": 7.0471,
+      "drop_random": -1.921,
+      "used_edges": []
+    },
+    {
+      "gap": "table",
+      "gap_surprise": 8.6108,
+      "edge": {
+        "from_key": "table",
+        "to_key": "conclusion",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.1935,
+      "cont_surprise_with_real_path": 5.421,
+      "drop_real": -0.2275,
+      "cont_surprise_with_random_path": 5.1388,
+      "drop_random": 0.0547,
+      "used_edges": []
+    },
+    {
+      "gap": "characters",
+      "gap_surprise": 7.7784,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.0607,
+      "cont_surprise_with_real_path": 5.4269,
+      "drop_real": -0.3662,
+      "cont_surprise_with_random_path": 5.3659,
+      "drop_random": -0.3051,
+      "used_edges": []
+    },
+    {
+      "gap": "grant",
+      "gap_surprise": 11.9762,
+      "edge": {
+        "from_key": "grant",
+        "to_key": "operation",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3402,
+      "cont_surprise_with_real_path": 6.2857,
+      "drop_real": 0.0545,
+      "cont_surprise_with_random_path": 5.9306,
+      "drop_random": 0.4097,
+      "used_edges": [
+        [
+          "grants",
+          "their operations"
+        ]
+      ]
+    },
+    {
+      "gap": "command",
+      "gap_surprise": 8.1422,
+      "edge": {
+        "from_key": "command",
+        "to_key": "@-@",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2117,
+      "cont_surprise_with_real_path": 5.1261,
+      "drop_real": 0.0856,
+      "cont_surprise_with_random_path": 5.8135,
+      "drop_random": -0.6019,
+      "used_edges": [
+        [
+          "his command",
+          "@-@ in @-@ action"
+        ]
+      ]
+    },
+    {
+      "gap": "action",
+      "gap_surprise": 8.1778,
+      "edge": {
+        "from_key": "action",
+        "to_key": "opponent",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.7195,
+      "cont_surprise_with_real_path": 4.9361,
+      "drop_real": -0.2166,
+      "cont_surprise_with_random_path": 4.7259,
+      "drop_random": -0.0063,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 23.9355,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.8814,
+      "cont_surprise_with_real_path": 8.5656,
+      "drop_real": -0.6843,
+      "cont_surprise_with_random_path": 8.3037,
+      "drop_random": -0.4224,
+      "used_edges": []
+    },
+    {
+      "gap": "target",
+      "gap_surprise": 7.8685,
+      "edge": {
+        "from_key": "target",
+        "to_key": "all",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.555,
+      "cont_surprise_with_real_path": 7.0395,
+      "drop_real": -0.4845,
+      "cont_surprise_with_random_path": 6.8012,
+      "drop_random": -0.2461,
+      "used_edges": []
+    },
+    {
+      "gap": "troops",
+      "gap_surprise": 8.6888,
+      "edge": {
+        "from_key": "troop",
+        "to_key": "order",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2639,
+      "cont_surprise_with_real_path": 5.1817,
+      "drop_real": 0.0822,
+      "cont_surprise_with_random_path": 5.3365,
+      "drop_random": -0.0726,
+      "used_edges": [
+        [
+          "the troops",
+          "any order"
+        ]
+      ]
+    },
+    {
+      "gap": "engineers",
+      "gap_surprise": 10.485,
+      "edge": {
+        "from_key": "engineer",
+        "to_key": "bridge",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.0802,
+      "cont_surprise_with_real_path": 5.2136,
+      "drop_real": -0.1334,
+      "cont_surprise_with_random_path": 5.8206,
+      "drop_random": -0.7404,
+      "used_edges": []
+    },
+    {
+      "gap": "classes",
+      "gap_surprise": 10.4353,
+      "edge": {
+        "from_key": "class",
+        "to_key": "class",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.4376,
+      "cont_surprise_with_real_path": 6.3741,
+      "drop_real": 0.0635,
+      "cont_surprise_with_random_path": 6.9327,
+      "drop_random": -0.4951,
+      "used_edges": [
+        [
+          "changing class does not greatly affect the stats",
+          "in a previous class"
+        ],
+        [
+          "cassin class , the first of the thousand tonners",
+          "the preceding paulding class"
+        ]
+      ]
+    },
+    {
+      "gap": "class",
+      "gap_surprise": 8.0616,
+      "edge": {
+        "from_key": "class",
+        "to_key": "class",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.9573,
+      "cont_surprise_with_real_path": 4.6321,
+      "drop_real": 0.3252,
+      "cont_surprise_with_random_path": 5.1376,
+      "drop_random": -0.1803,
+      "used_edges": [
+        [
+          "changing class does not greatly affect the stats",
+          "in a previous class"
+        ],
+        [
+          "cassin class , the first of the thousand tonners",
+          "the preceding paulding class"
+        ]
+      ]
+    },
+    {
+      "gap": "victory",
+      "gap_surprise": 8.3819,
+      "edge": {
+        "from_key": "victory",
+        "to_key": "kleinman",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.489,
+      "cont_surprise_with_real_path": 7.1704,
+      "drop_real": -0.6814,
+      "cont_surprise_with_random_path": 7.5229,
+      "drop_random": -1.0339,
+      "used_edges": []
+    },
+    {
+      "gap": "experience",
+      "gap_surprise": 8.8086,
+      "edge": {
+        "from_key": "experience",
+        "to_key": "score",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.0127,
+      "cont_surprise_with_real_path": 4.8413,
+      "drop_real": 0.1715,
+      "cont_surprise_with_random_path": 4.9022,
+      "drop_random": 0.1106,
+      "used_edges": [
+        [
+          "experience in major events also",
+          "good scores"
+        ]
+      ]
+    },
+    {
+      "gap": "points",
+      "gap_surprise": 8.8888,
+      "edge": {
+        "from_key": "point",
+        "to_key": "line",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.936,
+      "cont_surprise_with_real_path": 5.3161,
+      "drop_real": -0.3801,
+      "cont_surprise_with_random_path": 5.9562,
+      "drop_random": -1.0202,
+      "used_edges": []
+    },
+    {
+      "gap": "feature",
+      "gap_surprise": 9.0574,
+      "edge": {
+        "from_key": "feature",
+        "to_key": "fattening",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.0309,
+      "cont_surprise_with_real_path": 6.8087,
+      "drop_real": 0.2222,
+      "cont_surprise_with_random_path": 7.4841,
+      "drop_random": -0.4532,
+      "used_edges": [
+        [
+          "a feature",
+          "seasonal fattening"
+        ]
+      ]
+    },
+    {
+      "gap": "games",
+      "gap_surprise": 7.6452,
+      "edge": {
+        "from_key": "games",
+        "to_key": "game",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.6512,
+      "cont_surprise_with_real_path": 6.2404,
+      "drop_real": -0.5893,
+      "cont_surprise_with_random_path": 6.4709,
+      "drop_random": -0.8197,
+      "used_edges": []
+    },
+    {
+      "gap": "method",
+      "gap_surprise": 10.8372,
+      "edge": {
+        "from_key": "method",
+        "to_key": "antimony",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.7587,
+      "cont_surprise_with_real_path": 5.3406,
+      "drop_real": 0.4181,
+      "cont_surprise_with_random_path": 5.7941,
+      "drop_random": -0.0353,
+      "used_edges": [
+        [
+          "industrial methods to",
+          "antimony"
+        ]
+      ]
+    },
+    {
+      "gap": "unit",
+      "gap_surprise": 8.2907,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3324,
+      "cont_surprise_with_real_path": 6.6555,
+      "drop_real": -0.3231,
+      "cont_surprise_with_random_path": 6.8413,
+      "drop_random": -0.5089,
+      "used_edges": []
+    },
+    {
+      "gap": "army",
+      "gap_surprise": 8.9222,
+      "edge": {
+        "from_key": "army",
+        "to_key": "further killing",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.6777,
+      "cont_surprise_with_real_path": 4.5526,
+      "drop_real": 0.1251,
+      "cont_surprise_with_random_path": 5.2873,
+      "drop_random": -0.6096,
+      "used_edges": [
+        [
+          "the german army",
+          "further killing"
+        ]
+      ]
+    },
+    {
+      "gap": "military",
+      "gap_surprise": 7.9594,
+      "edge": {
+        "from_key": "military",
+        "to_key": "operation",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.7784,
+      "cont_surprise_with_real_path": 5.5898,
+      "drop_real": 0.1886,
+      "cont_surprise_with_random_path": 6.7874,
+      "drop_random": -1.009,
+      "used_edges": [
+        [
+          "by early 1947 , the military decided to",
+          "future radar training operations"
+        ]
+      ]
+    },
+    {
+      "gap": "records",
+      "gap_surprise": 9.3739,
+      "edge": {
+        "from_key": "record",
+        "to_key": "noisescape",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.5658,
+      "cont_surprise_with_real_path": 4.9499,
+      "drop_real": 0.6159,
+      "cont_surprise_with_random_path": 5.193,
+      "drop_random": 0.3728,
+      "used_edges": [
+        [
+          "relativity records",
+          "noisescapes"
+        ]
+      ]
+    },
+    {
+      "gap": "numbers",
+      "gap_surprise": 8.4762,
+      "edge": {
+        "from_key": "number",
+        "to_key": "rhodophyta",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.5756,
+      "cont_surprise_with_real_path": 4.8801,
+      "drop_real": -0.3045,
+      "cont_surprise_with_random_path": 5.6141,
+      "drop_random": -1.0384,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 19.7662,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.0156,
+      "cont_surprise_with_real_path": 7.8616,
+      "drop_real": 0.154,
+      "cont_surprise_with_random_path": 8.564,
+      "drop_random": -0.5484,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.094,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.7587,
+      "cont_surprise_with_real_path": 9.5103,
+      "drop_real": -0.7516,
+      "cont_surprise_with_random_path": 8.8926,
+      "drop_random": -0.1339,
+      "used_edges": []
+    },
+    {
+      "gap": "unit",
+      "gap_surprise": 8.5923,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.9689,
+      "cont_surprise_with_real_path": 4.8248,
+      "drop_real": 0.1441,
+      "cont_surprise_with_random_path": 4.9164,
+      "drop_random": 0.0526,
+      "used_edges": [
+        [
+          "where units",
+          "character growth occurs"
+        ]
+      ]
+    },
+    {
+      "gap": "missions",
+      "gap_surprise": 8.2218,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.5727,
+      "cont_surprise_with_real_path": 4.5363,
+      "drop_real": 0.0364,
+      "cont_surprise_with_random_path": 4.8356,
+      "drop_random": -0.2629,
+      "used_edges": [
+        [
+          "proposed mission",
+          "europa after a 6 @.@ 5 year cruise"
+        ]
+      ]
+    },
+    {
+      "gap": "face",
+      "gap_surprise": 8.955,
+      "edge": {
+        "from_key": "face",
+        "to_key": "shape",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.8602,
+      "cont_surprise_with_real_path": 5.1761,
+      "drop_real": -0.3159,
+      "cont_surprise_with_random_path": 5.35,
+      "drop_random": -0.4898,
+      "used_edges": []
+    },
+    {
+      "gap": "orders",
+      "gap_surprise": 8.971,
+      "edge": {
+        "from_key": "order",
+        "to_key": "death",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.7369,
+      "cont_surprise_with_real_path": 5.5368,
+      "drop_real": 0.2001,
+      "cont_surprise_with_random_path": 6.2927,
+      "drop_random": -0.5557,
+      "used_edges": [
+        [
+          "in order to",
+          "kyra 's death"
+        ]
+      ]
+    },
+    {
+      "gap": "post",
+      "gap_surprise": 8.5594,
+      "edge": {
+        "from_key": "post",
+        "to_key": "enemy",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.5565,
+      "cont_surprise_with_real_path": 4.7755,
+      "drop_real": -0.219,
+      "cont_surprise_with_random_path": 4.5864,
+      "drop_random": -0.03,
+      "used_edges": []
+    },
+    {
+      "gap": "elements",
+      "gap_surprise": 12.0926,
+      "edge": {
+        "from_key": "element",
+        "to_key": "paralympic",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.9074,
+      "cont_surprise_with_real_path": 8.0414,
+      "drop_real": -0.134,
+      "cont_surprise_with_random_path": 8.1757,
+      "drop_random": -0.2683,
+      "used_edges": []
+    },
+    {
+      "gap": "army",
+      "gap_surprise": 8.4624,
+      "edge": {
+        "from_key": "army",
+        "to_key": "further killing",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.3849,
+      "cont_surprise_with_real_path": 5.3264,
+      "drop_real": 0.0585,
+      "cont_surprise_with_random_path": 5.5775,
+      "drop_random": -0.1926,
+      "used_edges": [
+        [
+          "the german army",
+          "further killing"
+        ]
+      ]
+    },
+    {
+      "gap": "move",
+      "gap_surprise": 9.9098,
+      "edge": {
+        "from_key": "move",
+        "to_key": "development",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.6038,
+      "cont_surprise_with_real_path": 3.6844,
+      "drop_real": -0.0807,
+      "cont_surprise_with_random_path": 3.5837,
+      "drop_random": 0.02,
+      "used_edges": []
+    },
+    {
+      "gap": "move",
+      "gap_surprise": 9.3805,
+      "edge": {
+        "from_key": "move",
+        "to_key": "development",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.4446,
+      "cont_surprise_with_real_path": 6.2164,
+      "drop_real": -0.7718,
+      "cont_surprise_with_random_path": 6.0517,
+      "drop_random": -0.6071,
+      "used_edges": []
+    },
+    {
+      "gap": "effort",
+      "gap_surprise": 9.3493,
+      "edge": {
+        "from_key": "effort",
+        "to_key": "authority",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.1873,
+      "cont_surprise_with_real_path": 5.149,
+      "drop_real": 0.0383,
+      "cont_surprise_with_random_path": 5.7353,
+      "drop_random": -0.548,
+      "used_edges": [
+        [
+          "his efforts",
+          "authority"
+        ]
+      ]
+    },
+    {
+      "gap": "house",
+      "gap_surprise": 8.6513,
+      "edge": {
+        "from_key": "house",
+        "to_key": "between 1725 and 1730",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.5179,
+      "cont_surprise_with_real_path": 4.5404,
+      "drop_real": -0.0225,
+      "cont_surprise_with_random_path": 4.793,
+      "drop_random": -0.2752,
+      "used_edges": []
+    },
+    {
+      "gap": "major",
+      "gap_surprise": 7.8932,
+      "edge": {
+        "from_key": "major",
+        "to_key": "introduction",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.7999,
+      "cont_surprise_with_real_path": 3.9396,
+      "drop_real": -0.1397,
+      "cont_surprise_with_random_path": 4.0371,
+      "drop_random": -0.2372,
+      "used_edges": []
+    },
+    {
+      "gap": "position",
+      "gap_surprise": 7.9631,
+      "edge": {
+        "from_key": "position",
+        "to_key": "inni",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.3755,
+      "cont_surprise_with_real_path": 5.1435,
+      "drop_real": 0.232,
+      "cont_surprise_with_random_path": 5.0806,
+      "drop_random": 0.2949,
+      "used_edges": [
+        [
+          "the weak position",
+          "innis"
+        ]
+      ]
+    },
+    {
+      "gap": "defeat",
+      "gap_surprise": 8.8444,
+      "edge": {
+        "from_key": "defeat",
+        "to_key": "mentality",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.3686,
+      "cont_surprise_with_real_path": 4.0753,
+      "drop_real": 0.2933,
+      "cont_surprise_with_random_path": 4.7862,
+      "drop_random": -0.4176,
+      "used_edges": [
+        [
+          "the \" typical defeat",
+          "/ win mentality \" of most video games"
+        ]
+      ]
+    },
+    {
+      "gap": "move",
+      "gap_surprise": 10.1603,
+      "edge": {
+        "from_key": "move",
+        "to_key": "development",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.4895,
+      "cont_surprise_with_real_path": 4.7805,
+      "drop_real": -0.2911,
+      "cont_surprise_with_random_path": 4.5348,
+      "drop_random": -0.0453,
+      "used_edges": []
+    },
+    {
+      "gap": "chance",
+      "gap_surprise": 8.597,
+      "edge": {
+        "from_key": "chance",
+        "to_key": "string",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.8371,
+      "cont_surprise_with_real_path": 3.7452,
+      "drop_real": 0.0918,
+      "cont_surprise_with_random_path": 4.4607,
+      "drop_random": -0.6236,
+      "used_edges": [
+        [
+          "his chance",
+          "string of other players were signed"
+        ]
+      ]
+    },
+    {
+      "gap": "fire",
+      "gap_surprise": 9.0896,
+      "edge": {
+        "from_key": "fire",
+        "to_key": "minute",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.848,
+      "cont_surprise_with_real_path": 4.7513,
+      "drop_real": 0.0967,
+      "cont_surprise_with_random_path": 5.3159,
+      "drop_random": -0.4678,
+      "used_edges": [
+        [
+          "fire",
+          "40 minutes of play"
+        ]
+      ]
+    },
+    {
+      "gap": "list",
+      "gap_surprise": 10.0907,
+      "edge": {
+        "from_key": "list",
+        "to_key": "part",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.9676,
+      "cont_surprise_with_real_path": 6.6801,
+      "drop_real": -0.7125,
+      "cont_surprise_with_random_path": 6.4443,
+      "drop_random": -0.4767,
+      "used_edges": []
+    },
+    {
+      "gap": "themselves",
+      "gap_surprise": 8.3537,
+      "edge": {
+        "from_key": "themselves",
+        "to_key": "u",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.3702,
+      "cont_surprise_with_real_path": 4.2673,
+      "drop_real": 0.1028,
+      "cont_surprise_with_random_path": 4.7919,
+      "drop_random": -0.4217,
+      "used_edges": [
+        [
+          "themselves",
+          "sink u @-@ 58 in november 1917"
+        ]
+      ]
+    },
+    {
+      "gap": "each",
+      "gap_surprise": 7.7159,
+      "edge": {
+        "from_key": "each",
+        "to_key": "illustration",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.9931,
+      "cont_surprise_with_real_path": 6.97,
+      "drop_real": 0.0231,
+      "cont_surprise_with_random_path": 7.4137,
+      "drop_random": -0.4206,
+      "used_edges": [
+        [
+          "each was broken down",
+          "illustration"
+        ]
+      ]
+    },
+    {
+      "gap": "ways",
+      "gap_surprise": 9.3243,
+      "edge": {
+        "from_key": "way",
+        "to_key": "competition",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.2757,
+      "cont_surprise_with_real_path": 4.2537,
+      "drop_real": 0.022,
+      "cont_surprise_with_random_path": 4.1558,
+      "drop_random": 0.1199,
+      "used_edges": [
+        [
+          "in this way , beyonc\u00e9",
+          "\" healthy competition \" between the producers"
+        ]
+      ]
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 10.7538,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.9122,
+      "cont_surprise_with_real_path": 10.7534,
+      "drop_real": 0.1587,
+      "cont_surprise_with_random_path": 10.3974,
+      "drop_random": 0.5148,
+      "used_edges": [
+        [
+          "coco = = development",
+          "mobile phone version of crash boom bang !"
+        ]
+      ]
+    },
+    {
+      "gap": "work",
+      "gap_surprise": 8.4067,
+      "edge": {
+        "from_key": "work",
+        "to_key": "role",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.4981,
+      "cont_surprise_with_real_path": 10.5579,
+      "drop_real": -0.0598,
+      "cont_surprise_with_random_path": 10.3611,
+      "drop_random": 0.137,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.1038,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.5811,
+      "cont_surprise_with_real_path": 10.6776,
+      "drop_real": -0.0965,
+      "cont_surprise_with_random_path": 10.5532,
+      "drop_random": 0.0278,
+      "used_edges": []
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 8.4235,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.3186,
+      "cont_surprise_with_real_path": 10.939,
+      "drop_real": -0.6204,
+      "cont_surprise_with_random_path": 10.5289,
+      "drop_random": -0.2103,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.3591,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8197,
+      "cont_surprise_with_real_path": 9.5728,
+      "drop_real": -0.7532,
+      "cont_surprise_with_random_path": 8.5216,
+      "drop_random": 0.2981,
+      "used_edges": []
+    },
+    {
+      "gap": "beginning",
+      "gap_surprise": 8.2378,
+      "edge": {
+        "from_key": "beginning",
+        "to_key": "sign",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.5317,
+      "cont_surprise_with_real_path": 5.4292,
+      "drop_real": 0.1026,
+      "cont_surprise_with_random_path": 5.6002,
+      "drop_random": -0.0685,
+      "used_edges": [
+        [
+          "beginning",
+          "the sign"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.553,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.2222,
+      "cont_surprise_with_real_path": 8.4825,
+      "drop_real": -0.2602,
+      "cont_surprise_with_random_path": 8.0848,
+      "drop_random": 0.1375,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.9682,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.7396,
+      "cont_surprise_with_real_path": 11.038,
+      "drop_real": -0.2984,
+      "cont_surprise_with_random_path": 10.8678,
+      "drop_random": -0.1282,
+      "used_edges": []
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 7.663,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.1328,
+      "cont_surprise_with_real_path": 6.1623,
+      "drop_real": -0.0294,
+      "cont_surprise_with_random_path": 6.303,
+      "drop_random": -0.1702,
+      "used_edges": []
+    },
+    {
+      "gap": "work",
+      "gap_surprise": 8.2626,
+      "edge": {
+        "from_key": "work",
+        "to_key": "role",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.4177,
+      "cont_surprise_with_real_path": 5.5292,
+      "drop_real": -0.1115,
+      "cont_surprise_with_random_path": 5.9189,
+      "drop_random": -0.5011,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.9035,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0704,
+      "cont_surprise_with_real_path": 9.5405,
+      "drop_real": -0.4701,
+      "cont_surprise_with_random_path": 9.8481,
+      "drop_random": -0.7776,
+      "used_edges": []
+    },
+    {
+      "gap": "staff",
+      "gap_surprise": 8.6296,
+      "edge": {
+        "from_key": "staff",
+        "to_key": "she",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2385,
+      "cont_surprise_with_real_path": 5.2252,
+      "drop_real": 0.0133,
+      "cont_surprise_with_random_path": 5.0525,
+      "drop_random": 0.186,
+      "used_edges": [
+        [
+          "kew gardens staff",
+          "her the specimens needed"
+        ]
+      ]
+    },
+    {
+      "gap": "response",
+      "gap_surprise": 7.8507,
+      "edge": {
+        "from_key": "response",
+        "to_key": "assimilation",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.872,
+      "cont_surprise_with_real_path": 5.7337,
+      "drop_real": -0.8618,
+      "cont_surprise_with_random_path": 5.0162,
+      "drop_random": -0.1442,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.9698,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9083,
+      "cont_surprise_with_real_path": 8.9104,
+      "drop_real": -0.002,
+      "cont_surprise_with_random_path": 8.6559,
+      "drop_random": 0.2525,
+      "used_edges": []
+    },
+    {
+      "gap": "playstation",
+      "gap_surprise": 7.8138,
+      "edge": {
+        "from_key": "playstation",
+        "to_key": "beginning",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.8555,
+      "cont_surprise_with_real_path": 3.5899,
+      "drop_real": 0.2656,
+      "cont_surprise_with_random_path": 4.2224,
+      "drop_random": -0.3669,
+      "used_edges": [
+        [
+          "the playstation",
+          "beginning"
+        ]
+      ]
+    },
+    {
+      "gap": "team",
+      "gap_surprise": 8.5047,
+      "edge": {
+        "from_key": "team",
+        "to_key": "=",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.2413,
+      "cont_surprise_with_real_path": 2.4713,
+      "drop_real": 0.77,
+      "cont_surprise_with_random_path": 2.932,
+      "drop_random": 0.3094,
+      "used_edges": [
+        [
+          "the home team",
+          "= september york"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.5319,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4528,
+      "cont_surprise_with_real_path": 8.8058,
+      "drop_real": -0.353,
+      "cont_surprise_with_random_path": 8.7011,
+      "drop_random": -0.2483,
+      "used_edges": []
+    },
+    {
+      "gap": "idea",
+      "gap_surprise": 8.8897,
+      "edge": {
+        "from_key": "idea",
+        "to_key": "support",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.4231,
+      "cont_surprise_with_real_path": 5.9458,
+      "drop_real": -0.5227,
+      "cont_surprise_with_random_path": 6.0086,
+      "drop_random": -0.5856,
+      "used_edges": []
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 8.1747,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.5921,
+      "cont_surprise_with_real_path": 10.9207,
+      "drop_real": -0.3287,
+      "cont_surprise_with_random_path": 10.6289,
+      "drop_random": -0.0369,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 24.5838,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8664,
+      "cont_surprise_with_real_path": 8.7999,
+      "drop_real": 0.0665,
+      "cont_surprise_with_random_path": 8.9805,
+      "drop_random": -0.1141,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "sequel",
+      "gap_surprise": 9.7238,
+      "edge": {
+        "from_key": "sequel",
+        "to_key": "wright",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.4174,
+      "cont_surprise_with_real_path": 9.4874,
+      "drop_real": -0.07,
+      "cont_surprise_with_random_path": 10.5891,
+      "drop_random": -1.1717,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 18.9933,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.6418,
+      "cont_surprise_with_real_path": 10.099,
+      "drop_real": -0.4573,
+      "cont_surprise_with_random_path": 9.8818,
+      "drop_random": -0.24,
+      "used_edges": []
+    },
+    {
+      "gap": "trial",
+      "gap_surprise": 9.0324,
+      "edge": {
+        "from_key": "trial",
+        "to_key": "94 @",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.6268,
+      "cont_surprise_with_real_path": 5.4475,
+      "drop_real": 0.1793,
+      "cont_surprise_with_random_path": 5.7257,
+      "drop_random": -0.0989,
+      "used_edges": [
+        [
+          "on trials she",
+          "94 @"
+        ]
+      ]
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 8.4612,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.1113,
+      "cont_surprise_with_real_path": 5.7326,
+      "drop_real": 0.3787,
+      "cont_surprise_with_random_path": 6.1509,
+      "drop_random": -0.0396,
+      "used_edges": [
+        [
+          "coco = = development",
+          "mobile phone version of crash boom bang !"
+        ]
+      ]
+    },
+    {
+      "gap": "move",
+      "gap_surprise": 10.5063,
+      "edge": {
+        "from_key": "move",
+        "to_key": "development",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.1276,
+      "cont_surprise_with_real_path": 6.7815,
+      "drop_real": -0.6539,
+      "cont_surprise_with_random_path": 6.6078,
+      "drop_random": -0.4801,
+      "used_edges": []
+    },
+    {
+      "gap": "chance",
+      "gap_surprise": 10.5064,
+      "edge": {
+        "from_key": "chance",
+        "to_key": "string",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2911,
+      "cont_surprise_with_real_path": 6.0796,
+      "drop_real": -0.7885,
+      "cont_surprise_with_random_path": 6.0811,
+      "drop_random": -0.79,
+      "used_edges": []
+    },
+    {
+      "gap": "parts",
+      "gap_surprise": 8.0703,
+      "edge": {
+        "from_key": "part",
+        "to_key": "debate",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.6873,
+      "cont_surprise_with_real_path": 10.0119,
+      "drop_real": -0.3246,
+      "cont_surprise_with_random_path": 9.5956,
+      "drop_random": 0.0917,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 23.2473,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.3357,
+      "cont_surprise_with_real_path": 9.144,
+      "drop_real": 0.1916,
+      "cont_surprise_with_random_path": 8.5501,
+      "drop_random": 0.7855,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "staff",
+      "gap_surprise": 9.5865,
+      "edge": {
+        "from_key": "staff",
+        "to_key": "she",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.9052,
+      "cont_surprise_with_real_path": 6.5236,
+      "drop_real": -0.6183,
+      "cont_surprise_with_random_path": 7.1671,
+      "drop_random": -1.2618,
+      "used_edges": []
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 8.3037,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.3786,
+      "cont_surprise_with_real_path": 5.7543,
+      "drop_real": -0.3757,
+      "cont_surprise_with_random_path": 5.8541,
+      "drop_random": -0.4755,
+      "used_edges": []
+    },
+    {
+      "gap": "media",
+      "gap_surprise": 8.4289,
+      "edge": {
+        "from_key": "medium",
+        "to_key": "demand",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.3526,
+      "cont_surprise_with_real_path": 5.5685,
+      "drop_real": -0.2159,
+      "cont_surprise_with_random_path": 5.5613,
+      "drop_random": -0.2087,
+      "used_edges": []
+    },
+    {
+      "gap": "material",
+      "gap_surprise": 9.9073,
+      "edge": {
+        "from_key": "material",
+        "to_key": "confirmation",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.5674,
+      "cont_surprise_with_real_path": 6.2073,
+      "drop_real": 0.3601,
+      "cont_surprise_with_random_path": 6.7953,
+      "drop_random": -0.2278,
+      "used_edges": [
+        [
+          "from material coming up from",
+          "confirmation"
+        ]
+      ]
+    },
+    {
+      "gap": "games",
+      "gap_surprise": 7.9194,
+      "edge": {
+        "from_key": "games",
+        "to_key": "game",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.5172,
+      "cont_surprise_with_real_path": 3.5553,
+      "drop_real": -0.0381,
+      "cont_surprise_with_random_path": 4.4465,
+      "drop_random": -0.9293,
+      "used_edges": []
+    },
+    {
+      "gap": "map",
+      "gap_surprise": 9.0839,
+      "edge": {
+        "from_key": "map",
+        "to_key": "astronomer",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.1235,
+      "cont_surprise_with_real_path": 5.0672,
+      "drop_real": 0.0563,
+      "cont_surprise_with_random_path": 5.8823,
+      "drop_random": -0.7588,
+      "used_edges": [
+        [
+          "map is intended to",
+          "future astronomers"
+        ]
+      ]
+    },
+    {
+      "gap": "mission",
+      "gap_surprise": 10.3596,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.4202,
+      "cont_surprise_with_real_path": 4.9771,
+      "drop_real": -0.5569,
+      "cont_surprise_with_random_path": 5.0616,
+      "drop_random": -0.6414,
+      "used_edges": []
+    },
+    {
+      "gap": "mission",
+      "gap_surprise": 8.5955,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2356,
+      "cont_surprise_with_real_path": 5.2388,
+      "drop_real": -0.0032,
+      "cont_surprise_with_random_path": 5.592,
+      "drop_random": -0.3565,
+      "used_edges": []
+    },
+    {
+      "gap": "part",
+      "gap_surprise": 8.4943,
+      "edge": {
+        "from_key": "part",
+        "to_key": "debate",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.1768,
+      "cont_surprise_with_real_path": 5.3349,
+      "drop_real": -0.1581,
+      "cont_surprise_with_random_path": 5.2215,
+      "drop_random": -0.0447,
+      "used_edges": []
+    },
+    {
+      "gap": "involved",
+      "gap_surprise": 8.6548,
+      "edge": {
+        "from_key": "involved",
+        "to_key": "astronaut",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.4305,
+      "cont_surprise_with_real_path": 5.5513,
+      "drop_real": -0.1208,
+      "cont_surprise_with_random_path": 5.8816,
+      "drop_random": -0.4511,
+      "used_edges": []
+    },
+    {
+      "gap": "body",
+      "gap_surprise": 8.6342,
+      "edge": {
+        "from_key": "body",
+        "to_key": "one",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.0696,
+      "cont_surprise_with_real_path": 3.8939,
+      "drop_real": 0.1757,
+      "cont_surprise_with_random_path": 4.0894,
+      "drop_random": -0.0198,
+      "used_edges": [
+        [
+          "the human body",
+          "one could ascend"
+        ]
+      ]
+    },
+    {
+      "gap": "memory",
+      "gap_surprise": 7.8931,
+      "edge": {
+        "from_key": "memory",
+        "to_key": "backstory",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.544,
+      "cont_surprise_with_real_path": 5.2994,
+      "drop_real": -0.7553,
+      "cont_surprise_with_random_path": 5.0684,
+      "drop_random": -0.5244,
+      "used_edges": []
+    },
+    {
+      "gap": "systems",
+      "gap_surprise": 8.4323,
+      "edge": {
+        "from_key": "system",
+        "to_key": "1890",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.6103,
+      "cont_surprise_with_real_path": 5.4818,
+      "drop_real": 0.1285,
+      "cont_surprise_with_random_path": 5.6383,
+      "drop_random": -0.028,
+      "used_edges": [
+        [
+          "either side mechanical systems",
+          "unsuccessful and were removed in the 1890s"
+        ]
+      ]
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 8.1773,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.6504,
+      "cont_surprise_with_real_path": 6.56,
+      "drop_real": -0.9097,
+      "cont_surprise_with_random_path": 6.5374,
+      "drop_random": -0.887,
+      "used_edges": []
+    },
+    {
+      "gap": "designs",
+      "gap_surprise": 9.3089,
+      "edge": {
+        "from_key": "design",
+        "to_key": "may",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.8557,
+      "cont_surprise_with_real_path": 3.7928,
+      "drop_real": 0.0629,
+      "cont_surprise_with_random_path": 4.1128,
+      "drop_random": -0.2571,
+      "used_edges": [
+        [
+          "a slightly modified design",
+          "between may and october"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.5271,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.3858,
+      "cont_surprise_with_real_path": 9.6334,
+      "drop_real": -0.2475,
+      "cont_surprise_with_random_path": 9.0196,
+      "drop_random": 0.3662,
+      "used_edges": []
+    },
+    {
+      "gap": "games",
+      "gap_surprise": 7.9651,
+      "edge": {
+        "from_key": "games",
+        "to_key": "game",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2094,
+      "cont_surprise_with_real_path": 5.6359,
+      "drop_real": -0.4265,
+      "cont_surprise_with_random_path": 6.0735,
+      "drop_random": -0.8641,
+      "used_edges": []
+    },
+    {
+      "gap": "military",
+      "gap_surprise": 9.3202,
+      "edge": {
+        "from_key": "military",
+        "to_key": "operation",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.6052,
+      "cont_surprise_with_real_path": 6.2326,
+      "drop_real": 0.3726,
+      "cont_surprise_with_random_path": 6.8434,
+      "drop_random": -0.2382,
+      "used_edges": [
+        [
+          "by early 1947 , the military decided to",
+          "future radar training operations"
+        ]
+      ]
+    },
+    {
+      "gap": "character",
+      "gap_surprise": 9.39,
+      "edge": {
+        "from_key": "character",
+        "to_key": "energy",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.9813,
+      "cont_surprise_with_real_path": 4.8711,
+      "drop_real": 0.1101,
+      "cont_surprise_with_random_path": 5.1558,
+      "drop_random": -0.1745,
+      "used_edges": [
+        [
+          "character and",
+          "traveler new energy"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.3725,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.4876,
+      "cont_surprise_with_real_path": 9.6476,
+      "drop_real": -0.16,
+      "cont_surprise_with_random_path": 9.9366,
+      "drop_random": -0.449,
+      "used_edges": []
+    },
+    {
+      "gap": "world",
+      "gap_surprise": 8.232,
+      "edge": {
+        "from_key": "world",
+        "to_key": "house",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.4252,
+      "cont_surprise_with_real_path": 4.4427,
+      "drop_real": -0.0174,
+      "cont_surprise_with_random_path": 4.6165,
+      "drop_random": -0.1912,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 20.2733,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 12.4549,
+      "cont_surprise_with_real_path": 13.1441,
+      "drop_real": -0.6892,
+      "cont_surprise_with_random_path": 12.6791,
+      "drop_random": -0.2242,
+      "used_edges": []
+    },
+    {
+      "gap": "games",
+      "gap_surprise": 8.6969,
+      "edge": {
+        "from_key": "games",
+        "to_key": "game",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.4768,
+      "cont_surprise_with_real_path": 9.4149,
+      "drop_real": 0.0619,
+      "cont_surprise_with_random_path": 9.5823,
+      "drop_random": -0.1054,
+      "used_edges": [
+        [
+          "the games rio de janeiro",
+          "games at a cost of usd 14 @.@ 4 billion"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.8856,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.2306,
+      "cont_surprise_with_real_path": 8.5177,
+      "drop_real": -0.2871,
+      "cont_surprise_with_random_path": 8.3574,
+      "drop_random": -0.1268,
+      "used_edges": []
+    },
+    {
+      "gap": "opening",
+      "gap_surprise": 10.8514,
+      "edge": {
+        "from_key": "opening",
+        "to_key": "run",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3006,
+      "cont_surprise_with_real_path": 6.8325,
+      "drop_real": -0.5319,
+      "cont_surprise_with_random_path": 6.8569,
+      "drop_random": -0.5562,
+      "used_edges": []
+    },
+    {
+      "gap": "production",
+      "gap_surprise": 10.0097,
+      "edge": {
+        "from_key": "production",
+        "to_key": "daisy",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.974,
+      "cont_surprise_with_real_path": 5.8354,
+      "drop_real": 0.1387,
+      "cont_surprise_with_random_path": 6.1789,
+      "drop_random": -0.2049,
+      "used_edges": [
+        [
+          "a 2010 production",
+          "miss daisy"
+        ]
+      ]
+    },
+    {
+      "gap": "music",
+      "gap_surprise": 8.1623,
+      "edge": {
+        "from_key": "music",
+        "to_key": "instrument",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.5996,
+      "cont_surprise_with_real_path": 4.2454,
+      "drop_real": 0.3542,
+      "cont_surprise_with_random_path": 4.9227,
+      "drop_random": -0.3231,
+      "used_edges": [
+        [
+          "that music",
+          "nearly all the instruments"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.3586,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2051,
+      "cont_surprise_with_real_path": 9.1919,
+      "drop_real": 0.0132,
+      "cont_surprise_with_random_path": 9.7658,
+      "drop_random": -0.5608,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "games",
+      "gap_surprise": 9.0105,
+      "edge": {
+        "from_key": "games",
+        "to_key": "game",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2968,
+      "cont_surprise_with_real_path": 5.3201,
+      "drop_real": -0.0233,
+      "cont_surprise_with_random_path": 5.3199,
+      "drop_random": -0.0231,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 20.3559,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5828,
+      "cont_surprise_with_real_path": 8.8652,
+      "drop_real": -0.2824,
+      "cont_surprise_with_random_path": 8.2083,
+      "drop_random": 0.3745,
+      "used_edges": []
+    },
+    {
+      "gap": "games",
+      "gap_surprise": 8.9213,
+      "edge": {
+        "from_key": "games",
+        "to_key": "game",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.9329,
+      "cont_surprise_with_real_path": 6.9403,
+      "drop_real": -0.0074,
+      "cont_surprise_with_random_path": 7.3538,
+      "drop_random": -0.4209,
+      "used_edges": []
+    },
+    {
+      "gap": "seven",
+      "gap_surprise": 7.6867,
+      "edge": {
+        "from_key": "seven",
+        "to_key": "ny",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.8335,
+      "cont_surprise_with_real_path": 5.4539,
+      "drop_real": -0.6203,
+      "cont_surprise_with_random_path": 5.1817,
+      "drop_random": -0.3481,
+      "used_edges": []
+    },
+    {
+      "gap": "orchestra",
+      "gap_surprise": 10.3081,
+      "edge": {
+        "from_key": "orchestra",
+        "to_key": "album",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.0803,
+      "cont_surprise_with_real_path": 7.1656,
+      "drop_real": -0.0853,
+      "cont_surprise_with_random_path": 7.5718,
+      "drop_random": -0.4915,
+      "used_edges": []
+    },
+    {
+      "gap": "elements",
+      "gap_surprise": 7.8385,
+      "edge": {
+        "from_key": "element",
+        "to_key": "paralympic",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.8238,
+      "cont_surprise_with_real_path": 3.5421,
+      "drop_real": 0.2818,
+      "cont_surprise_with_random_path": 4.2581,
+      "drop_random": -0.4343,
+      "used_edges": [
+        [
+          "another element that will",
+          "paralympics"
+        ]
+      ]
+    },
+    {
+      "gap": "piece",
+      "gap_surprise": 7.677,
+      "edge": {
+        "from_key": "piece",
+        "to_key": "cornerstone",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.8141,
+      "cont_surprise_with_real_path": 4.9579,
+      "drop_real": -0.1438,
+      "cont_surprise_with_random_path": 4.8073,
+      "drop_random": 0.0068,
+      "used_edges": []
+    },
+    {
+      "gap": "battle",
+      "gap_surprise": 9.2993,
+      "edge": {
+        "from_key": "battle",
+        "to_key": "force",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.52,
+      "cont_surprise_with_real_path": 5.3157,
+      "drop_real": 0.2043,
+      "cont_surprise_with_random_path": 5.467,
+      "drop_random": 0.0531,
+      "used_edges": [
+        [
+          "the battle",
+          "to the british battlecruiser force as well"
+        ]
+      ]
+    },
+    {
+      "gap": "orchestra",
+      "gap_surprise": 8.2062,
+      "edge": {
+        "from_key": "orchestra",
+        "to_key": "album",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.9443,
+      "cont_surprise_with_real_path": 4.8078,
+      "drop_real": -0.8635,
+      "cont_surprise_with_random_path": 5.2893,
+      "drop_random": -1.345,
+      "used_edges": []
+    },
+    {
+      "gap": "opening",
+      "gap_surprise": 9.4843,
+      "edge": {
+        "from_key": "opening",
+        "to_key": "run",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3806,
+      "cont_surprise_with_real_path": 6.6543,
+      "drop_real": -0.2737,
+      "cont_surprise_with_random_path": 5.8701,
+      "drop_random": 0.5105,
+      "used_edges": []
+    },
+    {
+      "gap": "may",
+      "gap_surprise": 7.9319,
+      "edge": {
+        "from_key": "may",
+        "to_key": "website",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3133,
+      "cont_surprise_with_real_path": 6.4084,
+      "drop_real": -0.0951,
+      "cont_surprise_with_random_path": 6.4834,
+      "drop_random": -0.1701,
+      "used_edges": []
+    },
+    {
+      "gap": "duty",
+      "gap_surprise": 10.3706,
+      "edge": {
+        "from_key": "duty",
+        "to_key": "defence",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.009,
+      "cont_surprise_with_real_path": 6.9626,
+      "drop_real": -0.9536,
+      "cont_surprise_with_random_path": 6.2693,
+      "drop_random": -0.2603,
+      "used_edges": []
+    },
+    {
+      "gap": "lyrics",
+      "gap_surprise": 9.738,
+      "edge": {
+        "from_key": "lyric",
+        "to_key": "listener",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.6132,
+      "cont_surprise_with_real_path": 3.5263,
+      "drop_real": 0.0869,
+      "cont_surprise_with_random_path": 3.4813,
+      "drop_random": 0.1319,
+      "used_edges": [
+        [
+          "the song 's lyrics",
+          "listeners to imagine"
+        ]
+      ]
+    },
+    {
+      "gap": "may",
+      "gap_surprise": 8.2873,
+      "edge": {
+        "from_key": "may",
+        "to_key": "website",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.1913,
+      "cont_surprise_with_real_path": 6.7809,
+      "drop_real": 0.4105,
+      "cont_surprise_with_random_path": 7.9403,
+      "drop_random": -0.7489,
+      "used_edges": [
+        [
+          "in may 2009 ,",
+          "a new community website"
+        ]
+      ]
+    },
+    {
+      "gap": "singles",
+      "gap_surprise": 9.2664,
+      "edge": {
+        "from_key": "single",
+        "to_key": "disc",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.8132,
+      "cont_surprise_with_real_path": 6.8102,
+      "drop_real": 0.0031,
+      "cont_surprise_with_random_path": 7.0206,
+      "drop_random": -0.2074,
+      "used_edges": [
+        [
+          "a cd single",
+          "picture disc"
+        ]
+      ]
+    },
+    {
+      "gap": "release",
+      "gap_surprise": 10.0242,
+      "edge": {
+        "from_key": "release",
+        "to_key": "australia",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.8422,
+      "cont_surprise_with_real_path": 5.6776,
+      "drop_real": 0.1646,
+      "cont_surprise_with_random_path": 6.4969,
+      "drop_random": -0.6547,
+      "used_edges": [
+        [
+          "a commercial release",
+          "australia"
+        ]
+      ]
+    },
+    {
+      "gap": "website",
+      "gap_surprise": 11.2166,
+      "edge": {
+        "from_key": "website",
+        "to_key": "chorus",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.2899,
+      "cont_surprise_with_real_path": 4.3038,
+      "drop_real": -0.0138,
+      "cont_surprise_with_random_path": 4.15,
+      "drop_random": 0.14,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 23.4123,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.5591,
+      "cont_surprise_with_real_path": 9.5534,
+      "drop_real": 0.0058,
+      "cont_surprise_with_random_path": 10.0983,
+      "drop_random": -0.5391,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "game",
+      "gap_surprise": 9.9343,
+      "edge": {
+        "from_key": "game",
+        "to_key": "%",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.3798,
+      "cont_surprise_with_real_path": 5.6589,
+      "drop_real": -0.2791,
+      "cont_surprise_with_random_path": 5.5001,
+      "drop_random": -0.1203,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.0364,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.7021,
+      "cont_surprise_with_real_path": 6.8861,
+      "drop_real": -0.184,
+      "cont_surprise_with_random_path": 7.0135,
+      "drop_random": -0.3114,
+      "used_edges": []
+    },
+    {
+      "gap": "potential",
+      "gap_surprise": 8.8638,
+      "edge": {
+        "from_key": "potential",
+        "to_key": "formation",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.398,
+      "cont_surprise_with_real_path": 4.8908,
+      "drop_real": -0.4928,
+      "cont_surprise_with_random_path": 4.7055,
+      "drop_random": -0.3076,
+      "used_edges": []
+    },
+    {
+      "gap": "events",
+      "gap_surprise": 9.0446,
+      "edge": {
+        "from_key": "event",
+        "to_key": "encounter",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.8285,
+      "cont_surprise_with_real_path": 6.3389,
+      "drop_real": 0.4896,
+      "cont_surprise_with_random_path": 6.2882,
+      "drop_random": 0.5403,
+      "used_edges": [
+        [
+          "no other data loss events",
+          "encounter"
+        ]
+      ]
+    },
+    {
+      "gap": "release",
+      "gap_surprise": 7.6725,
+      "edge": {
+        "from_key": "release",
+        "to_key": "australia",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.0969,
+      "cont_surprise_with_real_path": 4.1466,
+      "drop_real": -0.0497,
+      "cont_surprise_with_random_path": 4.2943,
+      "drop_random": -0.1974,
+      "used_edges": []
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 7.9646,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.1167,
+      "cont_surprise_with_real_path": 4.186,
+      "drop_real": -0.0692,
+      "cont_surprise_with_random_path": 4.8963,
+      "drop_random": -0.7795,
+      "used_edges": []
+    },
+    {
+      "gap": "missions",
+      "gap_surprise": 8.6628,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.4381,
+      "cont_surprise_with_real_path": 4.4928,
+      "drop_real": -0.0547,
+      "cont_surprise_with_random_path": 4.9027,
+      "drop_random": -0.4646,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.1443,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.4594,
+      "cont_surprise_with_real_path": 10.8031,
+      "drop_real": -0.3437,
+      "cont_surprise_with_random_path": 10.6682,
+      "drop_random": -0.2088,
+      "used_edges": []
+    },
+    {
+      "gap": "edition",
+      "gap_surprise": 7.8739,
+      "edge": {
+        "from_key": "edition",
+        "to_key": "guidance",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.3353,
+      "cont_surprise_with_real_path": 5.2369,
+      "drop_real": -0.9016,
+      "cont_surprise_with_random_path": 4.7135,
+      "drop_random": -0.3782,
+      "used_edges": []
+    },
+    {
+      "gap": "edition",
+      "gap_surprise": 8.1018,
+      "edge": {
+        "from_key": "edition",
+        "to_key": "guidance",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.5592,
+      "cont_surprise_with_real_path": 7.3516,
+      "drop_real": -0.7924,
+      "cont_surprise_with_random_path": 7.5346,
+      "drop_random": -0.9754,
+      "used_edges": []
+    },
+    {
+      "gap": "staff",
+      "gap_surprise": 9.7468,
+      "edge": {
+        "from_key": "staff",
+        "to_key": "she",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.2868,
+      "cont_surprise_with_real_path": 4.4667,
+      "drop_real": -0.18,
+      "cont_surprise_with_random_path": 4.7179,
+      "drop_random": -0.4311,
+      "used_edges": []
+    },
+    {
+      "gap": "people",
+      "gap_surprise": 9.5236,
+      "edge": {
+        "from_key": "people",
+        "to_key": "awareness",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.303,
+      "cont_surprise_with_real_path": 5.4824,
+      "drop_real": -0.1794,
+      "cont_surprise_with_random_path": 5.6778,
+      "drop_random": -0.3749,
+      "used_edges": []
+    },
+    {
+      "gap": "versions",
+      "gap_surprise": 9.9321,
+      "edge": {
+        "from_key": "version",
+        "to_key": "number",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.168,
+      "cont_surprise_with_real_path": 8.7543,
+      "drop_real": 0.4137,
+      "cont_surprise_with_random_path": 9.1775,
+      "drop_random": -0.0095,
+      "used_edges": [
+        [
+          "an electric version",
+          "number one in the us and uk . \" it 's all over now"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.9458,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0609,
+      "cont_surprise_with_real_path": 9.0348,
+      "drop_real": 0.0261,
+      "cont_surprise_with_random_path": 9.2491,
+      "drop_random": -0.1882,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "iii",
+      "gap_surprise": 8.1017,
+      "edge": {
+        "from_key": "iii",
+        "to_key": "henry",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.9116,
+      "cont_surprise_with_real_path": 4.4681,
+      "drop_real": -0.5565,
+      "cont_surprise_with_random_path": 3.9279,
+      "drop_random": -0.0163,
+      "used_edges": []
+    },
+    {
+      "gap": "west",
+      "gap_surprise": 8.2597,
+      "edge": {
+        "from_key": "west",
+        "to_key": "strength",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.0763,
+      "cont_surprise_with_real_path": 4.0738,
+      "drop_real": 0.0025,
+      "cont_surprise_with_random_path": 4.5278,
+      "drop_random": -0.4515,
+      "used_edges": [
+        [
+          "the west",
+          "reaching tropical storm strength at"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 23.6601,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9842,
+      "cont_surprise_with_real_path": 8.8164,
+      "drop_real": 0.1678,
+      "cont_surprise_with_random_path": 8.7303,
+      "drop_random": 0.2539,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "west",
+      "gap_surprise": 7.7962,
+      "edge": {
+        "from_key": "west",
+        "to_key": "strength",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.8306,
+      "cont_surprise_with_real_path": 7.1631,
+      "drop_real": -0.3325,
+      "cont_surprise_with_random_path": 6.4818,
+      "drop_random": 0.3488,
+      "used_edges": []
+    },
+    {
+      "gap": "an",
+      "gap_surprise": 8.4865,
+      "edge": {
+        "from_key": "an",
+        "to_key": "presence",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.7911,
+      "cont_surprise_with_real_path": 6.666,
+      "drop_real": 0.1251,
+      "cont_surprise_with_random_path": 7.696,
+      "drop_random": -0.9049,
+      "used_edges": [
+        [
+          "there is also an",
+          "software presence on skye"
+        ]
+      ]
+    },
+    {
+      "gap": "development",
+      "gap_surprise": 9.835,
+      "edge": {
+        "from_key": "development",
+        "to_key": "version",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.5756,
+      "cont_surprise_with_real_path": 7.1115,
+      "drop_real": 0.4642,
+      "cont_surprise_with_random_path": 7.5392,
+      "drop_random": 0.0365,
+      "used_edges": [
+        [
+          "coco = = development",
+          "mobile phone version of crash boom bang !"
+        ]
+      ]
+    },
+    {
+      "gap": "players",
+      "gap_surprise": 10.9911,
+      "edge": {
+        "from_key": "player",
+        "to_key": "each other",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.1051,
+      "cont_surprise_with_real_path": 9.287,
+      "drop_real": 0.8181,
+      "cont_surprise_with_random_path": 10.1189,
+      "drop_random": -0.0138,
+      "used_edges": [
+        [
+          "discovered , and two players can meet and",
+          "each other"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.6415,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.7806,
+      "cont_surprise_with_real_path": 9.8887,
+      "drop_real": -0.1081,
+      "cont_surprise_with_random_path": 9.7611,
+      "drop_random": 0.0195,
+      "used_edges": []
+    },
+    {
+      "gap": "edition",
+      "gap_surprise": 8.6113,
+      "edge": {
+        "from_key": "edition",
+        "to_key": "guidance",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.6461,
+      "cont_surprise_with_real_path": 4.1248,
+      "drop_real": -0.4787,
+      "cont_surprise_with_random_path": 4.3015,
+      "drop_random": -0.6555,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.2787,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.9192,
+      "cont_surprise_with_real_path": 11.0694,
+      "drop_real": -0.1502,
+      "cont_surprise_with_random_path": 11.0508,
+      "drop_random": -0.1316,
+      "used_edges": []
+    },
+    {
+      "gap": "charts",
+      "gap_surprise": 7.8148,
+      "edge": {
+        "from_key": "chart",
+        "to_key": "number",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.9478,
+      "cont_surprise_with_real_path": 5.9186,
+      "drop_real": 0.0292,
+      "cont_surprise_with_random_path": 6.714,
+      "drop_random": -0.7662,
+      "used_edges": [
+        [
+          "of the album chart until late january 2007 , when",
+          "number one again for two weeks"
+        ]
+      ]
+    },
+    {
+      "gap": "units",
+      "gap_surprise": 9.9353,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3611,
+      "cont_surprise_with_real_path": 6.0357,
+      "drop_real": 0.3253,
+      "cont_surprise_with_random_path": 6.1361,
+      "drop_random": 0.225,
+      "used_edges": [
+        [
+          "where units",
+          "character growth occurs"
+        ]
+      ]
+    },
+    {
+      "gap": "units",
+      "gap_surprise": 9.4385,
+      "edge": {
+        "from_key": "unit",
+        "to_key": "growth",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.4424,
+      "cont_surprise_with_real_path": 5.3209,
+      "drop_real": 0.1215,
+      "cont_surprise_with_random_path": 5.489,
+      "drop_random": -0.0466,
+      "used_edges": [
+        [
+          "where units",
+          "character growth occurs"
+        ]
+      ]
+    },
+    {
+      "gap": "elements",
+      "gap_surprise": 9.2389,
+      "edge": {
+        "from_key": "element",
+        "to_key": "paralympic",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.3095,
+      "cont_surprise_with_real_path": 5.7686,
+      "drop_real": -0.4591,
+      "cont_surprise_with_random_path": 5.6896,
+      "drop_random": -0.3801,
+      "used_edges": []
+    },
+    {
+      "gap": "difficulty",
+      "gap_surprise": 10.9858,
+      "edge": {
+        "from_key": "difficulty",
+        "to_key": "progress",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.8342,
+      "cont_surprise_with_real_path": 6.2492,
+      "drop_real": -0.415,
+      "cont_surprise_with_random_path": 6.3622,
+      "drop_random": -0.528,
+      "used_edges": []
+    },
+    {
+      "gap": "writer",
+      "gap_surprise": 9.9911,
+      "edge": {
+        "from_key": "writer",
+        "to_key": "meditation",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.1463,
+      "cont_surprise_with_real_path": 4.7944,
+      "drop_real": 0.3519,
+      "cont_surprise_with_random_path": 6.116,
+      "drop_random": -0.9697,
+      "used_edges": [
+        [
+          "a writer",
+          "prolonged meditation and exploration \""
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 23.1826,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 10.5678,
+      "cont_surprise_with_real_path": 10.322,
+      "drop_real": 0.2458,
+      "cont_surprise_with_random_path": 10.4826,
+      "drop_random": 0.0852,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "iii",
+      "gap_surprise": 8.0932,
+      "edge": {
+        "from_key": "iii",
+        "to_key": "henry",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.9454,
+      "cont_surprise_with_real_path": 7.1617,
+      "drop_real": -0.2163,
+      "cont_surprise_with_random_path": 7.5351,
+      "drop_random": -0.5897,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.6729,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.8938,
+      "cont_surprise_with_real_path": 10.0474,
+      "drop_real": -0.1535,
+      "cont_surprise_with_random_path": 10.8618,
+      "drop_random": -0.968,
+      "used_edges": []
+    },
+    {
+      "gap": "series",
+      "gap_surprise": 7.6365,
+      "edge": {
+        "from_key": "series",
+        "to_key": "estate",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.1158,
+      "cont_surprise_with_real_path": 7.8293,
+      "drop_real": -0.7135,
+      "cont_surprise_with_random_path": 8.5573,
+      "drop_random": -1.4415,
+      "used_edges": []
+    },
+    {
+      "gap": "story",
+      "gap_surprise": 9.1983,
+      "edge": {
+        "from_key": "story",
+        "to_key": "\"",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.5394,
+      "cont_surprise_with_real_path": 5.3722,
+      "drop_real": 0.1672,
+      "cont_surprise_with_random_path": 5.6408,
+      "drop_random": -0.1015,
+      "used_edges": [
+        [
+          "the story",
+          "\""
+        ]
+      ]
+    },
+    {
+      "gap": "playstation",
+      "gap_surprise": 10.9439,
+      "edge": {
+        "from_key": "playstation",
+        "to_key": "beginning",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.5303,
+      "cont_surprise_with_real_path": 8.1973,
+      "drop_real": 0.333,
+      "cont_surprise_with_random_path": 8.6419,
+      "drop_random": -0.1116,
+      "used_edges": [
+        [
+          "the playstation",
+          "beginning"
+        ]
+      ]
+    },
+    {
+      "gap": "official",
+      "gap_surprise": 9.1571,
+      "edge": {
+        "from_key": "official",
+        "to_key": "day",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.6226,
+      "cont_surprise_with_real_path": 7.2369,
+      "drop_real": 0.3856,
+      "cont_surprise_with_random_path": 7.7992,
+      "drop_random": -0.1767,
+      "used_edges": [
+        [
+          "officials",
+          "until the day of the"
+        ]
+      ]
+    },
+    {
+      "gap": "magazine",
+      "gap_surprise": 9.2934,
+      "edge": {
+        "from_key": "magazine",
+        "to_key": "series",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.5725,
+      "cont_surprise_with_real_path": 5.7668,
+      "drop_real": 0.8057,
+      "cont_surprise_with_random_path": 7.013,
+      "drop_random": -0.4405,
+      "used_edges": [
+        [
+          "tintin magazine",
+          "series"
+        ]
+      ]
+    },
+    {
+      "gap": "uk",
+      "gap_surprise": 9.2432,
+      "edge": {
+        "from_key": "uk",
+        "to_key": "awareness",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.6034,
+      "cont_surprise_with_real_path": 5.2883,
+      "drop_real": 0.3151,
+      "cont_surprise_with_random_path": 5.2105,
+      "drop_random": 0.3929,
+      "used_edges": [
+        [
+          "digital uk",
+          "awareness"
+        ]
+      ]
+    },
+    {
+      "gap": "points",
+      "gap_surprise": 8.0391,
+      "edge": {
+        "from_key": "point",
+        "to_key": "line",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.2828,
+      "cont_surprise_with_real_path": 8.6065,
+      "drop_real": -0.3237,
+      "cont_surprise_with_random_path": 8.4012,
+      "drop_random": -0.1183,
+      "used_edges": []
+    },
+    {
+      "gap": "content",
+      "gap_surprise": 9.2653,
+      "edge": {
+        "from_key": "content",
+        "to_key": "edition",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.0901,
+      "cont_surprise_with_real_path": 7.1904,
+      "drop_real": -0.1002,
+      "cont_surprise_with_random_path": 7.4659,
+      "drop_random": -0.3758,
+      "used_edges": []
+    },
+    {
+      "gap": "difficulty",
+      "gap_surprise": 10.2355,
+      "edge": {
+        "from_key": "difficulty",
+        "to_key": "progress",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.6745,
+      "cont_surprise_with_real_path": 5.9243,
+      "drop_real": -0.2498,
+      "cont_surprise_with_random_path": 5.9323,
+      "drop_random": -0.2578,
+      "used_edges": []
+    },
+    {
+      "gap": "something",
+      "gap_surprise": 8.7961,
+      "edge": {
+        "from_key": "something",
+        "to_key": "somebody",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.9451,
+      "cont_surprise_with_real_path": 5.1281,
+      "drop_real": -0.183,
+      "cont_surprise_with_random_path": 5.7089,
+      "drop_random": -0.7639,
+      "used_edges": []
+    },
+    {
+      "gap": "website",
+      "gap_surprise": 8.5076,
+      "edge": {
+        "from_key": "website",
+        "to_key": "chorus",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.432,
+      "cont_surprise_with_real_path": 6.252,
+      "drop_real": 0.1799,
+      "cont_surprise_with_random_path": 6.4002,
+      "drop_random": 0.0318,
+      "used_edges": [
+        [
+          "the canadian website",
+          "irresistible chorus \""
+        ]
+      ]
+    },
+    {
+      "gap": "playstation",
+      "gap_surprise": 9.1736,
+      "edge": {
+        "from_key": "playstation",
+        "to_key": "beginning",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.0561,
+      "cont_surprise_with_real_path": 4.9912,
+      "drop_real": 0.065,
+      "cont_surprise_with_random_path": 5.3421,
+      "drop_random": -0.286,
+      "used_edges": [
+        [
+          "the playstation",
+          "beginning"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.5563,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.2676,
+      "cont_surprise_with_real_path": 8.441,
+      "drop_real": -0.1734,
+      "cont_surprise_with_random_path": 7.886,
+      "drop_random": 0.3816,
+      "used_edges": []
+    },
+    {
+      "gap": "points",
+      "gap_surprise": 8.3275,
+      "edge": {
+        "from_key": "point",
+        "to_key": "line",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.5279,
+      "cont_surprise_with_real_path": 6.6765,
+      "drop_real": -0.1486,
+      "cont_surprise_with_random_path": 7.1096,
+      "drop_random": -0.5817,
+      "used_edges": []
+    },
+    {
+      "gap": "elements",
+      "gap_surprise": 9.6987,
+      "edge": {
+        "from_key": "element",
+        "to_key": "paralympic",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.4447,
+      "cont_surprise_with_real_path": 4.7956,
+      "drop_real": -0.3509,
+      "cont_surprise_with_random_path": 4.8066,
+      "drop_random": -0.3619,
+      "used_edges": []
+    },
+    {
+      "gap": "scene",
+      "gap_surprise": 9.3188,
+      "edge": {
+        "from_key": "scene",
+        "to_key": "opening",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.236,
+      "cont_surprise_with_real_path": 5.4695,
+      "drop_real": -0.2336,
+      "cont_surprise_with_random_path": 5.6069,
+      "drop_random": -0.371,
+      "used_edges": []
+    },
+    {
+      "gap": "issues",
+      "gap_surprise": 8.7015,
+      "edge": {
+        "from_key": "issue",
+        "to_key": "change",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.0043,
+      "cont_surprise_with_real_path": 3.4876,
+      "drop_real": 0.5167,
+      "cont_surprise_with_random_path": 4.2722,
+      "drop_random": -0.2679,
+      "used_edges": [
+        [
+          "copyright issues",
+          "some changes"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 22.9025,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.4055,
+      "cont_surprise_with_real_path": 8.6744,
+      "drop_real": -0.2689,
+      "cont_surprise_with_random_path": 8.6204,
+      "drop_random": -0.2149,
+      "used_edges": []
+    },
+    {
+      "gap": "story",
+      "gap_surprise": 8.6886,
+      "edge": {
+        "from_key": "story",
+        "to_key": "\"",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.5796,
+      "cont_surprise_with_real_path": 6.7428,
+      "drop_real": -0.1633,
+      "cont_surprise_with_random_path": 7.5677,
+      "drop_random": -0.9882,
+      "used_edges": []
+    },
+    {
+      "gap": "form",
+      "gap_surprise": 7.8752,
+      "edge": {
+        "from_key": "form",
+        "to_key": "fume",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.006,
+      "cont_surprise_with_real_path": 9.55,
+      "drop_real": -0.544,
+      "cont_surprise_with_random_path": 8.1815,
+      "drop_random": 0.8245,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 20.8303,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8868,
+      "cont_surprise_with_real_path": 9.6661,
+      "drop_real": -0.7794,
+      "cont_surprise_with_random_path": 9.8314,
+      "drop_random": -0.9446,
+      "used_edges": []
+    },
+    {
+      "gap": "project",
+      "gap_surprise": 9.0793,
+      "edge": {
+        "from_key": "project",
+        "to_key": "album",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0311,
+      "cont_surprise_with_real_path": 9.2969,
+      "drop_real": -0.2658,
+      "cont_surprise_with_random_path": 9.6706,
+      "drop_random": -0.6396,
+      "used_edges": []
+    },
+    {
+      "gap": "zone",
+      "gap_surprise": 10.2607,
+      "edge": {
+        "from_key": "zone",
+        "to_key": "observation",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.0555,
+      "cont_surprise_with_real_path": 9.1082,
+      "drop_real": -0.0527,
+      "cont_surprise_with_random_path": 9.6303,
+      "drop_random": -0.5748,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 20.1069,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.8042,
+      "cont_surprise_with_real_path": 10.4925,
+      "drop_real": -0.6883,
+      "cont_surprise_with_random_path": 9.7868,
+      "drop_random": 0.0173,
+      "used_edges": []
+    },
+    {
+      "gap": "media",
+      "gap_surprise": 9.2259,
+      "edge": {
+        "from_key": "medium",
+        "to_key": "demand",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.9398,
+      "cont_surprise_with_real_path": 5.475,
+      "drop_real": 0.4648,
+      "cont_surprise_with_random_path": 5.9653,
+      "drop_random": -0.0256,
+      "used_edges": [
+        [
+          "both media , innis argued",
+          "demand"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 23.2393,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.6139,
+      "cont_surprise_with_real_path": 9.0321,
+      "drop_real": -0.4182,
+      "cont_surprise_with_random_path": 8.9212,
+      "drop_random": -0.3073,
+      "used_edges": []
+    },
+    {
+      "gap": "role",
+      "gap_surprise": 9.1651,
+      "edge": {
+        "from_key": "role",
+        "to_key": "adelaide",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.6639,
+      "cont_surprise_with_real_path": 5.0698,
+      "drop_real": -0.406,
+      "cont_surprise_with_random_path": 5.024,
+      "drop_random": -0.3601,
+      "used_edges": []
+    },
+    {
+      "gap": "forms",
+      "gap_surprise": 9.0267,
+      "edge": {
+        "from_key": "form",
+        "to_key": "fume",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.6968,
+      "cont_surprise_with_real_path": 5.3803,
+      "drop_real": -0.6835,
+      "cont_surprise_with_random_path": 4.8923,
+      "drop_random": -0.1954,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.2667,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 11.4658,
+      "cont_surprise_with_real_path": 11.4812,
+      "drop_real": -0.0154,
+      "cont_surprise_with_random_path": 12.9927,
+      "drop_random": -1.5269,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.8567,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.8348,
+      "cont_surprise_with_real_path": 8.9457,
+      "drop_real": -0.1109,
+      "cont_surprise_with_random_path": 8.6028,
+      "drop_random": 0.232,
+      "used_edges": []
+    },
+    {
+      "gap": "episode",
+      "gap_surprise": 8.9588,
+      "edge": {
+        "from_key": "episode",
+        "to_key": "avatar",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.5077,
+      "cont_surprise_with_real_path": 5.7585,
+      "drop_real": -0.2508,
+      "cont_surprise_with_random_path": 6.3825,
+      "drop_random": -0.8748,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.5223,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1106,
+      "cont_surprise_with_real_path": 9.4961,
+      "drop_real": -0.3855,
+      "cont_surprise_with_random_path": 8.834,
+      "drop_random": 0.2766,
+      "used_edges": []
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.2439,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.6878,
+      "cont_surprise_with_real_path": 6.8624,
+      "drop_real": -0.1746,
+      "cont_surprise_with_random_path": 6.6889,
+      "drop_random": -0.0011,
+      "used_edges": []
+    },
+    {
+      "gap": "period",
+      "gap_surprise": 8.168,
+      "edge": {
+        "from_key": "period",
+        "to_key": "amount",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.8205,
+      "cont_surprise_with_real_path": 5.8004,
+      "drop_real": 0.0201,
+      "cont_surprise_with_random_path": 6.5879,
+      "drop_random": -0.7674,
+      "used_edges": [
+        [
+          "during this period galileo",
+          "large amount"
+        ],
+        [
+          "during this period ,",
+          "large amount"
+        ]
+      ]
+    },
+    {
+      "gap": "valkyria",
+      "gap_surprise": 21.9822,
+      "edge": {
+        "from_key": "valkyria",
+        "to_key": "home",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.2913,
+      "cont_surprise_with_real_path": 9.2764,
+      "drop_real": 0.0149,
+      "cont_surprise_with_random_path": 8.7714,
+      "drop_random": 0.5199,
+      "used_edges": [
+        [
+          "the valkyria",
+          "her home"
+        ]
+      ]
+    },
+    {
+      "gap": "mission",
+      "gap_surprise": 10.7286,
+      "edge": {
+        "from_key": "mission",
+        "to_key": "cruise",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2626,
+      "cont_surprise_with_real_path": 5.0501,
+      "drop_real": 0.2125,
+      "cont_surprise_with_random_path": 4.9329,
+      "drop_random": 0.3297,
+      "used_edges": [
+        [
+          "proposed mission",
+          "europa after a 6 @.@ 5 year cruise"
+        ]
+      ]
+    },
+    {
+      "gap": "music",
+      "gap_surprise": 7.8804,
+      "edge": {
+        "from_key": "music",
+        "to_key": "instrument",
+        "depth": 1
+      },
+      "cont_surprise_without": 4.9948,
+      "cont_surprise_with_real_path": 4.4336,
+      "drop_real": 0.5613,
+      "cont_surprise_with_random_path": 4.7408,
+      "drop_random": 0.2541,
+      "used_edges": [
+        [
+          "that music",
+          "nearly all the instruments"
+        ]
+      ]
+    },
+    {
+      "gap": "purpose",
+      "gap_surprise": 9.9057,
+      "edge": {
+        "from_key": "purpose",
+        "to_key": "committee",
+        "depth": 1
+      },
+      "cont_surprise_without": 3.2648,
+      "cont_surprise_with_real_path": 3.4776,
+      "drop_real": -0.2128,
+      "cont_surprise_with_random_path": 3.8536,
+      "drop_random": -0.5888,
+      "used_edges": []
+    }
+  ]
+}

@@ -2649,3 +2649,49 @@ artifact is a number about the defaults, not about the system.
   training, not curation, drives consultability — the dial-law
   efficiency claim does NOT extend to consultation, stated at
   full strength.
+
+  **P79 SCORED (2026-08-10, results/livecausal_p79_{A1,A2,A3}.json,
+  three sequential arms on the ARM machine beside the running
+  d1024 extension, source store copy untouched).** The lifetime
+  thesis gets its functional proof, and the policy gets a better
+  shape than the one registered. (b1) PASS decisively: the frozen
+  arm A1 is inert — responsiveness 0.0008 (bar < 0.0028), dead to
+  injection exactly like P77's fresh reader despite streaming the
+  same 896M tokens. Responsiveness is not architectural and not
+  exposure — it is TRAINED LIFE. (b2) PASS beyond the bar's
+  imagination: A3's differential +0.1879 vs A2's +0.1843 — ratio
+  1.02 against a 0.5 bar. THE GATED LIFE MATCHES THE DENSE LIFE'S
+  CONSULTABILITY AT 25% OF THE GRADIENT SPEND — the dial-law
+  efficiency claim extends to consultation intact. (a) FAIL as
+  registered, and the data replace the hypothesis with a better
+  one: the differential is NOT monotone in surprise — bottom
+  tercile +0.2346, middle +0.3250, top (surprise 10-24.6) +0.0062.
+  At extreme surprise the matched edges are rare-token artifacts
+  and the win collapses. The policy signal exists but as a
+  BAND-PASS, not a threshold — and inside the middle band the
+  arc's first ABSOLUTE win appears: mean drop_real +0.0120 with
+  45/83 consults helping outright (bottom -0.1358, top -0.1924).
+  Consultation pays for itself precisely where a band policy
+  would fire it. (c) PASS: source store clean, per-row data in
+  all three artifacts, arm metadata recorded. Re-registration on
+  the same signal follows immediately as the band-policy
+  replication (P80).
+
+- **P80 — the band replicates (registered 2026-08-10, BEFORE the
+  run; same-night replication of P79's discovered shape on a
+  fresh seed with doubled statistics).** P79's findings are n=1
+  per arm. Setup: identical to P79's A3 and A2 arms (winning
+  cell, canon=True, fresh store copies) but seed 61, 120,000
+  consult words, up to 500 consults per arm.
+  (a) THE BAND REPLICATES on A3: middle surprise tercile's mean
+      per-row differential exceeds BOTH outer terciles AND
+      exceeds +0.15; the middle tercile's mean absolute drop_real
+      is > 0 (the absolute win reappears on a fresh seed).
+  (b) THE THREE-LIVES RESULT REPLICATES: A3's total differential
+      >= 0.75x A2's on the fresh seed.
+  (c) DISCIPLINE unchanged: clean copies, per-row artifacts.
+  Falsifiers: (a) fails => the band was seed noise — the policy
+  question re-registers on pooled data across seeds before any
+  policy code is built. (b) fails => the 1.02 ratio was
+  seed-fortunate; the gated-life claim drops to the pooled
+  estimate and the register says so.
