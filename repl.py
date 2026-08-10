@@ -507,32 +507,52 @@ class FossKIRepl:
         # --- Foss Pipeline (Reservoir + Attention + Hopfield + Consensus + MultiHop) ---
         if not scores and self.pipeline:
             try:
-                # Use autoregressive generation for best results
-                pipe_result = self.pipeline.generate_sequence(user_input, max_tokens=8)
-                if pipe_result['answer'] and pipe_result['confidence'] > 0.2:
-                    # Naturalize: convert raw answer to fluent sentence
-                    natural = self.pipeline.naturalize(user_input, pipe_result)
-                    final_answer = natural or pipe_result['answer']
+                # Anti-hallucination guard: the pipeline generates autoregressively
+                # from Reservoir/Hopfield and can produce a fluent, confident-looking
+                # answer for an entity it has never seen (e.g. "capital of Narnia"
+                # -> "oranjestad", a real fact about Aruba bleeding through nearest-
+                # neighbor attractor drift). The KnowledgeStore's Dict-Index is exact
+                # and knows what it doesn't know; when a question asks for an
+                # attribute of a named entity ("what is the X of Y") and that entity
+                # has zero facts in the store, skip the pipeline's guess entirely and
+                # let the SLOW PATH instructor (whose Fiber 2 defaults to REJECTED)
+                # answer honestly instead of being pre-empted by this fast path.
+                pipeline_blocked = False
+                m = re.search(r'(?:what|who)\s+is\s+the\s+\w+(?:\s+\w+)?\s+of\s+(.+)',
+                               user_input.rstrip('?').strip(), re.I)
+                if m:
+                    candidate_entity = m.group(1).strip()
+                    if candidate_entity and not self.knowledge.find_by_entity(candidate_entity):
+                        pipeline_blocked = True
+                        trace.append(f"  Pipeline: SKIPPED — '{candidate_entity}' unknown to KnowledgeStore")
 
-                    sc = ConfidenceScore(
-                        source=AnswerSource.KNOWLEDGE,
-                        raw=pipe_result['confidence'],
-                        calibrated=pipe_result['confidence'],
-                        answer=final_answer,
-                        method='foss_pipeline',
-                    )
-                    scores.append(sc)
-                    src_names = [s[0] for s in pipe_result['sources']]
-                    trace.append(f"  Pipeline({'+'.join(src_names)}): {sc}")
-                    if pipe_result.get('attention_weights'):
-                        top = sorted(pipe_result['attention_weights'].items(),
-                                     key=lambda x: -x[1])[:3]
-                        trace.append(f"  Attention: {', '.join(f'{w}({v:.2f})' for w,v in top)}")
-                    # Show generated sequence if available
-                    gen_seq = pipe_result.get('generated_sequence', [])
-                    if gen_seq:
-                        seq_str = ' '.join(f'{t}' for t, s, n in gen_seq)
-                        trace.append(f"  AutoReg: [{seq_str}]")
+                if not pipeline_blocked:
+                    # Use autoregressive generation for best results
+                    pipe_result = self.pipeline.generate_sequence(user_input, max_tokens=8)
+                    if pipe_result['answer'] and pipe_result['confidence'] > 0.2:
+                        # Naturalize: convert raw answer to fluent sentence
+                        natural = self.pipeline.naturalize(user_input, pipe_result)
+                        final_answer = natural or pipe_result['answer']
+
+                        sc = ConfidenceScore(
+                            source=AnswerSource.KNOWLEDGE,
+                            raw=pipe_result['confidence'],
+                            calibrated=pipe_result['confidence'],
+                            answer=final_answer,
+                            method='foss_pipeline',
+                        )
+                        scores.append(sc)
+                        src_names = [s[0] for s in pipe_result['sources']]
+                        trace.append(f"  Pipeline({'+'.join(src_names)}): {sc}")
+                        if pipe_result.get('attention_weights'):
+                            top = sorted(pipe_result['attention_weights'].items(),
+                                         key=lambda x: -x[1])[:3]
+                            trace.append(f"  Attention: {', '.join(f'{w}({v:.2f})' for w,v in top)}")
+                        # Show generated sequence if available
+                        gen_seq = pipe_result.get('generated_sequence', [])
+                        if gen_seq:
+                            seq_str = ' '.join(f'{t}' for t, s, n in gen_seq)
+                            trace.append(f"  AutoReg: [{seq_str}]")
             except Exception:
                 pass
 
