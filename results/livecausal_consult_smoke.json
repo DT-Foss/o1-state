@@ -1,0 +1,624 @@
+{
+  "store": "/var/folders/6d/v5s01yqx4f388x67wr_w3hs00000gn/T/livecausal_consult_smoke_8rn8o137/store",
+  "text_file": "/var/folders/6d/v5s01yqx4f388x67wr_w3hs00000gn/T/livecausal_consult_smoke_8rn8o137/corpus.txt",
+  "source": null,
+  "surprise_thresh": 0.8342,
+  "surprise_thresh_was_calibrated": true,
+  "lookahead": 12,
+  "max_gaps": 40,
+  "seed": 60,
+  "warmup_chunks": 200,
+  "n_warmup_words": 14600,
+  "n_consult_words": 14600,
+  "n_warmup_grad_steps": 200,
+  "elapsed_seconds": 1.33,
+  "n_spikes": 40,
+  "n_consults": 40,
+  "mean_delta_real": -0.2529,
+  "mean_delta_random": -0.3901,
+  "n_helped_real": 0,
+  "n_use_entries": 0,
+  "top5_used_edges": [],
+  "results": [
+    {
+      "gap": "chelsea",
+      "gap_surprise": 0.8342,
+      "edge": {
+        "from_key": "chelsea",
+        "to_key": "widely",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.1189,
+      "cont_surprise_with_real_path": 0.3567,
+      "drop_real": -0.2378,
+      "cont_surprise_with_random_path": 0.8239,
+      "drop_random": -0.705,
+      "used_edges": []
+    },
+    {
+      "gap": "longer",
+      "gap_surprise": 0.9288,
+      "edge": {
+        "from_key": "longer",
+        "to_key": "wind",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.619,
+      "cont_surprise_with_real_path": 1.1412,
+      "drop_real": -0.5222,
+      "cont_surprise_with_random_path": 0.7581,
+      "drop_random": -0.1391,
+      "used_edges": []
+    },
+    {
+      "gap": "pleasure",
+      "gap_surprise": 1.1298,
+      "edge": {
+        "from_key": "pleasure",
+        "to_key": "transferred",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.263,
+      "cont_surprise_with_real_path": 0.5825,
+      "drop_real": -0.3195,
+      "cont_surprise_with_random_path": 0.5606,
+      "drop_random": -0.2976,
+      "used_edges": []
+    },
+    {
+      "gap": "tall",
+      "gap_surprise": 1.4444,
+      "edge": {
+        "from_key": "tall",
+        "to_key": "hundred",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.4553,
+      "cont_surprise_with_real_path": 0.7093,
+      "drop_real": -0.2541,
+      "cont_surprise_with_random_path": 1.0695,
+      "drop_random": -0.6143,
+      "used_edges": []
+    },
+    {
+      "gap": "gordon",
+      "gap_surprise": 1.2646,
+      "edge": {
+        "from_key": "gordon",
+        "to_key": "nature",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.2038,
+      "cont_surprise_with_real_path": 0.2402,
+      "drop_real": -0.0364,
+      "cont_surprise_with_random_path": 0.2684,
+      "drop_random": -0.0645,
+      "used_edges": []
+    },
+    {
+      "gap": "tone",
+      "gap_surprise": 1.2154,
+      "edge": {
+        "from_key": "tone",
+        "to_key": "croatia",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.4313,
+      "cont_surprise_with_real_path": 0.7733,
+      "drop_real": -0.342,
+      "cont_surprise_with_random_path": 0.7277,
+      "drop_random": -0.2964,
+      "used_edges": []
+    },
+    {
+      "gap": "followed",
+      "gap_surprise": 1.5931,
+      "edge": {
+        "from_key": "followed",
+        "to_key": "rise",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.1872,
+      "cont_surprise_with_real_path": 0.4715,
+      "drop_real": -0.2843,
+      "cont_surprise_with_random_path": 0.4319,
+      "drop_random": -0.2447,
+      "used_edges": []
+    },
+    {
+      "gap": "cambridge",
+      "gap_surprise": 1.3504,
+      "edge": {
+        "from_key": "cambridge",
+        "to_key": "require",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.482,
+      "cont_surprise_with_real_path": 0.7067,
+      "drop_real": -0.2248,
+      "cont_surprise_with_random_path": 0.6918,
+      "drop_random": -0.2099,
+      "used_edges": []
+    },
+    {
+      "gap": "dark",
+      "gap_surprise": 1.0208,
+      "edge": {
+        "from_key": "dark",
+        "to_key": "brought",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.2468,
+      "cont_surprise_with_real_path": 0.4563,
+      "drop_real": -0.2094,
+      "cont_surprise_with_random_path": 0.9037,
+      "drop_random": -0.6569,
+      "used_edges": []
+    },
+    {
+      "gap": "killing",
+      "gap_surprise": 0.8542,
+      "edge": {
+        "from_key": "killing",
+        "to_key": "landing",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.1355,
+      "cont_surprise_with_real_path": 0.2318,
+      "drop_real": -0.0963,
+      "cont_surprise_with_random_path": 0.5148,
+      "drop_random": -0.3794,
+      "used_edges": []
+    },
+    {
+      "gap": "chelsea",
+      "gap_surprise": 0.8473,
+      "edge": {
+        "from_key": "chelsea",
+        "to_key": "widely",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.12,
+      "cont_surprise_with_real_path": 0.3613,
+      "drop_real": -0.2413,
+      "cont_surprise_with_random_path": 0.3075,
+      "drop_random": -0.1874,
+      "used_edges": []
+    },
+    {
+      "gap": "longer",
+      "gap_surprise": 0.9288,
+      "edge": {
+        "from_key": "longer",
+        "to_key": "wind",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.619,
+      "cont_surprise_with_real_path": 1.1412,
+      "drop_real": -0.5222,
+      "cont_surprise_with_random_path": 0.9002,
+      "drop_random": -0.2813,
+      "used_edges": []
+    },
+    {
+      "gap": "pleasure",
+      "gap_surprise": 1.1298,
+      "edge": {
+        "from_key": "pleasure",
+        "to_key": "transferred",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.263,
+      "cont_surprise_with_real_path": 0.5825,
+      "drop_real": -0.3195,
+      "cont_surprise_with_random_path": 0.7543,
+      "drop_random": -0.4913,
+      "used_edges": []
+    },
+    {
+      "gap": "tall",
+      "gap_surprise": 1.4444,
+      "edge": {
+        "from_key": "tall",
+        "to_key": "hundred",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.4553,
+      "cont_surprise_with_real_path": 0.7093,
+      "drop_real": -0.2541,
+      "cont_surprise_with_random_path": 0.7556,
+      "drop_random": -0.3004,
+      "used_edges": []
+    },
+    {
+      "gap": "gordon",
+      "gap_surprise": 1.2646,
+      "edge": {
+        "from_key": "gordon",
+        "to_key": "nature",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.2038,
+      "cont_surprise_with_real_path": 0.2402,
+      "drop_real": -0.0364,
+      "cont_surprise_with_random_path": 0.8314,
+      "drop_random": -0.6276,
+      "used_edges": []
+    },
+    {
+      "gap": "tone",
+      "gap_surprise": 1.2154,
+      "edge": {
+        "from_key": "tone",
+        "to_key": "croatia",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.4313,
+      "cont_surprise_with_real_path": 0.7733,
+      "drop_real": -0.342,
+      "cont_surprise_with_random_path": 0.5598,
+      "drop_random": -0.1285,
+      "used_edges": []
+    },
+    {
+      "gap": "followed",
+      "gap_surprise": 1.5931,
+      "edge": {
+        "from_key": "followed",
+        "to_key": "rise",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.1872,
+      "cont_surprise_with_real_path": 0.4715,
+      "drop_real": -0.2843,
+      "cont_surprise_with_random_path": 0.4452,
+      "drop_random": -0.258,
+      "used_edges": []
+    },
+    {
+      "gap": "cambridge",
+      "gap_surprise": 1.3504,
+      "edge": {
+        "from_key": "cambridge",
+        "to_key": "require",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.482,
+      "cont_surprise_with_real_path": 0.7067,
+      "drop_real": -0.2248,
+      "cont_surprise_with_random_path": 0.7701,
+      "drop_random": -0.2882,
+      "used_edges": []
+    },
+    {
+      "gap": "dark",
+      "gap_surprise": 1.0208,
+      "edge": {
+        "from_key": "dark",
+        "to_key": "brought",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.2468,
+      "cont_surprise_with_real_path": 0.4563,
+      "drop_real": -0.2094,
+      "cont_surprise_with_random_path": 0.7227,
+      "drop_random": -0.4759,
+      "used_edges": []
+    },
+    {
+      "gap": "killing",
+      "gap_surprise": 0.8542,
+      "edge": {
+        "from_key": "killing",
+        "to_key": "landing",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.1355,
+      "cont_surprise_with_real_path": 0.2318,
+      "drop_real": -0.0963,
+      "cont_surprise_with_random_path": 0.2964,
+      "drop_random": -0.161,
+      "used_edges": []
+    },
+    {
+      "gap": "chelsea",
+      "gap_surprise": 0.8473,
+      "edge": {
+        "from_key": "chelsea",
+        "to_key": "widely",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.12,
+      "cont_surprise_with_real_path": 0.3613,
+      "drop_real": -0.2413,
+      "cont_surprise_with_random_path": 0.3763,
+      "drop_random": -0.2563,
+      "used_edges": []
+    },
+    {
+      "gap": "longer",
+      "gap_surprise": 0.9288,
+      "edge": {
+        "from_key": "longer",
+        "to_key": "wind",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.619,
+      "cont_surprise_with_real_path": 1.1412,
+      "drop_real": -0.5222,
+      "cont_surprise_with_random_path": 1.0017,
+      "drop_random": -0.3827,
+      "used_edges": []
+    },
+    {
+      "gap": "pleasure",
+      "gap_surprise": 1.1298,
+      "edge": {
+        "from_key": "pleasure",
+        "to_key": "transferred",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.263,
+      "cont_surprise_with_real_path": 0.5825,
+      "drop_real": -0.3195,
+      "cont_surprise_with_random_path": 0.5095,
+      "drop_random": -0.2465,
+      "used_edges": []
+    },
+    {
+      "gap": "tall",
+      "gap_surprise": 1.4444,
+      "edge": {
+        "from_key": "tall",
+        "to_key": "hundred",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.4553,
+      "cont_surprise_with_real_path": 0.7093,
+      "drop_real": -0.2541,
+      "cont_surprise_with_random_path": 0.6742,
+      "drop_random": -0.2189,
+      "used_edges": []
+    },
+    {
+      "gap": "gordon",
+      "gap_surprise": 1.2646,
+      "edge": {
+        "from_key": "gordon",
+        "to_key": "nature",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.2038,
+      "cont_surprise_with_real_path": 0.2402,
+      "drop_real": -0.0364,
+      "cont_surprise_with_random_path": 0.4541,
+      "drop_random": -0.2503,
+      "used_edges": []
+    },
+    {
+      "gap": "tone",
+      "gap_surprise": 1.2154,
+      "edge": {
+        "from_key": "tone",
+        "to_key": "croatia",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.4313,
+      "cont_surprise_with_real_path": 0.7733,
+      "drop_real": -0.342,
+      "cont_surprise_with_random_path": 1.1652,
+      "drop_random": -0.7339,
+      "used_edges": []
+    },
+    {
+      "gap": "followed",
+      "gap_surprise": 1.5931,
+      "edge": {
+        "from_key": "followed",
+        "to_key": "rise",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.1872,
+      "cont_surprise_with_real_path": 0.4715,
+      "drop_real": -0.2843,
+      "cont_surprise_with_random_path": 0.4062,
+      "drop_random": -0.219,
+      "used_edges": []
+    },
+    {
+      "gap": "cambridge",
+      "gap_surprise": 1.3504,
+      "edge": {
+        "from_key": "cambridge",
+        "to_key": "require",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.482,
+      "cont_surprise_with_real_path": 0.7067,
+      "drop_real": -0.2248,
+      "cont_surprise_with_random_path": 1.086,
+      "drop_random": -0.604,
+      "used_edges": []
+    },
+    {
+      "gap": "dark",
+      "gap_surprise": 1.0208,
+      "edge": {
+        "from_key": "dark",
+        "to_key": "brought",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.2468,
+      "cont_surprise_with_real_path": 0.4563,
+      "drop_real": -0.2094,
+      "cont_surprise_with_random_path": 0.8901,
+      "drop_random": -0.6432,
+      "used_edges": []
+    },
+    {
+      "gap": "killing",
+      "gap_surprise": 0.8542,
+      "edge": {
+        "from_key": "killing",
+        "to_key": "landing",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.1355,
+      "cont_surprise_with_real_path": 0.2318,
+      "drop_real": -0.0963,
+      "cont_surprise_with_random_path": 0.9547,
+      "drop_random": -0.8192,
+      "used_edges": []
+    },
+    {
+      "gap": "chelsea",
+      "gap_surprise": 0.8473,
+      "edge": {
+        "from_key": "chelsea",
+        "to_key": "widely",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.12,
+      "cont_surprise_with_real_path": 0.3613,
+      "drop_real": -0.2413,
+      "cont_surprise_with_random_path": 0.9844,
+      "drop_random": -0.8644,
+      "used_edges": []
+    },
+    {
+      "gap": "longer",
+      "gap_surprise": 0.9288,
+      "edge": {
+        "from_key": "longer",
+        "to_key": "wind",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.619,
+      "cont_surprise_with_real_path": 1.1412,
+      "drop_real": -0.5222,
+      "cont_surprise_with_random_path": 1.0258,
+      "drop_random": -0.4068,
+      "used_edges": []
+    },
+    {
+      "gap": "pleasure",
+      "gap_surprise": 1.1298,
+      "edge": {
+        "from_key": "pleasure",
+        "to_key": "transferred",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.263,
+      "cont_surprise_with_real_path": 0.5825,
+      "drop_real": -0.3195,
+      "cont_surprise_with_random_path": 0.8303,
+      "drop_random": -0.5673,
+      "used_edges": []
+    },
+    {
+      "gap": "tall",
+      "gap_surprise": 1.4444,
+      "edge": {
+        "from_key": "tall",
+        "to_key": "hundred",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.4553,
+      "cont_surprise_with_real_path": 0.7093,
+      "drop_real": -0.2541,
+      "cont_surprise_with_random_path": 0.7959,
+      "drop_random": -0.3407,
+      "used_edges": []
+    },
+    {
+      "gap": "gordon",
+      "gap_surprise": 1.2646,
+      "edge": {
+        "from_key": "gordon",
+        "to_key": "nature",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.2038,
+      "cont_surprise_with_real_path": 0.2402,
+      "drop_real": -0.0364,
+      "cont_surprise_with_random_path": 0.9599,
+      "drop_random": -0.7561,
+      "used_edges": []
+    },
+    {
+      "gap": "tone",
+      "gap_surprise": 1.2154,
+      "edge": {
+        "from_key": "tone",
+        "to_key": "croatia",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.4313,
+      "cont_surprise_with_real_path": 0.7733,
+      "drop_real": -0.342,
+      "cont_surprise_with_random_path": 0.8588,
+      "drop_random": -0.4276,
+      "used_edges": []
+    },
+    {
+      "gap": "followed",
+      "gap_surprise": 1.5931,
+      "edge": {
+        "from_key": "followed",
+        "to_key": "rise",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.1872,
+      "cont_surprise_with_real_path": 0.4715,
+      "drop_real": -0.2843,
+      "cont_surprise_with_random_path": 0.3777,
+      "drop_random": -0.1904,
+      "used_edges": []
+    },
+    {
+      "gap": "cambridge",
+      "gap_surprise": 1.3504,
+      "edge": {
+        "from_key": "cambridge",
+        "to_key": "require",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.482,
+      "cont_surprise_with_real_path": 0.7067,
+      "drop_real": -0.2248,
+      "cont_surprise_with_random_path": 0.7972,
+      "drop_random": -0.3152,
+      "used_edges": []
+    },
+    {
+      "gap": "dark",
+      "gap_surprise": 1.0208,
+      "edge": {
+        "from_key": "dark",
+        "to_key": "brought",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.2468,
+      "cont_surprise_with_real_path": 0.4563,
+      "drop_real": -0.2094,
+      "cont_surprise_with_random_path": 0.4531,
+      "drop_random": -0.2063,
+      "used_edges": []
+    },
+    {
+      "gap": "killing",
+      "gap_surprise": 0.8542,
+      "edge": {
+        "from_key": "killing",
+        "to_key": "landing",
+        "depth": 1
+      },
+      "cont_surprise_without": 0.1355,
+      "cont_surprise_with_real_path": 0.2318,
+      "drop_real": -0.0963,
+      "cont_surprise_with_random_path": 0.482,
+      "drop_random": -0.3466,
+      "used_edges": []
+    }
+  ]
+}
