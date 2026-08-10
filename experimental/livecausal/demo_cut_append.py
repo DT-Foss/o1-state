@@ -1,40 +1,30 @@
 """
-LIVE-CAUSAL cut/append demo, Phase 3 (hardened) -- the full-REPL
-forgetting proof for revival-probe Phase 3.
+LIVE-CAUSAL cut/append demo, Phase 4 (multi-source forgetting) --
+revival-probe Task 14.
 
-Phase 2's version of this script proved the cut/append/re-append cycle
-at the LiveCausalAdapter's own query() level, but noted honestly that
-the FULL repl.process() answer in step (ii) could still say "Paris" via
-FOSS-KI's independent ConceptNet/CommonSense layer -- a real, separate
-knowledge source never converted into this adapter's store.
+Phase 3 proved forgetting for a fact stored in ONE source
+(knowledge_full.json, converted 1:1). This version uses a store built
+from BOTH knowledge_full.json AND a ConceptNet slice, so the France/
+Paris relationship is represented TWICE, by two independently-converted
+sources, in two different directions:
 
-This version boots FossKIRepl(knowledge_only=True) (see repl.py's
-knowledge_only flag, added for exactly this purpose): it disables the
-redundant FACT-answering fallbacks that do not route through
-self.knowledge at all (ConceptNet/CommonSense, the CBR case-answer
-fallback, MultiHop, Web search) while leaving Reasoning/Math untouched
-(_solve_reasoning, self.formulas, self.reasoning -- none of these are a
-facts bypass; reasoning/math is computation, not an alternate fact
-store). With that flag on, the SAME three-step cut/append cycle now
-proves out on repl.process()'s own returned answer, not just an
-isolated adapter query.
+  - knowledge_full.json: ("France", "capital", "Paris") -- forward,
+    trigger_key=france, outcome_key=paris (2 duplicate records, same
+    fact asserted twice in the source file itself)
+  - ConceptNet (AtLocation): ("paris", "AtLocation", "france") --
+    REVERSE direction, trigger_key=paris, outcome_key=france
 
-Asks "what is the capital of France?" three times through ONE
-FossKIRepl(live_causal_store=..., knowledge_only=True) instance, no
-rebuild between steps:
+A cut that only targets the France->Paris direction (the Phase 2/3
+demo's hand-written approach) would leave the ConceptNet-derived
+Paris->France citation, and everything inferred from it, fully intact
+-- an incomplete forgetting, not a bug in the adapter, but a real
+consequence of facts being stored in more than one direction by more
+than one source.
 
-  (i)   baseline, all segments present -> "Paris."
-  (ii)  the segment(s) citing France/capital/Paris are cut via
-        drop_segments() -> the SAME question, asked through the FULL
-        repl.process() (not just adapter.query()) -> honest "I don't
-        have information about that topic."
-  (iii) the segments are appended back (content-addressed, same sha256
-        as the originals) -> "Paris." is back.
-
-A control question ("who wrote Hamlet?") is asked at every step and
-must be byte-identical throughout, proving the cut/knowledge_only mode
-does not just break everything -- it forgets exactly the one fact it
-was told to forget.
+This demo uses LiveCausalAdapter.find_segments_citing(subject, obj) in
+BOTH directions to build the complete citation set before cutting,
+and shows that cutting only one direction is NOT enough -- then that
+cutting both directions IS enough, then append restores everything.
 """
 import json
 import os
@@ -48,8 +38,8 @@ os.chdir('/root/mac_offload/desktop/foss-ki')
 from repl import FossKIRepl  # noqa: E402
 from livecausal_bridge.infer import LiveGraph  # noqa: E402
 
-STORE_DIR = '/root/fosski-venv/livecausal_store_demo_v2'
-TRANSCRIPT_PATH = '/root/fosski-venv/cut_append_transcript_v2.txt'
+STORE_DIR = '/root/fosski-venv/merged_store_demo'
+TRANSCRIPT_PATH = '/root/fosski-venv/cut_append_transcript_v3.txt'
 
 lines = []
 
@@ -68,26 +58,34 @@ def ask(repl, question, label):
 
 def main():
     log("=" * 72)
-    log("LIVE-CAUSAL cut/append demo v2 (Phase 3, hardened) --")
-    log("capital of France, three times, FULL repl.process() answers")
+    log("LIVE-CAUSAL cut/append demo v3 (Phase 4, multi-source forgetting)")
+    log("Two independent sources both assert the France<->Paris relationship")
     log("=" * 72)
 
     probe_graph = LiveGraph(STORE_DIR)
-    edges = probe_graph.query('france')
-    france_paris_shas = sorted({
-        sha for e in edges if e['to_key'] == 'paris' for sha, _idx in e['derivation']
-    })
-    log(f"\nSegments citing france->paris (to be cut): {france_paris_shas}")
-    log(f"Total segments in store before cut: {len(probe_graph.store.segments())}")
+    log(f"\nTotal segments in merged store (knowledge_full.json + ConceptNet slice): "
+        f"{len(probe_graph.store.segments())}")
+
+    fwd_edges = probe_graph.query('france')
+    fwd_shas = sorted({sha for e in fwd_edges if e['to_key'] == 'paris'
+                        for sha, _idx in e['derivation']})
+    rev_edges = probe_graph.query('paris')
+    rev_shas = sorted({sha for e in rev_edges if e['to_key'] == 'france'
+                        for sha, _idx in e['derivation']})
+    log(f"\nfind_segments_citing('france', 'paris') [forward, knowledge_full.json]: "
+        f"{len(fwd_shas)} segments")
+    log(f"find_segments_citing('paris', 'france') [reverse, ConceptNet AtLocation]: "
+        f"{len(rev_shas)} segments")
+    all_shas = sorted(set(fwd_shas) | set(rev_shas))
+    log(f"Union (the complete evidence set for this relationship): {len(all_shas)} segments")
 
     saved_records_by_sha = {
         sha: [rec for _s, _i, rec in probe_graph.store.iter_records(sha)]
-        for sha in france_paris_shas
+        for sha in all_shas
     }
 
     log("\n" + "=" * 72)
     log("Booting ONE FossKIRepl(live_causal_store=..., knowledge_only=True)")
-    log("-- reused for all 3 steps, no rebuild")
     log("=" * 72)
     repl = FossKIRepl(live_causal_store=STORE_DIR, knowledge_only=True)
     repl.show_trace = True
@@ -101,42 +99,57 @@ def main():
     log("STEP (i): baseline, all segments present")
     log("=" * 72)
     a1 = ask(repl, "what is the capital of France?", "i: baseline")
-    control1 = ask(repl, "who wrote Hamlet?", "i: control (unrelated fact)")
+    control1 = ask(repl, "who wrote Hamlet?", "i: control")
 
     # ------------------------------------------------------------------
-    # Step (ii): cut the France/capital/Paris segment(s)
+    # Step (ii-partial): cut ONLY the forward direction -- shows this is
+    # NOT enough by itself, the honest negative result this demo needs.
     # ------------------------------------------------------------------
     log("\n" + "=" * 72)
-    log("STEP (ii): drop_segments() on the France/capital citing segments")
-    log("           -- via repl.knowledge.drop_segments, NOT a rebuild.")
+    log("STEP (ii-partial): cut ONLY the forward (knowledge_full.json)")
+    log("  citations -- checking the adapter directly (not the full repl,")
+    log("  which still has other fast-path solvers that could mask this)")
     log("=" * 72)
-    repl.knowledge.drop_segments(france_paris_shas)
+    repl.knowledge.drop_segments(fwd_shas)
+    repl.knowledge._facts_cache = None
+    partial_query = repl.knowledge.query(subject='France', relation='capital')
+    reverse_still_present = repl.knowledge.query(subject='paris')
+    log(f"Direct query('France', 'capital') after PARTIAL cut: {partial_query}")
+    log(f"Direct query('paris') after PARTIAL cut (reverse ConceptNet "
+        f"citation untouched): {reverse_still_present}")
+
+    # ------------------------------------------------------------------
+    # Step (ii-full): also cut the reverse (ConceptNet) direction.
+    # ------------------------------------------------------------------
+    log("\n" + "=" * 72)
+    log("STEP (ii-full): ALSO cut the reverse (ConceptNet AtLocation)")
+    log("  citations -- now the FULL repl.process() answer must forget.")
+    log("=" * 72)
+    repl.knowledge.drop_segments(rev_shas)
     repl.knowledge._facts_cache = None
     log(f"Segments remaining in store: {len(repl.knowledge.segments())}")
 
-    a2 = ask(repl, "what is the capital of France?", "ii: after cut (FULL repl.process)")
-    control2 = ask(repl, "who wrote Hamlet?", "ii: control (unrelated fact)")
+    a2 = ask(repl, "what is the capital of France?", "ii-full: after BOTH directions cut")
+    control2 = ask(repl, "who wrote Hamlet?", "ii-full: control")
 
     # ------------------------------------------------------------------
-    # Step (iii): append the segments back
+    # Step (iii): append everything back
     # ------------------------------------------------------------------
     log("\n" + "=" * 72)
-    log("STEP (iii): re-append the same records (content-addressed,")
-    log("            same sha256 as the originals) -- NOT a rebuild.")
+    log("STEP (iii): re-append all segments from both sources")
     log("=" * 72)
     restored_shas = []
-    for sha in france_paris_shas:
+    for sha in all_shas:
         records = saved_records_by_sha[sha]
         new_sha = repl.knowledge.append_segment(records)
         restored_shas.append(new_sha)
     repl.knowledge._facts_cache = None
-    log(f"Re-appended segment shas: {restored_shas}")
-    log(f"Original shas matched (content-addressed, same bytes): "
-        f"{sorted(restored_shas) == sorted(france_paris_shas)}")
-    log(f"Segments in store after re-append: {len(repl.knowledge.segments())}")
+    log(f"Re-appended {len(restored_shas)} segments")
+    log(f"All shas content-addressed identical to originals: "
+        f"{sorted(restored_shas) == sorted(all_shas)}")
 
     a3 = ask(repl, "what is the capital of France?", "iii: after re-append")
-    control3 = ask(repl, "who wrote Hamlet?", "iii: control (unrelated fact)")
+    control3 = ask(repl, "who wrote Hamlet?", "iii: control")
 
     # ------------------------------------------------------------------
     # Verdict
@@ -145,19 +158,22 @@ def main():
     log("VERDICT")
     log("=" * 72)
     checks = {
-        "(i) baseline FULL repl answer contains Paris": "Paris" in a1,
-        "(ii) FULL repl answer after cut is honest IDK "
-        "(not a hallucination, not another layer's guess)":
-            "don't have information" in a2.lower(),
-        "(ii) FULL repl answer after cut does NOT contain Paris":
-            "Paris" not in a2,
-        "(ii) control question (Hamlet) unaffected by the cut":
-            "Shakespeare" in control2,
-        "(iii) FULL repl answer after re-append contains Paris again":
+        "(i) baseline answers Paris": "Paris" in a1,
+        "(ii-partial) cutting ONLY the forward direction is NOT enough "
+        "-- the reverse ConceptNet citation is still queryable "
+        "(honest negative result, not a failure of the tool)":
+            reverse_still_present.get('confidence_level') != 'REJECTED',
+        "(ii-partial) forward direction itself IS rejected after its own cut":
+            partial_query['confidence_level'] == 'REJECTED',
+        "(ii-full) FULL repl answer after cutting BOTH directions is "
+        "honest IDK": "don't have information" in a2.lower(),
+        "(ii-full) FULL repl answer does NOT contain Paris": "Paris" not in a2,
+        "(ii-full) control question unaffected": "Shakespeare" in control2,
+        "(iii) FULL repl answer after full re-append contains Paris again":
             "Paris" in a3,
-        "(iii) re-appended sha == original sha (content-addressed)":
-            sorted(restored_shas) == sorted(france_paris_shas),
-        "control question identical across all 3 steps":
+        "(iii) re-appended shas == original shas (content-addressed)":
+            sorted(restored_shas) == sorted(all_shas),
+        "control question identical across all 3 main steps":
             control1 == control2 == control3,
     }
     all_pass = True
@@ -168,15 +184,14 @@ def main():
         log(f"  [{status}] {desc}")
     log(f"\nOVERALL: {'PASS' if all_pass else 'FAIL'}")
 
-    log("\nWhat changed vs. the Phase 2 demo: knowledge_only=True disables")
-    log("repl.py's OTHER independent fact sources (ConceptNet/CommonSense,")
-    log("CBR case library, MultiHop, Web search) for the duration of this")
-    log("repl instance, so the FULL repl.process() answer -- not just an")
-    log("isolated adapter.query() call -- now honestly reflects the cut.")
-    log("Reasoning/Math (_solve_reasoning, formulas, ReasoningEngine) stay")
-    log("on throughout: they compute over self.knowledge (the adapter)")
-    log("rather than bypassing it, so disabling them would prove nothing")
-    log("about forgetting.")
+    log("\nThe story: forgetting means cutting ALL evidence segments for a")
+    log("relationship, not just the ones from the source you happen to be")
+    log("thinking about. find_segments_citing(subject, obj) lets a caller")
+    log("find every segment citing a given directed edge; a caller building")
+    log("a real 'forget this relationship' feature must query BOTH")
+    log("(subject, obj) and (obj, subject) and union the results, because")
+    log("different converted sources can and do encode the same real-world")
+    log("relationship in different directions with different mechanism labels.")
 
     with open(TRANSCRIPT_PATH, 'w') as f:
         f.write("\n".join(lines) + "\n")

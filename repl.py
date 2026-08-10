@@ -184,7 +184,23 @@ class FossKIRepl:
         # KnowledgeStore-shaped self.knowledge swap is skipped.
         if self.using_live_causal:
             print(f"LiveCausalAdapter active: store_dir={store_dir}")
-            load_bootstrap_to_engine(self.commonsense)
+            # Phase 4 correction (revival-probe): load_bootstrap_to_engine()
+            # loads data/knowledge_full.json DIRECTLY into self.commonsense
+            # via engine.add_fact() -- the SAME source file
+            # convert_knowledge_full.py converts into this adapter's store.
+            # Under knowledge_only mode this was a live, undocumented
+            # redundancy bug, not a different knowledge source: cutting a
+            # fact from the adapter's LiveCausalAdapter store left an
+            # independent, un-cuttable copy of that exact fact sitting in
+            # self.commonsense the whole time (this is what actually
+            # produced "The capital of France is Paris." via
+            # method='cs_properties' in the Phase 2/3 transcripts -- traced
+            # directly, not ConceptNet as those transcripts' caveat implied).
+            # Skipped under knowledge_only so the flag's own contract (no
+            # fact-answering path that bypasses self.knowledge) holds for
+            # knowledge_full.json's content too, not just ConceptNet.
+            if not self.knowledge_only:
+                load_bootstrap_to_engine(self.commonsense)
         else:
             brain_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                       'data', 'foss-ki.brain')

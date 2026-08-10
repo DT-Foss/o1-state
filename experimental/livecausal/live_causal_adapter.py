@@ -365,3 +365,53 @@ class LiveCausalAdapter:
 
     def drop_segments(self, shas):
         return self.graph.drop_segments(shas)
+
+    def find_segments_citing(self, subject, obj=None):
+        """Every segment sha that cites a fact ABOUT `subject` -- Phase 4
+        (revival-probe Task 14): forgetting a fact means cutting ALL of
+        its evidence segments, not just one. When a fact is asserted by
+        two different source files converted into this same store (e.g.
+        knowledge_full.json's ["France", "capital", "Paris"] AND a
+        ConceptNet record like {"r": "AtLocation", "s": "paris", "o":
+        "france"}), each is its own record in its own segment with its
+        own citation -- dropping only the knowledge_full.json segment
+        leaves the ConceptNet-derived segment (and any inferred edge
+        built from it) fully able to answer the same question. This is
+        the CORRECT generalization of demo_cut_append.py's earlier
+        hand-written "find the two segments citing france->paris" logic
+        (which worked only because it happened to know there were
+        exactly two duplicate knowledge_full.json records) -- here it is
+        a real, general lookup over the graph's actual citation
+        structure, usable for any (subject, object) pair regardless of
+        which converter(s) produced the citing records.
+
+        Args:
+            subject: entity whose outgoing base+inferred edges to scan
+                (normalized the same way trigger_key is, via _normalize).
+            obj: if given, only segments citing an edge whose to_key
+                equals _normalize(obj) are returned (the common case: "I
+                want every segment that could answer subject-relates-to-
+                object, however it's phrased"). If None, returns every
+                segment citing ANY outgoing edge from subject -- a wider
+                net, useful for a "forget everything about X" cut.
+
+        Returns:
+            Sorted list of distinct segment sha256 hex digests. Citations
+            are pulled from BOTH base and inferred edges' derivations
+            (an inferred edge's derivation cites the base records that
+            built it, so this already reaches through multi-hop chains
+            to their underlying segments -- cutting the returned set
+            invalidates the base fact AND every inferred edge built
+            atop it, via LiveGraph.on_drop's existing derivation-
+            invalidation semantics, not anything this method does itself).
+        """
+        key = _normalize(subject)
+        target_key = _normalize(obj) if obj is not None else None
+        edges = self.graph.query(key)
+        shas = set()
+        for e in edges:
+            if target_key is not None and e['to_key'] != target_key:
+                continue
+            for sha, _idx in e['derivation']:
+                shas.add(sha)
+        return sorted(shas)
