@@ -5,37 +5,37 @@ validates, the live graph grows. analysis/LIVE_CAUSAL_SPEC.md SS4 ("the
 organism as builder"), stages 1-3 (curate / extract / fold) wired end to
 end: no LLM anywhere in the loop.
 
-    stream -> po.Organism.step_gated (P58's live gate, surprise_filter_run.py
-              pattern) -> gated chunk -> window text -> extract_validated
-              (curator_yield_run's contract, imported lazily -- SEE BELOW)
-              -> LiveStore.append_segment -> LiveGraph.on_append
+    window source -> window text -> extract_validated -> LiveStore.append_segment
+              -> LiveGraph.on_append
 
-CONTRACT WITH src/curator_yield_run.py (lead-defined, built in parallel by
-mvp3-p70; this file imports it only through the two functions below, never
-its internals):
+Wired against src/curator_yield_run.py, the REAL bridge (mvp3-p70's
+built-and-scored MVP-4 CONTRACT, P70 measurement):
     extract_validated(text: str) -> list[dict]
-        Validated triplets, each dict carrying at least {trigger, mechanism,
-        outcome, trigger_key, outcome_key}.
-    a window source iterable over (tape_pos: int, window_text: str) for
-        EVERY window (P70 policy update: extraction is ungated -- see
-        stream_windows()'s docstring) -- this file OWNS that iterable
-        (stream_windows() below implements it against
-        po.Organism.step_gated, also carrying surprise/gated per window),
-        the contract only fixes its (tape_pos, window_text) shape so
-        curator_yield_run's extractor can consume it identically to how
-        this loop does.
-
-Both are resolved via a lazy import hook (`_default_extractor`,
-`resolve_extractor`) so tests can stub them (see --extractor-stub / the
-FakeExtractor path) without needing curator_yield_run to exist yet.
+        Validated triplets, each carrying trigger/mechanism/outcome and
+        trigger_key/outcome_key (normalize_entity(trigger/outcome), set
+        directly by curator_yield_run -- a fallback key-derivation stays
+        in make_record() for any OTHER extractor wired in that doesn't
+        set them, e.g. a stub in a test).
+    iter_windows(...) -> generator of (tape_pos, window_text, surprise,
+        gated), one per chunk, EVERY window (P70 policy: extraction is
+        ungated -- see stream_windows()'s docstring for the same rule on
+        the --text-file path). Used directly for the ONLINE corpus path
+        (--source c4/wt103); resolve_extractor's lazy-import hook still
+        lets tests stub extract_validated without curator_yield_run
+        needing to exist for THOSE tests, but the online window source
+        is no longer a placeholder this file re-implements -- see
+        build_window_iterator.
 
 Two corpus sources:
   --text-file PATH   a local text file streamed as an iterator of blocks
                       (F6: "the corpus is an iterator" -- this is the
                       offline-capable, no-HF-network path used for the
-                      smoke test and for beast while DNS is down).
-  --source c4|wt103   the HF streaming corpus (HFStream, source_swap_run.py
-                      pattern) -- needs network / a warm HF cache.
+                      smoke test and for beast while DNS is down). Drives
+                      TextFileStream + stream_windows() locally, UNCHANGED
+                      by this bridge-integration pass.
+  --source c4|wt103   delegates entirely to curator_yield_run.iter_windows
+                      (verbatim source text via its own HFStreamWithText;
+                      needs network / a warm HF cache).
 
 Outputs (results/livecausal_builder_<tag>*):
   status.json    heartbeat (tmpfile + os.replace, pos_run.py pattern)
@@ -149,54 +149,62 @@ class TextFileStream:
         return "".join(parts)
 
 
-class HFCorpusStream:
-    """Thin wrapper around portable_organism's C4Stream/source_swap_run's
-    HFStream that also retains the raw words it has streamed so far (for
-    raw_text_for_tape_range), bounded to a rolling window so memory stays
-    flat on a long run. Needs network (HF `datasets`) unless the dataset
-    is already warm in the local HF cache (verified true for wikitext2 on
-    beast; c4/wt103 streaming still needs a live connection per shard)."""
-
-    def __init__(self, source, stoi, unk, block=8192, keep_words=200_000):
-        import portable_organism as po  # noqa: E402
-        from source_swap_run import HFStream  # noqa: E402
-
-        self._stream = HFStream(source, stoi, unk, block=block)
-        self._po = po
-        self.keep_words = keep_words
-        self._word_buffer = []   # rolling (tape_pos_of_first, [words...])
-        self._word_buffer_start = 0
-
-    @property
-    def docs(self):
-        return self._stream.docs
-
-    @property
-    def reconnects(self):
-        return self._stream.reconnects
-
-    @property
-    def pending(self):
-        return self._stream.pending
-
-    def next_block(self):
-        # HFStream tokenizes internally without keeping the source words;
-        # we cannot recover them post hoc for an HF corpus without
-        # re-tokenizing the same underlying text, which the base class
-        # does not expose. Documented gap (flagged in the build report):
-        # raw_text_for_tape_range on this source returns None, so
-        # stream_windows() falls back to a token-id placeholder text for
-        # HF corpora. The --text-file path is the one with exact raw text.
-        return self._stream.next_block()
-
-    def raw_text_for_tape_range(self, tape, lo, hi):
-        return None
+# HFCorpusStream (the earlier online-source placeholder, token-id text
+# fallback and all) is RETIRED: superseded by curator_yield_run.iter_windows
+# (see build_window_iterator below), which carries verbatim source text via
+# its own HFStreamWithText -- the placeholder-text gap this class used to
+# flag no longer exists for the online path.
 
 
-def build_corpus_stream(args, stoi, unk):
+def build_window_iterator(args, organism_seed=42):
+    """Returns (window_iter, stream_or_none) for the selected corpus source.
+
+    --text-file: builds a TextFileStream + a fresh po.Organism/ChunkFeeder
+        locally and drives stream_windows() over them (unchanged from
+        before this bridge-integration pass, per the build brief: "the
+        --text-file path stays unchanged"). stream_or_none is the
+        TextFileStream (exposes .docs for the n_streamed_tape_pos metric).
+
+    --source (c4/wt103): delegates ENTIRELY to
+        curator_yield_run.iter_windows -- the MVP-4 CONTRACT function,
+        which owns its own Organism/HFStreamWithText/ChunkFeederWithText
+        internally and already yields the exact (tape_pos, window_text,
+        surprise, gated) shape this loop needs, with VERBATIM source text
+        (not a token-id placeholder -- iter_windows's HFStreamWithText
+        keeps original-case text in lockstep with the token tape). This
+        loop does not construct its own Organism/stream for this path
+        anymore; stream_or_none is None (see run_builder's docstring for
+        how the n_streamed_tape_pos metric degrades gracefully).
+    """
     if args.text_file:
-        return TextFileStream(args.text_file, stoi, unk)
-    return HFCorpusStream(args.source, stoi, unk)
+        import torch  # noqa: E402
+        import portable_organism as po  # noqa: E402
+
+        vocab, stoi, unk, mask, val_ids = po.get_vocab()
+        V = len(vocab)
+        torch.manual_seed(organism_seed)
+        organism = po.Organism("builder", V, mask, seed=organism_seed)
+        stream = TextFileStream(args.text_file, stoi, unk)
+        feeder = po.ChunkFeeder(stream, args.batch, args.chunk_size)
+        win_iter = stream_windows(organism, stream, feeder, args.window_tokens, tape_cap=args.tape_cap)
+        return win_iter, stream
+
+    import curator_yield_run  # noqa: E402
+
+    win_iter = curator_yield_run.iter_windows(
+        substrate=args.source,
+        chunks=args.chunks if args.chunks else 10 ** 9,  # iter_windows needs a finite bound; effectively unbounded, max_windows/max_seconds in run_builder still cut it off
+        window_tokens=args.window_tokens,
+        d_model=args.d_model,
+        batch=args.batch,
+        chunk_size=args.chunk_size,
+        seed=organism_seed,
+        q=args.q,
+        window=args.window,
+        min_window=args.min_window,
+        ignition_chunks=args.ignition_chunks,
+    )
+    return win_iter, None
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -223,9 +231,11 @@ def stream_windows(organism, stream, feeder, window_tokens, tape_cap=None):
     update above). tape_pos is the tape offset of the window START (the
     chunk's first token) -- this IS the builder's doc_coord. window_text is
     window_tokens tokens' worth of ORIGINAL words (not the tokenized ids)
-    recovered from the stream, when the stream supports it (TextFileStream
-    always does; HFCorpusStream currently does not -- see its
-    raw_text_for_tape_range note). surprise is the chunk's mean NLL (the
+    recovered from the stream via raw_text_for_tape_range (TextFileStream
+    supports this; this function is only called with a TextFileStream --
+    the online --source path uses curator_yield_run.iter_windows instead,
+    which has its own verbatim-text mechanism, see build_window_iterator).
+    surprise is the chunk's mean NLL (the
     same value step_gated computes for its own rolling-quantile decision);
     gated is whether the organism's OWN training gate accepted this chunk
     for backprop -- carried through as a signal for the storage layer, not
@@ -336,18 +346,11 @@ def make_record(triplet, tape_pos, surprise, gated, extractor_version="builder_v
     of whether its window was gated, so a downstream policy can filter
     retroactively without re-streaming.
 
-    CONTRACT DEVIATION (flagged in the build report): the build brief's
-    contract requires extract_validated to return trigger_key/outcome_key
-    directly. The REAL curator_yield_run.extract_validated (already
-    present in this repo, P70-scored) does not -- it returns
-    {trigger, mechanism, outcome, confidence, evidence_sentence,
-    quantification, domain, source, quality_score}, no *_key fields. This
-    derives keys the same way the built-in fake_extractor's _default_key
-    does (lower, non-alnum -> underscore) so the loop stays runnable
-    against the real extractor without crashing on a missing key; if
-    curator_yield_run later adds real keys (e.g. entity-normalized, not
-    just string-normalized), swap this fallback for triplet['trigger_key']
-    directly and drop the .get() defaulting below."""
+    curator_yield_run.extract_validated (the real bridge, P70-scored) now
+    sets trigger_key/outcome_key directly via normalize_entity -- taken
+    as-is when present. The _default_key fallback stays for any extractor
+    that does not provide keys (e.g. a stub in a test), so this loop never
+    crashes on a missing key regardless of which extractor is wired in."""
     trigger_key = triplet.get("trigger_key") or _default_key(triplet["trigger"])
     outcome_key = triplet.get("outcome_key") or _default_key(triplet["outcome"])
     return {
@@ -391,19 +394,26 @@ def run_builder(
     store_dir,
     status_path,
     metrics_path,
-    stream,
-    organism,
-    feeder,
+    window_iter,
     extractor,
-    window_tokens,
     windows_per_segment,
     max_windows=None,
     max_seconds=None,
-    tape_cap=200_000,
     print_every=10,
+    stream=None,
 ):
     """The loop itself, factored out of main() so tests can drive it
-    directly against a stub stream/extractor without going through argv."""
+    directly against a stub window_iter/extractor without going through
+    argv. window_iter: any iterable of (tape_pos, window_text, surprise,
+    gated) -- either stream_windows(...) (the --text-file / TextFileStream
+    path) or curator_yield_run.iter_windows(...) (the online --source
+    c4/wt103 path, per the MVP-4 CONTRACT it documents) satisfy this the
+    same way; run_builder no longer knows or cares which. `stream` is
+    OPTIONAL and used only for the n_streamed_tape_pos metric (a stream
+    object exposing `.docs`) -- curator_yield_run.iter_windows owns its
+    stream internally and does not expose one, so this is None on that
+    path and the metric falls back to n_windows_total (still monotonic,
+    just coarser)."""
     graph = LiveGraph(store_dir)
     t0 = time.time()
 
@@ -433,7 +443,10 @@ def run_builder(
     def current_metrics():
         return {
             "wall_s": round(time.time() - t0, 2),
-            "n_streamed_tape_pos": stream.docs,  # coarse: doc/wrap count, exact tape pos is per-window
+            # doc/wrap count when a stream object is available (TextFileStream
+            # path); falls back to the window count itself when the window
+            # source owns its stream internally (curator_yield_run.iter_windows).
+            "n_streamed_tape_pos": stream.docs if stream is not None else n_windows_total,
             "n_windows_total": n_windows_total,
             "n_windows_gated": n_windows_gated,
             "n_triplets_total": n_triplets_total,
@@ -474,8 +487,7 @@ def run_builder(
         })
         return sha
 
-    win_iter = stream_windows(organism, stream, feeder, window_tokens, tape_cap=tape_cap)
-    for tape_pos, window_text, surprise, gated in win_iter:
+    for tape_pos, window_text, surprise, gated in window_iter:
         n_windows_total += 1
         if gated:
             n_windows_gated += 1
@@ -597,6 +609,11 @@ def main():
     ap.add_argument("--ignition-chunks", type=int, default=5)
     ap.add_argument("--max-windows", type=int, default=None)
     ap.add_argument("--max-seconds", type=float, default=None)
+    ap.add_argument("--chunks", type=int, default=None,
+                    help="online (--source) path only: bound passed to curator_yield_run.iter_windows "
+                         "(default: a large finite bound; --max-windows/--max-seconds still cut the loop off early)")
+    ap.add_argument("--tape-cap", type=int, default=200_000,
+                    help="--text-file path only: rolling tape trim window (memory cap on long runs)")
     ap.add_argument("--smoke", action="store_true", help="generate a synthetic causal corpus + fake extractor, run offline")
     ap.add_argument("--tag", default="v0")
     args = ap.parse_args()
@@ -628,18 +645,21 @@ def main():
     torch.set_num_threads(1)
     import portable_organism as po  # noqa: E402
 
+    # Set the gate cadence knobs before EITHER path builds an Organism:
+    # the --text-file path builds one directly in build_window_iterator;
+    # the --source path delegates to curator_yield_run.iter_windows, which
+    # re-sets these same module globals itself from the args it's given
+    # (same values, passed explicitly below) -- setting them here too is
+    # redundant but harmless for that path, and required for the
+    # --text-file path since stream_windows calls organism.step_gated
+    # against whatever these currently are.
     po.D_MODEL, po.BATCH, po.CHUNK = args.d_model, args.batch, args.chunk_size
     po.GATE_Q, po.GATE_WINDOW, po.MIN_WINDOW, po.IGNITION_CHUNKS = (
         args.q, args.window, args.min_window, args.ignition_chunks,
     )
-    vocab, stoi, unk, mask, val_ids = po.get_vocab()
-    V = len(vocab)
 
-    torch.manual_seed(args.seed)
-    organism = po.Organism("builder", V, mask, seed=args.seed)
-    stream = build_corpus_stream(args, stoi, unk)
-    feeder = po.ChunkFeeder(stream, args.batch, args.chunk_size)
     extractor = resolve_extractor(extractor_override)
+    window_iter, stream = build_window_iterator(args, organism_seed=args.seed)
 
     status_path = args.out_prefix + "_status.json"
     metrics_path = args.out_prefix + "_metrics.jsonl"
@@ -649,14 +669,12 @@ def main():
         args.store_dir,
         status_path,
         metrics_path,
-        stream,
-        organism,
-        feeder,
+        window_iter,
         extractor,
-        args.window_tokens,
         args.windows_per_segment,
         max_windows=args.max_windows,
         max_seconds=args.max_seconds,
+        stream=stream,
     )
 
     print("=" * 74)

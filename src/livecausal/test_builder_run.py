@@ -28,6 +28,7 @@ from livecausal.builder_run import (  # noqa: E402
     fake_extractor,
     generate_smoke_corpus,
     run_builder,
+    stream_windows,
 )
 from stranger_verify_run import score, verify_direction3  # noqa: E402
 
@@ -60,6 +61,7 @@ def _build_smoke_graph(d, seed=42, max_windows=40):
     organism = po.Organism("builder-test", V, mask, seed=seed)
     stream = TextFileStream(corpus_path, stoi, unk)
     feeder = po.ChunkFeeder(stream, po.BATCH, po.CHUNK)
+    window_iter = stream_windows(organism, stream, feeder, window_tokens=32)
 
     store_dir = os.path.join(d, "store")
     status_path = os.path.join(d, "status.json")
@@ -67,9 +69,10 @@ def _build_smoke_graph(d, seed=42, max_windows=40):
 
     graph, metrics = run_builder(
         store_dir, status_path, metrics_path,
-        stream, organism, feeder, fake_extractor,
-        window_tokens=32, windows_per_segment=5,
+        window_iter, fake_extractor,
+        windows_per_segment=5,
         max_windows=max_windows, print_every=1000,
+        stream=stream,
     )
     return graph, chains, metrics, store_dir
 
