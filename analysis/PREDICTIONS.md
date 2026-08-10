@@ -2362,3 +2362,45 @@ artifact is a number about the defaults, not about the system.
   store/infer mechanics break at scale — blocks any further
   scale-up until localized. (d) fails ⇒ replay-path
   nondeterminism, localize the layer.
+
+- **P75 — canonicalization lifts the measured constraint
+  (registered 2026-08-10, BEFORE the run; organ committed 4d807c6,
+  6/6 tests plus full livecausal regression green).** The one
+  organ both P72 (write side: 76/200 inferred edges, near-zero
+  exact-key collisions) and P73 (read side: coverage 0.0162)
+  localized, now measured on the real artifact. Setup: a COPY of
+  the P72 store on the x86 runner that built it (the DECISIONS
+  read-only-artifact rule), canon layer with env_pin recorded
+  (spaCy strict path, same discipline as P72).
+  (a) WRITE SIDE — THE ORIGINAL BAR: LiveGraph(canon=True) over
+      the copy lifts inferred edges from the measured 76
+      (canon=False, which must remain exactly 76) to ≥ 200 — the
+      EXACT bar P72 registered and failed. The lift factor and the
+      raw→canon key compression are reported at full strength.
+  (b) READ SIDE, both P73 questions re-asked: the identical P73
+      consultation measurement with query canon=True (random
+      control arm unchanged, on raw edges). (b1) coverage ≥ 0.08
+      (5× the measured 0.0162). (b2) mean_delta_real >
+      mean_delta_random — the clause P73 failed; with canon the
+      matched paths become semantically related, so this now tests
+      the injection mechanism itself, not key luck.
+  (c) COST HONESTY: cold canon mount over the 2,046-record copy
+      < 30s wall including model load; warm re-mount from the
+      stamped cache < 5s.
+  (d) THE MOAT HOLDS: 30 sampled canonical inferred edges
+      re-derived from ONLY the cited raw records plus the pinned
+      canon function (env_pin match enforced) — 30/30; and after
+      all canon operations the copy's store.verify() is True with
+      every segment sha unchanged (no-mutation on real data).
+  Falsifiers: (a) or (b1) fail ⇒ first-chunk head-lemma
+  canonicalization is insufficient on real prose — the concretely
+  observed report-about-X weakness becomes canon v2's named target,
+  with the compression stats localizing why. (b2) fails while (b1)
+  clears ⇒ injection value is not gated on relevance alone — a
+  mechanism finding about consult-back itself; next attack is the
+  injected text's form (length, position, phrasing), not the keys.
+  (c) fails ⇒ the flagged full-fold deviation is not a debt note
+  but a blocker — the semi-naive canon delta becomes mandatory
+  before builder integration. (d) fails ⇒ the canon layer breaks
+  stranger verifiability — blocks everything; the moat is
+  non-negotiable.
