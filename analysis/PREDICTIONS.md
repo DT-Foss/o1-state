@@ -2105,6 +2105,35 @@ artifact is a number about the defaults, not about the system.
   token novelty diverge — the registry instrument gains an entity
   mode.
 
+  **P70 SCORED (2026-08-10, results/curator_yield.json, full 3,000
+  chunks / 150 windows per arm on the second x86 runner, real fabel
+  extractor + 14-step gate in-process, no LLM; instrument hardened
+  in-run: a punctuation-free window reconstruction and a 0/0 vacuous
+  pass were caught by the builder agent, and a Unicode case-folding
+  misalignment (U+0130 expands under lower()) was caught by its own
+  alignment assert and fixed via an index map — all before any full
+  numbers existed).** THE REGISTERED FALSIFIER FIRES, near-1.0
+  branch, at 10× the smoke sample. (a) FAIL: 18.13 vs 18.60
+  validated triplets per kilotoken — ratio 0.974 against the 1.3
+  bar. Surprise-selected text is NOT causally denser: extraction
+  yield is essentially uniform across the novelty axis. (b) FAIL:
+  first-ever-entity rate 0.529 vs 0.514 — ratio 1.03 against 1.5.
+  The gate's token-level novelty (P58: 7× on first-ever types) does
+  NOT pass through extraction into entity novelty. (c) PASS: double
+  extraction byte-identical. THE COMPOSED BUILDER POLICY, measured
+  across P58/P64/P67/P70: the gate is the STORAGE curator, not the
+  extraction targeter — what it selects is worth REMEMBERING (keyed
+  recall P55, novelty-graded transfer P67, low redundancy P58) but
+  causal structure itself is uniformly distributed over the stream,
+  so builder v0 extracts UNGATED (every window pays equally in
+  triplet currency, ~18/kilotoken on WT-103) while the surprise
+  signal governs the memory-file and dedup layer. Named next
+  instruments, registered when launched: connective-density
+  prefilter (the pre-committed (a) route) and — sharper — the
+  NEW-EDGE rate against the growing graph (dedup currency; P58's
+  0.69× redundancy predicts surprise wins there where entity
+  novelty could not).
+
 - **P71 — the live graph never rebuilds, measured (registered
   2026-08-10, BEFORE the measurement; engine built and unit-green,
   src/livecausal/infer.py, ca2b82a).** The LIVE-CAUSAL claims from

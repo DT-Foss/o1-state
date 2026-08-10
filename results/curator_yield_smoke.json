@@ -1,0 +1,41 @@
+{
+  "p70": true,
+  "smoke": true,
+  "cadence": {
+    "d_model": 128,
+    "batch": 8,
+    "chunk": 64,
+    "q": 0.75,
+    "window": 500,
+    "min_window": 100,
+    "ignition_chunks": 100
+  },
+  "config": {
+    "chunks": 300,
+    "top_m": 20,
+    "window_tokens": 128,
+    "substrate": "wt103",
+    "vocab_source": "wikitext-2/5000",
+    "vocab_note": "the token stoi/vocab is built on WikiText-2 (5000 words, portable_organism.get_vocab), not WT-103 \u2014 most WT-103 tokens hit unk, so window text/entities use the raw word tape (HFStreamWithText), never vocab[token_id]",
+    "registry": "whole-stream n-gram (n=1..5) first-occurrence index over the full word tape, not window-only"
+  },
+  "surprise_windows": {
+    "triplets": 44,
+    "tokens": 2560,
+    "first_ever": 24,
+    "triplets_per_kilotoken": 17.1875,
+    "first_ever_entity_rate": 0.5455
+  },
+  "random_windows": {
+    "triplets": 47,
+    "tokens": 2560,
+    "first_ever": 29,
+    "triplets_per_kilotoken": 18.3594,
+    "first_ever_entity_rate": 0.617
+  },
+  "p70a_yield_ratio": 0.9362,
+  "p70a_pass": false,
+  "p70b_entity_novelty_ratio": 0.884,
+  "p70b_pass": false,
+  "p70c_pass": true
+}
