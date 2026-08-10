@@ -2104,3 +2104,25 @@ artifact is a number about the defaults, not about the system.
   instead of gating extraction; (b) fails ⇒ entity novelty and
   token novelty diverge — the registry instrument gains an entity
   mode.
+
+- **P71 — the live graph never rebuilds, measured (registered
+  2026-08-10, BEFORE the measurement; engine built and unit-green,
+  src/livecausal/infer.py, ca2b82a).** The LIVE-CAUSAL claims from
+  the spec, as numbers on the 16-core x86 runner (seeded synthetic
+  chain segments, ~50 records each):
+  (a) EQUIVALENCE AT SCALE: a 40-segment graph built incrementally
+      (on_append per segment) serializes bit-identically to the
+      batch rebuild over the same store — canonical inferred-edge
+      bytes equal, sha-comparable.
+  (b) DELTA SCALING: appending one fixed-size segment onto graphs of
+      5 → 80 segments (16× data growth) grows the append wall-time
+      by ≤ 4× — cost tracks the delta's neighborhood, not the graph.
+  (c) TRUNCATION IS A SCAN: dropping a mid-graph segment costs no
+      more wall-time than one append at the same graph size, result
+      bit-equal to the batch rebuild without that segment, zero
+      closure recomputation of surviving edges.
+  Falsifiers: (b) fails ⇒ the neighborhood term dominates earlier
+  than the spec assumes — measure the density at which delta cost
+  crosses batch cost and state it as the format's operating bound;
+  (c) fails ⇒ invalidation needs an index (derivation → inverted
+  index), named before built.
