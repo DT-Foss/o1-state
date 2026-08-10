@@ -46,8 +46,10 @@ import os
 import tempfile
 
 from .store import LiveStore
+from . import canon as canon_mod
 
 INFERRED_NAME = "inferred.jsonl"
+CANON_INFERRED_NAME = "canon_inferred.jsonl"
 MAX_DEPTH = 5  # v1's max_depth (hsslm pass1_exact_chains), mirrored exactly.
 
 
@@ -115,7 +117,7 @@ class LiveGraph:
     (SS2: "exactly the inferred edges whose derivation cites it").
     """
 
-    def __init__(self, store_dir, count_closures=False):
+    def __init__(self, store_dir, count_closures=False, canon=False, nlp=None):
         self.store_dir = store_dir
         self.store = LiveStore(store_dir)
         # base_edges[from_key][to_key] = sorted list of [sha, idx]
@@ -136,6 +138,39 @@ class LiveGraph:
         # calls either routine, so this counter is what makes "zero new
         # closures on drop" a checkable fact rather than an assertion.
         self.closure_calls = 0 if count_closures else None
+
+        # ------------------------------------------------------------
+        # Canonicalization layer (opt-in, P74 organ; canon.py). OFF by
+        # default -- canon=False is the entire pre-P74 code path, touched
+        # nowhere below this block, so default construction stays
+        # byte-identical to every LiveGraph built before this flag
+        # existed (the regression guarantee test_canon.py checks).
+        #
+        # `nlp` is an explicit, injectable spaCy pipeline (or None) passed
+        # straight through to canon.canonical_key -- lets a caller pin a
+        # specific loaded pipeline (tests) or force the no-spaCy fallback
+        # path (nlp=False, see _resolve_nlp below) without touching
+        # canon.py's own module-level cache. Default None means "resolve
+        # canon.py's module-cached default pipeline, load it once."
+        # ------------------------------------------------------------
+        self.canon_enabled = bool(canon)
+        self._canon_nlp_arg = nlp
+        self._canon_nlp = None  # resolved lazily in _resolve_nlp()
+        self.canon_env_pin = None
+        # canon_base_edges[canon_key][canon_key] = sorted list of [sha, idx]
+        # (same citation shape as _base_edges -- citations still point at
+        # RAW records; only the from/to key strings are canonical).
+        self._canon_base_edges = {}
+        self._canon_base_rev = {}
+        self._canon_inferred_all = []
+        self._canon_inferred_by_from = {}
+        # raw_key -> canon_key, folded once per mount/append/drop so a
+        # repeated raw_key across many records is canonicalized only once
+        # per _canon_rebuild() call, not once per record.
+        self._raw_to_canon = {}
+        self._canon_rebuilt_on_mount = False
+        self._canon_loaded_from_cache = False
+
         self._mount()
 
     # ------------------------------------------------------------------
@@ -152,11 +187,13 @@ class LiveGraph:
             cached = self._try_load_cache(cache_path, manifest_segments)
             if cached:
                 self._loaded_from_cache = True
+                self._mount_canon(manifest_segments)
                 return
         # No cache, or manifest stamp mismatch -> full rebuild from the store.
         self._rebuild_from_store()
         self._rebuilt_on_mount = True
         self._write_cache()
+        self._mount_canon(manifest_segments)
 
     def _try_load_cache(self, cache_path, manifest_segments):
         try:
@@ -248,6 +285,243 @@ class LiveGraph:
         _atomic_write(self._cache_path(), data)
 
     # ------------------------------------------------------------------
+    # Canonicalization layer (P74 organ, opt-in via canon=True).
+    #
+    # Deliberate scope decision (flagged here and in the build report):
+    # the canonical adjacency is a FULL FOLD over every raw base-edge
+    # citation, recomputed whenever the manifest stamp OR the canon
+    # env_pin changes -- NOT a semi-naive delta over canon_keys the way
+    # the raw layer's on_append/on_drop are. The build brief's "Delta-
+    # Inferenz läuft dann über kanonische Keys" is read here as "the
+    # inferred-edge TRANSITIVE CLOSURE step reuses the exact same
+    # _batch_transitive_closure/_delta_chains_for_citation machinery,
+    # just over canon_key adjacency instead of raw_key adjacency" -- which
+    # this does -- rather than as a mandate for a second independent
+    # semi-naive maintenance path threaded through on_append/on_drop.
+    # Reasoning: canon_key is a MANY-TO-ONE fold of raw_key (every raw_key
+    # collapses to exactly one canon_key, but many raw_keys can collapse
+    # to the same canon_key), so a single new raw base-edge citation can
+    # change the canon adjacency in a way that is NOT local to that one
+    # citation's own canon-key neighborhood -- e.g. appending a record
+    # that canonicalizes to an ALREADY-PRESENT canon_key can newly connect
+    # two previously-disjoint canon components whose raw citations were
+    # appended arbitrarily long ago. A correct semi-naive rule for this
+    # would need to re-derive from every raw citation sharing the new
+    # citation's canon_key, not just the new citation itself -- a real
+    # design (worth a future ticket) but out of scope for delivering a
+    # correct, tested organ now. The full fold is O(all records) per
+    # mount/append/drop, same asymptotic cost class _rebuild_from_store
+    # already pays on every cold mount -- correct first, fast later.
+    # ------------------------------------------------------------------
+
+    def _canon_cache_path(self):
+        return os.path.join(self.store_dir, CANON_INFERRED_NAME)
+
+    def _resolve_nlp(self):
+        """Resolves the spaCy pipeline used for this graph's canon calls,
+        once, cached on self. `nlp=False` (explicit, not None) at
+        construction forces the no-spaCy fallback path regardless of what
+        is installed -- useful for tests that need the fallback
+        deterministically without uninstalling anything. `nlp=None`
+        (the default) resolves canon.py's own module-cached default
+        pipeline (loaded at most once per process). Any other value
+        (an already-loaded spaCy Language object) is used as-is."""
+        if self._canon_nlp_arg is False:
+            return None
+        if self._canon_nlp_arg is not None:
+            return self._canon_nlp_arg
+        return canon_mod._get_nlp()
+
+    def _mount_canon(self, manifest_segments):
+        if not self.canon_enabled:
+            return
+        self._canon_nlp = self._resolve_nlp()
+        self.canon_env_pin = canon_mod.env_pin()
+        cache_path = self._canon_cache_path()
+        if os.path.exists(cache_path):
+            if self._try_load_canon_cache(cache_path, manifest_segments):
+                self._canon_loaded_from_cache = True
+                return
+        self._canon_rebuild()
+        self._canon_rebuilt_on_mount = True
+        self._write_canon_cache()
+
+    def _try_load_canon_cache(self, cache_path, manifest_segments):
+        try:
+            with open(cache_path, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+        except OSError:
+            return False
+        if not lines:
+            return False
+        try:
+            header = json.loads(lines[0])
+        except (ValueError, json.JSONDecodeError):
+            return False
+        if header.get("segments") != manifest_segments:
+            return False
+        if header.get("canon_env_pin") != self.canon_env_pin:
+            # The P70 lesson, applied here: a cache built under a
+            # different spaCy availability/version or a different
+            # CANON_VERSION is not a valid cache for THIS process's
+            # canonicalization function, even if the manifest stamp
+            # matches exactly. Mismatch -> full rebuild, never adopted.
+            return False
+
+        inferred = []
+        for line in lines[1:]:
+            line = line.rstrip("\n")
+            if line == "":
+                continue
+            try:
+                inferred.append(json.loads(line))
+            except (ValueError, json.JSONDecodeError):
+                return False
+
+        # Cache is valid: still need the canon base adjacency + raw_key
+        # map in memory for query()/edge derivation, so fold those (cheap
+        # relative to spaCy parsing -- this is dict bookkeeping only, the
+        # canon_key VALUES themselves are not recomputed here since the
+        # cached inferred edges already reflect them and the base fold
+        # below reuses self._raw_to_canon lazily per raw_key it has not
+        # seen yet... but on a cache HIT we still need the mapping for
+        # every raw_key currently in the store, so this still calls the
+        # canonicalizer once per distinct raw_key, same as a rebuild would
+        # -- the cache HIT only saves recomputing the transitive closure,
+        # not the raw_key->canon_key fold itself, since that fold is a
+        # prerequisite for query() regardless of inferred-edge caching.
+        self._canon_fold_base_edges()
+        self._canon_inferred_all = inferred
+        self._reindex_canon_inferred()
+        return True
+
+    def _canon_fold_base_edges(self):
+        """Rebuilds canon_base_edges/canon_base_rev/raw_to_canon from the
+        RAW base adjacency already in memory (self._base_edges), by
+        canonicalizing every distinct raw_key exactly once. Citations are
+        preserved verbatim (still (sha, idx) pointing at raw records) --
+        only the from/to key strings are replaced by their canon_key."""
+        self._raw_to_canon = {}
+        self._canon_base_edges = {}
+        self._canon_base_rev = {}
+
+        def _canon_of(raw_key):
+            cached = self._raw_to_canon.get(raw_key)
+            if cached is not None:
+                return cached
+            ck = canon_mod.canonical_key(raw_key, nlp=self._canon_nlp)
+            self._raw_to_canon[raw_key] = ck
+            return ck
+
+        for from_key, targets in self._base_edges.items():
+            canon_from = _canon_of(from_key)
+            for to_key, citations in targets.items():
+                canon_to = _canon_of(to_key)
+                bucket = self._canon_base_edges.setdefault(canon_from, {}).setdefault(canon_to, [])
+                for pair in citations:
+                    if pair not in bucket:
+                        bucket.append(list(pair))
+                bucket.sort(key=lambda p: (p[0], p[1]))
+                self._canon_base_rev.setdefault(canon_to, set()).add(canon_from)
+
+    def _canon_rebuild(self):
+        self._canon_fold_base_edges()
+        if self.closure_calls is not None:
+            self.closure_calls += 1
+        self._canon_inferred_all = _batch_transitive_closure(self._canon_base_edges)
+        self._reindex_canon_inferred()
+
+    def _reindex_canon_inferred(self):
+        self._canon_inferred_by_from = {}
+        for edge in self._canon_inferred_all:
+            self._canon_inferred_by_from.setdefault(edge["from_key"], []).append(edge)
+        for key in self._canon_inferred_by_from:
+            self._canon_inferred_by_from[key].sort(key=_edge_sort_key)
+        self._canon_inferred_all.sort(key=_edge_sort_key)
+
+    def _write_canon_cache(self):
+        header = _canonical_line({
+            "segments": self.store.segments(),
+            "canon_env_pin": self.canon_env_pin,
+        })
+        body = "".join(_canonical_line(e) for e in self._canon_inferred_all)
+        data = (header + body).encode("utf-8")
+        _atomic_write(self._canon_cache_path(), data)
+
+    def _refresh_canon(self):
+        """Recomputes the canon layer from the current raw base adjacency
+        and rewrites its cache. Called by on_append/on_drop when
+        canon_enabled -- always a full fold (see the scope note above),
+        so cost is O(current record count), not O(delta)."""
+        if not self.canon_enabled:
+            return
+        self._canon_rebuild()
+        self._write_canon_cache()
+
+    def canon_query(self, raw_key):
+        """query()'s canonical counterpart: canonicalizes `raw_key` itself
+        (the READ side of P73's coverage number -- a query for "the old
+        king" must find edges filed under "king of france"'s canon_key
+        too) and returns base + inferred edges over the canonical
+        adjacency, in the SAME dict shape query() returns. Every returned
+        edge's `derivation` still cites RAW (segment_sha, idx) coordinates
+        -- canonicalization never invents a citation, it only changes
+        which from/to key STRING joins which citations together. A
+        stranger can therefore re-derive any canon edge from nothing but
+        the cited raw records plus this module's pinned canonical_key
+        function (see test_canon.py's verifier-compatibility test).
+
+        Raises RuntimeError if this graph was not constructed with
+        canon=True -- calling the canonical query path on a canon=False
+        graph is a caller bug, not a silent empty result."""
+        if not self.canon_enabled:
+            raise RuntimeError(
+                "canon_query() requires LiveGraph(..., canon=True); "
+                "this graph was mounted with canon=False."
+            )
+        canon_key = canon_mod.canonical_key(raw_key, nlp=self._canon_nlp)
+        out = []
+        for to_key, citations in sorted(self._canon_base_edges.get(canon_key, {}).items()):
+            out.append({
+                "kind": "base",
+                "from_key": canon_key,
+                "to_key": to_key,
+                "derivation": [list(p) for p in citations],
+            })
+        for edge in self._canon_inferred_by_from.get(canon_key, []):
+            out.append({
+                "kind": "inferred",
+                "from_key": edge["from_key"],
+                "to_key": edge["to_key"],
+                "depth": edge["depth"],
+                "derivation": [list(p) for p in edge["derivation"]],
+            })
+        out.sort(key=lambda e: (e["kind"], e["to_key"], e.get("depth", 1), _derivation_key(e["derivation"])))
+        return out
+
+    def canon_inferred_edges(self):
+        """All canonical inferred edges, sorted -- canon-layer counterpart
+        to inferred_edges(). Empty list if canon_enabled is False."""
+        return [dict(e, derivation=[list(p) for p in e["derivation"]]) for e in self._canon_inferred_all]
+
+    def canon_of(self, raw_key):
+        """The canon_key a given raw_key maps to under this graph's
+        current fold. Convenience for tests/debugging; raises
+        RuntimeError under the same condition canon_query() does."""
+        if not self.canon_enabled:
+            raise RuntimeError(
+                "canon_of() requires LiveGraph(..., canon=True); "
+                "this graph was mounted with canon=False."
+            )
+        return canon_mod.canonical_key(raw_key, nlp=self._canon_nlp)
+
+    def was_canon_rebuilt_on_mount(self):
+        return self._canon_rebuilt_on_mount
+
+    def was_canon_loaded_from_cache(self):
+        return self._canon_loaded_from_cache
+
+    # ------------------------------------------------------------------
     # Introspection helpers (test-facing, per the build brief's
     # "Zähler/Flag testbar machen" requirement for cache validity).
     # ------------------------------------------------------------------
@@ -265,13 +539,29 @@ class LiveGraph:
     # Query
     # ------------------------------------------------------------------
 
-    def query(self, key):
+    def query(self, key, canon=False):
         """Base + inferred outgoing edges of `key`, sorted deterministically.
 
         Returns a list of dicts:
           base:     {"kind": "base", "from_key", "to_key", "derivation": [[sha, idx], ...]}
           inferred: {"kind": "inferred", "from_key", "to_key", "depth", "derivation": [...]}
+
+        canon=False (default): EXACT pre-P74 behavior, byte-identical to
+        every caller written before this parameter existed -- `key` is
+        matched against the raw base/inferred adjacency only.
+
+        canon=True: the READ side of the P73 coverage measurement. `key`
+        is itself canonicalized (canon_mod.canonical_key) before lookup,
+        against the canonical adjacency built by LiveGraph(canon=True) --
+        so a query for "the old king" can find edges filed under "king of
+        france"'s canon_key. Requires this graph to have been constructed
+        with canon=True (raises RuntimeError otherwise, via canon_query
+        below -- a canon=True query against a canon=False graph is a
+        caller bug, not a silent empty result). Every returned edge's
+        derivation still cites raw (segment_sha, idx) coordinates.
         """
+        if canon:
+            return self.canon_query(key)
         out = []
         for to_key, citations in sorted(self._base_edges.get(key, {}).items()):
             out.append(
@@ -388,6 +678,7 @@ class LiveGraph:
 
         self._reindex_inferred()
         self._write_cache()
+        self._refresh_canon()
         return new_edges
 
     # ------------------------------------------------------------------
@@ -424,6 +715,7 @@ class LiveGraph:
         self._inferred_all = kept_inferred
         self._reindex_inferred()
         self._write_cache()
+        self._refresh_canon()
 
     # ------------------------------------------------------------------
     # Drop segments through the store (convenience: mirrors store API)
