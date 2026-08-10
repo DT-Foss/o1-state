@@ -154,15 +154,21 @@ reported at full strength). Write side (P72: 76/200 inferred edges) and
 read side (P73: 1.6% coverage) now agree on the single binding
 constraint. One organ, two measured numbers waiting on it.
 
-**Scale is proven at MVP scale, not yet at corpus scale.** P72's numbers
-are a single controlled run: 3,000 stream chunks, 644 segments, five
-minutes on four cores. P71 separately proves the closure engine's growth
-curve (1.68× append time under 16× data growth, with constant delta-yield)
-— the mechanism that makes larger graphs cheap is measured — but the two
-have not yet been run together on a corpus an order of magnitude larger.
-That run is the natural next falsifier: does the append-time curve P71
-measured on synthetic chain data hold under P72's real, unevenly-connected
-extraction graph at ten or a hundred times its size?
+**Scale is measured at 10×, and it taught us something (P74).** The
+natural falsifier ran: a 30,000-chunk build (6,401 segments, 20,648
+records — precisely 10× P72) replayed through its own history twice.
+The mechanics scale cleanly — truncation stays zero-closure at any
+density (10/10 samples), closure accounting is exact across all 6,401
+appends, and both replays are structurally byte-identical. The
+discovery: graph density is not scale-invariant. Exact-key collisions
+accumulate superlinearly with stream length (76 inferred edges at 1× →
+5,408 at 10×, density 0.037 → 0.262), and append cost tracks that
+density — the pre-committed guard fired, so the sparse-regime bar is
+void and the curve reports descriptively (last/first fifth ≈ 11–13×,
+absolute cost still 94ms median at the frontier; the full 10× history
+replays from raw segments in ~8.5 minutes). The dense-regime bar
+re-registers in density-normalized form now that canonicalization
+deliberately raises density.
 
 ---
 

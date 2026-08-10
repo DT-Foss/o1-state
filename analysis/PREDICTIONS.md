@@ -2363,6 +2363,37 @@ artifact is a number about the defaults, not about the system.
   scale-up until localized. (d) fails ⇒ replay-path
   nondeterminism, localize the layer.
 
+  **P74 SCORED (2026-08-10, results/livecausal_scale_run1.json +
+  livecausal_scale_run2.json + p74_scale.log on the x86 runner;
+  instrument prep built p74_store — 30,000 WT-103 chunks, P72's
+  exact cadence and seed — 6,401 segments, 20,648 records,
+  precisely 10x P72).** The headline is a real discovery the guard
+  anticipated: GRAPH DENSITY IS NOT SCALE-INVARIANT. At 1x the
+  graph held 76 inferred edges (density 0.037); at 10x the same
+  corpus, extractor, and cadence yield 5,408 inferred on 20,608
+  base (density 0.2624) — exact-key collisions accumulate
+  superlinearly with stream length, 71x inferred growth on 10x
+  data. (a) The density guard FIRES (0.2624 > 0.186): the 4x bar
+  is void as pre-committed, and the curve reports descriptively —
+  ratio last/first fifth 11.4x / 13.0x across the two runs (bucket
+  medians 7.2ms -> 93.7ms), confirming the harness smoke's
+  dense-regime superlinearity on real extraction data. Absolute
+  cost stays practical: 93.7ms median append at the 6,401-segment
+  frontier, and the entire 10x history replays from raw segments
+  in ~510s. The dense-regime bar re-registers in the
+  density-normalized form (expected delta yield ~ density_pre x
+  n_keys) once canonicalization — which deliberately raises
+  density — lands its own P75 numbers. (b) PASS: 10/10 drop
+  samples at final size, zero new closures, both runs — truncation
+  stays a pure index scan regardless of density. (c) PASS: closure
+  accounting exact across all 6,401 appends, both runs — no hidden
+  rebuild anywhere in the wild. (d) PASS: all 6,401 per-append
+  rows structurally identical across the two replays (shas, edge
+  counts, closure deltas); wall times exempt as registered. The
+  mechanics scale; the append-cost curve is now a measured
+  function of density, and density is now a measured function of
+  corpus length.
+
 - **P75 — canonicalization lifts the measured constraint
   (registered 2026-08-10, BEFORE the run; organ committed 4d807c6,
   6/6 tests plus full livecausal regression green).** The one
