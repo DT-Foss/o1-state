@@ -17,10 +17,13 @@ its internals):
         Validated triplets, each dict carrying at least {trigger, mechanism,
         outcome, trigger_key, outcome_key}.
     a window source iterable over (tape_pos: int, window_text: str) for
-        gated windows -- this file OWNS that iterable (gated_windows()
-        below implements it against po.Organism.step_gated), the contract
-        only fixes its shape so curator_yield_run's extractor can consume
-        it identically to how this loop does.
+        EVERY window (P70 policy update: extraction is ungated -- see
+        stream_windows()'s docstring) -- this file OWNS that iterable
+        (stream_windows() below implements it against
+        po.Organism.step_gated, also carrying surprise/gated per window),
+        the contract only fixes its (tape_pos, window_text) shape so
+        curator_yield_run's extractor can consume it identically to how
+        this loop does.
 
 Both are resolved via a lazy import hook (`_default_extractor`,
 `resolve_extractor`) so tests can stub them (see --extractor-stub / the
@@ -182,7 +185,7 @@ class HFCorpusStream:
         # re-tokenizing the same underlying text, which the base class
         # does not expose. Documented gap (flagged in the build report):
         # raw_text_for_tape_range on this source returns None, so
-        # gated_windows() falls back to a token-id placeholder text for
+        # stream_windows() falls back to a token-id placeholder text for
         # HF corpora. The --text-file path is the one with exact raw text.
         return self._stream.next_block()
 
@@ -197,19 +200,36 @@ def build_corpus_stream(args, stoi, unk):
 
 
 # ─────────────────────────────────────────────────────────────────────────
-#  Gated window generator: the FENCE the SPEC calls out -- SS4 stage 1
-#  (curate). Wraps po.Organism.step_gated (surprise_filter_run.py's live
-#  gate, not a post-hoc top-M sort: a window is curated exactly when the
-#  gate accepts its chunk in real time).
+#  Window generator: the FENCE the SPEC calls out -- SS4 stage 1 (curate).
+#  Wraps po.Organism.step_gated (surprise_filter_run.py's live gate) to get
+#  a per-chunk surprise value and gate decision.
+#
+#  POLICY UPDATE (P70 rescoring, MVP-3 -- "Builder-Politik: Extraktion
+#  ungated, Gate kuratiert Storage"): P70 measured causal-structure yield
+#  as EVENLY DISTRIBUTED across the stream (surprise-gated extraction
+#  windows and random windows both land ~18 validated triplets/kilotoken,
+#  the falsifier's bars of 1.3x/1.5x both missed) -- surprise-gating the
+#  EXTRACTION step buys nothing. This generator therefore now yields EVERY
+#  chunk's window, gated or not, carrying the gate's surprise/gated signal
+#  alongside the text so a LATER stage (storage/dedup/memory -- P55/P58/P67
+#  territory, not this generator) can curate on it instead. The organism
+#  still streams gated (its own training gate is untouched -- step_gated
+#  still decides whether to backprop on this chunk); only the WINDOW-YIELD
+#  side stopped filtering.
 # ─────────────────────────────────────────────────────────────────────────
-def gated_windows(organism, stream, feeder, window_tokens, tape_cap=None):
-    """Generator over (tape_pos: int, window_text: str) for every chunk the
-    live gate accepts. tape_pos is the tape offset of the window START
-    (the gated chunk's first token) -- this IS the builder's doc_coord.
-    window_text is window_tokens tokens' worth of ORIGINAL words (not the
-    tokenized ids) recovered from the stream, when the stream supports it
-    (TextFileStream always does; HFCorpusStream currently does not -- see
-    its raw_text_for_tape_range note).
+def stream_windows(organism, stream, feeder, window_tokens, tape_cap=None):
+    """Generator over (tape_pos: int, window_text: str, surprise: float,
+    gated: bool) for EVERY chunk (ungated extraction, per the P70 policy
+    update above). tape_pos is the tape offset of the window START (the
+    chunk's first token) -- this IS the builder's doc_coord. window_text is
+    window_tokens tokens' worth of ORIGINAL words (not the tokenized ids)
+    recovered from the stream, when the stream supports it (TextFileStream
+    always does; HFCorpusStream currently does not -- see its
+    raw_text_for_tape_range note). surprise is the chunk's mean NLL (the
+    same value step_gated computes for its own rolling-quantile decision);
+    gated is whether the organism's OWN training gate accepted this chunk
+    for backprop -- carried through as a signal for the storage layer, not
+    used here to filter which windows get yielded.
 
     tape_cap: if given, the generator's internal token tape is trimmed to
     the last `tape_cap` tokens after each chunk (keeps memory flat on long
@@ -222,17 +242,16 @@ def gated_windows(organism, stream, feeder, window_tokens, tape_cap=None):
         s, gated, nll = organism.step_gated(x, y)
         chunk_start = tape_base + len(tape)
         tape.extend(int(v) for v in x[0])  # lane 0 carries the tape, surprise_filter_run.py's convention
-        if gated:
-            lo, hi = chunk_start, chunk_start + window_tokens
-            text = stream.raw_text_for_tape_range(tape, lo, hi)
-            if text is None:
-                # Fallback for sources without raw-text recovery: encode
-                # the token ids as a placeholder string so the extractor
-                # contract (text: str) is still satisfied. Flagged: this
-                # degrades extraction quality for HF corpora until the
-                # extractor is also handed the vocab to detokenize.
-                text = " ".join(str(t) for t in x[0][:window_tokens].tolist())
-            yield chunk_start, text
+        lo, hi = chunk_start, chunk_start + window_tokens
+        text = stream.raw_text_for_tape_range(tape, lo, hi)
+        if text is None:
+            # Fallback for sources without raw-text recovery: encode
+            # the token ids as a placeholder string so the extractor
+            # contract (text: str) is still satisfied. Flagged: this
+            # degrades extraction quality for HF corpora until the
+            # extractor is also handed the vocab to detokenize.
+            text = " ".join(str(t) for t in x[0][:window_tokens].tolist())
+        yield chunk_start, text, s, gated
         if tape_cap and len(tape) > tape_cap:
             drop = len(tape) - tape_cap
             tape = tape[drop:]
@@ -307,8 +326,15 @@ def fake_extractor(text):
 #  (MVP-1's schema: trigger/mechanism/outcome/trigger_key/outcome_key/
 #  doc_coord/evidence_count/use_count/meta).
 # ─────────────────────────────────────────────────────────────────────────
-def make_record(triplet, tape_pos, extractor_version="builder_v0"):
+def make_record(triplet, tape_pos, surprise, gated, extractor_version="builder_v0"):
     """Extractor triplet -> Store schema record.
+
+    surprise/gated (P70 policy update, MVP-3): the organism's per-window
+    gate signal, carried into meta so a LATER storage/dedup/memory stage
+    can curate on it -- extraction itself no longer gates (see
+    stream_windows' docstring). Every record gets this signal regardless
+    of whether its window was gated, so a downstream policy can filter
+    retroactively without re-streaming.
 
     CONTRACT DEVIATION (flagged in the build report): the build brief's
     contract requires extract_validated to return trigger_key/outcome_key
@@ -333,7 +359,11 @@ def make_record(triplet, tape_pos, extractor_version="builder_v0"):
         "doc_coord": tape_pos,
         "evidence_count": 1,
         "use_count": 0,
-        "meta": {"extractor_version": extractor_version},
+        "meta": {
+            "extractor_version": extractor_version,
+            "surprise": float(surprise),
+            "gated": bool(gated),
+        },
     }
 
 
@@ -377,8 +407,17 @@ def run_builder(
     graph = LiveGraph(store_dir)
     t0 = time.time()
 
-    n_windows_curated = 0
-    n_triplets_validated = 0
+    # P70 policy update (MVP-3): extraction runs on EVERY window, gated or
+    # not. n_windows_total/n_triplets_total count the ungated firehose;
+    # n_windows_gated/n_triplets_from_gated break out the subset the
+    # organism's own gate accepted, purely as a metric -- nothing here
+    # filters storage on it yet (the storage/dedup/memory policy P70 named
+    # is a later stage, not built by this loop; meta.surprise/meta.gated on
+    # every record is what that later stage will curate on).
+    n_windows_total = 0
+    n_windows_gated = 0
+    n_triplets_total = 0
+    n_triplets_from_gated = 0
     n_segments = 0
     n_base_edges_seen = 0
     append_seconds_total = 0.0
@@ -395,8 +434,10 @@ def run_builder(
         return {
             "wall_s": round(time.time() - t0, 2),
             "n_streamed_tape_pos": stream.docs,  # coarse: doc/wrap count, exact tape pos is per-window
-            "n_windows_curated": n_windows_curated,
-            "n_triplets_validated": n_triplets_validated,
+            "n_windows_total": n_windows_total,
+            "n_windows_gated": n_windows_gated,
+            "n_triplets_total": n_triplets_total,
+            "n_triplets_from_gated": n_triplets_from_gated,
             "n_segments": n_segments,
             "n_base_edges": sum(len(v) for v in graph._base_edges.values()),
             "n_inferred_edges": len(graph.inferred_edges()),
@@ -433,30 +474,39 @@ def run_builder(
         })
         return sha
 
-    win_iter = gated_windows(organism, stream, feeder, window_tokens, tape_cap=tape_cap)
-    for tape_pos, window_text in win_iter:
-        n_windows_curated += 1
+    win_iter = stream_windows(organism, stream, feeder, window_tokens, tape_cap=tape_cap)
+    for tape_pos, window_text, surprise, gated in win_iter:
+        n_windows_total += 1
+        if gated:
+            n_windows_gated += 1
+        # Extraction is UNGATED (P70 policy update): runs on every window
+        # regardless of `gated`. The gate signal rides along on each
+        # resulting record's meta instead of filtering which windows reach
+        # the extractor at all.
         triplets = extractor(window_text)
         for t in triplets:
-            pending_records.append(make_record(t, tape_pos))
-            n_triplets_validated += 1
+            pending_records.append(make_record(t, tape_pos, surprise, gated))
+            n_triplets_total += 1
+            if gated:
+                n_triplets_from_gated += 1
 
         if len(pending_records) >= windows_per_segment or (
-            pending_records and n_windows_curated % windows_per_segment == 0
+            pending_records and n_windows_total % windows_per_segment == 0
         ):
             flush_segment()
 
-        if n_windows_curated % print_every == 0:
+        if n_windows_total % print_every == 0:
             m = current_metrics()
             print(
-                "[builder] windows={n_windows_curated} triplets={n_triplets_validated} "
+                "[builder] windows={n_windows_total} (gated={n_windows_gated}) "
+                "triplets={n_triplets_total} (from_gated={n_triplets_from_gated}) "
                 "segments={n_segments} base_edges={n_base_edges} inferred_edges={n_inferred_edges} "
                 "wall={wall_s:.1f}s".format(**m),
                 flush=True,
             )
             write_status()
 
-        if max_windows and n_windows_curated >= max_windows:
+        if max_windows and n_windows_total >= max_windows:
             break
         if max_seconds and (time.time() - t0) >= max_seconds:
             break
