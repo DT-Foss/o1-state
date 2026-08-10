@@ -1904,8 +1904,8 @@ artifact is a number about the defaults, not about the system.
   **P64 SCORED (2026-08-06 night, results/filter_file.json, full
   1,500/1,500/1,500 chunks, 540 spans per file exactly matched, both
   shas recorded, cadence block d128/B8/K64 q0.75 in the artifact).**
-  (a) INVERTED — the pre-committed falsifier fires, and the negative
-  is stated as measured: the random-harvested file fertilizes BETTER
+  (a) FAIL, INVERTED — the pre-committed falsifier fires, and the
+  negative is stated as measured: the random-harvested file fertilizes BETTER
   than the surprise-harvested file on average-C4 heldout (+0.0617 vs
   +0.0356, a 1.7× inversion of the registered direction). Novelty
   selection does not buy diffuse transfer at this dose. (b) PASS both

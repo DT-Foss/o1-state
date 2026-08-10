@@ -1,12 +1,12 @@
 {
   "generated_by": "src/score_predictions_v2.py",
   "predictions_file": "analysis/PREDICTIONS.md",
-  "n_predictions": 59,
+  "n_predictions": 71,
   "coverage_summary": {
-    "full": 5,
-    "partial": 6,
-    "prose": 20,
-    "in_flight": 1,
+    "full": 10,
+    "partial": 8,
+    "prose": 26,
+    "in_flight": 0,
     "withdrawn": 1,
     "registered": 26
   },
@@ -1723,69 +1723,214 @@
     "P55": {
       "pid": "P55",
       "title": "the file answers by key (MS-Q, registered 2026-08-06, BEFORE\n  the build).",
-      "status": "registered",
-      "verdict_words": [],
-      "artifacts_named": [],
-      "artifacts_found": [],
-      "checks": [],
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/keyed_file.json"
+      ],
+      "artifacts_found": [
+        "keyed_file.json"
+      ],
+      "checks": [
+        {
+          "claim": "p55a_pass",
+          "artifact": "keyed_file.json",
+          "artifact_field": "p55a_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p55b_pass",
+          "artifact": "keyed_file.json",
+          "artifact_field": "p55b_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        }
+      ],
       "check_summary": {
-        "MATCH": 0,
+        "MATCH": 2,
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "prose-only (not yet scored)"
+      "coverage": "full"
     },
     "P56": {
       "pid": "P56",
       "title": "the width law's fourth point, and the attractor hardened\n  (MS-T, registered 2026-08-06, BEFORE the launches).",
-      "status": "in_flight",
-      "verdict_words": [],
-      "artifacts_named": [],
-      "artifacts_found": [],
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/gate_law_width_curve_q08.json",
+        "results/pos_s43q75_d128_status.json",
+        "results/pos_s43q75_d256_status.json"
+      ],
+      "artifacts_found": [
+        "gate_law_width_curve_q08.json",
+        "pos_s43q75_d128_status.json",
+        "pos_s43q75_d256_status.json"
+      ],
       "checks": [],
       "check_summary": {
         "MATCH": 0,
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "none",
-      "note": "artifact pos_d1024_status.json reports phase=running \u2014 skipped"
+      "coverage": "prose-only (no clause fields in artifact)"
     },
     "P57": {
       "pid": "P57",
       "title": "the composition curve: sublinearity over the exposure decade\n  (MS-S, registered 2026-08-06, BEFORE the launch).",
-      "status": "registered",
-      "verdict_words": [],
-      "artifacts_named": [],
-      "artifacts_found": [],
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/chimera_curve_20k.json",
+        "results/chimera_curve_5k.json"
+      ],
+      "artifacts_found": [
+        "chimera_curve_20k.json",
+        "chimera_curve_5k.json"
+      ],
       "checks": [],
       "check_summary": {
         "MATCH": 0,
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "prose-only (not yet scored)"
+      "coverage": "prose-only (no clause fields in artifact)"
     },
     "P58": {
       "pid": "P58",
       "title": "surprise is a knowledge filter, or it is not (MS-R,\n  registered 2026-08-06, BEFORE the build).",
-      "status": "registered",
-      "verdict_words": [],
-      "artifacts_named": [],
-      "artifacts_found": [],
-      "checks": [],
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/surprise_filter.json"
+      ],
+      "artifacts_found": [
+        "surprise_filter.json"
+      ],
+      "checks": [
+        {
+          "claim": "p58a_first_ever_ratio",
+          "artifact": "surprise_filter.json",
+          "artifact_field": "p58a_first_ever_ratio",
+          "artifact_value": 1.5111,
+          "register_value": "1.511",
+          "verdict": "MATCH",
+          "note": "artifact 1.5111 present as 1.511 in clause context"
+        },
+        {
+          "claim": "p58a_pass",
+          "artifact": "surprise_filter.json",
+          "artifact_field": "p58a_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p58b_pass",
+          "artifact": "surprise_filter.json",
+          "artifact_field": "p58b_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p58b_redundancy_ratio",
+          "artifact": "surprise_filter.json",
+          "artifact_field": "p58b_redundancy_ratio",
+          "artifact_value": 0.6863,
+          "register_value": "0.686",
+          "verdict": "MATCH",
+          "note": "artifact 0.6863 present as 0.686 in clause context"
+        },
+        {
+          "claim": "p58c_pass",
+          "artifact": "surprise_filter.json",
+          "artifact_field": "p58c_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p58c_seed2_ratio",
+          "artifact": "surprise_filter.json",
+          "artifact_field": "p58c_seed2_ratio",
+          "artifact_value": 1.5455,
+          "register_value": null,
+          "verdict": "UNPARSEABLE",
+          "note": "artifact 1.5455 not found verbatim in text"
+        }
+      ],
       "check_summary": {
-        "MATCH": 0,
+        "MATCH": 5,
         "MISMATCH": 0,
-        "UNPARSEABLE": 0
+        "UNPARSEABLE": 1
       },
-      "coverage": "prose-only (not yet scored)"
+      "coverage": "partial"
     },
     "P59": {
       "pid": "P59",
       "title": "the aged brain: does a 7-billion-token life gate, learn, and\n  survive shocks differently? (MS-U, registered 2026-08-06, BEFORE the\n  fork).",
-      "status": "amended",
+      "status": "scored",
       "verdict_words": [],
+      "artifacts_named": [
+        "results/aged_brain.json"
+      ],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
+    },
+    "P60": {
+      "pid": "P60",
+      "title": "stranger verification: the hub's review mechanism as a\n  measurement (MS-V, registered 2026-08-06, BEFORE the build).",
+      "status": "scored",
+      "verdict_words": [],
+      "artifacts_named": [
+        "results/stranger_verify.json",
+        "results/stranger_verify_arm.json",
+        "results/vizdoom_knowledge_x86.jsonl"
+      ],
+      "artifacts_found": [
+        "stranger_verify.json",
+        "stranger_verify_arm.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P61": {
+      "pid": "P61",
+      "title": "the retrodiction organ, keyed v1 (MS-E, registered\n  2026-08-06; full design in analysis/RETRO_SPEC_DRAFT.md, committed\n  with this entry; BEFORE the build).",
+      "status": "amended",
+      "verdict_words": [
+        "CONFIRMED",
+        "PASS"
+      ],
       "artifacts_named": [],
       "artifacts_found": [],
       "checks": [],
@@ -1796,9 +1941,9 @@
       },
       "coverage": "prose-only (not yet scored)"
     },
-    "P60": {
-      "pid": "P60",
-      "title": "stranger verification: the hub's review mechanism as a\n  measurement (MS-V, registered 2026-08-06, BEFORE the build).",
+    "P62": {
+      "pid": "P62",
+      "title": "the dial law: rate \u2248 1\u2212q across the regulator (MS-W,\n  registered 2026-08-06 night, BEFORE the launches).",
       "status": "registered",
       "verdict_words": [],
       "artifacts_named": [],
@@ -1810,6 +1955,449 @@
         "UNPARSEABLE": 0
       },
       "coverage": "prose-only (not yet scored)"
+    },
+    "P63": {
+      "pid": "P63",
+      "title": "the crossing is not a seed story (MS-X, registered 2026-08-06\n  night, BEFORE the launch).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/pos_d1024_s43_status.json"
+      ],
+      "artifacts_found": [
+        "pos_d1024_s43_status.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P64": {
+      "pid": "P64",
+      "title": "the filter earns its file, or it does not (MS-Y, registered\n  2026-08-06 night, BEFORE the build).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/filter_file.json"
+      ],
+      "artifacts_found": [
+        "filter_file.json"
+      ],
+      "checks": [
+        {
+          "claim": "p64a_pass",
+          "artifact": "filter_file.json",
+          "artifact_field": "p64a_pass",
+          "artifact_value": false,
+          "register_value": "FALSIFIED->False",
+          "verdict": "MATCH",
+          "note": ""
+        }
+      ],
+      "check_summary": {
+        "MATCH": 1,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "full"
+    },
+    "P65": {
+      "pid": "P65",
+      "title": "the valley is not a seed story (registered 2026-08-06 night,\n  BEFORE the launch).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/pos_d256_s42_q80_status.json"
+      ],
+      "artifacts_found": [
+        "pos_d256_s42_q80_status.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P66": {
+      "pid": "P66",
+      "title": "the plasticity-decay curve: what aging costs, across six\n  ages (registered 2026-08-06 night, BEFORE the runs; the follow-up\n  P59(c) fired).",
+      "status": "registered",
+      "verdict_words": [],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (not yet scored)"
+    },
+    "P67": {
+      "pid": "P67",
+      "title": "the filter's file on the filter's turf (registered\n  2026-08-10, BEFORE the build; the attack P64 named).",
+      "status": "scored",
+      "verdict_words": [
+        "WITHDRAWN",
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/filter_file_s43.json",
+        "results/novelty_transfer.json"
+      ],
+      "artifacts_found": [
+        "filter_file_s43.json",
+        "novelty_transfer.json"
+      ],
+      "checks": [
+        {
+          "claim": "p67a_pass",
+          "artifact": "novelty_transfer.json",
+          "artifact_field": "p67a_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p67b_pass",
+          "artifact": "novelty_transfer.json",
+          "artifact_field": "p67b_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p67c_pass",
+          "artifact": "novelty_transfer.json",
+          "artifact_field": "p67c_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        }
+      ],
+      "check_summary": {
+        "MATCH": 3,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "full"
+    },
+    "P68": {
+      "pid": "P68",
+      "title": "the crossing deepens, or it plateaus (registered\n  2026-08-10, BEFORE the resume).",
+      "status": "registered",
+      "verdict_words": [],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (not yet scored)"
+    },
+    "P69": {
+      "pid": "P69",
+      "title": "the valley is a shape, or it is a q-artifact (registered\n  2026-08-10, BEFORE the launch).",
+      "status": "registered",
+      "verdict_words": [],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (not yet scored)"
+    },
+    "P70": {
+      "pid": "P70",
+      "title": "the curator pays in triplets, or it does not (registered\n  2026-08-10, BEFORE the build; the LIVE-CAUSAL bridge experiment,\n  analysis/LIVE_CAUSAL_SPEC.md \u00a74).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/curator_yield.json"
+      ],
+      "artifacts_found": [
+        "curator_yield.json"
+      ],
+      "checks": [
+        {
+          "claim": "p70a_pass",
+          "artifact": "curator_yield.json",
+          "artifact_field": "p70a_pass",
+          "artifact_value": false,
+          "register_value": "FALSIFIED->False",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p70a_yield_ratio",
+          "artifact": "curator_yield.json",
+          "artifact_field": "p70a_yield_ratio",
+          "artifact_value": 0.9743,
+          "register_value": "0.974",
+          "verdict": "MATCH",
+          "note": "artifact 0.9743 present as 0.974 in clause context"
+        },
+        {
+          "claim": "p70b_entity_novelty_ratio",
+          "artifact": "curator_yield.json",
+          "artifact_field": "p70b_entity_novelty_ratio",
+          "artifact_value": 1.0286,
+          "register_value": "1.03",
+          "verdict": "MATCH",
+          "note": "artifact 1.0286 present as 1.03 in clause context"
+        },
+        {
+          "claim": "p70b_pass",
+          "artifact": "curator_yield.json",
+          "artifact_field": "p70b_pass",
+          "artifact_value": false,
+          "register_value": "FALSIFIED->False",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p70c_pass",
+          "artifact": "curator_yield.json",
+          "artifact_field": "p70c_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        }
+      ],
+      "check_summary": {
+        "MATCH": 5,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "full"
+    },
+    "P71": {
+      "pid": "P71",
+      "title": "the live graph never rebuilds, measured (registered\n  2026-08-10, BEFORE the measurement; engine built and unit-green,\n  src/livecausal/infer.py, ca2b82a).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/livecausal_p71.json"
+      ],
+      "artifacts_found": [
+        "livecausal_p71.json"
+      ],
+      "checks": [
+        {
+          "claim": "p71a_pass",
+          "artifact": "livecausal_p71.json",
+          "artifact_field": "clause_a_equivalence_at_scale.p71a_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p71b_pass",
+          "artifact": "livecausal_p71.json",
+          "artifact_field": "clause_b_delta_scaling.p71b_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p71c_pass",
+          "artifact": "livecausal_p71.json",
+          "artifact_field": "clause_c_truncation_is_scan.p71c_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p71a_pass",
+          "artifact": "livecausal_p71.json",
+          "artifact_field": "p71a_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p71b_pass",
+          "artifact": "livecausal_p71.json",
+          "artifact_field": "p71b_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p71c_pass",
+          "artifact": "livecausal_p71.json",
+          "artifact_field": "p71c_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        }
+      ],
+      "check_summary": {
+        "MATCH": 6,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "full"
+    },
+    "P72": {
+      "pid": "P72",
+      "title": "the builder builds, end to end (registered 2026-08-10,\n  BEFORE the run; every component individually green and committed\n  through 52ce3dc).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/p72_run1.json"
+      ],
+      "artifacts_found": [
+        "p72_run1.json"
+      ],
+      "checks": [
+        {
+          "claim": "p72a_base_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "clause_a_graph_grows.p72a_base_pass",
+          "artifact_value": true,
+          "register_value": null,
+          "verdict": "UNPARSEABLE",
+          "note": "no verdict word bound to this clause"
+        },
+        {
+          "claim": "p72a_inferred_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "clause_a_graph_grows.p72a_inferred_pass",
+          "artifact_value": false,
+          "register_value": null,
+          "verdict": "UNPARSEABLE",
+          "note": "no verdict word bound to this clause"
+        },
+        {
+          "claim": "p72a_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "clause_a_graph_grows.p72a_pass",
+          "artifact_value": false,
+          "register_value": null,
+          "verdict": "UNPARSEABLE",
+          "note": "no verdict word bound to this clause"
+        },
+        {
+          "claim": "p72b_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "clause_b_mechanics_hold.p72b_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p72c_consensus_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "clause_c_audit_passes.p72c_consensus_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p72c_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "clause_c_audit_passes.p72c_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p72c_verified_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "clause_c_audit_passes.p72c_verified_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p72d_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "clause_d_signal_rides_along.p72d_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p72a_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "p72a_pass",
+          "artifact_value": false,
+          "register_value": null,
+          "verdict": "UNPARSEABLE",
+          "note": "no verdict word bound to this clause"
+        },
+        {
+          "claim": "p72b_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "p72b_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p72c_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "p72c_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        },
+        {
+          "claim": "p72d_pass",
+          "artifact": "p72_run1.json",
+          "artifact_field": "p72d_pass",
+          "artifact_value": true,
+          "register_value": "PASS->True",
+          "verdict": "MATCH",
+          "note": ""
+        }
+      ],
+      "check_summary": {
+        "MATCH": 8,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 4
+      },
+      "coverage": "partial"
     }
   }
 }
