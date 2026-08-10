@@ -230,6 +230,10 @@ def run_consult(
 
     results = []
     n_use_entries = 0
+    n_spikes_total = 0  # surprise spikes, with OR without a queryable edge --
+    # the with/without split is the read-side coverage number (P73 clause a):
+    # how much of a live stream's gap vocabulary the store's exact-string
+    # key space can answer at all.
     use_seq = use_ledger.max_seq()
 
     states = None
@@ -241,6 +245,7 @@ def run_consult(
         is_gap = bool(gap_surprise) and gap_surprise[0] > surprise_thresh
         edge, outcome_text = (None, None)
         if is_gap:
+            n_spikes_total += 1
             edge, outcome_text = best_edge_for_key(graph, evidence_ledger, valid_segments, w)
             is_gap = is_gap and edge is not None
 
@@ -328,8 +333,9 @@ def run_consult(
     top5 = sorted(edge_use_counts.items(), key=lambda kv: (-kv[1], kv[0]))[:5]
 
     return {
-        "n_spikes": sum(1 for _ in results) + 0,  # gaps that cleared the surprise threshold AND had a queryable edge
-        "n_consults": len(results),
+        "n_spikes": n_spikes_total,  # gaps that cleared the surprise threshold, edge or no edge
+        "n_consults": len(results),  # the subset of spikes whose gap word had a queryable edge
+        "coverage": round(len(results) / n_spikes_total, 4) if n_spikes_total else None,
         "mean_delta_real": round(mean_drop_real, 4),
         "mean_delta_random": round(mean_drop_random, 4) if mean_drop_random is not None else None,
         "n_helped_real": n_helped_real,

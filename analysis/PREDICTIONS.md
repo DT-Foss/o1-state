@@ -2244,3 +2244,49 @@ artifact is a number about the defaults, not about the system.
   under five minutes on four cores, every edge citable to its
   stream coordinate. The one open constraint (key canonicalization
   for connectivity) is the next organ, not a patch.
+
+- **P73 — consult-back on the real graph (registered 2026-08-10,
+  BEFORE the run; consult machinery committed 6ca0bf6, 6/6 tests
+  green, coverage counter instrumented).** The spec's fifth stage
+  (§4 stage 4, "Consult") against the P72 artifact for the first
+  time: a warmed reader streams WT-103 on the x86 runner that built
+  the store; every surprise spike queries a COPY of the P72 store
+  (2,046 base edges, 644 segments — the scored artifact itself
+  stays untouched), the best-evidence path's outcome text injects
+  into a forked state, and use.ledger reinforces exactly the base
+  edges whose derivation helped. Pinned: d_model 64, warmup 200
+  chunks, quantile-0.9 auto-threshold, lookahead 12, seed 60,
+  20,000 consult words, max 40 consults.
+  (a) COVERAGE IS THE CANONICALIZATION NUMBER, READ SIDE: the
+      fraction of spike words with ANY outgoing edge in the store's
+      exact-string key space. Registered expectation: LOW — below
+      0.20 (the P72 near-zero key-collision finding predicts the
+      same disjointness from the consumer side). Measurability bar:
+      ≥ 10 actual consults within the 20,000 words. ZERO consults
+      at the stop ⇒ the falsifier fires at full strength: coverage
+      0 means consult-back is entirely blocked on canonicalization,
+      and that zero IS the read-side constraint measurement.
+  (b) THE PAIRED ARM DECIDES: over the actual consults,
+      mean_delta_real > mean_delta_random — the graph's chosen
+      path must beat an arbitrary edge's text injected through the
+      identical forked state. Absolute helps (drop_real > 0 rows)
+      reported at full strength either way; the smoke's honest
+      baseline is 0/40 absolute on a saturated corpus with real
+      beating random −0.25 vs −0.39.
+  (c) LEDGER DISCIPLINE IN THE WILD: use entries exist ONLY for
+      rows with drop_real > 0, every entry cites a (segment_sha,
+      idx) present in the store, and a fresh UseLedger mount over
+      the same store reproduces every use_count (fold
+      reproducibility on the real artifact).
+  (d) DETERMINISM RIDES ALONG: a second identical run (same seed,
+      same store copy state) reproduces the result rows and the
+      use.ledger byte-identically.
+  Falsifiers: (a) fires ⇒ stated above — canonicalization owns the
+  read side too, with the number attached. (b) fails ⇒ exact-key
+  consultation adds nothing beyond generic token injection; the
+  canonicalization organ then owns BOTH the coverage and the
+  quality number, and consult-back re-registers after it lands.
+  (c) fails ⇒ a ledger bug on real data — blocks everything until
+  closed (the ledger is the audit trail). (d) fails ⇒ hidden
+  nondeterminism in the consult loop (rng, stream, or state fork)
+  — localize the layer before any further consult claims.
