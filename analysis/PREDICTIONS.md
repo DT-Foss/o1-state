@@ -2322,3 +2322,43 @@ artifact is a number about the defaults, not about the system.
   proven sound and honest; its VALUE is measured as blocked on the
   same single organ P72 named. One organ, two measured numbers
   waiting on it.
+
+- **P74 — the append curve on a real graph at 10× (registered
+  2026-08-10, BEFORE the run; scale harness built and reviewed,
+  6/6 tests green on three machines, smoke on dense synthetic data
+  already showed 82× — the shape of the risk is known and stated
+  up front).** P71 measured 1.68× append-time growth under 16×
+  data on a THIN synthetic chain; the dossier names the natural
+  falsifier: does that curve hold on a real, unevenly-connected
+  extraction graph an order of magnitude past P72? Instrument
+  prep: a fresh 30,000-chunk WT-103 builder run (P72's exact
+  cadence and seed, 10× its stream) produces p74_store — expected
+  ~6,000+ segments, ~20,000 base records if the ~5.3/kt corpus
+  constant holds. Then the reviewed harness replays the store's
+  own history segment by segment into a fresh graph.
+  (a) THE CURVE, at P72-like sparsity: median append time in the
+      last fifth of the replay ≤ 4× the first fifth (P71's own
+      bar, carried to real data). Pre-committed density guard:
+      this bar binds only if the final graph's inferred/base ratio
+      stays ≤ 0.186 (5× P72's measured 0.037). A denser graph is a
+      different regime — then the ratio is reported descriptively
+      with the density attached, and the dense-regime bar is
+      registered separately after canonicalization lands (the
+      organ that will deliberately CREATE density).
+  (b) DROPS STAY ZERO-CLOSURE UNIVERSALLY: ≥ 10 drop samples at
+      final size, 100% zero new closures — binding regardless of
+      how (a) turns out.
+  (c) NO HIDDEN REBUILD: closure-call accounting exact across the
+      entire replay (sum of per-step deltas + the one initial
+      mount == the counter's total).
+  (d) STRUCTURAL DETERMINISM: a second replay of the same store
+      reproduces every structural field (per-step new base/
+      inferred edge counts, cumulative sizes, final totals)
+      identically; wall-clock fields exempt.
+  Falsifiers: (a) breaks while the density guard holds ⇒ the
+  delta-neighborhood computation itself is the scaling bottleneck
+  even in the sparse regime — per-append neighborhood capping
+  becomes a named build item, not a footnote. (b) or (c) fail ⇒
+  store/infer mechanics break at scale — blocks any further
+  scale-up until localized. (d) fails ⇒ replay-path
+  nondeterminism, localize the layer.

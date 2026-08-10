@@ -131,3 +131,15 @@ musste übersprungen werden, "substrate_absent"). Die bestehende Regel
 Datei-Producer, auch wenn die Vorhersage selbst nur Speicherung misst.
 Fix-Liste: keyed_file_run und filter_file_run schreiben beim nächsten
 Anfassen ein Entries-jsonl mit doc_coord je Span.
+
+## 2026-08-10 — Gescorte Store-Artefakte sind read-only (P73-Vorfall)
+
+Ein Agent-Consult-Lauf schrieb ein use.ledger direkt in
+results/p72_store_run1 (das gescorte P72-Artefakt), parallel zur
+P73-Messung, die korrekt auf Kopien lief. Sofort entfernt (1 Zeile,
+Segmente/Manifest unberührt, verify True danach; die P73-Kopien waren
+nachweislich sauber — beide Ledger bit-identisch mit exakt den eigenen
+14 Einträgen). Regel: Jeder Lauf, der einen gescorten Store konsumiert,
+mountet eine KOPIE — das Originalverzeichnis eines gescorten Artefakts
+wird nie als --store/Schreibziel übergeben. Gilt für Ledger-Anhänge
+genauso wie für Segmente.
