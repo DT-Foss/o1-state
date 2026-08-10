@@ -99,7 +99,8 @@ from core.ricci_attention import RicciAttention
 class FossKIRepl:
     """Interactive REPL for FOSS-KI."""
 
-    def __init__(self, knowledge_dim=128, lm_order=5, live_causal_store=None):
+    def __init__(self, knowledge_dim=128, lm_order=5, live_causal_store=None,
+                 knowledge_only=None):
         # Core components
         # LiveCausalAdapter switch: live_causal_store kwarg takes priority
         # over the FOSSKI_LIVECAUSAL_STORE env var; both default to unset,
@@ -111,6 +112,29 @@ class FossKIRepl:
         live_causal_knowledge = _maybe_load_live_causal_adapter(store_dir)
         self.knowledge = live_causal_knowledge or KnowledgeStore(dim=knowledge_dim)
         self.using_live_causal = live_causal_knowledge is not None
+
+        # Demo/proof-of-forgetting mode (Phase 3, revival-probe): knowledge_only
+        # kwarg takes priority over FOSSKI_KNOWLEDGE_ONLY=1; both default to
+        # unset/False, which is BYTE-IDENTICAL default behavior. When True,
+        # process() skips the redundant FACT-answering fallbacks that do not
+        # go through self.knowledge at all (ConceptNet/CommonSense, the CBR
+        # case-answer fallback, and MultiHop -- which is itself built on top
+        # of CommonSense, see self.multi_hop's construction below) so that a
+        # fact this adapter has forgotten (via drop_segments) is not silently
+        # answered from one of these OTHER, independent knowledge sources.
+        # REASONING/MATH stays on regardless of this flag -- _solve_reasoning,
+        # self.formulas (physics formulas), and self.reasoning (ReasoningEngine,
+        # which is itself constructed with knowledge_store=self.knowledge, so
+        # it already answers FROM the adapter, not around it) are not a facts
+        # bypass, they are computation over the same knowledge source or pure
+        # math/analogy solving with no external fact store of their own --
+        # disabling them would prove nothing about forgetting, only that this
+        # repl's math got worse. See each disabled call site in process() for
+        # the specific, individually-commented rationale.
+        self.knowledge_only = (
+            knowledge_only if knowledge_only is not None
+            else bool(os.environ.get('FOSSKI_KNOWLEDGE_ONLY'))
+        )
         self.lm = None  # Lazy-loaded
         self.router = VortexRouter(
             knowledge_store=self.knowledge,
@@ -539,7 +563,14 @@ class FossKIRepl:
                 trace.append(f"  Compositional: {sc}")
 
         # --- Commonsense (includes ConceptNet, ~0ms) ---
-        if not scores:
+        # SKIPPED under knowledge_only: CommonSenseEngine is its own
+        # independent fact store (built at __init__ from ConceptNet +
+        # built-in common-sense facts), entirely separate from
+        # self.knowledge -- it can answer a factual question (e.g.
+        # "capital of France") even after that fact has been cut from
+        # the LiveCausalAdapter's store, which would make a forgetting
+        # demo lie. Not touched otherwise (knowledge_only defaults False).
+        if not scores and not self.knowledge_only:
             cs_result = self.commonsense.query(user_input)
             if cs_result.get('found'):
                 candidate = self.naturalizer.naturalize_cs_answer(cs_result, question=user_input)
@@ -556,7 +587,15 @@ class FossKIRepl:
                     trace.append(f"  CommonSense: {sc}")
 
         # --- Foss Pipeline (Reservoir + Attention + Hopfield + Consensus + MultiHop) ---
-        if not scores and self.pipeline:
+        # SKIPPED ENTIRELY under knowledge_only: this generates
+        # autoregressively from its own Reservoir/Hopfield weights, a
+        # THIRD independent fact source (see the Phase 1 anti-
+        # hallucination guard below, which only blocks the "X of Y"
+        # pattern for an entity with zero self.knowledge facts -- other
+        # phrasings, or entities the adapter still half-knows via a
+        # different edge, are not covered by that narrower guard). A
+        # forgetting demo needs this OFF entirely, not just guarded.
+        if not scores and self.pipeline and not self.knowledge_only:
             try:
                 # Anti-hallucination guard: the pipeline generates autoregressively
                 # from Reservoir/Hopfield and can produce a fluent, confident-looking
@@ -664,14 +703,29 @@ class FossKIRepl:
             # --- Fallback cascade (collect more scores) ---
 
             # Multi-hop reasoning
-            hop_result = self.multi_hop.reason(user_input)
-            if hop_result['answered'] and self._answer_quality_gate(user_input, hop_result['answer']):
-                sc = calibrate_multi_hop(hop_result)
-                scores.append(sc)
-                trace.append(f"  MultiHop: {sc}")
+            # SKIPPED under knowledge_only: MultiHopReasoner is constructed
+            # with commonsense=self.commonsense (an independent ConceptNet-
+            # backed fact source), and its .kb attribute only gets pointed
+            # at self.knowledge inside load_brain() -- which knowledge_only
+            # mode never calls (see __init__: the brain-loading path is
+            # skipped whenever using_live_causal is True). So in this mode
+            # MultiHopReasoner always resolves through commonsense alone,
+            # never through the adapter -- a fact bypass, not a knowledge_only
+            # reasoning step, hence gated off here explicitly rather than
+            # relying on that indirection to stay true across future changes.
+            if not self.knowledge_only:
+                hop_result = self.multi_hop.reason(user_input)
+                if hop_result['answered'] and self._answer_quality_gate(user_input, hop_result['answer']):
+                    sc = calibrate_multi_hop(hop_result)
+                    scores.append(sc)
+                    trace.append(f"  MultiHop: {sc}")
 
             # CBR for "why" questions
-            if is_why:
+            # SKIPPED under knowledge_only: NLGPipeline's case-based-reasoning
+            # answers come from its own built-in case library, not
+            # self.knowledge -- a fourth independent fact source for "why"
+            # questions specifically.
+            if is_why and not self.knowledge_only:
                 cbr_answer = self.nlg.answer_open_question(user_input)
                 if cbr_answer and self._answer_quality_gate(user_input, cbr_answer):
                     sc = calibrate_cbr(cbr_answer)
@@ -679,7 +733,13 @@ class FossKIRepl:
                     trace.append(f"  CBR: {sc}")
 
             # Commonsense fallback (re-query if not tried above)
-            if not any(s.source == AnswerSource.COMMONSENSE for s in scores):
+            # SKIPPED under knowledge_only: same CommonSenseEngine/ConceptNet
+            # bypass as the fast-path Commonsense block above, re-queried
+            # here only because the fast path never got tried (an earlier
+            # non-commonsense score already existed and lost, or was
+            # rejected by the quality gate) -- same independent-source
+            # reasoning applies identically.
+            if not self.knowledge_only and not any(s.source == AnswerSource.COMMONSENSE for s in scores):
                 cs_result = self.commonsense.query(user_input)
                 if cs_result.get('found'):
                     candidate = self.naturalizer.naturalize_cs_answer(cs_result, question=user_input)
@@ -696,7 +756,9 @@ class FossKIRepl:
                         trace.append(f"  CommonSense(fallback): {sc}")
 
             # CBR fallback (non-why)
-            if not is_why:
+            # SKIPPED under knowledge_only: same NLGPipeline case-library
+            # bypass as the "why" CBR block above, for non-"why" questions.
+            if not is_why and not self.knowledge_only:
                 cbr_answer = self.nlg.answer_open_question(user_input)
                 if (cbr_answer and self._cbr_answer_relevant(user_input, cbr_answer)
                         and self._answer_quality_gate(user_input, cbr_answer)):
@@ -704,7 +766,13 @@ class FossKIRepl:
                     scores.append(sc)
                     trace.append(f"  CBR(fallback): {sc}")
 
-            # ReasoningEngine
+            # ReasoningEngine -- NOT gated by knowledge_only: constructed
+            # with knowledge_store=self.knowledge (see __init__), so it
+            # already answers FROM the adapter, not around it. Disabling
+            # this would prove nothing about forgetting and would break
+            # legitimate multi-step reasoning over facts the adapter DOES
+            # have -- exactly the "Reasoning/Math stays on" carve-out the
+            # __init__ docstring for this flag describes.
             try:
                 re_result = self.reasoning.reason(user_input)
                 if (re_result.get('answer') and re_result.get('confidence_level') != 'NONE'
@@ -738,6 +806,11 @@ class FossKIRepl:
             winner = best_answer(scores, user_input)
             if winner and winner.is_confident:
                 response = winner.answer
+            elif self.knowledge_only:
+                # Web search SKIPPED under knowledge_only: the internet is
+                # the ultimate independent fact source and would trivially
+                # defeat a forgetting demo (a cut fact is still "out there").
+                response = self._format_idk(scores, trace)
             else:
                 # Web search (last resort)
                 try:
