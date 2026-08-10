@@ -819,15 +819,21 @@ the file is not just fertile, it answers by key. (Run 1 was an instrument null �
 filter demanded spans the harvest geometry cannot produce — documented and fixed the same
 hour; the producer harvest reproduced bit-identically across all three runs of the recipe.)
 
-**And the two file roles split by harvest policy (P64).** One producer, two harvest
-policies, exactly matched span counts: the surprise-harvested file stores its entries
-BETTER (keyed +0.264 vs +0.217) while the random-harvested file wins the average-heldout
-race (+0.062 vs +0.036) — the fertilizer clause inverted, kept as measured. **The filter
-buys memory, not fertilizer**: novelty selection is the right harvest for the entry-store
-role (the `.causal` path); generic perplexity fertilizer needs no filter. Named next
-attack: a novelty-matched transfer eval on the P58 registry instrument.
+**And the two file roles split by harvest policy (P64 + P67).** One producer, two harvest
+policies, exactly matched span counts, the producers reproduced bit-identically across five
+runs and the verdicts checked on two seeds: the random-harvested file wins *average*-heldout
+fertilization ~1.8× on both seeds — and the novelty-stratified eval (P67, the P58 registry
+instrument applied to the eval) shows exactly why. Its advantage lives entirely in familiar
+content (3.5× in the lowest-novelty tercile), shrinks strictly monotonically as the eval
+gets newer (Δ(S−R) −0.053 → −0.027 → +0.001), and the surprise file crosses ahead in the
+top novelty tercile. Keyed storage of own entries is content-agnostic — both files clear
+the bar decisively on both seeds; a one-seed S-advantage did not replicate and is
+withdrawn. **The filter buys the frontier**: novelty-graded transfer plus entry-level
+recall — the right harvest for the `.causal` knowledge path, while average-perplexity
+fertilizer is harvest-policy-free.
 → `src/surprise_filter_run.py`, `src/keyed_file_run.py`, `src/filter_file_run.py`,
-`results/surprise_filter.json`, `results/keyed_file.json`, `results/filter_file.json`
+`src/novelty_transfer_run.py`, `results/surprise_filter.json`, `results/keyed_file.json`,
+`results/filter_file.json`, `results/filter_file_s43.json`, `results/novelty_transfer.json`
 
 ### 19 — The age axis: a 7.4-billion-token life, forked and measured
 
@@ -1054,8 +1060,9 @@ document. At fixed dose the gated arm **crosses full-gradient training at d=1024
 1.0092 on one fifth of the gradient tokens), echoing the token-axis crossing at 909.7M
 tokens. The frozen knowledge file is **tappable** (keyed recall +0.264, specificity
 +0.218), the gate is a measured **novelty filter** (1.51× first-ever content, 7× on new
-types), and the two file roles split cleanly by harvest policy — the filter buys memory,
-not fertilizer. The **age axis** is open: experience is immunity (32% less forgetting,
+types), and the two file roles split cleanly by harvest policy — the filter buys the
+frontier: its file's transfer value is novelty-graded and crosses ahead on the newest
+content, while random harvest wins only on the familiar. The **age axis** is open: experience is immunity (32% less forgetting,
 recovery below pre-shock), at a small measured plasticity price (0.744×) and zero rate
 shift. And the file format's review mechanism works across instruction sets: 19/20
 sampled entries bit-exact between ARM and x86, the single divergence pinned to a one-ULP

@@ -2007,6 +2007,38 @@ artifact is a number about the defaults, not about the system.
   (b) fails alone ⇒ the novelty advantage is a threshold, not a
   gradient — find the threshold.
 
+  **P67 SCORED (2026-08-10, results/novelty_transfer.json, full
+  1,500/1,500 chunks, file shas bit-equal to P64's — the fourth and
+  fifth exact reproductions of the two producers).** 3/3 PASS — THE
+  NOVELTY GRADIENT IS REAL AND STRICTLY MONOTONE. delta(S−R) runs
+  −0.0530 (low tercile) → −0.0269 (mid) → +0.0015 (high): the random
+  file's fertilizer advantage lives ENTIRELY in familiar content
+  (3.5× at the low tercile, 0.0741 vs 0.0211), shrinks as the eval
+  gets newer, and the surprise file crosses ahead exactly in the top
+  novelty tercile (0.0616 vs 0.0601). (a) PASS on the crossing;
+  (b) PASS on strict monotonicity — the 0.054-nat swing across
+  terciles is the robust finding, the top-tercile edge itself is
+  thin (+0.0015); (c) PASS (registry 167,185 bigrams, equal tercile
+  sizes, tercile bounds 0.143/0.190). Composed with P64: the
+  average-heldout inversion was an eval-distribution artifact,
+  precisely as the P64 scoring suspected — the gate harvests for the
+  FRONTIER; its file's transfer value is novelty-graded where the
+  random file's is redundancy-weighted.
+
+  **P64 SEED CHECK (2026-08-10, results/filter_file_s43.json, seed
+  43, 556 matched spans).** The diffuse inversion REPLICATES: gain_R
+  0.0735 vs gain_S 0.0381 — 1.9× on the second seed (1.7× on the
+  first). Clause (b)'s finer ordering does NOT: keyed recall reads
+  S +0.1983 vs R +0.2015, a tie (Δ0.003, against seed-42's S-ahead
+  Δ0.047); both clear the 0.05 bar decisively on both seeds. The
+  seed-42 "surprise stores BETTER" reading was seed-sized and is
+  WITHDRAWN; storage is content-agnostic, full stop. The seed-robust
+  facts across P64/P67: (1) random harvest wins average-heldout
+  fertilization ~1.8×, (2) both files store their own entries
+  equally well, (3) the surprise file's transfer is novelty-graded
+  and crosses ahead on the newest content. THE FILTER BUYS THE
+  FRONTIER — not storage superiority, not average fertilizer.
+
 - **P68 — the crossing deepens, or it plateaus (registered
   2026-08-10, BEFORE the resume).** d128 crossed ratio 1.0 on the
   token axis at 909M; d1024 crosses at 50M on both seeds (P56/P63).

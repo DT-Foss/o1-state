@@ -1,0 +1,73 @@
+{
+  "p67": true,
+  "smoke": false,
+  "cadence": {
+    "d_model": 128,
+    "batch": 8,
+    "chunk": 64,
+    "q": 0.75,
+    "window": 500,
+    "min_window": 100,
+    "ignition_chunks": 100
+  },
+  "config": {
+    "producer_chunks": 1500,
+    "consumer_chunks": 1500,
+    "replay_every": 25,
+    "r_prob": 0.3,
+    "registry_bigrams": 167185,
+    "tercile_rows": 104,
+    "novelty_tercile_bounds": [
+      0.14286,
+      0.19048
+    ]
+  },
+  "n_spans_matched": 540,
+  "file_sha256": {
+    "file_S": "87c81bcc00818922c34ff207f3267e5c86a8792c2edeb915aa2e53708b4e7e34",
+    "file_R": "b1804f58865e79a1b70d9b904ec85bbe4d5029b24d1ba5c8879528c26e70bf8e"
+  },
+  "sha_matches_p64": {
+    "file_S": true,
+    "file_R": true
+  },
+  "per_tercile_heldout": {
+    "file_S": {
+      "low": 5.070954,
+      "mid": 5.31465,
+      "high": 5.692932
+    },
+    "file_R": {
+      "low": 5.017977,
+      "mid": 5.287787,
+      "high": 5.69443
+    },
+    "without": {
+      "low": 5.092038,
+      "mid": 5.338742,
+      "high": 5.754534
+    }
+  },
+  "per_tercile_gains": {
+    "low": {
+      "S": 0.021084,
+      "R": 0.074061
+    },
+    "mid": {
+      "S": 0.024092,
+      "R": 0.050955
+    },
+    "high": {
+      "S": 0.061602,
+      "R": 0.060104
+    }
+  },
+  "p67_delta_S_minus_R": {
+    "low": -0.052977,
+    "mid": -0.026863,
+    "high": 0.001498
+  },
+  "p67a_pass": true,
+  "p67b_pass": true,
+  "p67c_pass": true
+}
