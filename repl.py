@@ -557,12 +557,14 @@ class FossKIRepl:
                     sc = calibrate_solver(direct, 'direct_kb')
                     scores.append(sc)
                     trace.append(f"  DirectKB: {sc}")
+                    self._append_receipt(trace, user_input, direct)
         else:
             direct = self._direct_kb_lookup(user_input)
             if direct and self._answer_quality_gate(user_input, direct):
                 sc = calibrate_solver(direct, 'direct_kb')
                 scores.append(sc)
                 trace.append(f"  DirectKB: {sc}")
+                self._append_receipt(trace, user_input, direct)
             else:
                 solver_ans = self._solve_reasoning(user_input)
                 if solver_ans:
@@ -1615,6 +1617,71 @@ class FossKIRepl:
             return vocab_words[best_idx]
 
         return None
+
+    def _append_receipt(self, trace, question, answer):
+        """Task 16 (revival-probe, "receipts"): if self.knowledge is a
+        LiveCausalAdapter, look up the exact same fact _direct_kb_lookup
+        just answered and append a trace line showing its provenance --
+        (segment_sha[:12], idx) citations, evidence_count, and (if the
+        adapter's query() found one) a contested signal.
+
+        Deliberately a SEPARATE, best-effort re-query rather than
+        threading citation data back out of _direct_kb_lookup's own ~90
+        call sites: _direct_kb_lookup iterates self.knowledge.facts
+        directly (a flat list, no provenance attached) precisely because
+        many of its patterns need to scan/join across multiple facts
+        (see e.g. the reverse "who painted X" lookup) in ways a single
+        query(subject, relation) call doesn't cover. Re-deriving the
+        (subject, relation) pair from the ANSWER text here and calling
+        query() again is a few extra dict lookups against an in-memory
+        adapter -- not a measurable cost -- and keeps this addition
+        additive: nothing about _direct_kb_lookup's existing ~90 call
+        sites changes, so this can silently return without a receipt
+        (not crash, not degrade the answer) whenever the re-derivation
+        doesn't confidently match, which is expected and fine -- a
+        missing receipt is not the same claim as a wrong answer.
+        """
+        if not self.using_live_causal:
+            return
+        # Only handles the shapes _direct_kb_lookup and this adapter can
+        # both agree on: "{subject} {mechanism} {outcome}" (Phase 5's
+        # causes-lookup addition returns exactly this), and a bare object
+        # answer for "what is the X of Y?"-shaped questions (looked up by
+        # re-running the same regex router.py's _parse_query_for_knowledge
+        # uses, so the (subject, relation) pair is guaranteed consistent
+        # with what actually produced the router's own version of this
+        # answer, not a second guess).
+        subject = None
+        relation = None
+        m = re.match(r'^(.+?)\s+causes\s+(.+)$', answer, re.I)
+        if m:
+            subject, relation = m.group(1).strip(), 'causes'
+        else:
+            m = re.search(r'(?:what|who)\s+is\s+the\s+(\w+(?:\s+\w+)?)\s+of\s+(.+)',
+                           question.rstrip('?').strip(), re.I)
+            if m:
+                relation, subject = m.group(1).strip(), m.group(2).strip()
+
+        if not subject or not relation:
+            return
+        try:
+            result = self.knowledge.query(subject=subject, relation=relation)
+        except Exception:
+            return
+        if not result.get('fact') or 'citations' not in result:
+            return
+
+        citations = result['citations']
+        cite_str = ', '.join(f"({sha},{idx})" for sha, idx in citations)
+        ec = result.get('evidence_count', '?')
+        trace.append(f"    Receipt: {cite_str} | evidence_count={ec}")
+        contested = result.get('contested')
+        if contested:
+            trace.append(
+                f"    Contested: {contested['ratio']} "
+                f"(winner='{contested['winner_mechanism']}', "
+                f"mechanisms={contested['counts_by_mechanism']})"
+            )
 
     def _direct_kb_lookup(self, question: str) -> Optional[str]:
         """Direct KB text-search for questions the Hopfield router misses."""

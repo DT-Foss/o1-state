@@ -345,11 +345,94 @@ class LiveCausalAdapter:
             'top2_gap': 1.0,
             'steps': 0,
             'thresholds': (0.7, 0.4),
-            # Extra, adapter-specific field beyond KnowledgeStore's contract
+            # Extra, adapter-specific fields beyond KnowledgeStore's contract
             # -- documented as an addition, not a silent extension callers
             # must know about to use this adapter for the compatible subset.
             'evidence_count': ec,
             'edge_kind': edge['kind'],
+            # Task 16 (revival-probe, "receipts"): the exact citations behind
+            # this answer, so a caller (repl.py's trace) can show provenance
+            # per fact, not just a scalar confidence. One (short_sha, idx)
+            # pair per hop in the edge's derivation -- for a base edge this
+            # is every citing record (there can be more than one, e.g. the
+            # France/capital duplicate in knowledge_full.json); for an
+            # inferred edge it is the full chain, root to leaf, one entry
+            # per hop, in derivation order (already root-to-leaf per
+            # infer.py's own docstring). short_sha is sha[:12] -- enough to
+            # be visually distinct in a trace line without the full 64 hex
+            # chars; the full sha is always recoverable from the store's
+            # segment filenames if a caller needs to verify byte-for-byte.
+            'citations': [(sha[:12], idx) for sha, idx in edge['derivation']],
+            # Task 16: SS2 contested status for THIS edge_key (trigger_key,
+            # outcome_key) -- true iff at least one OTHER record citing the
+            # SAME (trigger_key, outcome_key) pair asserts a DIFFERENT
+            # mechanism (evidence.py's actual identity: edge_key is
+            # (from_key, to_key), mechanism-blind by design -- see
+            # evidence.py's module docstring). This is NOT "two different
+            # outcomes for the same trigger" (that is just two separate,
+            # uncontested edge_keys with their own evidence_count each) --
+            # it is evidence.py's own SS2 conflict definition, reused
+            # verbatim via contested()/dominance()/is_dominant(), no new
+            # conflict logic invented here.
+            'contested': self._contested_for_edge(edge),
+        }
+
+    def _contested_for_edge(self, edge):
+        """Returns None if this edge_key has no on-record conflict (the
+        common case -- not contested is not itself news, so this stays
+        cheap and returns None rather than a verbose "not contested" dict
+        for every single query() call). Returns a dict describing the
+        conflict when a genuine SS2 conflict exists: two (or more) records
+        citing the SAME (trigger_key, outcome_key) edge_key with DIFFERENT
+        mechanisms -- evidence.py's own conflict definition (module
+        docstring: "two records citing the same (from_key, to_key) pair
+        with DIFFERENT mechanisms collide on the same edge_key and are
+        exactly what the draft's SS2 contradiction case describes").
+
+        evidence.py's evidence_count(edge_key, valid_segments) itself
+        folds ALL mechanisms for an edge_key together (mechanism-blind by
+        design, per the module docstring's ACCEPTED note -- a future fold
+        COULD re-key by (trigger_key, mechanism, outcome_key), but does
+        not today). Rather than inventing a new per-mechanism ledger fold,
+        this method reuses evidence_count's EXISTING valid_segments filter
+        parameter for a purpose the ledger already supports: passing it
+        only the subset of segments citing one mechanism gets that
+        mechanism's own count for free, still going through
+        EvidenceLedger.evidence_count() itself for every number -- no
+        counting logic is duplicated or reimplemented here."""
+        edge_key = (edge['from_key'], edge['to_key'])
+        all_valid_segments = set(self.graph.store.segments())
+
+        # Group every (sha, idx) citing this edge_key by mechanism.
+        segments_by_mechanism = {}
+        for sha, idx in self.graph.base_edge_citations(edge['from_key'], edge['to_key']):
+            if sha not in all_valid_segments:
+                continue
+            for _seg_sha, rec_idx, rec in self.graph.store.iter_records(sha):
+                if rec_idx == idx:
+                    mech = rec.get('mechanism', '').lower().strip()
+                    segments_by_mechanism.setdefault(mech, set()).add(sha)
+                    break
+
+        if len(segments_by_mechanism) <= 1:
+            return None
+
+        # Genuine SS2 conflict: >1 distinct mechanism on record for this
+        # exact edge_key. Fold each mechanism's own evidence_count via the
+        # real ledger, restricted to that mechanism's own citing segments.
+        counts_by_mechanism = {
+            mech: self.evidence.evidence_count(edge_key, segs)
+            for mech, segs in segments_by_mechanism.items()
+        }
+        ranked = sorted(counts_by_mechanism.items(), key=lambda kv: -kv[1])
+        winner_mech, winner_count = ranked[0]
+        runner_mech, runner_count = ranked[1]
+        ratio_str = (f"{winner_count}:{runner_count}" if runner_count > 0
+                     else f"{winner_count}:0")
+        return {
+            'counts_by_mechanism': counts_by_mechanism,
+            'winner_mechanism': winner_mech,
+            'ratio': ratio_str,
         }
 
     # ------------------------------------------------------------------
