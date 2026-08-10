@@ -548,7 +548,8 @@ def load_bootstrap_to_knowledge_store(store, filepath: str = '') -> int:
         data = json.load(f)
 
     loaded = 0
-    for s, r, o, _w in data['triplets']:
+    for t in data['triplets']:
+        s, r, o = t[0], t[1], t[2]
         store.store_fact(s, r, o)
         loaded += 1
 
