@@ -1981,3 +1981,50 @@ artifact is a number about the defaults, not about the system.
   find the covariate; (b) fails ⇒ the organism has a finite learning
   lifetime — state where the fitted curve crosses 0.5× and 0.1×;
   (c) fails ⇒ P59(b) was a pair accident.
+
+- **P67 — the filter's file on the filter's turf (registered
+  2026-08-10, BEFORE the build; the attack P64 named).** P64 measured
+  the surprise file losing average-heldout transfer 1.7× while
+  storing its own entries better. The registered question: does
+  file-S win on NOVEL content — the class the gate selects for?
+  Setup: the P64 producer pass regenerated (deterministic; shas must
+  equal P64's), same three consumer twins; the EVAL is the new
+  instrument: C4 heldout chunks stratified into terciles by
+  first-ever-bigram rate against a registry accumulated over the
+  producer stream (the P58 instrument applied to the eval),
+  per-tercile heldout NLL per arm. Runs on the second x86 runner.
+  (a) NOVEL TURF, FILTER WINS: in the TOP novelty tercile,
+      gain_S ≥ gain_R.
+  (b) GRADED: gain_S − gain_R increases monotonically from the low
+      to the high tercile.
+  (c) mechanics: file shas equal P64's, matched dose, equal tercile
+      sizes.
+  Falsifiers: (a) fails ⇒ the surprise file is not advantaged even
+  on novel evals — the gate is a MEMORY organ only (P55/P64b) and
+  fertilization is harvest-policy-free; the architecture assigns
+  file-S to the keyed path and any-harvest to the diffuse path,
+  measured before anything is built on the contrary assumption.
+  (b) fails alone ⇒ the novelty advantage is a threshold, not a
+  gradient — find the threshold.
+
+- **P68 — the crossing deepens, or it plateaus (registered
+  2026-08-10, BEFORE the resume).** d128 crossed ratio 1.0 on the
+  token axis at 909M; d1024 crosses at 50M on both seeds (P56/P63).
+  The composed question: does width ACCELERATE the token-axis gain —
+  is d1024's crossing the start of a widening lead or a plateau? The
+  measured d1024/seed42 life resumes from its own checkpoint
+  (results/pos_d1024_ckpt.pt; the exact-resume path is the
+  D2-measured one) and streams 50M → 150M on the ARM machine, solo,
+  identical recipe, q=0.8 explicit; the eval cadence writes the
+  ratio trajectory.
+  (a) THE LEAD GROWS: improvement ratio at 150M > 1.0092 (the 50M
+      reading) — the crossing is a trajectory, not a point.
+  (b) NO HUMP: the ratio at ~100M lies between the 50M and 150M
+      readings.
+  (c) the rate stays on the dial: cumulative gate rate at 150M
+      within ±0.5pp of 0.1981.
+  Falsifiers: (a) fails at ≤ 1.0 ⇒ the d1024 crossing is a
+  50M-anchor artifact (A2's width-lag) and the anchor caveat becomes
+  the finding; (a) fails inside (1.0, 1.0092] ⇒ plateau — the
+  crossing holds but does not compound; (c) fails ⇒ the dial law
+  has a token-horizon boundary — locate it.
