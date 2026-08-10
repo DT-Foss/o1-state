@@ -2582,3 +2582,34 @@ artifact is a number about the defaults, not about the system.
   the fork-injection therapy itself is refuted with the strongest
   evidence available, same consequence with a sharper cause. (c)
   fails => pipeline breach, fix before interpretation.
+
+  **P78 SCORED (2026-08-10, results/livecausal_p78_grid.json, 12
+  cells on the x86 runner, fresh copy of the P72 store, reader =
+  the gated A3 arm of the 896M-token POS life).** THE CHANNEL
+  LIVES, AND THE FORM STORY SNAPS INTO FOCUS. (a) PASS: four
+  cells clear the +0.01 bar — and they are EXACTLY the four
+  full_record_text cells (+0.0298 to +0.1370, all at n=40
+  consults; best cell full_record_text x3 x6 at +0.1370, 13x the
+  bar). The builder's pre-committed bet from the P77 round named
+  this precise cell (full_record_text, repeat 2-3, short
+  lookahead) — the anchor hypothesis was right all along, it just
+  needed a reader alive enough to show it. (b) PASS by two orders
+  of magnitude: mean |random-arm effect| 0.1223 vs bar 0.0014 —
+  the lived reader reacts ~175x more strongly to arbitrary
+  injection than the fresh d64 did. This retroactively explains
+  P73/P75/P77 completely: the fresh reader was not refuting the
+  therapy, it was too inert to register ANY injection. (c) PASS:
+  ledger-clean post-grid, n=40 in every cell, reader meta in the
+  artifact. Two honest observations carried at full strength:
+  every absolute delta remains NEGATIVE (injections always cost a
+  lived state something; relevance makes the real path cost LESS
+  than random — a differential win, not yet an absolute one — the
+  next question is the consult POLICY: when to pay the injection
+  tax at all), and outcome_text/chain_text stay worse than random
+  even for the lived reader (a bare outcome without its trigger
+  anchor is noise, confirming why the form mattered). Coverage
+  rose to 0.3846 under the lived reader's own surprise threshold.
+  The four-measurement arc closes coherently: keys (P73->P75),
+  then form x scale (P77->P78) — consult-back works as a
+  differential mechanism through full-record injection into a
+  genuinely lived reader.
