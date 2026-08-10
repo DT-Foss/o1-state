@@ -310,6 +310,82 @@ def build_injection_text(graph, edge, form="outcome_text"):
     return _record_text_for_form(record, form)
 
 
+class ReaderCkptError(RuntimeError):
+    """Raised by load_reader_from_ckpt when a checkpoint cannot be loaded
+    against the requested vocab -- a caller bug (wrong ckpt for this
+    corpus/vocab build) that must fail loudly, never silently degrade to
+    a fresh/mismatched model (P78 build brief: 'Vocab-Kompatibilität hart
+    assertieren')."""
+
+
+def load_reader_from_ckpt(ckpt_path, po_mod, vocab, mask, name="consult-reader-ckpt"):
+    """P78: loads a REAL trained Organism from a portable_organism.py
+    snapshot (po_mod.save_snapshot's format -- 'organism'/'config' keys,
+    see portable_organism.py's own save_snapshot/load_snapshot). Returns
+    (organism, ckpt_config_dict).
+
+    d_model is taken from the checkpoint's OWN config (ck['config']
+    ['d_model']), never from a --d-model guess -- po_mod.D_MODEL (the
+    module-level global po_mod.Organism's __init__ reads to size the
+    model) is set from the checkpoint before construction, mirroring the
+    existing --d-model re-assert pattern in main() below (po.D_MODEL =
+    args.d_model right before Organism(...)) but sourced from the
+    checkpoint's own record of what it was trained at instead of a CLI
+    guess a caller could get wrong.
+
+    Vocab compatibility is asserted HARD before any state_dict load is
+    attempted: the checkpoint's embedding row count minus 2 (ck['organism']
+    ['model']['embed.weight'].shape[0] - 2 -- length_extrap_v2.py builds
+    nn.Embedding(vocab_size + 2, d_model), so the raw row count always
+    overshoots vocab_size by exactly 2) must
+    equal len(vocab) exactly, or ReaderCkptError is raised with both
+    numbers named -- a caller loading a d64/WT-103 checkpoint against a
+    smoke-corpus vocab (different build_vocab call, different vocab_size)
+    would otherwise hit an opaque torch RuntimeError deep inside
+    load_state_dict's shape-mismatch check; this surfaces the SAME failure
+    at the point the checkpoint is chosen, with the actionable numbers."""
+    if not os.path.exists(ckpt_path):
+        raise ReaderCkptError("--reader-ckpt path does not exist: {}".format(ckpt_path))
+
+    import torch as torch_mod
+    ck = torch_mod.load(ckpt_path, map_location="cpu", weights_only=False)
+
+    if "organism" not in ck or "config" not in ck:
+        raise ReaderCkptError(
+            "{} does not look like a portable_organism.save_snapshot checkpoint "
+            "(missing 'organism' and/or 'config' top-level keys, got: {})".format(
+                ckpt_path, sorted(ck.keys()) if isinstance(ck, dict) else type(ck))
+        )
+
+    ckpt_config = ck["config"]
+    ckpt_d_model = ckpt_config.get("d_model")
+    if ckpt_d_model is None:
+        raise ReaderCkptError("{} config has no 'd_model' -- cannot size the reader".format(ckpt_path))
+
+    embed_weight = ck["organism"]["model"].get("embed.weight")
+    if embed_weight is None:
+        raise ReaderCkptError("{} organism.model has no 'embed.weight' -- not a StreamingNoPELM checkpoint".format(ckpt_path))
+    # SelectiveRapiditySqrtTransformerLM builds nn.Embedding(vocab_size + 2,
+    # d_model) (length_extrap_v2.py) -- the embed.weight row count is
+    # vocab_size + 2, not vocab_size itself. Subtract the same +2 back out
+    # so this compares against len(vocab) on equal footing (the exact
+    # quantity Organism(name, vocab_size, mask) is constructed with).
+    ckpt_vocab_size = embed_weight.shape[0] - 2
+    my_vocab_size = len(vocab)
+    if ckpt_vocab_size != my_vocab_size:
+        raise ReaderCkptError(
+            "vocab mismatch: checkpoint {} was trained with vocab_size={} "
+            "(embed.weight row count minus 2), this run's vocab has {} entries -- "
+            "refusing to load a reader against an incompatible vocab "
+            "(same build_vocab()/corpus required)".format(ckpt_path, ckpt_vocab_size, my_vocab_size)
+        )
+
+    po_mod.D_MODEL = ckpt_d_model  # ckpt's own record, not a CLI guess -- see docstring
+    organism = po_mod.Organism(name, my_vocab_size, mask)
+    organism.load_state_dict(ck["organism"])
+    return organism, ckpt_config
+
+
 def calibrate_surprise_threshold(words, stoi, unk, model, dev, torch_mod, quantile=0.9, n_calib_words=500):
     """Measures the model's own per-token surprise distribution over the
     first n_calib_words of `words` (from a fresh state, exactly how
@@ -678,6 +754,18 @@ def main():
                          "reruns per cell, from the SAME post-warmup model state each time, so "
                          "cells are comparable to each other). Writes one JSON with a top-level "
                          "'grid' list of per-cell results instead of a single result dict.")
+    ap.add_argument("--reader-ckpt", default=None,
+                    help="P78: load a REAL trained Organism checkpoint (portable_organism.py's "
+                         "save_snapshot format) as the reader instead of a freshly initialized "
+                         "one. d_model is read from the checkpoint's own config, NOT --d-model "
+                         "(--d-model is ignored when --reader-ckpt is set -- a warning is printed "
+                         "if the two disagree). Vocab compatibility (checkpoint's embed.weight row "
+                         "count vs this run's vocab size) is asserted hard; a mismatch raises "
+                         "ReaderCkptError rather than loading a broken reader. --warmup-chunks is "
+                         "IGNORED (forced to 0) when --reader-ckpt is set -- the checkpoint's model "
+                         "already lived through real training, a synthetic warmup on top would be "
+                         "meaningless. Default (omitted): byte-identical to every pre-P78 "
+                         "invocation, a fresh Organism is constructed exactly as before.")
     args = ap.parse_args()
 
     smoke_dir = None
@@ -732,22 +820,34 @@ def main():
         raise SystemExit("one of --text-file, --source, or --smoke is required")
 
     torch.manual_seed(args.seed)
-    po.D_MODEL = args.d_model  # re-assert: get_vocab() above may have been called under a
-    # different po.D_MODEL from a prior --smoke build step; the READER organism below must
-    # use the d_model this run actually asked for.
-    organism = po.Organism("consult-reader", V, mask, seed=args.seed)
+    reader_ckpt_config = None
+    effective_warmup_chunks = args.warmup_chunks
+    if args.reader_ckpt:
+        if args.d_model != 64:  # 64 is argparse's own default -- only warn on an EXPLICIT disagreement
+            print("[consult] --reader-ckpt set: ignoring --d-model={} (checkpoint's own config wins)".format(
+                args.d_model), flush=True)
+        print("[consult] loading reader checkpoint: {}".format(args.reader_ckpt), flush=True)
+        organism, reader_ckpt_config = load_reader_from_ckpt(args.reader_ckpt, po, vocab, mask)
+        print("[consult] reader checkpoint loaded: d_model={} n_chunks_lived={} n_bwd={} grad_tokens={}".format(
+            reader_ckpt_config.get("d_model"), organism.n_chunks, organism.n_bwd, organism.grad_tokens), flush=True)
+        effective_warmup_chunks = 0  # the checkpoint's model already lived through real training
+    else:
+        po.D_MODEL = args.d_model  # re-assert: get_vocab() above may have been called under a
+        # different po.D_MODEL from a prior --smoke build step; the READER organism below must
+        # use the d_model this run actually asked for.
+        organism = po.Organism("consult-reader", V, mask, seed=args.seed)
     model = organism.model
     dev = next(model.parameters()).device
 
     warmup_words, consult_words = words, words
-    if args.warmup_chunks > 0:
-        n_warmup_tokens = args.warmup_chunks * args.warmup_batch * args.warmup_chunk_size
+    if effective_warmup_chunks > 0:
+        n_warmup_tokens = effective_warmup_chunks * args.warmup_batch * args.warmup_chunk_size
         split = min(len(words) // 2, n_warmup_tokens // 1)  # word-level proxy for token count (>=1 token/word here)
         warmup_words, consult_words = words[:split], words[split:]
         if not consult_words:
             consult_words = words  # fallback: corpus too short to split, reuse everything
 
-        print("[consult] warmup: {} chunks on {} prefix words...".format(args.warmup_chunks, len(warmup_words)), flush=True)
+        print("[consult] warmup: {} chunks on {} prefix words...".format(effective_warmup_chunks, len(warmup_words)), flush=True)
         po.BATCH, po.CHUNK = args.warmup_batch, args.warmup_chunk_size
         warmup_ids = [stoi.get(w, unk) for w in warmup_words]
 
@@ -772,7 +872,7 @@ def main():
 
         warmup_stream = _ListStream(warmup_ids)
         warmup_feeder = po.ChunkFeeder(warmup_stream, po.BATCH, po.CHUNK)
-        for _ in range(args.warmup_chunks):
+        for _ in range(effective_warmup_chunks):
             x, y = warmup_feeder.next_xy()
             organism.step_gated(x, y, ignition=True)  # ignition=True: always trains during warmup, gate untouched by consult concerns
         model.eval()
@@ -857,13 +957,15 @@ def main():
             "surprise_thresh_was_calibrated": args.surprise_thresh is None,
             "max_gaps": args.max_gaps,
             "seed": args.seed,
-            "warmup_chunks": args.warmup_chunks,
-            "n_warmup_words": len(warmup_words) if args.warmup_chunks > 0 else 0,
+            "warmup_chunks": effective_warmup_chunks,
+            "n_warmup_words": len(warmup_words) if effective_warmup_chunks > 0 else 0,
             "n_consult_words": len(consult_words),
-            "n_warmup_grad_steps": organism.n_bwd if args.warmup_chunks > 0 else 0,
+            "n_warmup_grad_steps": organism.n_bwd if effective_warmup_chunks > 0 else 0,
             "elapsed_seconds": round(elapsed, 2),
             "canon": args.canon,
             "canon_env_pin": graph.canon_env_pin if args.canon else None,
+            "reader_ckpt": args.reader_ckpt,
+            "reader_ckpt_config": reader_ckpt_config,
             "grid": cells,
             "best_cell_by_real_minus_random": best_cell,
         }
@@ -909,10 +1011,10 @@ def main():
         "lookahead": args.lookahead,
         "max_gaps": args.max_gaps,
         "seed": args.seed,
-        "warmup_chunks": args.warmup_chunks,
-        "n_warmup_words": len(warmup_words) if args.warmup_chunks > 0 else 0,
+        "warmup_chunks": effective_warmup_chunks,
+        "n_warmup_words": len(warmup_words) if effective_warmup_chunks > 0 else 0,
         "n_consult_words": len(consult_words),
-        "n_warmup_grad_steps": organism.n_bwd if args.warmup_chunks > 0 else 0,
+        "n_warmup_grad_steps": organism.n_bwd if effective_warmup_chunks > 0 else 0,
         "elapsed_seconds": round(elapsed, 2),
         "canon": args.canon,
         # canon_env_pin travels with the payload only when --canon is on --
@@ -922,6 +1024,8 @@ def main():
         # omitted) when --canon is off, so a reader can tell "canon was
         # off" apart from "canon was on but env_pin failed to record."
         "canon_env_pin": graph.canon_env_pin if args.canon else None,
+        "reader_ckpt": args.reader_ckpt,
+        "reader_ckpt_config": reader_ckpt_config,
         "inject_form": args.inject_form[0],
         "inject_repeat": args.inject_repeat[0],
         **result,

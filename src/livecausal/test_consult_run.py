@@ -24,11 +24,13 @@ from livecausal.infer import LiveGraph  # noqa: E402
 from livecausal.store import LiveStore  # noqa: E402
 from livecausal.evidence import EvidenceLedger, UseLedger  # noqa: E402
 from livecausal.consult_run import (  # noqa: E402
+    ReaderCkptError,
     best_edge_for_key,
     build_injection_text,
     calibrate_surprise_threshold,
     generate_smoke_store,
     generate_vocab_aware_smoke_corpus,
+    load_reader_from_ckpt,
     random_edge_for_key,
     run_consult,
 )
@@ -547,6 +549,153 @@ def test_grid_never_touches_store_use_ledger(d):
     print("test_grid_never_touches_store_use_ledger: OK (store={} has no use.ledger after --grid)".format(store_dir))
 
 
+# ---------------------------------------------------------------------
+# P78: load_reader_from_ckpt's roundtrip. A Mini-Organism (small vocab,
+# small d_model, a handful of trained steps so its weights are NOT the
+# fresh-init default) is saved via portable_organism.save_snapshot, then
+# loaded back via load_reader_from_ckpt -- the reconstructed model's
+# forward output on a fixed input must be BYTE-IDENTICAL to the
+# original's (same weights, same eval-mode determinism), and d_model
+# must have come from the checkpoint's own config, not a guess.
+# ---------------------------------------------------------------------
+
+def test_reader_ckpt_roundtrip_byte_identical_forward(d):
+    import torch
+    import portable_organism as po
+
+    torch.set_num_threads(1)
+    mini_vocab = ["<unk>"] + ["w{}".format(i) for i in range(63)]  # 64-word toy vocab
+    mini_stoi = {w: i for i, w in enumerate(mini_vocab)}
+    mini_unk = 0
+    mini_mask = None
+
+    po.D_MODEL, po.BATCH, po.CHUNK = 16, 2, 8
+    torch.manual_seed(21)
+    organism = po.Organism("mini-reader", len(mini_vocab), mini_mask, seed=21)
+
+    # a few real gated training steps -- weights must move OFF the
+    # fresh-init default, or a roundtrip bug that silently reconstructs a
+    # FRESH model instead of loading the checkpoint would go undetected.
+    rng = random.Random(3)
+    for _ in range(6):
+        x = torch.tensor([[rng.randrange(len(mini_vocab)) for _ in range(po.CHUNK)] for _ in range(po.BATCH)], dtype=torch.long)
+        y = torch.tensor([[rng.randrange(len(mini_vocab)) for _ in range(po.CHUNK)] for _ in range(po.BATCH)], dtype=torch.long)
+        organism.step_gated(x, y, ignition=True)
+
+    ckpt_path = os.path.join(d, "mini_ckpt.pt")
+
+    class _FakeStream:
+        docs, pending = 0, []
+
+    po.save_snapshot(ckpt_path, organism, _FakeStream(), bufs=None, wall_s=0.0)
+    assert os.path.exists(ckpt_path)
+
+    probe = torch.tensor([[rng.randrange(len(mini_vocab)) for _ in range(po.CHUNK)]], dtype=torch.long)
+    organism.model.eval()
+    with torch.no_grad():
+        logits_before, _ = organism.model(probe, None)
+
+    # Simulate a DIFFERENT po.D_MODEL in effect before loading (as if a
+    # prior --smoke build or a mismatched --d-model ran first) -- the
+    # loader must still size the reconstructed model from the CHECKPOINT's
+    # own config, not whatever po.D_MODEL happens to be set to right now.
+    po.D_MODEL = 999
+
+    loaded_organism, ckpt_config = load_reader_from_ckpt(ckpt_path, po, mini_vocab, mini_mask, name="loaded")
+    assert ckpt_config["d_model"] == 16, "ckpt_config must report the CHECKPOINT's own d_model"
+    assert po.D_MODEL == 16, "load_reader_from_ckpt must set po.D_MODEL from the checkpoint, not leave a stale/guessed value"
+
+    loaded_organism.model.eval()
+    with torch.no_grad():
+        logits_after, _ = loaded_organism.model(probe, None)
+
+    assert torch.equal(logits_before, logits_after), (
+        "roundtripped reader's forward output differs from the original -- "
+        "the checkpoint was not loaded byte-identically"
+    )
+    assert loaded_organism.n_bwd == organism.n_bwd, "loaded organism must carry the SAME training history counters"
+    assert loaded_organism.grad_tokens == organism.grad_tokens
+    print("test_reader_ckpt_roundtrip_byte_identical_forward: OK (d_model={}, n_bwd={}, logits identical)".format(
+        ckpt_config["d_model"], loaded_organism.n_bwd))
+
+
+def test_reader_ckpt_vocab_mismatch_rejected(d):
+    import torch
+    import portable_organism as po
+
+    torch.set_num_threads(1)
+    mini_vocab = ["<unk>"] + ["w{}".format(i) for i in range(63)]
+    mini_mask = None
+
+    po.D_MODEL, po.BATCH, po.CHUNK = 16, 2, 8
+    torch.manual_seed(4)
+    organism = po.Organism("mini-mismatch", len(mini_vocab), mini_mask, seed=4)
+
+    ckpt_path = os.path.join(d, "mismatch_ckpt.pt")
+
+    class _FakeStream:
+        docs, pending = 0, []
+
+    po.save_snapshot(ckpt_path, organism, _FakeStream(), bufs=None, wall_s=0.0)
+
+    wrong_vocab = ["<unk>"] + ["v{}".format(i) for i in range(199)]  # 200 entries, not 64
+    raised = False
+    try:
+        load_reader_from_ckpt(ckpt_path, po, wrong_vocab, mini_mask)
+    except ReaderCkptError as e:
+        raised = True
+        msg = str(e)
+        assert "64" in msg and "200" in msg, "error message must name BOTH vocab sizes for a caller to act on: {!r}".format(msg)
+    assert raised, "loading against an incompatible vocab must raise ReaderCkptError, not silently proceed"
+    print("test_reader_ckpt_vocab_mismatch_rejected: OK (64 vs 200 correctly rejected)")
+
+
+def test_reader_ckpt_missing_path_rejected(d):
+    import portable_organism as po
+    raised = False
+    try:
+        load_reader_from_ckpt(os.path.join(d, "does_not_exist.pt"), po, ["<unk>", "a"], None)
+    except ReaderCkptError:
+        raised = True
+    assert raised, "a nonexistent --reader-ckpt path must raise ReaderCkptError, not an opaque torch FileNotFoundError"
+    print("test_reader_ckpt_missing_path_rejected: OK")
+
+
+# ---------------------------------------------------------------------
+# P78 regression: main() with --reader-ckpt omitted must remain
+# byte-identical to every pre-P78 invocation -- run as a real subprocess
+# (the reader-construction branch lives in main()'s own setup code, same
+# reasoning as test_grid_never_touches_store_use_ledger).
+# ---------------------------------------------------------------------
+
+def test_main_without_reader_ckpt_is_unaffected(d):
+    import subprocess
+
+    store_dir = os.path.join(d, "store")
+    corpus_path = os.path.join(d, "corpus.txt")
+    generate_smoke_store(store_dir, corpus_path, seed=6)
+
+    out_path = os.path.join(d, "out.json")
+    consult_run_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "consult_run.py")
+    env = dict(os.environ)
+    env["HF_HUB_OFFLINE"] = "1"
+    env["HF_DATASETS_OFFLINE"] = "1"
+    env["OMP_NUM_THREADS"] = "1"
+    proc = subprocess.run(
+        [sys.executable, consult_run_path, "--store", store_dir, "--text-file", corpus_path,
+         "--max-gaps", "6", "--warmup-chunks", "0", "--out", out_path],
+        capture_output=True, text=True, env=env, timeout=120,
+    )
+    assert proc.returncode == 0, "subprocess without --reader-ckpt failed: {}\n{}".format(proc.stdout[-2000:], proc.stderr[-2000:])
+    import json
+    with open(out_path) as f:
+        payload = json.load(f)
+    assert payload["reader_ckpt"] is None, "reader_ckpt must be None when --reader-ckpt is omitted"
+    assert payload["reader_ckpt_config"] is None
+    assert payload["warmup_chunks"] == 0, "warmup_chunks must reflect the requested (not forced) value when --reader-ckpt is absent"
+    print("test_main_without_reader_ckpt_is_unaffected: OK (reader_ckpt=None, warmup_chunks=0 as requested)")
+
+
 def run_all():
     tests = [
         test_best_edge_for_key_finds_real_edge,
@@ -562,6 +711,10 @@ def run_all():
         test_random_edge_for_key_return_edge_shape_matches_legacy,
         test_run_consult_with_full_record_text_form,
         test_grid_never_touches_store_use_ledger,
+        test_reader_ckpt_roundtrip_byte_identical_forward,
+        test_reader_ckpt_vocab_mismatch_rejected,
+        test_reader_ckpt_missing_path_rejected,
+        test_main_without_reader_ckpt_is_unaffected,
     ]
     for t in tests:
         with_tmpdir(t)
