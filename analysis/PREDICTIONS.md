@@ -2548,3 +2548,37 @@ artifact is a number about the defaults, not about the system.
   organism at real scale — the configuration in which the
   closed-loop consultation pattern was originally measured to
   work (F4) — replayed through this exact harness.
+- **P78 — the lived reader (registered 2026-08-10, BEFORE the
+  run; harness committed d88ada9, 17/17 tests incl. byte-identical
+  forward roundtrip).** The last suspect standing after three
+  nulls. Reader: the GATED arm (A3) of the 40h POS run's snapshot
+  at 895,821,824 streamed tokens — 225,426,944 gradient tokens
+  over 440,287 backward steps at q0.75, the dial-law life itself —
+  converted read-only into the canonical snapshot format
+  (results/p78_reader_A3.pt, forward proven byte-identical to the
+  source arm; peripheral config fields like batch/gate_window
+  differ from the source run's but are inert in an eval-only
+  reader — d_model/n_layers/n_heads are structurally proven by the
+  successful state_dict load). Setup otherwise IDENTICAL to P77:
+  same 12-cell grid, same store copy discipline, same seed, no
+  warmup (the reader is 896M tokens warm), threshold calibrated on
+  the consult stream.
+  (a) EXISTENCE, unchanged bar: >= 1 cell with real minus random
+      >= +0.01 nats at >= 20 consults.
+  (b) RESPONSIVENESS: the lived reader must at least REACT — mean
+      |mean_delta_random| across the 12 cells >= 2x P77's same
+      statistic (0.0007), i.e. >= 0.0014. A lived state that
+      ignores arbitrary injections as completely as a fresh d64
+      did would kill the channel, not just the therapy.
+  (c) DISCIPLINE: store copy ledger-clean post-grid; reader meta
+      (n_bwd, grad_tokens, source arm) in the artifact; default
+      cell reported beside P77's default for the scale comparison.
+  Falsifiers: (a) AND (b) fail => the state-fork token-injection
+  channel is dead in this reader family at these scales regardless
+  of training life — consult-back re-registers only as a different
+  coupling (F4-style reminded reads / gradient-dosed replay per
+  P55, not inference-time forking). (b) passes but (a) fails =>
+  the reader reacts to injections yet relevance buys nothing —
+  the fork-injection therapy itself is refuted with the strongest
+  evidence available, same consequence with a sharper cause. (c)
+  fails => pipeline breach, fix before interpretation.
