@@ -502,33 +502,36 @@ accident, a 2×4 q-width grid that separates the two variables cleanly:
 
 | d_model | seed | q | gate fires | improvement ratio | per M grad-token |
 |---|---|---|---|---|---|
-| 128 | 42 | 0.75 | 24.7% | 0.9729 | 0.2969 |
-| 256 | 42 | 0.75 | 24.7% | 0.9953 | 0.2937 |
+| 128 | 42/43 | 0.75 | 24.7% | 0.9729 / 0.9807 | 0.2969 / 0.3009 |
+| 256 | 42/43 | 0.75 | 24.7% | 0.9953 / 0.9951 | 0.2937 / 0.2936 |
 | 128 | 43 | 0.80 | 19.9% | 0.9708 | 0.3696 |
-| 256 | 43 | 0.80 | 19.9% | 0.9892 | 0.3629 |
-| 512 | 42+43 | 0.80 | 19.8% | 0.9777 / 0.9758 | 0.3547 / 0.3467 |
-| 1024 | 42 | 0.80 | 19.8% | **1.0092** | 0.3305 |
+| 256 | 42/43 | 0.80 | 19.9% | 0.9841 / 0.9892 | 0.3611 / 0.3629 |
+| 512 | 42/43 | 0.80 | 19.8% | 0.9777 / 0.9758 | 0.3547 / 0.3467 |
+| 1024 | 42/43 | 0.80 | 19.8% | **1.0092 / 1.0304** | 0.3305 / 0.3278 |
 
-**The gate rate is a dial, not an emergent.** Five q=0.8 runs across an 8× width range land
-inside 0.1981–0.1994 (0.13pp scatter; the seed delta at d=512 is 0.02pp); both q=0.75 runs
-land at 0.2472. The 4.9pp "fall at d=512" was the q flip — there never was a width→rate
+**The gate rate is a dial, not an emergent.** Seven q=0.8 runs across an 8× width range and
+two seeds land inside 0.1978–0.1994 (0.16pp scatter); all four q=0.75 runs land inside
+0.2466–0.2478. Both q levels are seed-hard, and no rate anywhere shows more than 0.06pp of
+seed delta. The 4.9pp "fall at d=512" was the q flip — there never was a width→rate
 effect. The earlier ignition-depth mechanism reading of that gap is **retracted as a width
 mechanism**: it modeled a config difference as physics (its own forensics said as much — the
 fraction of window entries above the *q75* threshold was 0.230 at both d=256 and d=512, which
 is exactly what one sees when d=512 is gating on q80). The per-chunk ignition traces remain
 valid data about each config's ignition dynamics.
 
-**What the clean grid shows instead — selection crosses the firehose at d=1024.** At fixed
-q=0.8 and matched dose (~19.8%, 9.90–9.97M gradient tokens), the improvement ratio reads
-0.9708 → 0.9892 → 0.9777/0.9758 (two seeds agree; the d=512 valley is real) → **1.0092**: the
-gated arm ends 0.030 nats *better* than the full-gradient arm on one fifth of the gradient
-tokens. The d128→d256 rise replicates at both q levels. Per-token efficiency at fixed dose
-falls monotonically with width (0.3696 → 0.3305) — the old "selection gets cheaper with
-width" read compared q=0.75 doses against a q=0.8 dose; a higher quantile doses fewer, more
-selective tokens at any width. One caveat carried openly: all points share the 50M anchor,
-and A2 degrades with width at fixed tokens (4.93 → 5.45), so the anchor sits earlier in a
-wider model's training. The 24.7% line stands on two widths at one seed each; its seed-43
-pair at q=0.75 is running.
+**What the clean grid shows instead — selection crosses the firehose at d=1024, on both
+seeds.** At fixed q=0.8 and matched dose (~19.8%, 9.89–9.97M gradient tokens), the
+improvement ratio reads 0.9708 → 0.9841/0.9892 → 0.9777/0.9758 (the d=512 valley holds on
+both d=256 seeds) → **1.0092 / 1.0304** (mean 1.0198): the gated arm ends up to 0.096 nats
+*better* than the full-gradient arm on one fifth of the gradient tokens, and the second
+seed lands above the first. The d128→d256 rise replicates at both q levels. Per-token
+efficiency at fixed dose falls monotonically with width (0.3696 → 0.3278) — the old
+"selection gets cheaper with width" read compared q=0.75 doses against a q=0.8 dose; a
+higher quantile doses fewer, more selective tokens at any width. Ratio seed-deltas grow as
+width shrinks (d512 0.0019, d256 0.0051, d128 0.0078) while the RATES never move more than
+0.06pp with seed — the rate is the hard invariant. One caveat carried openly: all points
+share the 50M anchor, and A2 degrades with width at fixed tokens (4.93 → 5.53), so the
+anchor sits earlier in a wider model's training.
 
 **The repeat at 50M scale has now run, and it resolves the tension.** Eleven days after the
 original, in a different process, with one mid-run stream reconnect, the seed-42 d=512 run
@@ -781,7 +784,20 @@ place on the plasticity axis (+0.028). The finding that outranks the table: with
 exposure, the single-organ regime degrades near-linearly (forgetting 0.189→1.306) while the
 composition degrades sublinearly (0.259→0.381) — **the organs stabilize each other; the
 whole is the reason the parts keep working**.
-→ `src/chimera.py`, `results/chimera_v1.json`, `analysis/CHIMERA_SPEC.md`
+
+**And the curve over the exposure decade (P57).** Re-run at 5,000- and 20,000-chunk phases:
+the composition's forgetting fits **log-log slope 0.295** over the four exposure points
+(150 → 20,000 chunks: 0.259 → 0.381 → 0.752 → 1.027) — sublinearity is a four-point law,
+not a two-point accident. The predicted near-linear contrast arm instead *saturates*
+(forgetting has a ceiling and the fixed-schedule arm hits it early, sitting 21–72% above
+chimera throughout), the full-gradient arm forgets most of all (1.954 at 4× chimera's
+7.8M-gradient-token budget), and **recovery survives the decade**: chimera's residual is
++0.018 at 20,000-chunk phases (returning to pre-shock at 20× the original exposure) against
+the no-monitor ablation's +0.651. One honest subtraction, kept at full strength: the
+reminder organ's edge vanishes at 20k — its fixed dose does not scale with phase length,
+named as that organ's next attack.
+→ `src/chimera.py`, `results/chimera_v1.json`, `results/chimera_curve_5k.json`,
+`results/chimera_curve_20k.json`, `analysis/CHIMERA_SPEC.md`
 
 ### 18 — The file answers by key — and the filter buys memory, not fertilizer
 

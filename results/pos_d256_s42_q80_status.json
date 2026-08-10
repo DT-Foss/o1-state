@@ -1,0 +1,86 @@
+{
+  "pid": 3933325,
+  "phase": "done",
+  "config": {
+    "hours": 16.0,
+    "target_tokens": 50000000,
+    "d_model": 256,
+    "batch": 8,
+    "chunk": 64,
+    "lr": 0.003,
+    "seed": 42,
+    "q": 0.8,
+    "window": 500,
+    "min_window": 100,
+    "ignition_chunks": 100,
+    "eval_tokens": 200000,
+    "eval_every_s": 900.0,
+    "eval_every_tokens": 0,
+    "ckpt_every_s": 600.0,
+    "status_every_s": 60.0,
+    "twin_fork_hours": 24.0,
+    "twin_fork_tokens": 0,
+    "index_warmup_tokens": 5000000,
+    "recur_min_hours": 2.0,
+    "spike_min_nll": 7.0,
+    "span_half": 32,
+    "lookahead": 16,
+    "max_index_entries": 20000,
+    "max_probes_per_hour": 30,
+    "pause_rss_gb": 12.0,
+    "pause_disk_gb": 5.0,
+    "no_index": true,
+    "resume": false,
+    "tag": "d256_s42_q80"
+  },
+  "started_utc": "2026-08-06T20:54:08Z",
+  "wall_s": 37092.1,
+  "n_streamed": 50000384,
+  "tok_per_s": 1348.0,
+  "rss_gb": 1.1,
+  "disk_free_gb": 50.2,
+  "stream_docs": 138532,
+  "stream_reconnects": 0,
+  "arms": {
+    "A1": {
+      "grad_tokens": 0,
+      "n_chunks": 97657,
+      "n_bwd": 0
+    },
+    "A2": {
+      "grad_tokens": 50000384,
+      "n_chunks": 97657,
+      "n_bwd": 97657
+    },
+    "A3": {
+      "grad_tokens": 9964032,
+      "n_chunks": 97657,
+      "n_bwd": 19461
+    }
+  },
+  "index": null,
+  "twin_forked": false,
+  "digest": "f5d25ce84f2d6864d8df9b71618afb83a856d7f340a981f6a02f7ed31e038267",
+  "final": {
+    "type": "eval",
+    "wall_s": 37046.3,
+    "n_streamed": 50000384,
+    "rss_gb": 1.1,
+    "arms": {
+      "A1": {
+        "heldout": 8.683416,
+        "grad_tokens": 0
+      },
+      "A2": {
+        "heldout": 5.027412,
+        "grad_tokens": 50000384
+      },
+      "A3": {
+        "heldout": 5.085397,
+        "grad_tokens": 9964032,
+        "gate_frac_recent": 0.175,
+        "gate_frac_cum": 0.1993
+      }
+    }
+  }
+}

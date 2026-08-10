@@ -1,0 +1,86 @@
+{
+  "pid": 3926079,
+  "phase": "done",
+  "config": {
+    "hours": 16.0,
+    "target_tokens": 50000000,
+    "d_model": 256,
+    "batch": 8,
+    "chunk": 64,
+    "lr": 0.003,
+    "seed": 43,
+    "q": 0.75,
+    "window": 500,
+    "min_window": 100,
+    "ignition_chunks": 100,
+    "eval_tokens": 200000,
+    "eval_every_s": 900.0,
+    "eval_every_tokens": 0,
+    "ckpt_every_s": 600.0,
+    "status_every_s": 60.0,
+    "twin_fork_hours": 24.0,
+    "twin_fork_tokens": 0,
+    "index_warmup_tokens": 5000000,
+    "recur_min_hours": 2.0,
+    "spike_min_nll": 7.0,
+    "span_half": 32,
+    "lookahead": 16,
+    "max_index_entries": 20000,
+    "max_probes_per_hour": 30,
+    "pause_rss_gb": 12.0,
+    "pause_disk_gb": 5.0,
+    "no_index": true,
+    "resume": false,
+    "tag": "s43q75_d256"
+  },
+  "started_utc": "2026-08-06T17:47:10Z",
+  "wall_s": 38355.3,
+  "n_streamed": 50000384,
+  "tok_per_s": 1303.6,
+  "rss_gb": 1.064,
+  "disk_free_gb": 50.1,
+  "stream_docs": 138532,
+  "stream_reconnects": 0,
+  "arms": {
+    "A1": {
+      "grad_tokens": 0,
+      "n_chunks": 97657,
+      "n_bwd": 0
+    },
+    "A2": {
+      "grad_tokens": 50000384,
+      "n_chunks": 97657,
+      "n_bwd": 97657
+    },
+    "A3": {
+      "grad_tokens": 12391424,
+      "n_chunks": 97657,
+      "n_bwd": 24202
+    }
+  },
+  "index": null,
+  "twin_forked": false,
+  "digest": "aaeb10607c92ccd6232511d8c6e670323d4d4a0a10d129c692b06350deab72a2",
+  "final": {
+    "type": "eval",
+    "wall_s": 38281.7,
+    "n_streamed": 50000384,
+    "rss_gb": 1.064,
+    "arms": {
+      "A1": {
+        "heldout": 8.697174,
+        "grad_tokens": 0
+      },
+      "A2": {
+        "heldout": 5.04068,
+        "grad_tokens": 50000384
+      },
+      "A3": {
+        "heldout": 5.058527,
+        "grad_tokens": 12391424,
+        "gate_frac_recent": 0.235,
+        "gate_frac_cum": 0.2478
+      }
+    }
+  }
+}

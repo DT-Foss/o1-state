@@ -1506,6 +1506,20 @@ artifact is a number about the defaults, not about the system.
   0.9777/0.9758 (two seeds agree — the d512 valley is real) → 1.0092,
   and the d128→d256 rise replicates at both q levels.
 
+  **P56(c) COMPLETED (runs finished 2026-08-07, scored 2026-08-10;
+  results/pos_s43q75_d128_status.json,
+  results/pos_s43q75_d256_status.json).** The true q=0.75/seed-43
+  pair closes the clause: d128 reads 0.2466, d256 reads 0.2478 —
+  both within 0.06pp of seed-42's 0.2472 against the ±0.5pp bar.
+  (c) PASS. The 24.7% line now stands on two widths × two seeds, so
+  BOTH q levels are seed-hard and the dial law is complete on its
+  grid. Profile reproduction beside the rate: at d256/q0.75 the seed
+  pair reads ratio 0.9951 vs 0.9953 and efficiency 0.2936 vs 0.2937
+  — reproduction to the third decimal; at d128/q0.75 ratio 0.9807 vs
+  0.9729 (the narrowest width carries the largest ratio seed-delta,
+  0.0078, while every RATE reproduces within 0.06pp — the rate is
+  the hard invariant; the ratio softens with narrowness).
+
 - **P55 — the file answers by key (MS-Q, registered 2026-08-06, BEFORE
   the build).** P47/P52 proved the frozen file transfers DIFFUSELY
   (global NLL gains to strangers). The end architecture claims more:
@@ -1579,6 +1593,37 @@ artifact is a number about the defaults, not about the system.
   Falsifiers: (a) fails ⇒ sublinearity was a two-point accident, the
   stabilizer claim reverts to the measured pair; (c) fails ⇒ the
   monitor's recovery has an exposure ceiling — locate it.
+
+  **P57 SCORED (completed 2026-08-09, scored 2026-08-10,
+  results/chimera_curve_5k.json + results/chimera_curve_20k.json,
+  five arms at 5,000- and 20,000-chunk phases, cadence read from the
+  POS checkpoint config).** The decade is measured and splits the
+  clauses cleanly. (a) HALF-PASS, and the passing half is a law:
+  chimera's forgetting fits log-log slope 0.295 over the four
+  exposure points (150/1k/5k/20k: 0.259 → 0.381 → 0.752 → 1.027) —
+  far under the 0.8 bar; sublinearity is a four-point law, not a
+  two-point accident. The r3 contrast half fails in an unexpected
+  direction: r3 does not stay near-linear, it SATURATES (1.306 →
+  1.764 → 1.245; four-point slope 0.386) — forgetting has a ceiling
+  and the fixed-schedule arm hits it early, sitting 21–72% above
+  chimera throughout. (b) FAIL as registered: the 20k forgetting
+  ratio reads 0.825 against ≤0.292 — the gap narrows because r3's
+  forgetting hits its ceiling, not because chimera degrades; chimera
+  remains the lowest-forgetting arm at every exposure (1.027 vs
+  1.245 r3 vs 1.954 full-gradient — the firehose forgets most at 4×
+  chimera's 7.8M gradient tokens). (c) PASS — RECOVERY SURVIVES THE
+  DECADE: chimera residual +0.018 at 20k phases (bar 0.1), back to
+  pre-shock level at 20× the P54 exposure, while the no_monitor
+  ablation reads +0.651 — the dividend monitor's recovery
+  attribution stands at every measured exposure. Finding beyond the
+  clauses: the reminder organ's P54 edge VANISHES at 20k
+  (no_reminder matches chimera on all three axes — forgetting 1.019
+  vs 1.027, plasticity 0.988 vs 0.986, recovery +0.002 vs +0.018):
+  the reminder is a small-exposure organ; its fixed dose does not
+  scale with phase length, named as the next attack on that organ.
+  Composition remains the stabilizer at the decade: lowest
+  forgetting, near-zero recovery residual, quarter of the
+  full-gradient budget.
 
 - **P58 — surprise is a knowledge filter, or it is not (MS-R,
   registered 2026-08-06, BEFORE the build).** The distiller's ground
@@ -1819,6 +1864,17 @@ artifact is a number about the defaults, not about the system.
   seed artifact and the curve needs seed pairs before any crossing
   claim.
 
+  **P63 SCORED (run finished 2026-08-07, scored 2026-08-10,
+  results/pos_d1024_s43_status.json + metrics, solo on the ARM
+  machine).** 2/2 PASS — THE CROSSING IS NOT A SEED STORY. (a)
+  seed-43 improvement ratio 1.0304 (seed 42: 1.0092): the gated arm
+  beats the full-gradient arm by 0.096 nats on one fifth of the
+  gradient tokens — the second seed lands ABOVE the first, the
+  margin tripled. (b) the profile reproduces: gate rate 0.1978 vs
+  0.1981 (Δ0.03pp, bar ±0.5pp), efficiency 0.3278 vs 0.3305
+  (Δ0.0027, bar ±0.02). Mean d1024 ratio across seeds: 1.0198.
+  Selection beating the firehose at width is a two-seed fact.
+
 - **P64 — the filter earns its file, or it does not (MS-Y, registered
   2026-08-06 night, BEFORE the build).** The distiller bridge: P58
   proved the gate points at novelty; P55 proved the frozen file stores
@@ -1884,6 +1940,18 @@ artifact is a number about the defaults, not about the system.
   Falsifiers: (a)/(b) fail ⇒ the d256 point carries seed variance the
   d512 pair does not — the fixed-q curve needs seed pairs at every
   width before any shape claim finer than the d1024 crossing.
+
+  **P65 SCORED (run finished 2026-08-07, scored 2026-08-10,
+  results/pos_d256_s42_q80_status.json + metrics).** (a) FAIL by one
+  ten-thousandth: seed-42 ratio 0.9841 vs seed-43's 0.9892 —
+  Δ0.0051 against the ±0.005 bar. The d256/q0.8 ratio seed-delta is
+  ~2.7× the d512 pair's 0.0019, and the pre-committed reading
+  applies in its narrow form: ratio-shape claims finer than the
+  crossing need seed pairs per width. (b) PASS — THE VALLEY SURVIVES
+  BOTH SEEDS: 0.9841 > both d512 ratios (0.9777/0.9758); d256 sits
+  above d512 on either seed, so the dip at d512 is a width feature,
+  not seed noise. (c) PASS: rate 0.1993, inside 0.1981–0.1994 —
+  seven q=0.8 runs now sit inside 0.16pp across widths and seeds.
 
 - **P66 — the plasticity-decay curve: what aging costs, across six
   ages (registered 2026-08-06 night, BEFORE the runs; the follow-up
