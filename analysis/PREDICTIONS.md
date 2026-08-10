@@ -2613,3 +2613,39 @@ artifact is a number about the defaults, not about the system.
   then form x scale (P77->P78) — consult-back works as a
   differential mechanism through full-record injection into a
   genuinely lived reader.
+
+- **P79 — the consult policy and the three lives (registered
+  2026-08-10, BEFORE the overnight run; readers converted from the
+  same 40h-POS snapshot as P78, forward-load verified).** P78
+  proved the differential channel through the gated life. Two
+  questions turn that into law. Setup: the winning P78 cell only
+  (full_record_text, repeat 3, lookahead 6), canon=True, fresh
+  copies of the P72 store, WT-103 stream, seed 60, quantile 0.75
+  threshold, 60,000 consult words, up to 250 consults — run three
+  times, once per arm of the SAME lived stream: A1 (frozen, 0
+  gradient tokens), A2 (dense, 895,821,824 gradient tokens), A3
+  (gated, 225,426,944 gradient tokens at q0.75).
+  (a) THE POLICY LAW, on A3: binning consults by gap surprise into
+      terciles, the mean per-row differential (drop_real minus
+      drop_random) in the TOP tercile exceeds the bottom tercile
+      AND is positive — the injection tax pays where surprise is
+      high, pre-committed as the shape a consult policy needs.
+  (b) THE GATE BUYS CONSULTABILITY: (b1) A1 is inert — mean
+      |mean_delta_random| < 0.0028 (2x the fresh-reader floor
+      P77 measured): if an untrained state reacted like a lived
+      one, training life would be irrelevant and the P78 story
+      wrong. (b2) directional: A3's mean differential on the
+      winning cell reaches >= 0.5x A2's — the gated life retains
+      at least half the consultability at 25% of the gradient
+      spend. Reported at full strength either way.
+  (c) DISCIPLINE: ledger-clean store copies, per-row data in every
+      artifact, reader meta (arm, n_bwd, grad_tokens) recorded.
+  Falsifiers: (a) fails => the differential win is
+  surprise-flat — consultation cannot be gated by the reader's own
+  signal and the policy question re-registers on other signals
+  (evidence_count, edge depth). (b1) fails => responsiveness is
+  architectural, not lived — the lifetime interpretation of P78
+  retracts and the register says so. (b2) fails => density of
+  training, not curation, drives consultability — the dial-law
+  efficiency claim does NOT extend to consultation, stated at
+  full strength.
