@@ -2473,6 +2473,16 @@ artifact is a number about the defaults, not about the system.
   (injection mechanics, mount cost) is named, bounded, and
   registered against.
 
+  **P75(c) ADDENDUM (2026-08-10, results/livecausal_p75_cost_recheck.json,
+  code b8dd6af):** the mandatory ticket is closed and re-measured
+  on the same real artifact: with the persisted canon map + the
+  semi-naive canon delta (verified against an independent oracle
+  implementation), warm mount drops 17.81s -> **1.807s** (bar 5s),
+  cold 23.2s (bar 30s holds), and the warm graph carries the
+  identical 62,924 canonical inferred edges. The remaining warm
+  floor is the spaCy model load itself, not parsing — named as the
+  next lever if it ever matters.
+
 - **P77 — the injection mechanism isolated (registered 2026-08-10,
   BEFORE the run; harness committed 4519382, 13/13 tests green
   incl. the grid-ledger-isolation regression).** P73 and P75 both
