@@ -153,12 +153,17 @@ work with. P75 (canonical keys) re-ran the identical measurement with
 coverage at 0.1509 and semantically related paths available — and the
 real-vs-random arm STILL shows no separation (−0.0007 vs +0.0004,
 noise scale; the pre-registered falsifier, reported at full strength).
-That is a genuine mechanism finding, not a key problem anymore: at
-this reader scale, injecting a relevant path's outcome text into the
-forked state does not lower continuation surprise. The next registered
-attack targets the injected text's form (length, position, phrasing)
-and the reader's scale — named in the register before any fix is
-attempted.
+That is a genuine mechanism finding, not a key problem anymore. P77
+then varied the mechanism itself — three injection text forms, dosing,
+two scoring windows, twelve pre-registered cells — and every cell sits
+at noise scale (the falsifier fired cleanly; the default cell
+reproduces P75's null exactly). Three independent nulls now
+triangulate: keys (P73→P75), text form and dose (P77) are exonerated —
+the bottleneck is the reader. A d64 model with 200 warmup chunks
+barely moves for any injection at all. The next registered attack
+replays this exact harness through a genuinely trained organism at
+real scale — the configuration in which the closed-loop consultation
+pattern was originally measured to work (F4).
 
 **Scale is measured at 10×, and it taught us something (P74).** The
 natural falsifier ran: a 30,000-chunk build (6,401 segments, 20,648

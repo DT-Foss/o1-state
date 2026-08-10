@@ -2510,3 +2510,31 @@ artifact is a number about the defaults, not about the system.
   winning form's own mechanism becomes the next question. (c)
   fails ⇒ the grid pipeline is not the P75 pipeline — fix before
   interpreting anything.
+
+  **P77 SCORED (2026-08-10, results/livecausal_p77_grid.json, 12
+  cells in one process on the x86 runner, fresh copy of the P72
+  store).** (a) THE FALSIFIER FIRES, cleanly and completely: no
+  cell comes near the +0.01 bar — every real-minus-random gap sits
+  in [-0.0024, -0.0009], real consistently at or below random, all
+  twelve cells at noise scale. Form is exonerated alongside the
+  keys. (b) FAIL as registered: the nominal best cell is
+  outcome_text x3 x12, not full_record_text — and the honest note
+  is that at noise scale the ranking itself carries no signal; the
+  anchor hypothesis is neither confirmed nor meaningfully refuted,
+  it is simply below the floor. (c) PASS twice over: the default
+  cell reproduces P75's null exactly (-0.0007), and the store copy
+  carries no use.ledger after the grid (NO_LEDGER_CLEAN). Lead
+  verification beyond the clauses: a per-row smoke check proves
+  the form pathway was live at repeat=1 (15/15 rows differ between
+  forms) — the grid's 4-decimal cell equality is aggregate
+  rounding of sub-1e-4 effects, not a dead code path. THE
+  TRIANGULATION, three independent nulls: P73 (exact keys), P75
+  (canonical keys, 15% coverage, related paths), P77 (three text
+  forms, dosing, two windows) — the consult-value bottleneck is
+  the READER, not the graph and not the injection text. A d64
+  reader with 200 warmup chunks barely moves for ANY injection
+  (random-arm effects are equally microscopic). The next
+  registered attack is the reader itself: a genuinely trained
+  organism at real scale — the configuration in which the
+  closed-loop consultation pattern was originally measured to
+  work (F4) — replayed through this exact harness.

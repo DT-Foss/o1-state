@@ -1,0 +1,166 @@
+{
+  "store": "results/p77_store",
+  "text_file": null,
+  "source": "wt103",
+  "surprise_thresh": 10.5674,
+  "surprise_thresh_was_calibrated": true,
+  "max_gaps": 40,
+  "seed": 60,
+  "warmup_chunks": 200,
+  "n_warmup_words": 20000,
+  "n_consult_words": 20000,
+  "n_warmup_grad_steps": 200,
+  "elapsed_seconds": 241.31,
+  "canon": true,
+  "canon_env_pin": {
+    "spacy_available": true,
+    "spacy_version": "3.8.15",
+    "model_available": true,
+    "canon_version": "1"
+  },
+  "grid": [
+    {
+      "inject_form": "outcome_text",
+      "inject_repeat": 1,
+      "lookahead": 6,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0013,
+      "mean_delta_random": 0.0009,
+      "n_helped_real": 18
+    },
+    {
+      "inject_form": "outcome_text",
+      "inject_repeat": 1,
+      "lookahead": 12,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0007,
+      "mean_delta_random": 0.0004,
+      "n_helped_real": 18
+    },
+    {
+      "inject_form": "outcome_text",
+      "inject_repeat": 3,
+      "lookahead": 6,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0008,
+      "mean_delta_random": 0.001,
+      "n_helped_real": 19
+    },
+    {
+      "inject_form": "outcome_text",
+      "inject_repeat": 3,
+      "lookahead": 12,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0004,
+      "mean_delta_random": 0.0005,
+      "n_helped_real": 19
+    },
+    {
+      "inject_form": "full_record_text",
+      "inject_repeat": 1,
+      "lookahead": 6,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0013,
+      "mean_delta_random": 0.0009,
+      "n_helped_real": 19
+    },
+    {
+      "inject_form": "full_record_text",
+      "inject_repeat": 1,
+      "lookahead": 12,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0007,
+      "mean_delta_random": 0.0004,
+      "n_helped_real": 18
+    },
+    {
+      "inject_form": "full_record_text",
+      "inject_repeat": 3,
+      "lookahead": 6,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0015,
+      "mean_delta_random": 0.0009,
+      "n_helped_real": 19
+    },
+    {
+      "inject_form": "full_record_text",
+      "inject_repeat": 3,
+      "lookahead": 12,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0008,
+      "mean_delta_random": 0.0004,
+      "n_helped_real": 18
+    },
+    {
+      "inject_form": "chain_text",
+      "inject_repeat": 1,
+      "lookahead": 6,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0013,
+      "mean_delta_random": 0.0009,
+      "n_helped_real": 18
+    },
+    {
+      "inject_form": "chain_text",
+      "inject_repeat": 1,
+      "lookahead": 12,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0007,
+      "mean_delta_random": 0.0004,
+      "n_helped_real": 18
+    },
+    {
+      "inject_form": "chain_text",
+      "inject_repeat": 3,
+      "lookahead": 6,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0008,
+      "mean_delta_random": 0.001,
+      "n_helped_real": 19
+    },
+    {
+      "inject_form": "chain_text",
+      "inject_repeat": 3,
+      "lookahead": 12,
+      "n_spikes": 265,
+      "n_consults": 40,
+      "coverage": 0.1509,
+      "mean_delta_real": -0.0004,
+      "mean_delta_random": 0.0005,
+      "n_helped_real": 19
+    }
+  ],
+  "best_cell_by_real_minus_random": {
+    "inject_form": "outcome_text",
+    "inject_repeat": 3,
+    "lookahead": 12,
+    "n_spikes": 265,
+    "n_consults": 40,
+    "coverage": 0.1509,
+    "mean_delta_real": -0.0004,
+    "mean_delta_random": 0.0005,
+    "n_helped_real": 19
+  }
+}
