@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
+# --- Revival-Probe additions (large artifacts, not source) ---
+data/
+logs/
+*.log
+.pytest_cache/
+*.pid

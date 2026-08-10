@@ -1,0 +1,5 @@
+{
+  "cryptography_fernet": "from cryptography.fernet import Fernet\nkey = Fernet.generate_key()\nf = Fernet(key)\ntoken = f.encrypt(b'{message}')\nprint(f'Encrypted: {token}')\nprint(f'Decrypted: {f.decrypt(token)}')",
+  "jwt_basic": "import jwt\nencoded_jwt = jwt.encode({'some': 'payload'}, '{secret}', algorithm='HS256')\nprint(f'JWT: {encoded_jwt}')\ndecoded = jwt.decode(encoded_jwt, '{secret}', algorithms=['HS256'])\nprint(f'Decoded: {decoded}')",
+  "bcrypt_hash": "import bcrypt\npassword = b'{password}'\nsalt = bcrypt.gensalt()\nhashed = bcrypt.hashpw(password, salt)\nprint(f'Hashed: {hashed}')\nif bcrypt.checkpw(password, hashed):\n    print('Password match')"
+}

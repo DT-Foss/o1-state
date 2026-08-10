@@ -1,0 +1,7 @@
+{
+    "pytest_basic": "import pytest\ndef test_example():\n    assert 1 == 1\nif __name__ == '__main__':\n    pytest.main([__file__])",
+    "pytest_fixture": "import pytest\n@pytest.fixture\ndef sample_data():\n    return {'key': 'value'}\ndef test_with_fixture(sample_data):\n    assert sample_data['key'] == 'value'",
+    "unittest_basic": "import unittest\nclass TestBasic(unittest.TestCase):\n    def test_upper(self):\n        self.assertEqual('foo'.upper(), 'FOO')\nif __name__ == '__main__':\n    unittest.main()",
+    "mock_patch": "from unittest.mock import patch\nwith patch('os.getcwd') as mocked_getcwd:\n    mocked_getcwd.return_value = '/mocked/path'\n    import os\n    print(f'Current dir: {os.getcwd()}')",
+    "coverage_run": "import subprocess\nsubprocess.run(['coverage', 'run', '-m', 'pytest'])\nsubprocess.run(['coverage', 'report'])"
+}

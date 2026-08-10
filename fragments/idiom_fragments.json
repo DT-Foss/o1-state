@@ -1,0 +1,5 @@
+{
+    "json_edit": "import json\nimport os\n\ndef update_json(filename, key, value):\n    data = {}\n    if os.path.exists(filename):\n        with open(filename, 'r') as f:\n            data = json.load(f)\n    data[key] = value\n    with open(filename, 'w') as f:\n        json.dump(data, f, indent=4)\n    return data",
+    "sqlite_save": "import sqlite3\nimport time\n\ndef save_to_db(db_name, message):\n    conn = sqlite3.connect(db_name)\n    c = conn.cursor()\n    c.execute('CREATE TABLE IF NOT EXISTS logs (msg TEXT, time REAL)')\n    c.execute('INSERT INTO logs VALUES (?, ?)', (message, time.time()))\n    conn.commit()\n    conn.close()",
+    "file_size": "import os\n\ndef get_file_info(path):\n    if os.path.exists(path):\n        size = os.path.getsize(path)\n        return {'size': size, 'exists': True}\n    return {'size': 0, 'exists': False}"
+}

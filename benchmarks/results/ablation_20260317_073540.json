@@ -1,0 +1,49 @@
+{
+  "arc_challenge": {
+    "with_science_kb": {
+      "correct": 91,
+      "total": 100,
+      "accuracy": 0.91,
+      "kb_entries": 1556
+    },
+    "without_science_kb": {
+      "correct": 68,
+      "total": 100,
+      "accuracy": 0.68
+    },
+    "delta": 0.23
+  },
+  "piqa": {
+    "with_rules": {
+      "correct": 88,
+      "total": 100,
+      "accuracy": 0.88,
+      "rule_counts": {
+        "TOOL_USE": 51,
+        "MATERIAL_PROPS": 21,
+        "IMPLAUSIBLE_PAIRS": 20,
+        "PHYSICAL_CAUSATION": 634,
+        "PREP_PREFERENCES": 18
+      }
+    },
+    "without_rules": {
+      "correct": 52,
+      "total": 100,
+      "accuracy": 0.52
+    },
+    "delta": 0.36
+  },
+  "winograd": {
+    "with_rules": {
+      "correct": 95,
+      "total": 100,
+      "accuracy": 0.95
+    },
+    "without_rules": {
+      "correct": 94,
+      "total": 100,
+      "accuracy": 0.94
+    },
+    "delta": 0.01
+  }
+}
