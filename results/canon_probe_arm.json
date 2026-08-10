@@ -1,0 +1,3867 @@
+{
+  "env_pin": {
+    "canon_version": "1",
+    "model_available": true,
+    "spacy_available": true,
+    "spacy_version": "3.8.11"
+  },
+  "n_probes": 964,
+  "probes": [
+    {
+      "canon": "king",
+      "raw": "the king"
+    },
+    {
+      "canon": "war",
+      "raw": "the war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "the severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "the rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the global king"
+    },
+    {
+      "canon": "war",
+      "raw": "the global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "the sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "the sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "the growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "the unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "a king"
+    },
+    {
+      "canon": "war",
+      "raw": "a war"
+    },
+    {
+      "canon": "famine",
+      "raw": "a famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "a economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "a recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "a market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "a severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "a severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "a severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "a severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "a severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "a severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "a rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "a rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "a rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "a rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "a rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "a rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "a global king"
+    },
+    {
+      "canon": "war",
+      "raw": "a global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "a global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "a global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "a global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "a global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "a sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "a sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "a sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "a sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "a sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "a sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "a sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "a sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "a sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "a sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "a sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "a sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "a growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "a growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "a growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "a growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "a growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "a growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "a unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "a unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "a unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "a unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "a unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "a unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "an king"
+    },
+    {
+      "canon": "war",
+      "raw": "an war"
+    },
+    {
+      "canon": "famine",
+      "raw": "an famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "an economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "an downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "an inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "an recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "an crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "an market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "an harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "an severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "an severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "an severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "an severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "an severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "an severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "an severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "an severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "an severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "an severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "an rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "an rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "an rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "an rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "an rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "an rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "an rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "an rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "an rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "an rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "an global king"
+    },
+    {
+      "canon": "war",
+      "raw": "an global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "an global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "an global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "an global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "an global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "an global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "an global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "an global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "an global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "an sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "an sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "an sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "an sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "an sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "an sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "an sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "an sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "an sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "an sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "an sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "an sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "an sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "an sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "an sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "an sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "an sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "an sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "an sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "an sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "an growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "an growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "an growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "an growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "an growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "an growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "an growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "an growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "an growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "an growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "an unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "an unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "an unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "an unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "an unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "an unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "an unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "an unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "an unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "an unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the old king"
+    },
+    {
+      "canon": "war",
+      "raw": "the old war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the old famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the old economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the old downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the old inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the old recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the old crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the old market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the old harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the old severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "the old severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the old severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the old severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the old severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the old severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the old severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the old severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the old severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the old severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the old rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "the old rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the old rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the old rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the old rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the old rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the old rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the old rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the old rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the old rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the old global king"
+    },
+    {
+      "canon": "war",
+      "raw": "the old global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the old global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the old global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the old global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the old global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the old global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the old global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the old global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the old global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the old sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "the old sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the old sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the old sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the old sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the old sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the old sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the old sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the old sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the old sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the old sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "the old sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the old sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the old sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the old sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the old sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the old sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the old sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the old sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the old sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the old growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "the old growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the old growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the old growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the old growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the old growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the old growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the old growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the old growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the old growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the old unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "the old unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the old unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the old unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the old unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the old unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the old unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the old unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the old unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the old unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the resulting king"
+    },
+    {
+      "canon": "war",
+      "raw": "the resulting war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the resulting famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the resulting economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the resulting downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the resulting inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the resulting recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the resulting crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the resulting market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the resulting harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the resulting severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "the resulting severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the resulting severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the resulting severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the resulting severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the resulting severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the resulting severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the resulting severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the resulting severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the resulting severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the resulting rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "the resulting rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the resulting rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the resulting rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the resulting rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the resulting rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the resulting rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the resulting rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the resulting rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the resulting rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the resulting global king"
+    },
+    {
+      "canon": "war",
+      "raw": "the resulting global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the resulting global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the resulting global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the resulting global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the resulting global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the resulting global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the resulting global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the resulting global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the resulting global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the resulting sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "the resulting sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the resulting sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the resulting sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the resulting sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the resulting sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the resulting sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the resulting sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the resulting sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the resulting sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the resulting sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "the resulting sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the resulting sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the resulting sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the resulting sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the resulting sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the resulting sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the resulting sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the resulting sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the resulting sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the resulting growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "the resulting growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the resulting growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the resulting growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the resulting growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the resulting growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the resulting growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the resulting growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the resulting growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the resulting growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the resulting unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "the resulting unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the resulting unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the resulting unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the resulting unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the resulting unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the resulting unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the resulting unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the resulting unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the resulting unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the ensuing king"
+    },
+    {
+      "canon": "war",
+      "raw": "the ensuing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the ensuing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the ensuing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the ensuing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the ensuing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the ensuing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the ensuing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the ensuing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the ensuing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the ensuing severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "the ensuing severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the ensuing severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the ensuing severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the ensuing severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the ensuing severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the ensuing severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the ensuing severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the ensuing severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the ensuing severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the ensuing rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "the ensuing rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the ensuing rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the ensuing rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the ensuing rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the ensuing rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the ensuing rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the ensuing rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the ensuing rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the ensuing rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the ensuing global king"
+    },
+    {
+      "canon": "war",
+      "raw": "the ensuing global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the ensuing global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the ensuing global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the ensuing global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the ensuing global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the ensuing global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the ensuing global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the ensuing global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the ensuing global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the ensuing sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "the ensuing sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the ensuing sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the ensuing sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the ensuing sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the ensuing sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the ensuing sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the ensuing sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the ensuing sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the ensuing sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the ensuing sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "the ensuing sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the ensuing sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the ensuing sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the ensuing sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the ensuing sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the ensuing sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the ensuing sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the ensuing sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the ensuing sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the ensuing growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "the ensuing growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the ensuing growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the ensuing growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the ensuing growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the ensuing growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the ensuing growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the ensuing growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the ensuing growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the ensuing growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the ensuing unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "the ensuing unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "the ensuing unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "the ensuing unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the ensuing unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the ensuing unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "the ensuing unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the ensuing unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "the ensuing unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the ensuing unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "that terrible king"
+    },
+    {
+      "canon": "war",
+      "raw": "that terrible war"
+    },
+    {
+      "canon": "famine",
+      "raw": "that terrible famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "that terrible economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "that terrible downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "that terrible inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "that terrible recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "that terrible crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "that terrible market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "that terrible harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "that terrible severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "that terrible severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "that terrible severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "that terrible severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "that terrible severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "that terrible severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "that terrible severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "that terrible severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "that terrible severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "that terrible severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "that terrible rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "that terrible rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "that terrible rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "that terrible rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "that terrible rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "that terrible rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "that terrible rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "that terrible rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "that terrible rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "that terrible rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "that terrible global king"
+    },
+    {
+      "canon": "war",
+      "raw": "that terrible global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "that terrible global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "that terrible global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "that terrible global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "that terrible global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "that terrible global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "that terrible global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "that terrible global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "that terrible global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "that terrible sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "that terrible sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "that terrible sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "that terrible sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "that terrible sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "that terrible sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "that terrible sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "that terrible sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "that terrible sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "that terrible sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "that terrible sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "that terrible sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "that terrible sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "that terrible sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "that terrible sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "that terrible sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "that terrible sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "that terrible sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "that terrible sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "that terrible sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "that terrible growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "that terrible growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "that terrible growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "that terrible growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "that terrible growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "that terrible growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "that terrible growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "that terrible growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "that terrible growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "that terrible growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "that terrible unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "that terrible unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "that terrible unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "that terrible unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "that terrible unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "that terrible unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "that terrible unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "that terrible unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "that terrible unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "that terrible unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "this severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "this severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "this severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "this severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "this severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "this severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "this severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "this severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "this severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "this severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "this severe severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "this severe severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "this severe severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "this severe severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "this severe severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "this severe severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "this severe severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "this severe severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "this severe severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "this severe severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "this severe rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "this severe rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "this severe rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "this severe rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "this severe rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "this severe rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "this severe rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "this severe rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "this severe rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "this severe rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "this severe global king"
+    },
+    {
+      "canon": "war",
+      "raw": "this severe global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "this severe global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "this severe global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "this severe global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "this severe global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "this severe global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "this severe global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "this severe global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "this severe global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "this severe sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "this severe sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "this severe sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "this severe sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "this severe sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "this severe sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "this severe sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "this severe sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "this severe sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "this severe sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "this severe sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "this severe sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "this severe sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "this severe sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "this severe sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "this severe sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "this severe sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "this severe sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "this severe sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "this severe sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "this severe growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "this severe growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "this severe growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "this severe growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "this severe growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "this severe growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "this severe growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "this severe growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "this severe growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "this severe growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "this severe unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "this severe unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "this severe unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "this severe unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "this severe unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "this severe unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "this severe unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "this severe unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "this severe unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "this severe unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "another king"
+    },
+    {
+      "canon": "war",
+      "raw": "another war"
+    },
+    {
+      "canon": "famine",
+      "raw": "another famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "another economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "another downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "another inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "another recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "another crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "another market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "another harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "another severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "another severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "another severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "another severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "another severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "another severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "another severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "another severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "another severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "another severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "another rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "another rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "another rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "another rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "another rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "another rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "another rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "another rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "another rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "another rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "another global king"
+    },
+    {
+      "canon": "war",
+      "raw": "another global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "another global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "another global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "another global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "another global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "another global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "another global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "another global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "another global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "another sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "another sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "another sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "another sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "another sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "another sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "another sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "another sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "another sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "another sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "another sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "another sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "another sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "another sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "another sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "another sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "another sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "another sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "another sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "another sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "another growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "another growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "another growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "another growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "another growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "another growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "another growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "another growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "another growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "another growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "another unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "another unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "another unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "another unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "another unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "another unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "another unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "another unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "another unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "another unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "some king"
+    },
+    {
+      "canon": "war",
+      "raw": "some war"
+    },
+    {
+      "canon": "famine",
+      "raw": "some famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "some economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "some downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "some inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "some recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "some crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "some market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "some harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "some severe king"
+    },
+    {
+      "canon": "war",
+      "raw": "some severe war"
+    },
+    {
+      "canon": "famine",
+      "raw": "some severe famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "some severe economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "some severe downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "some severe inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "some severe recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "some severe crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "some severe market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "some severe harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "some rising king"
+    },
+    {
+      "canon": "war",
+      "raw": "some rising war"
+    },
+    {
+      "canon": "famine",
+      "raw": "some rising famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "some rising economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "some rising downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "some rising inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "some rising recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "some rising crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "some rising market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "some rising harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "some global king"
+    },
+    {
+      "canon": "war",
+      "raw": "some global war"
+    },
+    {
+      "canon": "famine",
+      "raw": "some global famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "some global economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "some global downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "some global inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "some global recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "some global crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "some global market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "some global harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "some sharp king"
+    },
+    {
+      "canon": "war",
+      "raw": "some sharp war"
+    },
+    {
+      "canon": "famine",
+      "raw": "some sharp famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "some sharp economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "some sharp downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "some sharp inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "some sharp recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "some sharp crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "some sharp market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "some sharp harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "some sudden king"
+    },
+    {
+      "canon": "war",
+      "raw": "some sudden war"
+    },
+    {
+      "canon": "famine",
+      "raw": "some sudden famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "some sudden economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "some sudden downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "some sudden inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "some sudden recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "some sudden crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "some sudden market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "some sudden harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "some growing king"
+    },
+    {
+      "canon": "war",
+      "raw": "some growing war"
+    },
+    {
+      "canon": "famine",
+      "raw": "some growing famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "some growing economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "some growing downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "some growing inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "some growing recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "some growing crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "some growing market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "some growing harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "some unexpected king"
+    },
+    {
+      "canon": "war",
+      "raw": "some unexpected war"
+    },
+    {
+      "canon": "famine",
+      "raw": "some unexpected famine"
+    },
+    {
+      "canon": "economy",
+      "raw": "some unexpected economy"
+    },
+    {
+      "canon": "downturn",
+      "raw": "some unexpected downturn"
+    },
+    {
+      "canon": "inflation",
+      "raw": "some unexpected inflation"
+    },
+    {
+      "canon": "recession",
+      "raw": "some unexpected recession"
+    },
+    {
+      "canon": "crisis",
+      "raw": "some unexpected crisis"
+    },
+    {
+      "canon": "market",
+      "raw": "some unexpected market"
+    },
+    {
+      "canon": "harvest",
+      "raw": "some unexpected harvest"
+    },
+    {
+      "canon": "king",
+      "raw": "the king of france"
+    },
+    {
+      "canon": "king",
+      "raw": "a king of france"
+    },
+    {
+      "canon": "king",
+      "raw": "the king in unemployment"
+    },
+    {
+      "canon": "king",
+      "raw": "a king in unemployment"
+    },
+    {
+      "canon": "king",
+      "raw": "the king about the weather"
+    },
+    {
+      "canon": "king",
+      "raw": "a king about the weather"
+    },
+    {
+      "canon": "king",
+      "raw": "the king between nations"
+    },
+    {
+      "canon": "king",
+      "raw": "a king between nations"
+    },
+    {
+      "canon": "king",
+      "raw": "the king of the empire"
+    },
+    {
+      "canon": "king",
+      "raw": "a king of the empire"
+    },
+    {
+      "canon": "war",
+      "raw": "the war of france"
+    },
+    {
+      "canon": "war",
+      "raw": "a war of france"
+    },
+    {
+      "canon": "war",
+      "raw": "the war in unemployment"
+    },
+    {
+      "canon": "war",
+      "raw": "a war in unemployment"
+    },
+    {
+      "canon": "war",
+      "raw": "the war about the weather"
+    },
+    {
+      "canon": "war",
+      "raw": "a war about the weather"
+    },
+    {
+      "canon": "war",
+      "raw": "the war between nations"
+    },
+    {
+      "canon": "war",
+      "raw": "a war between nations"
+    },
+    {
+      "canon": "war",
+      "raw": "the war of the empire"
+    },
+    {
+      "canon": "war",
+      "raw": "a war of the empire"
+    },
+    {
+      "canon": "famine",
+      "raw": "the famine of france"
+    },
+    {
+      "canon": "famine",
+      "raw": "a famine of france"
+    },
+    {
+      "canon": "famine",
+      "raw": "the famine in unemployment"
+    },
+    {
+      "canon": "famine",
+      "raw": "a famine in unemployment"
+    },
+    {
+      "canon": "famine",
+      "raw": "the famine about the weather"
+    },
+    {
+      "canon": "famine",
+      "raw": "a famine about the weather"
+    },
+    {
+      "canon": "famine",
+      "raw": "the famine between nations"
+    },
+    {
+      "canon": "famine",
+      "raw": "a famine between nations"
+    },
+    {
+      "canon": "famine",
+      "raw": "the famine of the empire"
+    },
+    {
+      "canon": "famine",
+      "raw": "a famine of the empire"
+    },
+    {
+      "canon": "economy",
+      "raw": "the economy of france"
+    },
+    {
+      "canon": "economy",
+      "raw": "a economy of france"
+    },
+    {
+      "canon": "economy",
+      "raw": "the economy in unemployment"
+    },
+    {
+      "canon": "economy",
+      "raw": "a economy in unemployment"
+    },
+    {
+      "canon": "economy",
+      "raw": "the economy about the weather"
+    },
+    {
+      "canon": "economy",
+      "raw": "a economy about the weather"
+    },
+    {
+      "canon": "economy",
+      "raw": "the economy between nations"
+    },
+    {
+      "canon": "economy",
+      "raw": "a economy between nations"
+    },
+    {
+      "canon": "economy",
+      "raw": "the economy of the empire"
+    },
+    {
+      "canon": "economy",
+      "raw": "a economy of the empire"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the downturn of france"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a downturn of france"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the downturn in unemployment"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a downturn in unemployment"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the downturn about the weather"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a downturn about the weather"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the downturn between nations"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a downturn between nations"
+    },
+    {
+      "canon": "downturn",
+      "raw": "the downturn of the empire"
+    },
+    {
+      "canon": "downturn",
+      "raw": "a downturn of the empire"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the inflation of france"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a inflation of france"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the inflation in unemployment"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a inflation in unemployment"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the inflation about the weather"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a inflation about the weather"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the inflation between nations"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a inflation between nations"
+    },
+    {
+      "canon": "inflation",
+      "raw": "the inflation of the empire"
+    },
+    {
+      "canon": "inflation",
+      "raw": "a inflation of the empire"
+    },
+    {
+      "canon": "recession",
+      "raw": "the recession of france"
+    },
+    {
+      "canon": "recession",
+      "raw": "a recession of france"
+    },
+    {
+      "canon": "recession",
+      "raw": "the recession in unemployment"
+    },
+    {
+      "canon": "recession",
+      "raw": "a recession in unemployment"
+    },
+    {
+      "canon": "recession",
+      "raw": "the recession about the weather"
+    },
+    {
+      "canon": "recession",
+      "raw": "a recession about the weather"
+    },
+    {
+      "canon": "recession",
+      "raw": "the recession between nations"
+    },
+    {
+      "canon": "recession",
+      "raw": "a recession between nations"
+    },
+    {
+      "canon": "recession",
+      "raw": "the recession of the empire"
+    },
+    {
+      "canon": "recession",
+      "raw": "a recession of the empire"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the crisis of france"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a crisis of france"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the crisis in unemployment"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a crisis in unemployment"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the crisis about the weather"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a crisis about the weather"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the crisis between nations"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a crisis between nations"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the crisis of the empire"
+    },
+    {
+      "canon": "crisis",
+      "raw": "a crisis of the empire"
+    },
+    {
+      "canon": "market",
+      "raw": "the market of france"
+    },
+    {
+      "canon": "market",
+      "raw": "a market of france"
+    },
+    {
+      "canon": "market",
+      "raw": "the market in unemployment"
+    },
+    {
+      "canon": "market",
+      "raw": "a market in unemployment"
+    },
+    {
+      "canon": "market",
+      "raw": "the market about the weather"
+    },
+    {
+      "canon": "market",
+      "raw": "a market about the weather"
+    },
+    {
+      "canon": "market",
+      "raw": "the market between nations"
+    },
+    {
+      "canon": "market",
+      "raw": "a market between nations"
+    },
+    {
+      "canon": "market",
+      "raw": "the market of the empire"
+    },
+    {
+      "canon": "market",
+      "raw": "a market of the empire"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the harvest of france"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a harvest of france"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the harvest in unemployment"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a harvest in unemployment"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the harvest about the weather"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a harvest about the weather"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the harvest between nations"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a harvest between nations"
+    },
+    {
+      "canon": "harvest",
+      "raw": "the harvest of the empire"
+    },
+    {
+      "canon": "harvest",
+      "raw": "a harvest of the empire"
+    },
+    {
+      "canon": "was published",
+      "raw": "was published"
+    },
+    {
+      "canon": "has increased sharply",
+      "raw": "has increased sharply"
+    },
+    {
+      "canon": "quickly disappeared",
+      "raw": "quickly disappeared"
+    },
+    {
+      "canon": "fell rapidly",
+      "raw": "fell rapidly"
+    },
+    {
+      "canon": "grew without warning",
+      "raw": "grew without warning"
+    },
+    {
+      "canon": "collapsed overnight",
+      "raw": "collapsed overnight"
+    },
+    {
+      "canon": "damage",
+      "raw": "caused widespread damage"
+    },
+    {
+      "canon": "unrest",
+      "raw": "led to further unrest"
+    },
+    {
+      "canon": "reaction",
+      "raw": "triggered a chain reaction"
+    },
+    {
+      "canon": "casualty",
+      "raw": "resulted in mass casualties"
+    },
+    {
+      "canon": "was widely reported",
+      "raw": "was widely reported"
+    },
+    {
+      "canon": "continues to worsen",
+      "raw": "continues to worsen"
+    },
+    {
+      "canon": "xk7j2q9",
+      "raw": "xk7j2q9"
+    },
+    {
+      "canon": "123",
+      "raw": "123"
+    },
+    {
+      "canon": "!!!",
+      "raw": "!!!"
+    },
+    {
+      "canon": "",
+      "raw": ""
+    },
+    {
+      "canon": "",
+      "raw": "   "
+    },
+    {
+      "canon": "",
+      "raw": "\t\n"
+    },
+    {
+      "canon": "---",
+      "raw": "---"
+    },
+    {
+      "canon": "a1b2c3",
+      "raw": "a1b2c3"
+    },
+    {
+      "canon": "a",
+      "raw": "N/A"
+    },
+    {
+      "canon": "tbd",
+      "raw": "TBD"
+    },
+    {
+      "canon": "header",
+      "raw": "###header###"
+    },
+    {
+      "canon": "42",
+      "raw": "42"
+    },
+    {
+      "canon": "0.001",
+      "raw": "0.001"
+    },
+    {
+      "canon": "$$$",
+      "raw": "$$$"
+    },
+    {
+      "canon": "kingkingkingkingkingkingkingkingkingkingkingkingkingkingkingkingkingkingkingking",
+      "raw": "kingkingkingkingkingkingkingkingkingkingkingkingkingkingkingkingkingkingkingking"
+    },
+    {
+      "canon": "i̇stanbul",
+      "raw": "İstanbul"
+    },
+    {
+      "canon": "uprising",
+      "raw": "the İstanbul uprising"
+    },
+    {
+      "canon": "i̇",
+      "raw": "İ"
+    },
+    {
+      "canon": "crisis",
+      "raw": "the resulting İstanbul crisis"
+    },
+    {
+      "canon": "diyarbakır",
+      "raw": "Diyarbakır"
+    },
+    {
+      "canon": "großen",
+      "raw": "the großen Straße"
+    },
+    {
+      "canon": "café",
+      "raw": "café"
+    },
+    {
+      "canon": "café",
+      "raw": "café"
+    },
+    {
+      "canon": "ﬁle",
+      "raw": "ﬁle"
+    },
+    {
+      "canon": "ｋｉｎｇ",
+      "raw": "ＫＩＮＧ"
+    },
+    {
+      "canon": "war",
+      "raw": "the war (١٩١٤)"
+    },
+    {
+      "canon": "starvation",
+      "raw": "MASS STARVATION"
+    },
+    {
+      "canon": "the​king",
+      "raw": "the​king"
+    },
+    {
+      "canon": "rise",
+      "raw": "a sharp rise in unemployment"
+    },
+    {
+      "canon": "report",
+      "raw": "a report about the weather"
+    },
+    {
+      "canon": "downturn",
+      "raw": "severe economic downturn"
+    },
+    {
+      "canon": "rate",
+      "raw": "rising interest rates"
+    },
+    {
+      "canon": "famine",
+      "raw": "a great famine"
+    },
+    {
+      "canon": "king",
+      "raw": "king of france"
+    },
+    {
+      "canon": "harvest",
+      "raw": "another bad harvest"
+    },
+    {
+      "canon": "war",
+      "raw": "a costly war"
+    },
+    {
+      "canon": "expectancy",
+      "raw": "reduced life expectancy"
+    },
+    {
+      "canon": "budget",
+      "raw": "public healthcare budgets"
+    },
+    {
+      "canon": "smoke",
+      "raw": "wildfire smoke"
+    },
+    {
+      "canon": "illness",
+      "raw": "respiratory illness"
+    },
+    {
+      "canon": "smoking",
+      "raw": "smoking"
+    },
+    {
+      "canon": "cancer",
+      "raw": "lung cancer"
+    },
+    {
+      "canon": "emission",
+      "raw": "increased greenhouse gas emissions"
+    },
+    {
+      "canon": "rise",
+      "raw": "global sea level rise"
+    },
+    {
+      "canon": "collapse",
+      "raw": "the collapse of the housing market"
+    },
+    {
+      "canon": "failure",
+      "raw": "widespread crop failure"
+    },
+    {
+      "canon": "drought",
+      "raw": "a prolonged drought"
+    },
+    {
+      "canon": "outbreak",
+      "raw": "the outbreak of civil war"
+    },
+    {
+      "canon": "rate",
+      "raw": "declining birth rates"
+    },
+    {
+      "canon": "population",
+      "raw": "an aging population"
+    },
+    {
+      "canon": "introduction",
+      "raw": "the introduction of new tariffs"
+    },
+    {
+      "canon": "slowdown",
+      "raw": "a slowdown in manufacturing output"
+    }
+  ]
+}

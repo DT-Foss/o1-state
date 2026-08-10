@@ -1,0 +1,21 @@
+{
+  "divergences": [],
+  "env_pin_a": {
+    "canon_version": "1",
+    "model_available": true,
+    "spacy_available": true,
+    "spacy_version": "3.8.11"
+  },
+  "env_pin_b": {
+    "canon_version": "1",
+    "model_available": true,
+    "spacy_available": true,
+    "spacy_version": "3.8.15"
+  },
+  "fraction_identical": 1.0,
+  "n_divergent": 0,
+  "n_identical": 964,
+  "n_total": 964,
+  "only_in_a": [],
+  "only_in_b": []
+}
