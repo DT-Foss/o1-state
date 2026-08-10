@@ -2695,3 +2695,22 @@ artifact is a number about the defaults, not about the system.
   policy code is built. (b) fails => the 1.02 ratio was
   seed-fortunate; the gated-life claim drops to the pooled
   estimate and the register says so.
+
+  **P80 SCORED (2026-08-10, results/livecausal_p80_{A3,A2}.json,
+  seed 61, 500 consults per arm on the ARM machine).** Both
+  clauses PASS — the night's discoveries are now n=2. (a) THE BAND
+  REPLICATES: A3's middle surprise tercile leads both outer
+  terciles (+0.2730 vs +0.2353 / +0.1573, bar +0.15 cleared) and
+  the ABSOLUTE win inside the band reappears on the fresh seed —
+  mean drop_real +0.0156 with 97/166 consults helping outright.
+  Honest refinement carried: the extreme-surprise collapse is
+  milder at n=500 (+0.157, not P79's +0.006) — the band shape is
+  real, the total top-end death was partly small-n. (b) THE THREE
+  LIVES REPLICATE: A3/A2 differential ratio 0.94 (bar 0.75);
+  pooled across both seeds the gated life sits at ~0.98x the
+  dense life's consultability at 25% of the gradient spend. (c)
+  PASS: clean copies, per-row data in both artifacts. Overall at
+  n=500 the channel is stronger than at n=250: A3 differential
+  +0.2216 with 238/500 absolute helps (47.6%). The consult-policy
+  organ now has its measured specification: fire in the band,
+  skip the extremes.
