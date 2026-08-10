@@ -9,7 +9,7 @@
 > result JSONs in this repository are the record. The seven primitives underlying everything
 > here are formalized in their broadest form in **[FOUNDATIONS.md](FOUNDATIONS.md)** — read
 > that first for the claims; read on for the evidence. The prediction ledger
-> ([analysis/PREDICTIONS.md](analysis/PREDICTIONS.md)) runs to P66, most already scored —
+> ([analysis/PREDICTIONS.md](analysis/PREDICTIONS.md)) runs to P78, most already scored —
 > confirmations and falsifications at the same strength, mechanically re-checkable via
 > `src/score_predictions_v2.py`.
 >
@@ -32,7 +32,7 @@ Formal statements, each over the *class* of systems it applies to, in
 | F1 | **The surprise calculus** — the learner's own prediction error, at every horizon: a ladder of deposited predictions about the future, scored when the future arrives, controls when to learn, store, consult, sleep | POS: ~25% gradient tokens ≈ 100% of full-gradient learning, crossing ABOVE 1.0 at 909M tokens and at d=1024 (§9); locked as a composition (§17); the rate is a dial, the gate a measured novelty filter (§9, §18); span store, sleep dosing, runtime consultation (§11–12) |
 | F2 | **The exactness license** — bounded contraction makes detach-carry streaming training *exact* and decouples training layout from deployment layout | grad-cosine 1.0000, max-abs-delta 0.0 (§4); full-seq ≡ chunked+carried to float precision (§10); any state×weight mismatch heals in 256 tokens (§14) |
 | F3 | **Phase–magnitude separation** — in complex bound states, content (phase) is written and never evolves; persistence (magnitude) decays; the two never mix | zero-drive phase invariance \|Δφ\| ≈ 1e-8; knee moved 32→2176+ via the disclosed clamp+refresh pair, an interaction of both axes (§10) |
-| F4 | **The two-system law** — sharp gated readouts have a capacity cliff, so unbounded accumulation belongs to an external index the stream writes and consults | cliff slope 1.32 vs 0.57 (§8); hybrid recall at P=16: base 0.10–0.20 → 0.41–0.62 (§12); reminded reads ~1.0 (§12); the frozen file answers by key (§18) |
+| F4 | **The two-system law** — sharp gated readouts have a capacity cliff, so unbounded accumulation belongs to an external index the stream writes and consults | cliff slope 1.32 vs 0.57 (§8); hybrid recall at P=16: base 0.10–0.20 → 0.41–0.62 (§12); reminded reads ~1.0 (§12); the frozen file answers by key (§18); the index is a living, canonicalized, delta-inferred file a lived reader consults with a ~175× stronger reaction than a fresh one (§20) |
 | F5 | **Family-generic operating modes** — every mode above attaches to the affine-scan operator class (Mamba/S6, S5, LRU), not to one architecture | family reduction ~1e-15 (§1); POS-on-S6 at 0.98× of POS-on-GSSM, GSSM ahead 0.156 nats head-to-head (§13) |
 | F6 | **Train short, deploy unbounded** — no absolute position + exactness ⇒ tiny training horizons, unbounded deployment | ×0.98 PPL at 4096×; 1B-token eval at flat 4.36 GB and a 7.4B+-token training LIFE at 0.69–0.83 GB (§4, §19); recall flat across 8 detached boundaries (§10) |
 | F7 | **The portable organism** — the living system is a ~53 MB serializable asset; organs couple through kilobytes (spans, reminders, deltas), not activations: migratable, forkable, shardable, seedable, offline-capable | live ARM→x86 mid-stream migration behaviorally identical to six decimals (§15); stranger verification across ISAs, 19/20 bit-exact with the one divergence pinned to a ULP (§16); a 7.4B-token life forked and measured (§19); fork cost measured (twin, §9) |
@@ -856,13 +856,110 @@ measured against a fresh 50M-token twin of identical configuration (P59):
   running.
 → `src/aged_brain_run.py`, `src/age_ladder_run.py`, `results/aged_brain.json`
 
+### 20 — LIVE-CAUSAL: a living knowledge file, delta-inferred, canonicalized, and consulted
+
+Everything above treats the `.causal` index as a growing store the stream reads from. This
+section is what it takes to make that store itself **live**: append-only, content-addressed,
+delta-inferred without a rebuild, and — the honest arc — what it takes to make an already-lived
+reader actually use it.
+
+**The format never rebuilds (P71).** Segments are content-addressed and append-only; base
+edges and inferred chains both carry an exact citation back to the segment and record that
+produced them. On 40 segments, incremental and full-rebuild closures are sha256-identical.
+Under 16× data growth (5→80 segments) append time grows **1.68×** (bar ≤4×; median 7.9ms →
+13.3ms), with delta-yield holding constant at 190 new edges per append regardless of graph
+size. Dropping a segment invalidates exactly the edges whose derivation cites it: 5
+repetitions, **0 closure computations** on drop, 5/5 bit-equal to a full batch rebuild.
+→ `results/livecausal_p71.json`
+
+**The builder builds, end to end (P72).** Two full runs over real WikiText-103 text, the
+spaCy-strict extractor path pinned: **2,046 base records**, **644 segments**, wall clock
+**281.8s** on a 4-core x86 runner. The second run reproduces all 644 segment SHAs
+bit-identically — zero full rebuilds. A stranger audit along the third citation direction
+reads **30/30 edges verified, 30/30 two-mount consensus**. Gated fraction 0.2053, inside the
+q=0.75 dial band. The same run supplied P70's answer: surprise-selected windows do **not**
+out-yield seeded-random windows on validated-triplet density (ratio 0.974 against a 1.3× bar
+— the falsifier fires) — so the builder's policy, taken straight from that result, runs
+extraction on every window and lets the surprise gate curate what gets *stored*, not what gets
+*extracted*.
+→ `results/p72_run1.json`, `results/p72_compare.json`, `results/p72_verify.json`,
+`results/curator_yield.json`
+
+**Canonicalization removes the measured constraint (P75).** P72 localized a write-side
+bottleneck (2,047 extracted triplets folding to only 76 inferred edges against a 200-edge
+bar — near-zero exact-string key collisions); P73 confirmed it from the read side (coverage
+0.0162 — 40 of 2,471 surprise spikes found any answerable key). A deterministic canonicalization
+organ (first-noun-chunk head lemma, sealed segments untouched, every derivation still citing
+raw records) removes it: on the identical artifact, canon=False reproduces exactly 76 inferred
+edges; **canon=True yields 62,924** — lift **828×**, raw keys folding 1.88:1. Read-side
+coverage rises from 0.0162 to **0.1509** (9.3× baseline) — one in seven surprise spikes now
+finds a queryable edge, up from one in sixty-two. Canonical keys are fleet-stable across spaCy
+versions (**964/964** probe phrases identical between 3.8.11 and 3.8.15), and 30/30 sampled
+canonical edges re-derive from nothing but the cited raw records plus the pinned canon
+function. Two honest bills came with the win: the raw→canon spaCy fold on every mount blew the
+warm-mount bar (17.81s against a 5s bar) — closed by a persisted, env-pin-stamped canon map plus
+a semi-naive canon delta (independently oracle-verified), dropping warm mount to **1.807s**
+(cold 23.2s, bar 30s holds), same 62,924 edges — and the graph, by design, now sits in the dense
+regime P74 mapped.
+→ `results/livecausal_p75.json`, `results/canon_probe_cross.json`,
+`results/livecausal_p75_cost_recheck.json`
+
+**Density is not scale-invariant (P74).** A 30,000-chunk WT-103 build — P72's exact cadence
+and seed, 10× its stream — produced 6,401 segments and 20,648 records. Exact-key collisions
+accumulate **superlinearly** with stream length: inferred edges went from 76 at 1× to **5,408**
+at 10× (density 0.037 → 0.262), a 71× growth on 10× data — the pre-committed density guard
+fired and the sparse-regime append-cost bar went void by design. The mechanics held regardless:
+drops stayed zero-closure at every density (10/10 samples), closure accounting was exact
+across all 6,401 appends, and two independent replays were structurally byte-identical.
+Absolute cost stayed practical — 93.7ms median append at the frontier, the full 10× history
+replaying from raw segments in ~510s.
+→ `results/livecausal_scale_run1.json`, `results/livecausal_scale_run2.json`
+
+**Consult-back: three nulls triangulate the reader, then a lived reader breaks through
+(P73 → P75 → P77 → P78).** The spec's fifth stage — fork the state on a surprise spike, inject
+the graph's retrieved text, measure whether continuation surprise drops — ran four times, each
+holding one more variable fixed:
+
+- **P73 (exact keys):** machinery sound (0 ledger violations, 14/14 citations resolve, both
+  runs byte-identical down to the use.ledger sha) but coverage of 0.0162 left nothing to
+  inject — the real-vs-random arm showed no separation.
+- **P75 (canonical keys):** coverage cleared to 0.1509 with semantically related paths
+  available — and the real-vs-random arm STILL showed no separation (−0.0007 vs +0.0004, noise
+  scale). Keys were exonerated; the mechanism itself became the suspect.
+- **P77 (injection form):** a 12-cell grid varying text form (outcome / full-record / chain),
+  repeat count, and lookahead, everything else pinned to P75 — every cell sat at noise scale
+  (real consistently at or below random, gaps in [−0.0024, −0.0009] against a +0.01 bar). Form
+  was exonerated too. Three independent nulls now triangulated the same conclusion: the
+  bottleneck was the **reader** — a d64 model with 200 warmup chunks barely reacts to any
+  injection, real or random.
+- **P78 (the lived reader):** the identical 12-cell grid replayed through the gated arm of the
+  40-hour POS run's own snapshot (895,821,824 streamed tokens, 225,426,944 gradient tokens over
+  440,287 backward steps) instead of a cold d64 model. **The channel lives.** Four cells clear
+  the +0.01 bar — exactly the four `full_record_text` cells (+0.0298 to +0.1370, best cell
+  +0.1370, 13× the bar) — confirming the form hypothesis P77 could not test because nothing
+  reacted. The lived reader's responsiveness to injection generically is **~175× stronger**
+  than the fresh reader's (mean |random-arm effect| 0.1223 vs P77's 0.0007), which retroactively
+  explains all three earlier nulls: they were not refuting the therapy, the reader was too
+  inert to register *any* injection, relevant or not. Reported at the same strength: every
+  absolute delta stays negative — injection always costs a lived state something; relevance
+  makes the real path cost *less* than random, a differential win, not yet an absolute one. The
+  next registered question is the consult policy — when to pay the injection tax at all.
+
+→ `results/livecausal_consult_run1.json`, `results/livecausal_consult_run2.json`,
+`results/livecausal_p77_grid.json`, `results/livecausal_p78_grid.json`
+→ `src/livecausal/store.py`, `src/livecausal/infer.py`, `src/livecausal/canon.py`,
+`src/livecausal/canon_probe.py`, `src/livecausal/scale_run.py`, `src/livecausal/p75_run.py`,
+`src/livecausal/consult_run.py`, `src/livecausal/builder_run.py`, `src/livecausal/evidence.py`,
+`src/livecausal/demo.py`
+
 ### The method: pre-registered, auto-scored, falsifications kept
 
 Every run above was preceded by a numbered prediction in
 [analysis/PREDICTIONS.md](analysis/PREDICTIONS.md) (immutable P-numbers, committed before the
 data existed). `src/score_predictions_v2.py` re-scores the whole register mechanically —
-at its last full audit: 59 predictions, 75 clause checks, 0 mismatches against the
-hand-scored record — and three machine-readability rules are standing policy
+at its last full audit (2026-08-10, `results/scorer_audit.json`): 76 predictions,
+0 mismatches against the hand-scored record, seven of them (P71–P75, P77, P78) registered
+and scored the same day — and three machine-readability rules are standing policy
 (pass-booleans beside raw numbers, artifact paths in scored headers, one verdict word per
 clause). Falsified predictions stay in the record with the number that killed them —
 the falsify-then-confirm arc of the phase-rent question, the dream generator's kill, the
@@ -929,6 +1026,79 @@ knowledge extraction, post-quantum cryptanalysis, nuclear knowledge graphs, and 
 responsible disclosure to IBM PSIRT). The complete list, with venues and DOIs, is in
 [PAPERS.md](PAPERS.md). Software: [dotcausal.com](https://dotcausal.com) ·
 [github.com/dotcausal/dotcausal](https://github.com/dotcausal/dotcausal).
+
+---
+
+## The FOSS-KI merge (`integrations/foss-ki/`)
+
+A second, independent answer engine gets folded onto the same living file. FOSS-KI
+(Reservoir/Hopfield/Intent, first built March 2026) is a non-transformer answer engine that
+resolves a question in milliseconds — no forward pass through a language model at all. Revived
+as a probe, its entire knowledge base was converted onto the LIVE-CAUSAL store above and mounted
+behind the exact interface the rest of the engine already calls, so the same cut/append/verify
+loop that governs the o1-state knowledge file now governs FOSS-KI's answers too.
+
+**The conversion.** `convert_knowledge_full.py` turns FOSS-KI's flat 4,855-fact knowledge base
+(`data/knowledge_full.json`) into 98 sealed LiveStore segments (50 records/segment). A second
+converter, `convert_conceptnet.py`, does the same for ConceptNet: every one of ConceptNet's 31
+relation types is decided individually against sampled real records (not by relation name
+alone) — 189,719 records (37.9%) kept as world-fact mechanisms (`is_a`, `causes`, `at_location`,
+`used_for`, …), 310,281 (62.1%) excluded as lexical word-form relations (`Synonym`,
+`DerivedFrom`, `FormOf`, …) that describe strings, not facts about the entities. A mounting
+constraint was measured, not guessed: the full 189,719-record ConceptNet conversion writes fine
+(22s, 3,795 segments — writing is O(1) per segment) but OOM-kills the graph mount at 21.3GB
+resident — the same P74 density-is-not-scale-invariant curve, now traced concretely in RSS/time
+on real ConceptNet data (base→inferred ratios from 3.5× up to 174.6× drive peak RSS from 37MB to
+6,945MB across four measured sizes). The demos therefore run a proven-safe **15,000-source-
+relation slice** (11,217 records after mapping, 225 segments, 6.4s mount, 489MB RSS) — an
+honestly-scoped subset, not the full file; promoting it needs the mount-time fix this measurement
+names, not a bigger machine.
+
+**`LiveCausalAdapter`** (`live_causal_adapter.py`) sits behind `core.knowledge.KnowledgeStore`'s
+interface — `query`, `find_by_entity`, a materialized `.facts` list, and the `store_fact` write
+path — so FOSS-KI's own reasoning, formula-solving, and answer-quality gate run unmodified on top
+of a LIVE-CAUSAL store instead of an in-memory dict.
+
+**The cut/append demo, at full system level (9/9 checks, transcript in the repo).** With
+`knowledge_only=True` (a mode built specifically to route every fact query through the adapter
+and off FOSS-KI's other independent fact sources — CommonSense bootstrap, the CBR case library,
+multi-hop reasoning, web search — so a forgetting demo can't be defeated by a second, uncut copy
+of the same fact): "what is the capital of France?" answers **"Paris"**; every segment citing the
+France↔Paris relationship **in both directions** (`knowledge_full.json`'s forward fact and
+ConceptNet's reverse `AtLocation` fact — a real multi-source case, and cutting only one direction
+is shown, live, to be provably not enough) is cut via `drop_segments()`; the identical question
+now answers an honest **"I don't have information about that topic"** — not a hallucination, a
+correct refusal; the same segments are re-appended (content-addressed: every sha256 matches the
+one just dropped); the question answers **"Paris"** again — nothing rebuilt in between, one
+running process throughout. A control question ("who wrote Hamlet?") returns the same answer at
+every step, proving the cut removed one relationship, not the knowledge base.
+→ `demo_cut_append.py`, `cut_append_transcript_v3.txt`
+
+**The full loop, from raw text to spoken answer, in one process (Phase 5, 8/8 checks).**
+`demo_e2e_loop.py` starts from a local text file, not a pre-converted store: `builder_run.py`
+(the o1-state team's own organism-plus-fabel builder, invoked as a subprocess exactly as an
+operator would) streams a Marie Curie facts article and folds validated causal triplets straight
+into the same `LiveStore`/`LiveGraph` a `FossKIRepl` mounts immediately afterward — no separate
+conversion step. In the same process that just built the store: "what does high doses of
+radiation cause?" answers **"high doses of radiation causes cancer"** — the article's own fact,
+live; a control question ("who wrote Hamlet?") answers **"Shakespeare"** from the pre-seeded
+base, proving the article didn't overwrite anything; cutting only the article's 8 segments (not
+the 98 pre-seeded ones) makes the radiation question answer **"I don't have information about
+that topic"** while the control stays **"Shakespeare."** Getting clean, question-answerable
+triplets out of the extractor took real iteration (documented in the module's own docstring —
+longer multi-sentence paragraphs produced triggers/outcomes no natural question could reach)
+and one traced, minimal addition to `repl.py`'s query router (`_direct_kb_lookup` gained a
+"what does X cause?" pattern, since none of the router's existing attribute-shaped patterns
+covered `causes`).
+→ `demo_e2e_loop.py`, `marie_curie_article.txt`
+
+**The knowledge engine's closure-wall is the next named organ.** The ConceptNet mount curve
+above is a second, independent measurement of P74's finding on real-world data at real scale —
+graph density is not scale-invariant, and dense regimes need bounded or lazy inference rather
+than an eager full closure at mount time. That is now a named next attack on the LIVE-CAUSAL
+engine itself, not a footnote: the same organ that will need to serve a full 500K-relation
+ConceptNet or any comparably dense corpus.
+→ `integrations/foss-ki/README.md`, `integrations/foss-ki/DEMO.md`
 
 ---
 
@@ -1003,15 +1173,21 @@ o1-state/
 │   ├── chimera.py                                                the composed organism (§17)
 │   ├── knowledge_file_run.py, keyed_file_run.py, surprise_filter_run.py, filter_file_run.py   the knowledge file (§18)
 │   ├── aged_brain_run.py, age_ladder_run.py                      the age axis (§19)
+│   ├── livecausal/          the living knowledge file: store.py, infer.py, canon.py,
+│   │   canon_probe.py, scale_run.py, p75_run.py, consult_run.py, builder_run.py,
+│   │   evidence.py, demo.py + test_*.py                          LIVE-CAUSAL (§20)
 │   └── score_predictions_v2.py                                   the auto-falsifier
 ├── vendor/fabel/            the .causal deterministic knowledge engine (the index)
+├── integrations/foss-ki/    the FOSS-KI merge onto the living store (converters, adapter,
+│   the cut/append and end-to-end-loop demos)                     the FOSS-KI merge
 ├── analysis/                theory, pre-registered predictions, research logs
 ├── results/                 measured JSON + logs — the evidence
 └── plots/                   figures
 ```
 
-`reference/` = architecture · `src/` = experiments · `vendor/fabel/` = knowledge index
-· `analysis/` = theory · `results/` = measured JSON · `plots/` = figures.
+`reference/` = architecture · `src/` = experiments · `vendor/fabel/` = knowledge index ·
+`integrations/foss-ki/` = the merged answer engine · `analysis/` = theory ·
+`results/` = measured JSON · `plots/` = figures.
 
 ---
 
@@ -1067,6 +1243,27 @@ recovery below pre-shock), at a small measured plasticity price (0.744×) and ze
 shift. And the file format's review mechanism works across instruction sets: 19/20
 sampled entries bit-exact between ARM and x86, the single divergence pinned to a one-ULP
 float boundary and answered with an integer-exact quantization rule.
+
+The newest wave made the knowledge index itself live. LIVE-CAUSAL is append-only,
+content-addressed, and never rebuilds (1.68× append time under 16× data, zero closures on
+drop); the real builder runs end to end on WikiText-103 (2,046 records, 644 segments in
+under five minutes, 30/30 stranger-audited); a canonicalization organ removed the one
+constraint both the write and read side had localized (inferred edges 76 → **62,924**, a
+828× lift, coverage 0.0162 → **0.1509**, warm mount 17.8s → 1.81s); a 10× scale run showed
+graph density is **not** scale-invariant (0.037 → 0.262) while the mechanics — drops, closure
+accounting, determinism — held exactly. And the consult-back channel, which stayed at noise
+scale through three independent nulls (exact keys, canonical keys, injection form — each one
+exonerated in turn), **came alive** the moment it was replayed through an actually-lived
+reader instead of a cold one: the 40-hour POS run's own 896M-token snapshot reacts to
+injection ~175× more strongly than a fresh model and clears the pre-registered bar on
+exactly the predicted cell (full-record text, +0.137 nats, 13× the bar) — the bottleneck was
+never the graph, it was a reader too inert to be helped by anything. On top of that,
+**FOSS-KI** — a from-scratch, non-transformer answer engine that resolves questions in
+milliseconds — was revived and merged onto the same living file: its whole knowledge base
+plus a 189,719-record slice of ConceptNet now live as sealed, cut-and-append-able segments,
+and the full system demo shows a running process forget a fact, refuse honestly, and recall
+it again after a byte-identical re-append — no restart, no rebuild, nine automated checks
+green.
 
 Every number here is reproducible from the scripts in `src/`. The kernel reductions are exact
 identities; the recall result is 5-seed with the attention validity gate at 0.994; the threshold
