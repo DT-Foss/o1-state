@@ -1,4 +1,4 @@
-# experimental/livecausal/ — LIVE-CAUSAL bridge, revival-probe Phase 2+3+4+5
+# experimental/livecausal/ — LIVE-CAUSAL bridge, revival-probe Phase 2+3+4+5+Task16
 
 Source-of-record copies of the LiveCausalAdapter MVP built during the
 FOSS-KI revival probe (2026-08-10). These files are committed here for
@@ -212,6 +212,85 @@ RSS, well inside the measured-safe range above. This is a real,
 honestly-scoped subset, not the full 500K file — promoting to the full
 file requires the mount-time fix this document flags, not a bigger
 machine alone (the growth is superlinear, not just large).
+
+## Activating the switches
+
+```python
+from repl import FossKIRepl
+repl = FossKIRepl(live_causal_store="/path/to/a/converted/store")
+# or: FOSSKI_LIVECAUSAL_STORE=/path/to/store python repl.py
+
+# for a forgetting demo where the FULL repl.process() answer (not just
+# the adapter's own query()) must honestly reflect a cut:
+repl = FossKIRepl(live_causal_store="/path/to/store", knowledge_only=True)
+# or: FOSSKI_LIVECAUSAL_STORE=/path/to/store FOSSKI_KNOWLEDGE_ONLY=1 python repl.py
+```
+
+## Receipts — provenance and contested status in the trace (Task 16)
+
+`live_causal_adapter.py`'s `query()` now returns two extra fields beyond
+the KnowledgeStore-compatible shape (documented at their computation site
+in the module, same pattern as `evidence_count`/`edge_kind` before them):
+
+  - `citations`: `[(sha[:12], idx), ...]` — every `(segment, record-index)`
+    pair backing the returned fact, one per hop for an inferred edge
+    (already root-to-leaf per `infer.py`'s own derivation order), every
+    citing record for a base edge (there can be more than one — e.g. the
+    France/capital duplicate in `knowledge_full.json`).
+
+  - `contested`: `None` for the common case (no on-record conflict), or
+    a dict (`counts_by_mechanism`, `winner_mechanism`, `ratio`) when
+    `evidence.py`'s own SS2 conflict definition fires — two or more
+    records citing the SAME `(trigger_key, outcome_key)` edge_key with
+    DIFFERENT `mechanism` strings. Every count in this dict comes from
+    `EvidenceLedger.evidence_count()` itself, called once per competing
+    mechanism (reusing `evidence_count`'s existing `valid_segments`
+    filter parameter for a purpose it already supports — restricting it
+    to one mechanism's own citing segments); **no new conflict-counting
+    logic was written**, per the assignment's explicit instruction.
+
+`repl.py`'s `_append_receipt()` (called right after the two existing
+`DirectKB` trace lines) re-derives the `(subject, relation)` pair from
+the answer just produced and re-queries `self.knowledge` for its own
+provenance, appending `Receipt: (sha,idx), ... | evidence_count=N` and
+(when applicable) `Contested: N:M (winner='...', mechanisms={...})` to
+the trace. Best-effort and additive: if the re-derivation doesn't
+confidently match (most of `_direct_kb_lookup`'s ~90 call sites use
+shapes this doesn't attempt to parse), it silently returns nothing — a
+missing receipt is not treated as a wrong answer, and none of
+`_direct_kb_lookup`'s existing behavior changes. Only active when
+`self.using_live_causal` is true; the original `KnowledgeStore` path is
+untouched, and all 8 existing regression tests still pass unchanged.
+
+`build_contested_store.py`: builds a genuine SS2-conflict store for
+testing/demoing this — `Coffee causes alertness` (3 independently-sourced
+segments, one record each — a real, traced property of `evidence.py`'s
+segment-provenance fallback: a STRING `doc_coord` like `"study:1"` hits
+the fallback where `evidence_key = citing segment's sha`, so multiple
+records packed into ONE segment fold to `evidence_count=1` regardless of
+how many they are — each independent source needs its OWN segment) vs.
+`Coffee correlates_with alertness` (1 segment). `demo_receipts.py` proves
+both receipt fields are live, not decorative: cutting one of the two
+France/Paris citing segments drops the receipt's own `evidence_count`
+from 2 to 1 (the answer still holds — one citation survives); cutting
+the second makes the fact disappear entirely, exactly as the receipt
+predicted. Cutting 2 of the 3 `causes` segments flips the contested
+ratio live from `3:1` to `1:1` (`winner` also flips, to
+`correlates_with`) — proving the ratio is recomputed from the CURRENT
+store on every call, not cached. 8 automated checks, all PASS.
+
+Explicitly NOT implemented (flagged, not built): "two different
+outcomes for the same trigger" (e.g. two segments claiming
+`France capital Paris` and `France capital Lyon`) is NOT a conflict in
+`evidence.py`'s own model — those are two separate, uncontested
+`edge_key`s (different `outcome_key`), each with its own
+`evidence_count`; the adapter's existing `max(..., key=evidence_count)`
+selection (unchanged by this task) already picks the better-evidenced
+one, silently, with no contested signal. A true "contradictory outcome"
+detector would need the identity refinement `evidence.py`'s own
+docstring names as available-but-not-implemented (re-keying by
+`(trigger_key, mechanism, outcome_key)`) or a new comparison this task
+was told not to invent.
 
 ## Activating the switches
 

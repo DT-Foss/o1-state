@@ -1,0 +1,92 @@
+========================================================================
+PART A -- evidence_count receipt proof (France/capital/Paris)
+========================================================================
+
+Segments citing france->paris: ['8478f493a34887b3194acc41b6b1aec9dfe17fbd115d7309c6259294b2562f70', 'b079ae4797d495d68e067e25f156dd25d6efec95b5ca196fb3999c2660cb3cc0']
+
+--- [A1: baseline, 2 citations] Q: what is the capital of France? ---
+A: Paris
+
+[Trace]
+    Intent: question_factual (0.87)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+      Receipt: (8478f493a348,11), (b079ae4797d4,40) | evidence_count=2
+Receipt: Receipt: (8478f493a348,11), (b079ae4797d4,40) | evidence_count=2
+
+Cutting ONE segment: 8478f493a34887b3194acc41b6b1aec9dfe17fbd115d7309c6259294b2562f70
+
+--- [A2: after cutting 1 of 2 citations] Q: what is the capital of France? ---
+A: Paris
+
+[Trace]
+    Intent: question_factual (0.87)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+      Receipt: (b079ae4797d4,40) | evidence_count=1
+Receipt: Receipt: (b079ae4797d4,40) | evidence_count=1
+
+Cutting the SECOND (last) segment: b079ae4797d495d68e067e25f156dd25d6efec95b5ca196fb3999c2660cb3cc0
+
+--- [A3: after cutting both citations] Q: what is the capital of France? ---
+A: I don't have information about that topic.
+
+[Trace]
+    Intent: question_factual (0.87)
+    Winner: ConfidenceScore(instructor, cal=0.50, raw=0.50, method='instructor_route')
+  Parsed 1 actions
+    Executing: Action(knowledge:query)
+    → I don't have information about that topic. [REJECTED]
+    Instructor: ConfidenceScore(instructor, cal=0.50, raw=0.50, method='instructor_route')
+
+========================================================================
+PART B -- contested-ratio receipt proof (Coffee: causes vs correlates_with)
+========================================================================
+
+'causes' segments (3 expected): ['7121341f2ee97bd121e79941f3f73f825c995a8dc4a52beaa272b485c5e1eeca', 'c947fccf4f945dfff4ad636797f758be01bf3183e081855d1657209f0108c42b', 'eab26be20bced5ba19e7b6424a22380f780fa4bfd3d5d62e87cd029a5b8a351b']
+'correlates_with' segments (1 expected): ['ad622720613b4d4984dc1901e0958a1e2ec6ac03498fad37533942101b9f9058']
+
+--- [B1: baseline, 3:1 contested] Q: what does Coffee cause? ---
+A: Coffee causes alertness
+
+[Trace]
+    Intent: question_factual (0.59)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+      Receipt: (7121341f2ee9,0), (ad622720613b,0), (c947fccf4f94,0), (eab26be20bce,0) | evidence_count=4
+      Contested: 3:1 (winner='causes', mechanisms={'causes': 3, 'correlates_with': 1})
+Contested: Contested: 3:1 (winner='causes', mechanisms={'causes': 3, 'correlates_with': 1})
+
+Cutting 2 of the 3 'causes' segments: ['7121341f2ee97bd121e79941f3f73f825c995a8dc4a52beaa272b485c5e1eeca', 'c947fccf4f945dfff4ad636797f758be01bf3183e081855d1657209f0108c42b']
+
+--- [B2: after cutting 2 of 3 causes sources] Q: what does Coffee cause? ---
+A: Coffee causes alertness
+
+[Trace]
+    Intent: question_factual (0.59)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+      Receipt: (ad622720613b,0), (eab26be20bce,0) | evidence_count=2
+      Contested: 1:1 (winner='correlates_with', mechanisms={'correlates_with': 1, 'causes': 1})
+Contested: Contested: 1:1 (winner='correlates_with', mechanisms={'correlates_with': 1, 'causes': 1})
+
+========================================================================
+VERDICT
+========================================================================
+  [PASS] A1: baseline receipt shows evidence_count=2
+  [PASS] A2: answer still holds (1 citation survives)
+  [PASS] A2: receipt now shows evidence_count=1
+  [PASS] A2: receipt no longer cites the cut segment
+  [PASS] A3: fact fully forgotten once ALL citations are cut
+  [PASS] B1: baseline contested ratio is 3:1
+  [PASS] B2: contested ratio recomputed live, now 1:1
+  [PASS] B2: ratio is NOT still 3:1 (would prove it's cached/hardcoded)
+
+OVERALL: PASS
+
+Both receipts (evidence_count citations and the contested ratio) are
+computed live from the current store's actual segments on every
+query() call -- cutting a cited segment changes the receipt's own
+numbers in exactly the way the citation predicts, proving the
+receipt is a real, checkable pointer into the store, not a
+decorative confidence label.

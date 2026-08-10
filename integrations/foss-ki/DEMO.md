@@ -34,3 +34,24 @@ FossKIRepl(live_causal_store="<converted store>", knowledge_only=True)
 **Why this is the whole stack, not a subset:** every other demo in this directory starts from an already-converted store. This one starts from a raw text file and ends at a spoken-language answer, with the SAME process doing the building and the answering — nothing was pre-computed, cached, or staged between steps 1 and 2.
 
 **Honest scope note, traced not assumed:** the fabel extractor's real output on this kind of text is short causal-mechanism triplets ("X causes Y"), and even getting there took real iteration — the first attempts (a Wikipedia "Penicillin" article, then longer multi-sentence paragraphs) produced multi-sentence, unnaturally-long trigger/outcome keys unreachable by ANY natural question (documented in `demo_e2e_loop.py`'s own module docstring); a one-sentence-per-line article with a small `--window-tokens` value was needed to get clean, short causal facts out of this extractor. Separately, none of `core/router.py`'s pre-existing natural-language query patterns (`_parse_query_for_knowledge`, all attribute-shaped: capital/known_for/location/born/...) covered "what causes X" / "what does X cause" against `self.knowledge` — this demo's Phase 5 change adds exactly that one lookup to `repl.py`'s `_direct_kb_lookup`, returning a full sentence ("{subject} causes {outcome}") rather than the bare outcome specifically because a short bare answer can fail `_answer_quality_gate`'s topic-overlap check when it shares no words with the question and isn't a capitalized proper noun — a real, traced fix, not a workaround around the gate.
+
+---
+
+# DEMO 3 — receipts: the trace shows exactly which segments backed an answer (Task 16)
+
+```
+1. "what is the capital of France?" -> "Paris"
+   [Trace] ... Receipt: (8478f493a348,11), (b079ae4797d4,40) | evidence_count=2
+2. Cut ONE of the two cited segments.
+3. Same question again -> STILL "Paris"
+   [Trace] ... Receipt: (b079ae4797d4,40) | evidence_count=1
+   (one citation survived the cut -- the receipt tracked it correctly)
+4. Cut the LAST cited segment -> "I don't have information about that topic."
+   (the receipt's prediction held: zero citations left, zero fact left)
+```
+
+A second run against a genuine conflict store (`Coffee causes alertness`, 3 independently-sourced segments, vs. `Coffee correlates_with alertness`, 1 segment) shows the trace's `Contested: 3:1 (winner='causes', ...)` line — then cutting 2 of the 3 `causes` segments flips it LIVE to `Contested: 1:1 (winner='correlates_with', ...)` on the very next question, proving the ratio is recomputed from the current store every time, never cached.
+
+**Why this matters:** a confidence number alone ("HIGH", "0.9") is a claim you have to trust. A receipt is a claim you can check — every citation is a real `(segment_sha, record_index)` pointer a stranger can open with nothing but the store directory, and this demo proves the pointer is load-bearing: cut what it cites, and the answer (or the confidence ratio) changes exactly as the receipt said it would. `experimental/livecausal/demo_receipts.py` runs both proofs automatically, 8 checks, all PASS.
+
+**What "contested" does and does not mean here:** `evidence.py`'s own conflict definition is mechanism-based — two records citing the SAME `(trigger_key, outcome_key)` pair with DIFFERENT `mechanism` strings (e.g. "causes" vs. "correlates_with" for the same Coffee→alertness pair). Two segments claiming genuinely DIFFERENT outcomes for the same trigger (e.g. "France's capital is Paris" vs. "France's capital is Lyon") are NOT contested in this model — they're two separate, uncontested edges, and the adapter silently picks the better-evidenced one without flagging a conflict. Building that comparison would mean inventing new conflict logic beyond `evidence.py`'s existing folds, which this task was explicitly told not to do.
