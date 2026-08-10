@@ -2472,3 +2472,41 @@ artifact is a number about the defaults, not about the system.
   moved by an order of magnitude or three; what it exposed next
   (injection mechanics, mount cost) is named, bounded, and
   registered against.
+
+- **P77 — the injection mechanism isolated (registered 2026-08-10,
+  BEFORE the run; harness committed 4519382, 13/13 tests green
+  incl. the grid-ledger-isolation regression).** P73 and P75 both
+  measured the same null: injecting the graph's best path into the
+  forked state does not lower continuation surprise, even at 15%
+  coverage with semantically related paths (keys exonerated). This
+  run varies the MECHANISM, everything else pinned to the P75
+  setup (canon=True read side, copy of the P72 store, WT-103,
+  seed 60, d64 reader, 200-chunk warmup, 40 gaps/cell). Grid,
+  pre-committed: form {outcome_text, full_record_text, chain_text}
+  x repeat {1, 3} x lookahead {6, 12} = 12 cells, one process, one
+  warmup, both arms always sharing the form treatment.
+  (a) EXISTENCE: at least one cell shows mean_delta_real minus
+      mean_delta_random >= +0.01 nats with >= 20 consults — an
+      order of magnitude above the measured noise floor
+      (|effects| <= 0.004 in P73/P75). If NO cell clears: the
+      falsifier retires consult-back's value claim at this reader
+      scale in ALL tested forms, and the reader itself (d_model,
+      warmup depth) becomes the registered suspect for a separate
+      prediction — form is then exonerated alongside the keys.
+  (b) THE FORM HYPOTHESIS, directional: the best cell by
+      (real minus random) uses full_record_text — the injected
+      outcome needs its trigger anchor to bind to the gap context
+      (the builder's own pre-committed bet, adopted as the
+      registered direction; PASS/FAIL does not gate clause a).
+  (c) REGRESSION INSIDE THE MEASUREMENT: the default cell
+      (outcome_text, repeat 1, lookahead 12) must reproduce P75's
+      null (mean_delta_real within [-0.002, +0.001]); if it
+      diverges beyond that, the divergence must be localized
+      before any other cell is interpreted. Post-run, the store
+      copy must carry NO use.ledger (the grid isolation the
+      harness bug-fix guarantees).
+  Falsifiers: (a) fires ⇒ stated above — scale, not form. (b)
+  fails with (a) passing ⇒ the anchor story is wrong and the
+  winning form's own mechanism becomes the next question. (c)
+  fails ⇒ the grid pipeline is not the P75 pipeline — fix before
+  interpreting anything.
