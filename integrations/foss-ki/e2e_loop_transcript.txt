@@ -1,0 +1,100 @@
+========================================================================
+LIVE-CAUSAL end-to-end loop demo -- world text -> live segments -> answer -> forget
+========================================================================
+
+Source article: /root/fosski-venv/marie_curie_article.txt
+(833 chars, 19 lines -- a fixed local file, no web scraping)
+
+========================================================================
+STEP 0: pre-seed the store with knowledge_full.json (base knowledge, already there)
+========================================================================
+Pre-seeded 4855 knowledge_full.json records (98 segments) into /root/fosski-venv/e2e_loop_store
+
+========================================================================
+STEP 1: builder_run.py streams the article, fabel extracts, folds into LiveStore
+========================================================================
+$ nice -n 19 env OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 python3 /root/o1lab/src/livecausal/builder_run.py --text-file /root/fosski-venv/marie_curie_article.txt --store-dir /root/fosski-venv/e2e_loop_store --out-prefix /root/fosski-venv/e2e_loop_build --window-tokens 6 --max-windows 60 --tag fosski_e2e_loop
+  Device: cpu
+  [builder] windows=10 (gated=10) triplets=1 (from_gated=1) segments=1 base_edges=4572 inferred_edges=44422 wall=3.1s
+  [builder] windows=20 (gated=10) triplets=5 (from_gated=1) segments=3 base_edges=4576 inferred_edges=44424 wall=6.7s
+  [builder] windows=30 (gated=10) triplets=6 (from_gated=1) segments=4 base_edges=4577 inferred_edges=44424 wall=8.6s
+  [builder] windows=40 (gated=10) triplets=8 (from_gated=1) segments=6 base_edges=4577 inferred_edges=44426 wall=11.7s
+  [builder] windows=50 (gated=11) triplets=11 (from_gated=1) segments=7 base_edges=4577 inferred_edges=44426 wall=13.6s
+  [builder] windows=60 (gated=11) triplets=12 (from_gated=1) segments=8 base_edges=4577 inferred_edges=44426 wall=15.4s
+  ==========================================================================
+  [builder] done: {'wall_s': 16.58, 'n_streamed_tape_pos': 282, 'n_windows_total': 60, 'n_windows_gated': 11, 'n_triplets_total': 12, 'n_triplets_from_gated': 1, 'n_segments': 8, 'n_base_edges': 4577, 'n_inferred_edges': 44426}
+  [builder] graph store: /root/fosski-venv/e2e_loop_store
+
+Total segments in store: 106 (98 pre-seeded + 8 from the article)
+Base edges: 4577
+
+========================================================================
+STEP 2: FossKIRepl mounts the just-built store, answers a question about the article
+========================================================================
+using_live_causal = True
+knowledge_only    = True
+
+--- [immediate answer about the article] Q: what does high doses of radiation cause? ---
+A: high doses of radiation causes cancer
+
+[Trace]
+    Intent: question_factual (0.65)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+
+--- [control (unrelated, from knowledge_full.json)] Q: who wrote Hamlet? ---
+A: Shakespeare
+
+[Trace]
+    Intent: question_factual (0.70)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+
+========================================================================
+STEP 3: cut ONLY the article's segments -- the whole ingested text, not
+        one fact, and NOT the pre-seeded knowledge_full.json base
+========================================================================
+Dropping 8 article-derived segments via drop_segments()
+(98 pre-seeded knowledge_full.json segments untouched)
+Segments remaining in store: 98 (should equal the 98 pre-seeded segments)
+
+--- [after cutting the article] Q: what does high doses of radiation cause? ---
+A: I don't have information about that topic.
+
+[Trace]
+    Intent: question_factual (0.65)
+    Winner: ConfidenceScore(instructor, cal=0.50, raw=0.50, method='instructor_route')
+  Parsed 1 actions
+    Executing: Action(knowledge:query)
+    → I don't have information about that topic. [REJECTED]
+    Instructor: ConfidenceScore(instructor, cal=0.50, raw=0.50, method='instructor_route')
+
+--- [control] Q: who wrote Hamlet? ---
+A: Shakespeare
+
+[Trace]
+    Intent: question_factual (0.70)
+    Winner: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+    DirectKB: ConfidenceScore(solver, cal=0.90, raw=1.00, method='direct_kb')
+
+========================================================================
+VERDICT
+========================================================================
+  [PASS] step 1: builder_run.py exited successfully
+  [PASS] step 1: at least one article segment was built
+  [PASS] step 2: immediate answer mentions cancer (the article's fact)
+  [PASS] step 2: control question answers Shakespeare (from the pre-seeded base)
+  [PASS] step 3: after cutting, the article fact is honestly forgotten
+  [PASS] step 3: after cutting, the answer does NOT still say cancer
+  [PASS] step 3: control question unaffected by the cut
+  [PASS] control question identical before and after the cut
+
+OVERALL: PASS
+
+The full stack, once, live: a text file was streamed by the organism,
+fabel's deterministic 14-step extractor validated causal triplets from
+it with no LLM anywhere, LiveStore sealed them into content-addressed
+segments, LiveCausalAdapter mounted that store and FOSS-KI answered a
+question about the article in the SAME process that just built it --
+then forgot the entire article, on command, leaving everything else
+(knowledge_full.json's facts) untouched.
