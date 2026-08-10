@@ -189,10 +189,99 @@ def window_source_text(seg_tape, start, wlen):
     return "".join(seg_tape[start:min(start + wlen, len(seg_tape))]).strip()
 
 
+def iter_windows(substrate="wt103", chunks=3000, window_tokens=128,
+                  d_model=128, batch=8, chunk_size=64, seed=42,
+                  q=0.75, window=500, min_window=100, ignition_chunks=100,
+                  stream_cls=None):
+    """MVP-4 CONTRACT (builder_run.py depends on this exact signature and
+    yield shape — do not change without flagging the team lead).
+
+    Streams `substrate` through a fresh Organism with the SAME cadence
+    knobs P70 uses (gate q/window/min_window/ignition_chunks — see
+    src/portable_organism.py's Organism.step_gated), and yields one
+    (tape_pos, window_text, surprise, gated) tuple per chunk, in stream
+    order, for chunks 1..`chunks`:
+
+        tape_pos    — int, this chunk's start position in the token/segment
+                      tape (same coordinate space P70's chunk_surprise/
+                      first_pos use)
+        window_text — str, verbatim (punctuation/case-intact) source text
+                      for the `window_tokens`-token window starting at
+                      tape_pos (via window_source_text on a running segment
+                      tape — grows every chunk, so windows never read past
+                      what has streamed so far)
+        surprise    — float, this chunk's gate surprise s (org.step_gated's
+                      own scalar; NOT windowed/smoothed)
+        gated       — bool, whether the organism actually trained on this
+                      chunk (new builder policy: extraction runs on EVERY
+                      window regardless of gated — the gate curates what
+                      the organism LEARNS from, not what the curator may
+                      extract from; gated is exposed so the builder loop
+                      can use it as a routing signal, e.g. weighting or
+                      logging, without re-deriving it)
+
+    This is the same streaming/cadence path main() drives for the P70
+    measurement (HFStreamWithText + ChunkFeederWithText + Organism.
+    step_gated) — one implementation, so a builder loop built on this
+    generator sees exactly the stream P70 was scored against, not a
+    re-implementation that could drift from it.
+
+    `stream_cls` lets a caller substitute a stream (e.g. a FakeStream in a
+    test) without touching this function; defaults to HFStreamWithText."""
+    if stream_cls is None:
+        stream_cls = HFStreamWithText
+
+    po.D_MODEL, po.BATCH, po.CHUNK = d_model, batch, chunk_size
+    po.GATE_Q, po.GATE_WINDOW, po.MIN_WINDOW, po.IGNITION_CHUNKS = \
+        q, window, min_window, ignition_chunks
+    vocab, stoi, unk, mask, val_ids = po.get_vocab()
+
+    torch.manual_seed(seed)
+    org = po.Organism("curator", len(vocab), mask, seed=seed)
+    stream = stream_cls(substrate, stoi, unk)
+    feeder = ChunkFeederWithText(stream, po.BATCH, po.CHUNK)
+
+    seg_tape = []
+    for ci in range(1, chunks + 1):
+        x, y, lane0_segs = feeder.next_xy()
+        s, gated, nll = org.step_gated(x, y)
+        tape_pos = len(seg_tape)
+        seg_tape.extend(lane0_segs)
+        text = window_source_text(seg_tape, tape_pos, window_tokens)
+        yield tape_pos, text, float(s), bool(gated)
+
+
+def normalize_entity(s):
+    """The one normalization used everywhere an entity string is compared:
+    the registry (build_ngram_first_pos/is_first_ever), entity_keys(), and
+    the MVP-4 contract's trigger_key/outcome_key all call this — one
+    normalization, so a builder-loop membership check against the registry
+    means the same thing it means inside this harness's own measurement."""
+    return s.strip().lower()
+
+
 def extract_validated(text, domain="wt103", source="p70"):
-    """fabel in-process path: rule_extractor -> 14-step Foss gate. Mirrors
+    """MVP-4 CONTRACT (builder_run.py depends on this exact signature and
+    schema — do not change without flagging the team lead).
+
+    fabel in-process path: rule_extractor.extract_from_text -> the 14-step
+    Foss validation gate (validate_triplet_v2). Mirrors
     vendor/fabel/extract/extract_to_db.py's main loop exactly (sequential
-    seen_kept accumulation per window, deterministic)."""
+    seen_kept accumulation within one text, deterministic — no LLM, nothing
+    stochastic). This is the SAME function P70's own measurement calls
+    (run_arm below), so the builder loop's extraction is byte-identical to
+    what P70 scored — one source of truth, not a re-implementation that
+    could drift from it.
+
+    Returns a list[dict], each with at least:
+        trigger, mechanism, outcome   — the raw fabel triplet fields
+        trigger_key, outcome_key      — normalize_entity(trigger/outcome),
+                                         the graph's own entity currency
+                                         (matches entity_keys() below and
+                                         the registry's n-gram normalization)
+    plus whatever extract_from_text/validate_triplet_v2 attach (confidence,
+    quality_score, evidence_sentence, quantification, domain, source, and
+    optional condition/co_causes/effect_size/population/temporal)."""
     triplets = []
     seen_kept = []
     for rt in extract_from_text(text, domain=domain, source=source):
@@ -202,14 +291,21 @@ def extract_validated(text, domain="wt103", source="p70"):
             continue
         d["confidence"] = res.confidence
         d["quality_score"] = res.quality_score
+        d["trigger_key"] = normalize_entity(d["trigger"])
+        d["outcome_key"] = normalize_entity(d["outcome"])
         seen_kept.append(d)
         triplets.append(d)
     return triplets
 
 
 def entity_keys(triplet):
-    """The graph's own entity currency: normalized trigger/outcome strings."""
-    return {triplet["trigger"].strip().lower(), triplet["outcome"].strip().lower()}
+    """The graph's own entity currency: normalized trigger/outcome strings.
+    Reads trigger_key/outcome_key when present (the extract_validated
+    contract always sets them); falls back to normalizing trigger/outcome
+    directly for any triplet dict built outside that path."""
+    if "trigger_key" in triplet and "outcome_key" in triplet:
+        return {triplet["trigger_key"], triplet["outcome_key"]}
+    return {normalize_entity(triplet["trigger"]), normalize_entity(triplet["outcome"])}
 
 
 MAX_ENTITY_NGRAM = 5   # entity strings are short noun phrases; 5 words covers them
