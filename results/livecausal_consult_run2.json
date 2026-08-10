@@ -1,0 +1,731 @@
+{
+  "store": "results/p73_store_b",
+  "text_file": null,
+  "source": "wt103",
+  "surprise_thresh": 10.5674,
+  "surprise_thresh_was_calibrated": true,
+  "lookahead": 12,
+  "max_gaps": 40,
+  "seed": 60,
+  "warmup_chunks": 200,
+  "n_warmup_words": 20000,
+  "n_consult_words": 20000,
+  "n_warmup_grad_steps": 200,
+  "elapsed_seconds": 26.73,
+  "n_spikes": 2471,
+  "n_consults": 40,
+  "coverage": 0.0162,
+  "mean_delta_real": -0.004,
+  "mean_delta_random": -0.0023,
+  "n_helped_real": 14,
+  "n_use_entries": 14,
+  "top5_used_edges": [
+    {
+      "edge_key": [
+        "images",
+        "most detailed global color portrait of jupiter yet"
+      ],
+      "use_count": 5
+    },
+    {
+      "edge_key": [
+        "immediately",
+        "bus services run to inverness and glasgow"
+      ],
+      "use_count": 2
+    },
+    {
+      "edge_key": [
+        "practice",
+        "water from the penstocks for maintenance"
+      ],
+      "use_count": 2
+    },
+    {
+      "edge_key": [
+        "case",
+        "power outage at the airport"
+      ],
+      "use_count": 1
+    },
+    {
+      "edge_key": [
+        "demon",
+        "kyra cannot feel emotions"
+      ],
+      "use_count": 1
+    }
+  ],
+  "results": [
+    {
+      "gap": "universities",
+      "gap_surprise": 11.2465,
+      "edge": {
+        "from_key": "universities",
+        "to_key": "critical thinking",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.2967,
+      "cont_surprise_with_real_path": 7.3056,
+      "drop_real": -0.0088,
+      "cont_surprise_with_random_path": 7.3024,
+      "drop_random": -0.0057,
+      "used_edges": []
+    },
+    {
+      "gap": "immediately",
+      "gap_surprise": 10.5823,
+      "edge": {
+        "from_key": "immediately",
+        "to_key": "bus services run to inverness and glasgow",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.4276,
+      "cont_surprise_with_real_path": 6.4249,
+      "drop_real": 0.0027,
+      "cont_surprise_with_random_path": 6.4252,
+      "drop_random": 0.0024,
+      "used_edges": [
+        [
+          "immediately",
+          "bus services run to inverness and glasgow"
+        ]
+      ]
+    },
+    {
+      "gap": "immediately",
+      "gap_surprise": 10.8604,
+      "edge": {
+        "from_key": "immediately",
+        "to_key": "bus services run to inverness and glasgow",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.0565,
+      "cont_surprise_with_real_path": 6.0553,
+      "drop_real": 0.0012,
+      "cont_surprise_with_random_path": 6.0597,
+      "drop_random": -0.0032,
+      "used_edges": [
+        [
+          "immediately",
+          "bus services run to inverness and glasgow"
+        ]
+      ]
+    },
+    {
+      "gap": "itself",
+      "gap_surprise": 11.4494,
+      "edge": {
+        "from_key": "itself",
+        "to_key": "spacecraft to go into safe mode",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.9216,
+      "cont_surprise_with_real_path": 5.9189,
+      "drop_real": 0.0027,
+      "cont_surprise_with_random_path": 5.9101,
+      "drop_random": 0.0116,
+      "used_edges": [
+        [
+          "itself",
+          "spacecraft to go into safe mode"
+        ]
+      ]
+    },
+    {
+      "gap": "operation",
+      "gap_surprise": 12.0464,
+      "edge": {
+        "from_key": "operation",
+        "to_key": "automation",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.1104,
+      "cont_surprise_with_real_path": 6.1123,
+      "drop_real": -0.0019,
+      "cont_surprise_with_random_path": 6.1129,
+      "drop_random": -0.0025,
+      "used_edges": []
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 12.3186,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.1835,
+      "cont_surprise_with_real_path": 6.1857,
+      "drop_real": -0.0023,
+      "cont_surprise_with_random_path": 6.1795,
+      "drop_random": 0.004,
+      "used_edges": []
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 11.8766,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.932,
+      "cont_surprise_with_real_path": 7.9341,
+      "drop_real": -0.0021,
+      "cont_surprise_with_random_path": 7.9355,
+      "drop_random": -0.0035,
+      "used_edges": []
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 12.4526,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.4902,
+      "cont_surprise_with_real_path": 6.4881,
+      "drop_real": 0.0021,
+      "cont_surprise_with_random_path": 6.4984,
+      "drop_random": -0.0082,
+      "used_edges": [
+        [
+          "images",
+          "most detailed global color portrait of jupiter yet"
+        ]
+      ]
+    },
+    {
+      "gap": "demon",
+      "gap_surprise": 12.087,
+      "edge": {
+        "from_key": "demon",
+        "to_key": "kyra cannot feel emotions",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.0717,
+      "cont_surprise_with_real_path": 7.07,
+      "drop_real": 0.0018,
+      "cont_surprise_with_random_path": 7.0673,
+      "drop_random": 0.0045,
+      "used_edges": [
+        [
+          "demon",
+          "kyra cannot feel emotions"
+        ]
+      ]
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 11.8203,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.8692,
+      "cont_surprise_with_real_path": 6.8761,
+      "drop_real": -0.0069,
+      "cont_surprise_with_random_path": 6.8643,
+      "drop_random": 0.0049,
+      "used_edges": []
+    },
+    {
+      "gap": "importance",
+      "gap_surprise": 10.89,
+      "edge": {
+        "from_key": "importance",
+        "to_key": "sphalerite ( zns",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.2089,
+      "cont_surprise_with_real_path": 6.2097,
+      "drop_real": -0.0008,
+      "cont_surprise_with_random_path": 6.2063,
+      "drop_random": 0.0025,
+      "used_edges": []
+    },
+    {
+      "gap": "importance",
+      "gap_surprise": 10.9166,
+      "edge": {
+        "from_key": "importance",
+        "to_key": "sphalerite ( zns",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2269,
+      "cont_surprise_with_real_path": 5.2287,
+      "drop_real": -0.0018,
+      "cont_surprise_with_random_path": 5.2248,
+      "drop_random": 0.0021,
+      "used_edges": []
+    },
+    {
+      "gap": "importance",
+      "gap_surprise": 10.9037,
+      "edge": {
+        "from_key": "importance",
+        "to_key": "sphalerite ( zns",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.1622,
+      "cont_surprise_with_real_path": 7.163,
+      "drop_real": -0.0009,
+      "cont_surprise_with_random_path": 7.162,
+      "drop_random": 0.0002,
+      "used_edges": []
+    },
+    {
+      "gap": "frequently",
+      "gap_surprise": 11.8323,
+      "edge": {
+        "from_key": "frequently",
+        "to_key": "140 \u00b0 f ( 60 \u00b0 c )",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.117,
+      "cont_surprise_with_real_path": 6.117,
+      "drop_real": 0.0,
+      "cont_surprise_with_random_path": 6.1196,
+      "drop_random": -0.0026,
+      "used_edges": []
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 11.7945,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.9529,
+      "cont_surprise_with_real_path": 6.9846,
+      "drop_real": -0.0317,
+      "cont_surprise_with_random_path": 6.9561,
+      "drop_random": -0.0032,
+      "used_edges": []
+    },
+    {
+      "gap": "everything",
+      "gap_surprise": 13.0825,
+      "edge": {
+        "from_key": "everything",
+        "to_key": "his third solo album",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.1796,
+      "cont_surprise_with_real_path": 5.1932,
+      "drop_real": -0.0136,
+      "cont_surprise_with_random_path": 5.1899,
+      "drop_random": -0.0103,
+      "used_edges": []
+    },
+    {
+      "gap": "practice",
+      "gap_surprise": 12.1122,
+      "edge": {
+        "from_key": "practice",
+        "to_key": "water from the penstocks for maintenance",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.806,
+      "cont_surprise_with_real_path": 7.831,
+      "drop_real": -0.025,
+      "cont_surprise_with_random_path": 7.8402,
+      "drop_random": -0.0342,
+      "used_edges": []
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 12.3393,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.2041,
+      "cont_surprise_with_real_path": 7.2035,
+      "drop_real": 0.0006,
+      "cont_surprise_with_random_path": 7.2058,
+      "drop_random": -0.0017,
+      "used_edges": [
+        [
+          "images",
+          "most detailed global color portrait of jupiter yet"
+        ]
+      ]
+    },
+    {
+      "gap": "case",
+      "gap_surprise": 12.9851,
+      "edge": {
+        "from_key": "case",
+        "to_key": "power outage at the airport",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.6297,
+      "cont_surprise_with_real_path": 5.6197,
+      "drop_real": 0.0101,
+      "cont_surprise_with_random_path": 5.6304,
+      "drop_random": -0.0007,
+      "used_edges": [
+        [
+          "case",
+          "power outage at the airport"
+        ]
+      ]
+    },
+    {
+      "gap": "practice",
+      "gap_surprise": 11.9394,
+      "edge": {
+        "from_key": "practice",
+        "to_key": "water from the penstocks for maintenance",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.212,
+      "cont_surprise_with_real_path": 7.2101,
+      "drop_real": 0.002,
+      "cont_surprise_with_random_path": 7.21,
+      "drop_random": 0.002,
+      "used_edges": [
+        [
+          "practice",
+          "water from the penstocks for maintenance"
+        ]
+      ]
+    },
+    {
+      "gap": "practice",
+      "gap_surprise": 12.8067,
+      "edge": {
+        "from_key": "practice",
+        "to_key": "water from the penstocks for maintenance",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.629,
+      "cont_surprise_with_real_path": 6.6549,
+      "drop_real": -0.0259,
+      "cont_surprise_with_random_path": 6.6552,
+      "drop_random": -0.0262,
+      "used_edges": []
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 12.1206,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.1386,
+      "cont_surprise_with_real_path": 8.1354,
+      "drop_real": 0.0031,
+      "cont_surprise_with_random_path": 8.1291,
+      "drop_random": 0.0095,
+      "used_edges": [
+        [
+          "images",
+          "most detailed global color portrait of jupiter yet"
+        ]
+      ]
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 12.1418,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.7525,
+      "cont_surprise_with_real_path": 6.7499,
+      "drop_real": 0.0026,
+      "cont_surprise_with_random_path": 6.7542,
+      "drop_random": -0.0017,
+      "used_edges": [
+        [
+          "images",
+          "most detailed global color portrait of jupiter yet"
+        ]
+      ]
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 11.8734,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.4596,
+      "cont_surprise_with_real_path": 7.4603,
+      "drop_real": -0.0006,
+      "cont_surprise_with_random_path": 7.4609,
+      "drop_random": -0.0013,
+      "used_edges": []
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 12.2426,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.1848,
+      "cont_surprise_with_real_path": 7.1911,
+      "drop_real": -0.0063,
+      "cont_surprise_with_random_path": 7.191,
+      "drop_random": -0.0061,
+      "used_edges": []
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 12.5151,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.7212,
+      "cont_surprise_with_real_path": 7.7179,
+      "drop_real": 0.0033,
+      "cont_surprise_with_random_path": 7.7274,
+      "drop_random": -0.0062,
+      "used_edges": [
+        [
+          "images",
+          "most detailed global color portrait of jupiter yet"
+        ]
+      ]
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 11.6479,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.2479,
+      "cont_surprise_with_real_path": 5.2542,
+      "drop_real": -0.0063,
+      "cont_surprise_with_random_path": 5.2496,
+      "drop_random": -0.0018,
+      "used_edges": []
+    },
+    {
+      "gap": "images",
+      "gap_surprise": 12.1153,
+      "edge": {
+        "from_key": "images",
+        "to_key": "most detailed global color portrait of jupiter yet",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.0242,
+      "cont_surprise_with_real_path": 6.0289,
+      "drop_real": -0.0046,
+      "cont_surprise_with_random_path": 6.0152,
+      "drop_random": 0.0091,
+      "used_edges": []
+    },
+    {
+      "gap": "relief",
+      "gap_surprise": 13.1178,
+      "edge": {
+        "from_key": "relief",
+        "to_key": "ensuing mortality",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.3103,
+      "cont_surprise_with_real_path": 6.3147,
+      "drop_real": -0.0044,
+      "cont_surprise_with_random_path": 6.3173,
+      "drop_random": -0.0069,
+      "used_edges": []
+    },
+    {
+      "gap": "practice",
+      "gap_surprise": 11.9115,
+      "edge": {
+        "from_key": "practice",
+        "to_key": "water from the penstocks for maintenance",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.2317,
+      "cont_surprise_with_real_path": 7.2313,
+      "drop_real": 0.0005,
+      "cont_surprise_with_random_path": 7.2298,
+      "drop_random": 0.0019,
+      "used_edges": [
+        [
+          "practice",
+          "water from the penstocks for maintenance"
+        ]
+      ]
+    },
+    {
+      "gap": "importance",
+      "gap_surprise": 10.9701,
+      "edge": {
+        "from_key": "importance",
+        "to_key": "sphalerite ( zns",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.7406,
+      "cont_surprise_with_real_path": 6.7427,
+      "drop_real": -0.0021,
+      "cont_surprise_with_random_path": 6.7425,
+      "drop_random": -0.0019,
+      "used_edges": []
+    },
+    {
+      "gap": "itself",
+      "gap_surprise": 11.0346,
+      "edge": {
+        "from_key": "itself",
+        "to_key": "spacecraft to go into safe mode",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.8813,
+      "cont_surprise_with_real_path": 6.8937,
+      "drop_real": -0.0124,
+      "cont_surprise_with_random_path": 6.8819,
+      "drop_random": -0.0005,
+      "used_edges": []
+    },
+    {
+      "gap": "itself",
+      "gap_surprise": 10.9528,
+      "edge": {
+        "from_key": "itself",
+        "to_key": "spacecraft to go into safe mode",
+        "depth": 1
+      },
+      "cont_surprise_without": 5.7563,
+      "cont_surprise_with_real_path": 5.7862,
+      "drop_real": -0.0299,
+      "cont_surprise_with_random_path": 5.7652,
+      "drop_random": -0.0089,
+      "used_edges": []
+    },
+    {
+      "gap": "operation",
+      "gap_surprise": 12.7618,
+      "edge": {
+        "from_key": "operation",
+        "to_key": "automation",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.4466,
+      "cont_surprise_with_real_path": 9.4466,
+      "drop_real": -0.0,
+      "cont_surprise_with_random_path": 9.4481,
+      "drop_random": -0.0016,
+      "used_edges": []
+    },
+    {
+      "gap": "transition",
+      "gap_surprise": 13.0767,
+      "edge": {
+        "from_key": "transition",
+        "to_key": "several commercials using variations on the theme",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.0231,
+      "cont_surprise_with_real_path": 6.0197,
+      "drop_real": 0.0034,
+      "cont_surprise_with_random_path": 6.0261,
+      "drop_random": -0.0031,
+      "used_edges": [
+        [
+          "transition",
+          "several commercials using variations on the theme"
+        ]
+      ]
+    },
+    {
+      "gap": "operation",
+      "gap_surprise": 12.7412,
+      "edge": {
+        "from_key": "operation",
+        "to_key": "automation",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.5533,
+      "cont_surprise_with_real_path": 9.5546,
+      "drop_real": -0.0013,
+      "cont_surprise_with_random_path": 9.5564,
+      "drop_random": -0.0031,
+      "used_edges": []
+    },
+    {
+      "gap": "operation",
+      "gap_surprise": 12.873,
+      "edge": {
+        "from_key": "operation",
+        "to_key": "automation",
+        "depth": 1
+      },
+      "cont_surprise_without": 8.9618,
+      "cont_surprise_with_real_path": 8.9629,
+      "drop_real": -0.0011,
+      "cont_surprise_with_random_path": 8.9569,
+      "drop_random": 0.0049,
+      "used_edges": []
+    },
+    {
+      "gap": "operation",
+      "gap_surprise": 12.3853,
+      "edge": {
+        "from_key": "operation",
+        "to_key": "automation",
+        "depth": 1
+      },
+      "cont_surprise_without": 9.1493,
+      "cont_surprise_with_real_path": 9.1516,
+      "drop_real": -0.0023,
+      "cont_surprise_with_random_path": 9.1532,
+      "drop_random": -0.0039,
+      "used_edges": []
+    },
+    {
+      "gap": "operation",
+      "gap_surprise": 12.7468,
+      "edge": {
+        "from_key": "operation",
+        "to_key": "automation",
+        "depth": 1
+      },
+      "cont_surprise_without": 7.8502,
+      "cont_surprise_with_real_path": 7.8494,
+      "drop_real": 0.0008,
+      "cont_surprise_with_random_path": 7.8498,
+      "drop_random": 0.0004,
+      "used_edges": [
+        [
+          "operation",
+          "automation"
+        ]
+      ]
+    },
+    {
+      "gap": "operation",
+      "gap_surprise": 12.7375,
+      "edge": {
+        "from_key": "operation",
+        "to_key": "automation",
+        "depth": 1
+      },
+      "cont_surprise_without": 6.4833,
+      "cont_surprise_with_real_path": 6.4869,
+      "drop_real": -0.0036,
+      "cont_surprise_with_random_path": 6.4873,
+      "drop_random": -0.004,
+      "used_edges": []
+    }
+  ]
+}

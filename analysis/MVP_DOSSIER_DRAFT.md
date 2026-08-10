@@ -111,6 +111,7 @@ own pre-committed bar.
 |---|---|---|---|
 | P71 | The live graph never rebuilds | 40 segments: incremental and full-rebuild closures sha256-identical (`c6a96567…`). 16× data growth (5→80 segments): append time grows 1.68× (bar ≤4×; median 7.9ms → 13.3ms), delta-yield holds constant at 190 new edges per append regardless of graph size. Truncation: 5 repetitions, **0 closure computations** on drop, 5/5 bit-equal to a full batch rebuild. | `results/livecausal_p71.json` |
 | P72 | The builder builds, end to end | Two full runs, real WT-103 text, spaCy-strict extractor path pinned: **2,046 base records**, **644 segments**, wall clock **281.8s** (under five minutes) on a 4-core x86 runner. Second run reproduces all 644 segment SHAs bit-identically — zero full rebuilds. Direction-3 stranger audit: **30/30 edges verified, 30/30 two-mount consensus**. Gated fraction **0.2053**, inside the q=0.75 dial band [0.20, 0.30]. | `results/p72_run1.json`, `results/p72_compare.json`, `results/p72_verify.json` |
+| P73 | Consult-back on the real graph | Machinery sound and deterministic: 0 ledger violations, 14/14 use citations resolve against live segments, two runs byte-identical including the use.ledger sha256. Value honestly negative: coverage **0.0162** (40 of 2,471 spikes answerable by exact key) and the real-path arm does **not** beat the random arm (mean Δ −0.0040 vs −0.0023) — both numbers localize to entity canonicalization, agreeing with P72's write-side finding. | `results/livecausal_consult_run1.json`, `results/livecausal_consult_run2.json` |
 | P70 | Does the gate's curation raise validated-triplet yield over random windows? | **No — the falsifier fires.** Surprise-selected windows: 18.13 validated triplets/kilotoken. Seeded-random windows: 18.60. Yield ratio **0.974** (bar 1.3× — fail). Entity-novelty ratio **1.03** (bar 1.5× — fail). Double-pass extraction stays byte-identical (pass). **Policy consequence, taken straight from the falsifier:** extraction runs ungated on every window; the surprise gate curates what the organism *learns from*, not what the curator *may extract* — a real result folded directly into the builder's design (Section 2's `windows (gated / total): 11 / 80` line is this policy, live). | `results/curator_yield.json` |
 | P60 | Cross-ISA stranger verification | Forward (ARM→x86): **10/10** bit-exact, 10/10 consensus. Reverse (x86→ARM): **9/10** — the falsifier fires on one entry (lane 4205, episode 0, frame 14: a single token, one quantization bin apart), localized to a 1-ULP float block-mean reduction-order difference between ISAs and answered with a normative fix (integer-exact token quantization). Net: **19/20** sampled entries bit-exact across both directions. | `results/stranger_verify.json`, `results/stranger_verify_arm.json` |
 | P55 | The frozen file answers by own key | After dosed replay of a sha256-frozen file, the reader completes the file's own entries **0.264 nats better** than its no-file twin (bar 0.05, 5.3× over) — keyed recall, not diffuse fertilization. | `results/keyed_file.json` |
@@ -138,11 +139,20 @@ canonicalization, or the deferred fuzzy-matching pass v1's inference
 engine already documents as flagged-not-implemented scope. This is the
 next organ to build, not a caveat to hedge around.
 
-**Consult-back is not built yet.** The spec's fifth stage — the organism
-reading the graph back in flight, with graph misses on high-surprise
-queries acting as a gap signal that drives what the builder fetches next —
-is designed (`analysis/LIVE_CAUSAL_SPEC.md` §4, stage 4) but not wired
-into the builder loop measured here. MVP-5 on the build ledger.
+**Consult-back is built, measured, and blocked on the same organ.** The
+spec's fifth stage — the organism reading the graph back in flight — ran
+against the real P72 store (P73, two runs): the machinery is proven
+sound (0 ledger-discipline violations, 14/14 citations resolve, both
+runs byte-identical down to the use.ledger sha), but its VALUE is
+measured as blocked on canonicalization from the read side too. Coverage
+0.0162 — of 2,471 surprise spikes on a live WT-103 stream, only 40 gap
+words found any edge in the exact-string key space — and at that
+coverage the matched paths are semantically unrelated to the
+continuation, so the real-vs-random injection arm shows no separation
+(mean Δ −0.0040 vs −0.0023, noise scale; the pre-registered falsifier,
+reported at full strength). Write side (P72: 76/200 inferred edges) and
+read side (P73: 1.6% coverage) now agree on the single binding
+constraint. One organ, two measured numbers waiting on it.
 
 **Scale is proven at MVP scale, not yet at corpus scale.** P72's numbers
 are a single controlled run: 3,000 stream chunks, 644 segments, five
@@ -161,7 +171,7 @@ extraction graph at ten or a hundred times its size?
 Every number in Section 3 was a numbered, immutable prediction in
 `analysis/PREDICTIONS.md` *before* the run that scored it — committed to
 the record before the data existed, never edited after the fact. The
-register holds **71 predictions through P72**, and the latest full
+register holds **72 predictions through P73**, and the latest full
 mechanical audit reads **0 mismatches** (`results/scorer_audit.json`,
 2026-08-10); `src/score_predictions_v2.py`
 mechanically re-parses the entire file, loads every cited `results/*.json`

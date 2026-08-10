@@ -1,0 +1,61 @@
+Device: cpu
+[consult] warmup: 200 chunks on 20000 prefix words...
+[consult] warmup done, 200 grad steps (25600 tokens)
+[consult] auto-calibrated surprise_thresh=10.5674 (quantile=0.9)
+[consult] store=results/p73_store_a words=20000 gaps<=40
+==========================================================================
+CONSULT-BACK: does querying the live graph lower post-gap surprise?
+  gap 'universities' (s=11.2): without 7.30 -> with(real) 7.31 ^ -0.009  | with(random) -0.006
+  gap 'immediately' (s=10.6): without 6.43 -> with(real) 6.42 v +0.003  | with(random) +0.002
+  gap 'immediately' (s=10.9): without 6.06 -> with(real) 6.06 v +0.001  | with(random) -0.003
+  gap 'itself' (s=11.4): without 5.92 -> with(real) 5.92 v +0.003  | with(random) +0.012
+  gap 'operation' (s=12.0): without 6.11 -> with(real) 6.11 ^ -0.002  | with(random) -0.003
+  gap 'images' (s=12.3): without 6.18 -> with(real) 6.19 ^ -0.002  | with(random) +0.004
+  gap 'images' (s=11.9): without 7.93 -> with(real) 7.93 ^ -0.002  | with(random) -0.004
+  gap 'images' (s=12.5): without 6.49 -> with(real) 6.49 v +0.002  | with(random) -0.008
+  gap 'demon' (s=12.1): without 7.07 -> with(real) 7.07 v +0.002  | with(random) +0.004
+  gap 'images' (s=11.8): without 6.87 -> with(real) 6.88 ^ -0.007  | with(random) +0.005
+  gap 'importance' (s=10.9): without 6.21 -> with(real) 6.21 ^ -0.001  | with(random) +0.003
+  gap 'importance' (s=10.9): without 5.23 -> with(real) 5.23 ^ -0.002  | with(random) +0.002
+
+n_spikes=2471 n_consults=40 n_helped_real=14/40
+mean_delta_real=-0.0040  mean_delta_random=-0.0023
+n_use_entries=14
+top5 used edges:
+  images -> most detailed global color portrait of jupiter yet  use_count=5
+  immediately -> bus services run to inverness and glasgow  use_count=2
+  practice -> water from the penstocks for maintenance  use_count=2
+  case -> power outage at the airport  use_count=1
+  demon -> kyra cannot feel emotions  use_count=1
+wrote results/livecausal_consult_run1.json
+Device: cpu
+[consult] warmup: 200 chunks on 20000 prefix words...
+[consult] warmup done, 200 grad steps (25600 tokens)
+[consult] auto-calibrated surprise_thresh=10.5674 (quantile=0.9)
+[consult] store=results/p73_store_b words=20000 gaps<=40
+==========================================================================
+CONSULT-BACK: does querying the live graph lower post-gap surprise?
+  gap 'universities' (s=11.2): without 7.30 -> with(real) 7.31 ^ -0.009  | with(random) -0.006
+  gap 'immediately' (s=10.6): without 6.43 -> with(real) 6.42 v +0.003  | with(random) +0.002
+  gap 'immediately' (s=10.9): without 6.06 -> with(real) 6.06 v +0.001  | with(random) -0.003
+  gap 'itself' (s=11.4): without 5.92 -> with(real) 5.92 v +0.003  | with(random) +0.012
+  gap 'operation' (s=12.0): without 6.11 -> with(real) 6.11 ^ -0.002  | with(random) -0.003
+  gap 'images' (s=12.3): without 6.18 -> with(real) 6.19 ^ -0.002  | with(random) +0.004
+  gap 'images' (s=11.9): without 7.93 -> with(real) 7.93 ^ -0.002  | with(random) -0.004
+  gap 'images' (s=12.5): without 6.49 -> with(real) 6.49 v +0.002  | with(random) -0.008
+  gap 'demon' (s=12.1): without 7.07 -> with(real) 7.07 v +0.002  | with(random) +0.004
+  gap 'images' (s=11.8): without 6.87 -> with(real) 6.88 ^ -0.007  | with(random) +0.005
+  gap 'importance' (s=10.9): without 6.21 -> with(real) 6.21 ^ -0.001  | with(random) +0.003
+  gap 'importance' (s=10.9): without 5.23 -> with(real) 5.23 ^ -0.002  | with(random) +0.002
+
+n_spikes=2471 n_consults=40 n_helped_real=14/40
+mean_delta_real=-0.0040  mean_delta_random=-0.0023
+n_use_entries=14
+top5 used edges:
+  images -> most detailed global color portrait of jupiter yet  use_count=5
+  immediately -> bus services run to inverness and glasgow  use_count=2
+  practice -> water from the penstocks for maintenance  use_count=2
+  case -> power outage at the airport  use_count=1
+  demon -> kyra cannot feel emotions  use_count=1
+wrote results/livecausal_consult_run2.json
+P73_RUNS_DONE

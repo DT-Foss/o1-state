@@ -2290,3 +2290,35 @@ artifact is a number about the defaults, not about the system.
   closed (the ledger is the audit trail). (d) fails ⇒ hidden
   nondeterminism in the consult loop (rng, stream, or state fork)
   — localize the layer before any further consult claims.
+
+  **P73 SCORED (2026-08-10, results/livecausal_consult_run1.json +
+  livecausal_consult_run2.json + p73_consult.log, two runs on the
+  x86 runner that built the store, fresh store copies p73_store_a/b,
+  the scored P72 artifact untouched).** (a) PASS, and the number is
+  stark: coverage 0.0162 — of 2,471 surprise spikes on the live
+  WT-103 stream, 40 gap words found ANY outgoing edge in the
+  store's exact-string key space (measurability bar of 10 consults
+  cleared 4×; registered expectation <0.20 confirmed an order of
+  magnitude harder). 98.4% of what surprises the reader is
+  unanswerable by exact key — the read-side canonicalization
+  number, matching P72's write-side near-zero key collisions.
+  (b) FAIL, the falsifier fires: mean_delta_real -0.0040 vs
+  mean_delta_random -0.0023 — the graph's best-evidence path does
+  NOT beat an arbitrary edge's text, and both effects sit at noise
+  scale (|Δ| ≈ 0.002–0.004 nats on a ~6–7 nat base; absolute helps
+  14/40). Coherent mechanism: at 1.6% coverage the matched edge for
+  a colliding gap word is semantically unrelated to the actual
+  continuation ('images' → a Jupiter color-portrait outcome), so
+  injection degenerates to generic token perturbation — exactly the
+  registered consequence: the canonicalization organ now owns BOTH
+  the coverage number and the quality number, and consult-back
+  re-registers after it lands. (c) PASS: 0 ledger-discipline
+  violations across all rows, 14/14 use citations resolve to live
+  segments, a fresh UseLedger mount reproduces every use_count.
+  (d) PASS: both runs byte-identical in all result rows AND in the
+  use.ledger itself (sha256 fb0b9b35… both stores) — HF stream,
+  warmup, threshold calibration, and consult loop are deterministic
+  end to end on real infrastructure. The consult machinery is
+  proven sound and honest; its VALUE is measured as blocked on the
+  same single organ P72 named. One organ, two measured numbers
+  waiting on it.
