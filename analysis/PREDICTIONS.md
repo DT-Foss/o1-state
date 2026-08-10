@@ -2060,3 +2060,21 @@ artifact is a number about the defaults, not about the system.
   the finding; (a) fails inside (1.0, 1.0092] ⇒ plateau — the
   crossing holds but does not compound; (c) fails ⇒ the dial law
   has a token-horizon boundary — locate it.
+
+- **P69 — the valley is a shape, or it is a q-artifact (registered
+  2026-08-10, BEFORE the launch).** The fixed-q0.8 ratio curve has a
+  measured shape: d128 < d512 < d256 < d1024, the d512 dip
+  seed-robust (P65b). The q0.75 line has only d128/d256. One run —
+  d512/seed42/q0.75, exact 50M recipe, second x86 runner — decides
+  whether the shape belongs to the width curve or to the q level:
+  (a) THE VALLEY IS q-INVARIANT: d512/q0.75 improvement ratio lands
+      BELOW d256/q0.75's 0.9951 (the dip replicates at the second
+      dial setting).
+  (b) THE DIAL HOLDS: cumulative gate rate inside 0.2466–0.2478
+      (the measured q0.75 band).
+  (c) ORDERING: the ratio lands above d128/q0.75's seed-42 reading
+      0.9729 (the full q0.8 ordering transfers).
+  Falsifiers: (a) fails ⇒ the valley is a q0.8 artifact and the
+  fixed-dose curve shape is dial-dependent — the width law's shape
+  claims then need per-q measurement; (b) fails ⇒ the dial has a
+  width×q interaction at d512 — locate it.
