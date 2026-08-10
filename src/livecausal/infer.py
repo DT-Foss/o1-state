@@ -115,7 +115,7 @@ class LiveGraph:
     (SS2: "exactly the inferred edges whose derivation cites it").
     """
 
-    def __init__(self, store_dir):
+    def __init__(self, store_dir, count_closures=False):
         self.store_dir = store_dir
         self.store = LiveStore(store_dir)
         # base_edges[from_key][to_key] = sorted list of [sha, idx]
@@ -128,6 +128,14 @@ class LiveGraph:
         self._base_rev = {}
         self._rebuilt_on_mount = False
         self._loaded_from_cache = False
+        # Optional instrumentation (P71c): counts calls into the two
+        # closure-computing routines (_batch_transitive_closure via full
+        # rebuild, _delta_chains_for_citation via on_append). Off by
+        # default; when off, closure_calls stays None and behavior is
+        # byte-identical to before this flag existed. on_drop() never
+        # calls either routine, so this counter is what makes "zero new
+        # closures on drop" a checkable fact rather than an assertion.
+        self.closure_calls = 0 if count_closures else None
         self._mount()
 
     # ------------------------------------------------------------------
@@ -211,6 +219,8 @@ class LiveGraph:
         # Second pass: derive all transitive chains from scratch. This is
         # the batch (non-incremental) closure, used only here and as the
         # equivalence oracle in tests -- on_append never calls this.
+        if self.closure_calls is not None:
+            self.closure_calls += 1
         all_inferred = _batch_transitive_closure(self._base_edges)
         self._inferred_all = all_inferred
         self._reindex_inferred()
@@ -320,6 +330,8 @@ class LiveGraph:
         seen = set()  # (from_key, to_key, derivation-key) already added this call
         for from_key, to_key, csha, cidx, _was_new_pair in new_citations:
             hop = [csha, cidx]
+            if self.closure_calls is not None:
+                self.closure_calls += 1
             chains = _delta_chains_for_citation(
                 self._base_edges, self._base_rev, from_key, to_key, hop, MAX_DEPTH
             )

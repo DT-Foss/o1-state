@@ -1,0 +1,131 @@
+{
+  "clause_a_equivalence_at_scale": {
+    "batch_sha256": "c6a965677a286dfacf14fbcdd0bca0ae52c2062aba6694f11c6df0064e3c57df",
+    "batch_was_full_rebuild": true,
+    "incremental_sha256": "c6a965677a286dfacf14fbcdd0bca0ae52c2062aba6694f11c6df0064e3c57df",
+    "n_inferred_batch": 222,
+    "n_inferred_incremental": 222,
+    "n_records": 58,
+    "n_segments": 40,
+    "p71a_pass": true
+  },
+  "clause_b_delta_scaling": {
+    "n_repeats": 5,
+    "p71b_pass": true,
+    "per_size": {
+      "10": {
+        "n_new_inferred_last_rep": 190,
+        "wall_seconds_median": 0.00836060382425785,
+        "wall_seconds_raw": [
+          0.006815928965806961,
+          0.008632224053144455,
+          0.007506322115659714,
+          0.008392585441470146,
+          0.00836060382425785
+        ]
+      },
+      "20": {
+        "n_new_inferred_last_rep": 190,
+        "wall_seconds_median": 0.008600123226642609,
+        "wall_seconds_raw": [
+          0.008624611422419548,
+          0.008600123226642609,
+          0.01142272911965847,
+          0.007740311324596405,
+          0.008589476346969604
+        ]
+      },
+      "40": {
+        "n_new_inferred_last_rep": 190,
+        "wall_seconds_median": 0.008654363453388214,
+        "wall_seconds_raw": [
+          0.012442637234926224,
+          0.008654363453388214,
+          0.009512212127447128,
+          0.008505567908287048,
+          0.007833557203412056
+        ]
+      },
+      "5": {
+        "n_new_inferred_last_rep": 190,
+        "wall_seconds_median": 0.00791482999920845,
+        "wall_seconds_raw": [
+          0.008571319282054901,
+          0.00791482999920845,
+          0.009143071249127388,
+          0.006219400092959404,
+          0.007340693846344948
+        ]
+      },
+      "80": {
+        "n_new_inferred_last_rep": 190,
+        "wall_seconds_median": 0.013279009610414505,
+        "wall_seconds_raw": [
+          0.01316157728433609,
+          0.011464884504675865,
+          0.0176224522292614,
+          0.013521293178200722,
+          0.013279009610414505
+        ]
+      }
+    },
+    "ratio_t80_over_t5": 1.6777378177096056,
+    "sizes": [
+      5,
+      10,
+      20,
+      40,
+      80
+    ],
+    "t5_median_seconds": 0.00791482999920845,
+    "t80_median_seconds": 0.013279009610414505
+  },
+  "clause_c_truncation_is_scan": {
+    "all_bit_equal_to_batch": true,
+    "append_wall_seconds_median": 0.010579446330666542,
+    "append_wall_seconds_raw": [
+      0.016172092407941818,
+      0.010852765291929245,
+      0.00984426774084568,
+      0.010579446330666542,
+      0.010040275752544403
+    ],
+    "bit_equal_to_batch_without_segment_per_rep": [
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "closure_calls_during_drop_per_rep": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "drop_no_more_than_append": true,
+    "drop_wall_seconds_median": 0.008398618549108505,
+    "drop_wall_seconds_raw": [
+      0.008398618549108505,
+      0.011642351746559143,
+      0.006815165281295776,
+      0.006867937743663788,
+      0.009812016040086746
+    ],
+    "n_repeats": 5,
+    "n_segments": 80,
+    "p71c_pass": true,
+    "zero_new_closures_on_drop": true
+  },
+  "elapsed_seconds": 11.641932725906372,
+  "engine_commit": "ca2b82a",
+  "finished_unix": 1786367870.1046708,
+  "host": "konpeki-beast",
+  "p71a_pass": true,
+  "p71b_pass": true,
+  "p71c_pass": true,
+  "prediction": "P71",
+  "spec_ref": "analysis/PREDICTIONS.md P71",
+  "started_unix": 1786367858.462738
+}

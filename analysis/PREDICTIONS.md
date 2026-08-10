@@ -2126,3 +2126,23 @@ artifact is a number about the defaults, not about the system.
   crosses batch cost and state it as the format's operating bound;
   (c) fails ⇒ invalidation needs an index (derivation → inverted
   index), named before built.
+
+  **P71 SCORED (2026-08-10, results/livecausal_p71.json, run on the
+  16-core x86 runner at OMP=1/nice 15, engine at ca2b82a plus an
+  optional closure-counter flag whose default is byte-identical —
+  both test suites green before and after).** 3/3 PASS — THE LIVE
+  GRAPH NEVER REBUILDS, AS NUMBERS. (a) 40 segments incremental vs
+  batch: 222 inferred edges on both paths, canonical-bytes sha256
+  IDENTICAL (c6a96567…). (b) 16× data growth (5 → 80 segments), one
+  fixed 50-record delta: append time grows 1.68× (bar ≤ 4; medians
+  7.9ms → 13.3ms), and the delta's inferred-edge yield is constant
+  (190) at every graph size — delta locality measured, not assumed.
+  Scoring note carried openly: the workload is chain-shaped with a
+  fixed anchor; the density at which the neighborhood term would
+  dominate remains the format's operating bound per the registered
+  falsifier and gets measured when real extraction graphs exist
+  (P70/P72 output). (c) truncation: five repetitions, ZERO closure
+  computations on drop (instrumented at the only two closure sites),
+  5/5 bit-equal to the batch rebuild without the dropped segment,
+  drop median 8.4ms ≤ append median 10.6ms. The three mechanics the
+  LIVE-CAUSAL spec §2 claims are now measured mechanics.
