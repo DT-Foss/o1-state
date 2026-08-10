@@ -2134,6 +2134,17 @@ artifact is a number about the defaults, not about the system.
   0.69× redundancy predicts surprise wins there where entity
   novelty could not).
 
+  **P70 ENVIRONMENT NOTE (2026-08-10, found during MVP-4
+  integration).** The extractor has two code paths — spaCy-tagged
+  verb boundaries (strict) vs a surface-regex fallback (loose,
+  fires more often with context-smeared strings) — and the P70
+  artifact did not pin which path ran. Both arms shared one path on
+  one machine, so the scored RATIOS stand unchanged; the absolute
+  yield (~18 validated triplets/kilotoken) is path-dependent and
+  carries that caveat. From this finding forward every builder/
+  extraction artifact records an env_pin field (spacy_available,
+  version, model); P72 runs pinned to the strict path.
+
 - **P71 — the live graph never rebuilds, measured (registered
   2026-08-10, BEFORE the measurement; engine built and unit-green,
   src/livecausal/infer.py, ca2b82a).** The LIVE-CAUSAL claims from
