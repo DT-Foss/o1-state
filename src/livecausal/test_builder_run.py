@@ -78,6 +78,44 @@ def _build_smoke_graph(d, seed=42, max_windows=40):
     return graph, chains, metrics, store_dir
 
 
+def _build_smoke_graph_with_canon(d, seed=42, max_windows=40, canon=False):
+    """Same fixture as _build_smoke_graph, with canon passed through to
+    run_builder -- kept as a SEPARATE function (not a canon= kwarg added
+    to _build_smoke_graph itself) so every existing test calling
+    _build_smoke_graph() stays byte-identical, untouched by Task 12."""
+    import torch
+    import portable_organism as po
+
+    torch.set_num_threads(1)
+    po.D_MODEL, po.BATCH, po.CHUNK = 64, 4, 32
+    po.GATE_Q, po.GATE_WINDOW, po.MIN_WINDOW, po.IGNITION_CHUNKS = 0.75, 50, 10, 5
+
+    corpus_path = os.path.join(d, "corpus.txt")
+    chains = generate_smoke_corpus(corpus_path, seed=seed)
+
+    vocab, stoi, unk, mask, val_ids = po.get_vocab()
+    V = len(vocab)
+    torch.manual_seed(seed)
+    organism = po.Organism("builder-canon-test", V, mask, seed=seed)
+    stream = TextFileStream(corpus_path, stoi, unk)
+    feeder = po.ChunkFeeder(stream, po.BATCH, po.CHUNK)
+    window_iter = stream_windows(organism, stream, feeder, window_tokens=32)
+
+    store_dir = os.path.join(d, "store")
+    status_path = os.path.join(d, "status.json")
+    metrics_path = os.path.join(d, "metrics.jsonl")
+
+    graph, metrics = run_builder(
+        store_dir, status_path, metrics_path,
+        window_iter, fake_extractor,
+        windows_per_segment=5,
+        max_windows=max_windows, print_every=1000,
+        stream=stream,
+        canon=canon,
+    )
+    return graph, chains, metrics, store_dir
+
+
 # ---------------------------------------------------------------------
 # Test 1: the loop runs offline end to end and produces a non-trivial
 # graph (base edges + inferred edges both present).
@@ -324,6 +362,74 @@ def test_extractor_override_is_used_not_default(d):
     assert calls == ["hello world"], "override was not used as the extractor"
 
 
+# ---------------------------------------------------------------------
+# Test 6: Task 12 -- run_builder(canon=True) mounts the store's LiveGraph
+# with the canonicalization organ on, folding every appended segment into
+# BOTH the raw and canon-key adjacency. Records themselves stay
+# completely raw (canon is read-time only, per LIVE_CAUSAL_SPEC SS2).
+# ---------------------------------------------------------------------
+
+def test_builder_canon_true_mounts_canon_layer(d):
+    graph, chains, metrics, store_dir = _build_smoke_graph_with_canon(d, canon=True)
+
+    assert graph.canon_enabled is True
+    assert metrics["canon"] is True
+    assert metrics["canon_env_pin"] is not None
+    assert metrics["canon_env_pin"]["canon_version"]
+    assert metrics["n_canon_inferred_edges"] > 0, (
+        "canon=True builder run produced zero canon-inferred edges -- "
+        "the smoke corpus's own itemXX chain keys are already exact "
+        "single-token strings, so this would only fail if the canon "
+        "layer were not actually wired into on_append at all"
+    )
+
+    # Records on disk are UNCHANGED by canon=True -- trigger_key/
+    # outcome_key are still whatever the extractor produced, not
+    # replaced by canon_key. Canon stays a read-time layer.
+    sample_sha = graph.store.segments()[0]
+    for _s, _idx, record in graph.store.iter_records(sample_sha):
+        assert "trigger_key" in record and "outcome_key" in record
+        # The raw key must still be recoverable via canon_of -- proves
+        # the canon layer reads FROM these unmodified records, not the
+        # other way around.
+        ck = graph.canon_of(record["trigger_key"])
+        assert isinstance(ck, str) and ck
+
+    # canon_map.jsonl and canon_inferred.jsonl must exist on disk (the
+    # persisted map + closure cache Task 12 added) -- canon=False builds
+    # never produce these files (checked in the regression test below).
+    assert os.path.exists(os.path.join(store_dir, "canon_map.jsonl"))
+    assert os.path.exists(os.path.join(store_dir, "canon_inferred.jsonl"))
+
+    # A second, fresh LiveGraph mount over the same store must be WARM
+    # (map + closure cache both hit) and reproduce the identical
+    # canon-inferred edge set -- the end-to-end confirmation that the
+    # builder's own store is warm-mountable after a real (if small)
+    # canon=True build, not just the synthetic corpora in
+    # test_canon_delta.py.
+    graph2 = LiveGraph(store_dir, canon=True)
+    assert graph2.was_canon_loaded_from_cache() is True
+    assert graph2.canon_inferred_edges() == graph.canon_inferred_edges()
+
+
+# ---------------------------------------------------------------------
+# Test 7: canon=False (the default, and every pre-Task-12 call site) is
+# byte-identical regression -- no canon files appear on disk, metrics
+# carry the vacuous-but-present canon fields, graph behaves exactly as
+# every builder run before Task 12 existed.
+# ---------------------------------------------------------------------
+
+def test_builder_canon_false_is_regression_identical(d):
+    graph, chains, metrics, store_dir = _build_smoke_graph(d)  # canon defaults to False
+
+    assert graph.canon_enabled is False
+    assert metrics["canon"] is False
+    assert metrics["canon_env_pin"] is None
+    assert metrics["n_canon_inferred_edges"] == 0
+    assert not os.path.exists(os.path.join(store_dir, "canon_map.jsonl"))
+    assert not os.path.exists(os.path.join(store_dir, "canon_inferred.jsonl"))
+
+
 def run_all():
     tests = [
         test_smoke_loop_produces_graph,
@@ -333,6 +439,8 @@ def run_all():
         test_extraction_is_ungated,
         test_verifier_accepts_builder_output,
         test_extractor_override_is_used_not_default,
+        test_builder_canon_true_mounts_canon_layer,
+        test_builder_canon_false_is_regression_identical,
     ]
     for t in tests:
         with_tmpdir(t)

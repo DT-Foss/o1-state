@@ -50,6 +50,7 @@ from . import canon as canon_mod
 
 INFERRED_NAME = "inferred.jsonl"
 CANON_INFERRED_NAME = "canon_inferred.jsonl"
+CANON_MAP_NAME = "canon_map.jsonl"
 MAX_DEPTH = 5  # v1's max_depth (hsslm pass1_exact_chains), mirrored exactly.
 
 
@@ -164,9 +165,10 @@ class LiveGraph:
         self._canon_base_rev = {}
         self._canon_inferred_all = []
         self._canon_inferred_by_from = {}
-        # raw_key -> canon_key, folded once per mount/append/drop so a
-        # repeated raw_key across many records is canonicalized only once
-        # per _canon_rebuild() call, not once per record.
+        # raw_key -> canon_key memo (persisted to canon_map.jsonl, see the
+        # canon-layer section below) -- every raw_key is parsed through
+        # canon_mod.canonical_key AT MOST ONCE per process lifetime,
+        # whether via a warm map load or a genuine cache miss.
         self._raw_to_canon = {}
         self._canon_rebuilt_on_mount = False
         self._canon_loaded_from_cache = False
@@ -287,35 +289,60 @@ class LiveGraph:
     # ------------------------------------------------------------------
     # Canonicalization layer (P74 organ, opt-in via canon=True).
     #
-    # Deliberate scope decision (flagged here and in the build report):
-    # the canonical adjacency is a FULL FOLD over every raw base-edge
-    # citation, recomputed whenever the manifest stamp OR the canon
-    # env_pin changes -- NOT a semi-naive delta over canon_keys the way
-    # the raw layer's on_append/on_drop are. The build brief's "Delta-
-    # Inferenz läuft dann über kanonische Keys" is read here as "the
-    # inferred-edge TRANSITIVE CLOSURE step reuses the exact same
-    # _batch_transitive_closure/_delta_chains_for_citation machinery,
-    # just over canon_key adjacency instead of raw_key adjacency" -- which
-    # this does -- rather than as a mandate for a second independent
-    # semi-naive maintenance path threaded through on_append/on_drop.
-    # Reasoning: canon_key is a MANY-TO-ONE fold of raw_key (every raw_key
-    # collapses to exactly one canon_key, but many raw_keys can collapse
-    # to the same canon_key), so a single new raw base-edge citation can
-    # change the canon adjacency in a way that is NOT local to that one
-    # citation's own canon-key neighborhood -- e.g. appending a record
-    # that canonicalizes to an ALREADY-PRESENT canon_key can newly connect
-    # two previously-disjoint canon components whose raw citations were
-    # appended arbitrarily long ago. A correct semi-naive rule for this
-    # would need to re-derive from every raw citation sharing the new
-    # citation's canon_key, not just the new citation itself -- a real
-    # design (worth a future ticket) but out of scope for delivering a
-    # correct, tested organ now. The full fold is O(all records) per
-    # mount/append/drop, same asymptotic cost class _rebuild_from_store
-    # already pays on every cold mount -- correct first, fast later.
+    # P75c (registered, scored 2026-08-10): the P74-era full-fold-per-
+    # mount design cost 17.8s on a warm mount even with
+    # canon_inferred.jsonl cache-hit (warm_loaded_from_cache=True) --
+    # every raw_key was re-canonicalized (re-parsed through spaCy) on
+    # EVERY mount regardless of the inferred-edge cache, because only the
+    # closure step was cached, not the raw_key -> canon_key fold itself.
+    # That is now a measured, registered cost regression the build brief
+    # names as PFLICHT (mandatory) before builder integration -- fixed
+    # here with two changes:
+    #
+    # 1. PERSISTED CANON MAP (canon_map.jsonl, this section below): every
+    #    raw_key -> canon_key pair this graph has ever computed is
+    #    appended to a manifest-and-env_pin-stamped file, mirroring
+    #    canon_inferred.jsonl's own cache-validity discipline exactly
+    #    (same two-field stamp: segments() AND canon_env_pin). A warm
+    #    mount with a valid map stamp loads the map directly and calls
+    #    canonical_key() ZERO times -- pure dict deserialization.
+    #
+    # 2. SEMI-NAIVE CANON DELTA (on_append/on_drop below, replacing the
+    #    P74-era _refresh_canon full fold): on_append canonicalizes ONLY
+    #    the raw_keys that are genuinely NEW to the map (a map hit costs
+    #    a dict lookup, not a spaCy parse), then folds the resulting new
+    #    CANONICAL base-edge citations through the exact same
+    #    _delta_chains_for_citation machinery the raw layer's on_append
+    #    already uses -- just called with canon_key adjacency
+    #    (_canon_base_edges/_canon_base_rev) instead of raw adjacency.
+    #
+    #    The build brief's own concern -- "a new record folding onto an
+    #    ALREADY-PRESENT canon_key can newly connect two previously-
+    #    disjoint canon components whose citations were appended
+    #    arbitrarily long ago" -- turns out to need NO special-casing:
+    #    _delta_chains_for_citation was already written generically
+    #    enough for this. It never assumes from_key/to_key are new to the
+    #    adjacency, only that the CITATION (a specific (sha, idx) pair on
+    #    a specific (from_key, to_key) edge) is new -- it walks
+    #    ancestors(from_key) and descendants(to_key) fresh, against
+    #    whatever the CURRENT adjacency contains, every time it is
+    #    called. Feeding it a canonical (canon_from, canon_to, sha, idx)
+    #    citation is therefore already correct for the many-to-one case:
+    #    if canon_from already had five other ancestors from raw_keys
+    #    appended segments ago, the ancestor walk finds all five, exactly
+    #    as it would for a raw citation joining an old raw component. The
+    #    ONLY new requirement is emitting one canonical citation per NEW
+    #    raw base-edge citation (not per NEW canon_key pair) -- verified
+    #    directly by test_canon_delta.py's batch-oracle equivalence test
+    #    (delta result == a from-scratch full fold, on a corpus
+    #    constructed to exercise exactly this many-to-one join case).
     # ------------------------------------------------------------------
 
     def _canon_cache_path(self):
         return os.path.join(self.store_dir, CANON_INFERRED_NAME)
+
+    def _canon_map_path(self):
+        return os.path.join(self.store_dir, CANON_MAP_NAME)
 
     def _resolve_nlp(self):
         """Resolves the spaCy pipeline used for this graph's canon calls,
@@ -337,16 +364,171 @@ class LiveGraph:
             return
         self._canon_nlp = self._resolve_nlp()
         self.canon_env_pin = canon_mod.env_pin()
+
+        # Two INDEPENDENT caches, each stamped the same way (segments +
+        # canon_env_pin) but validated separately: the map cache (raw_key
+        # -> canon_key, the expensive-to-recompute spaCy-parse artifact)
+        # and the inferred-edge cache (the closure artifact, cheap to
+        # recompute FROM a valid map, expensive to recompute from
+        # scratch). A map hit + closure miss still avoids every spaCy
+        # call; a map miss forces the same full parse pass P74 always
+        # paid, regardless of the closure cache's state.
+        map_hit = self._try_load_canon_map(manifest_segments)
+        if not map_hit:
+            self._raw_to_canon = {}
+
         cache_path = self._canon_cache_path()
+        closure_hit = False
         if os.path.exists(cache_path):
-            if self._try_load_canon_cache(cache_path, manifest_segments):
-                self._canon_loaded_from_cache = True
-                return
-        self._canon_rebuild()
-        self._canon_rebuilt_on_mount = True
+            closure_hit = self._try_load_canon_cache(cache_path, manifest_segments)
+
+        if map_hit and closure_hit:
+            self._canon_loaded_from_cache = True
+            # Base adjacency still needs folding from the (now-cached) map
+            # -- pure dict work, no canonicalization calls at all.
+            self._canon_fold_base_edges_from_map()
+            return
+
+        # Fold the base adjacency (canonicalizing any raw_key the map
+        # didn't already have -- on a full map hit this is zero calls; on
+        # a cold/partial map this canonicalizes exactly the keys missing
+        # from the map, same as before, never more).
+        self._canon_fold_base_edges_from_map()
+
+        if closure_hit:
+            # Map was rebuilt/extended (or was already complete) but the
+            # closure cache was stale relative to the CURRENT manifest --
+            # this combination should not arise in practice (closure
+            # cache and map cache share the same stamp), but if it does,
+            # prefer correctness: the closure must be recomputed too,
+            # since the map's completeness does not guarantee the base
+            # adjacency the closure was computed over still matches.
+            closure_hit = False
+
+        if not closure_hit:
+            if self.closure_calls is not None:
+                self.closure_calls += 1
+            self._canon_inferred_all = _batch_transitive_closure(self._canon_base_edges)
+            self._reindex_canon_inferred()
+            self._canon_rebuilt_on_mount = True
+
+        self._write_canon_map()
         self._write_canon_cache()
 
+    def _try_load_canon_map(self, manifest_segments):
+        """Loads canon_map.jsonl into self._raw_to_canon if its stamp
+        (segments + canon_env_pin) matches the current mount. Returns
+        True on a valid load (self._raw_to_canon populated, ZERO
+        canonical_key calls made), False otherwise (self._raw_to_canon
+        left untouched -- caller resets it to {} on a miss)."""
+        path = self._canon_map_path()
+        if not os.path.exists(path):
+            return False
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+        except OSError:
+            return False
+        if not lines:
+            return False
+        try:
+            header = json.loads(lines[0])
+        except (ValueError, json.JSONDecodeError):
+            return False
+        if header.get("segments") != manifest_segments:
+            return False
+        if header.get("canon_env_pin") != self.canon_env_pin:
+            return False
+
+        mapping = {}
+        for line in lines[1:]:
+            line = line.rstrip("\n")
+            if line == "":
+                continue
+            try:
+                entry = json.loads(line)
+            except (ValueError, json.JSONDecodeError):
+                return False
+            mapping[entry["raw"]] = entry["canon"]
+        self._raw_to_canon = mapping
+        return True
+
+    def _write_canon_map(self):
+        """Persists self._raw_to_canon (the full raw_key -> canon_key
+        mapping accumulated so far) to canon_map.jsonl, stamped with the
+        current manifest segments + canon_env_pin -- same atomic-write,
+        same header-then-body JSON-Lines discipline every other cache in
+        this module uses. Called after every fold/delta that may have
+        added new entries (mount, on_append); on_drop does NOT call this
+        (see on_drop's own docstring: the map is a pure function's memo,
+        never invalidated by a drop)."""
+        header = _canonical_line({
+            "segments": self.store.segments(),
+            "canon_env_pin": self.canon_env_pin,
+        })
+        body = "".join(
+            _canonical_line({"raw": raw, "canon": ck})
+            for raw, ck in sorted(self._raw_to_canon.items())
+        )
+        data = (header + body).encode("utf-8")
+        _atomic_write(self._canon_map_path(), data)
+
+    def _canon_of_memo(self, raw_key):
+        """The one canonicalization call site for the whole class: a memo
+        lookup against self._raw_to_canon, calling canon_mod.canonical_key
+        (a real spaCy parse, or the fallback) ONLY on a genuine miss, and
+        recording the result in the memo immediately so no raw_key is
+        ever parsed twice within one process's lifetime -- this is what
+        makes on_append's delta cost track "how many NEW raw_keys arrived"
+        rather than "how many raw_keys exist in the whole store"."""
+        cached = self._raw_to_canon.get(raw_key)
+        if cached is not None:
+            return cached
+        ck = canon_mod.canonical_key(raw_key, nlp=self._canon_nlp)
+        self._raw_to_canon[raw_key] = ck
+        return ck
+
+    def _canon_fold_base_edges_from_map(self):
+        """Rebuilds canon_base_edges/canon_base_rev from the RAW base
+        adjacency already in memory (self._base_edges), canonicalizing
+        each distinct raw_key via the memo (_canon_of_memo) -- a map hit
+        costs a dict lookup per raw_key, never a parse. This is still an
+        O(all base edges) pass over the in-memory adjacency (dict
+        iteration, no I/O, no spaCy) -- the P75c cost that is now
+        eliminated is the PARSING, not this bookkeeping fold, which was
+        never the expensive part (see P75c's own finding: warm mount cost
+        17.8s while this fold's own dict work is sub-millisecond -- the
+        entire cost was re-parsing every raw_key through spaCy on every
+        mount, even with a valid closure cache)."""
+        self._canon_base_edges = {}
+        self._canon_base_rev = {}
+
+        for from_key, targets in self._base_edges.items():
+            canon_from = self._canon_of_memo(from_key)
+            for to_key, citations in targets.items():
+                canon_to = self._canon_of_memo(to_key)
+                bucket = self._canon_base_edges.setdefault(canon_from, {}).setdefault(canon_to, [])
+                for pair in citations:
+                    if pair not in bucket:
+                        bucket.append(list(pair))
+                bucket.sort(key=lambda p: (p[0], p[1]))
+                self._canon_base_rev.setdefault(canon_to, set()).add(canon_from)
+
+    def _reindex_canon_inferred(self):
+        self._canon_inferred_by_from = {}
+        for edge in self._canon_inferred_all:
+            self._canon_inferred_by_from.setdefault(edge["from_key"], []).append(edge)
+        for key in self._canon_inferred_by_from:
+            self._canon_inferred_by_from[key].sort(key=_edge_sort_key)
+        self._canon_inferred_all.sort(key=_edge_sort_key)
+
     def _try_load_canon_cache(self, cache_path, manifest_segments):
+        """Loads canon_inferred.jsonl (the closure/transitive-edge cache)
+        into self._canon_inferred_all if its stamp matches. Returns True
+        on a valid load, False otherwise. This is the closure artifact
+        ONLY -- it says nothing about whether the raw_key -> canon_key
+        map is warm; see _try_load_canon_map for that, and _mount_canon
+        for how the two independent cache hits combine."""
         try:
             with open(cache_path, "r", encoding="utf-8") as f:
                 lines = f.readlines()
@@ -378,66 +560,9 @@ class LiveGraph:
             except (ValueError, json.JSONDecodeError):
                 return False
 
-        # Cache is valid: still need the canon base adjacency + raw_key
-        # map in memory for query()/edge derivation, so fold those (cheap
-        # relative to spaCy parsing -- this is dict bookkeeping only, the
-        # canon_key VALUES themselves are not recomputed here since the
-        # cached inferred edges already reflect them and the base fold
-        # below reuses self._raw_to_canon lazily per raw_key it has not
-        # seen yet... but on a cache HIT we still need the mapping for
-        # every raw_key currently in the store, so this still calls the
-        # canonicalizer once per distinct raw_key, same as a rebuild would
-        # -- the cache HIT only saves recomputing the transitive closure,
-        # not the raw_key->canon_key fold itself, since that fold is a
-        # prerequisite for query() regardless of inferred-edge caching.
-        self._canon_fold_base_edges()
         self._canon_inferred_all = inferred
         self._reindex_canon_inferred()
         return True
-
-    def _canon_fold_base_edges(self):
-        """Rebuilds canon_base_edges/canon_base_rev/raw_to_canon from the
-        RAW base adjacency already in memory (self._base_edges), by
-        canonicalizing every distinct raw_key exactly once. Citations are
-        preserved verbatim (still (sha, idx) pointing at raw records) --
-        only the from/to key strings are replaced by their canon_key."""
-        self._raw_to_canon = {}
-        self._canon_base_edges = {}
-        self._canon_base_rev = {}
-
-        def _canon_of(raw_key):
-            cached = self._raw_to_canon.get(raw_key)
-            if cached is not None:
-                return cached
-            ck = canon_mod.canonical_key(raw_key, nlp=self._canon_nlp)
-            self._raw_to_canon[raw_key] = ck
-            return ck
-
-        for from_key, targets in self._base_edges.items():
-            canon_from = _canon_of(from_key)
-            for to_key, citations in targets.items():
-                canon_to = _canon_of(to_key)
-                bucket = self._canon_base_edges.setdefault(canon_from, {}).setdefault(canon_to, [])
-                for pair in citations:
-                    if pair not in bucket:
-                        bucket.append(list(pair))
-                bucket.sort(key=lambda p: (p[0], p[1]))
-                self._canon_base_rev.setdefault(canon_to, set()).add(canon_from)
-
-    def _canon_rebuild(self):
-        self._canon_fold_base_edges()
-        if self.closure_calls is not None:
-            self.closure_calls += 1
-        self._canon_inferred_all = _batch_transitive_closure(self._canon_base_edges)
-        self._reindex_canon_inferred()
-
-    def _reindex_canon_inferred(self):
-        self._canon_inferred_by_from = {}
-        for edge in self._canon_inferred_all:
-            self._canon_inferred_by_from.setdefault(edge["from_key"], []).append(edge)
-        for key in self._canon_inferred_by_from:
-            self._canon_inferred_by_from[key].sort(key=_edge_sort_key)
-        self._canon_inferred_all.sort(key=_edge_sort_key)
 
     def _write_canon_cache(self):
         header = _canonical_line({
@@ -448,15 +573,124 @@ class LiveGraph:
         data = (header + body).encode("utf-8")
         _atomic_write(self._canon_cache_path(), data)
 
-    def _refresh_canon(self):
-        """Recomputes the canon layer from the current raw base adjacency
-        and rewrites its cache. Called by on_append/on_drop when
-        canon_enabled -- always a full fold (see the scope note above),
-        so cost is O(current record count), not O(delta)."""
+    def _canon_on_append(self, sha, raw_new_citations):
+        """Semi-naive canon-layer maintenance for a newly appended segment.
+
+        raw_new_citations: the SAME (from_key, to_key, sha, idx,
+        was_new_pair) tuples the raw layer's own on_append just computed
+        for this segment (passed in rather than recomputed -- one pass
+        over the segment's records is enough for both layers).
+
+        For each raw citation, canonicalize its endpoints via the memo
+        (a spaCy parse ONLY for a raw_key genuinely new to this graph's
+        map -- see _canon_of_memo), fold the resulting canonical citation
+        into _canon_base_edges/_canon_base_rev, and run the EXACT same
+        _delta_chains_for_citation the raw layer uses, over the canonical
+        adjacency instead of the raw one. See this class's canon-layer
+        docstring block above for why this is already correct for the
+        many-to-one join case without any special-casing."""
         if not self.canon_enabled:
             return
-        self._canon_rebuild()
+
+        canon_new_citations = []  # (canon_from, canon_to, sha, idx)
+        for from_key, to_key, csha, cidx, _was_new_pair in raw_new_citations:
+            canon_from = self._canon_of_memo(from_key)
+            canon_to = self._canon_of_memo(to_key)
+            bucket = self._canon_base_edges.setdefault(canon_from, {}).setdefault(canon_to, [])
+            pair = [csha, cidx]
+            if pair not in bucket:
+                bucket.append(pair)
+                bucket.sort(key=lambda p: (p[0], p[1]))
+            self._canon_base_rev.setdefault(canon_to, set()).add(canon_from)
+            canon_new_citations.append((canon_from, canon_to, csha, cidx))
+
+        new_edges = []
+        seen = set()
+        for canon_from, canon_to, csha, cidx in canon_new_citations:
+            hop = [csha, cidx]
+            if self.closure_calls is not None:
+                self.closure_calls += 1
+            chains = _delta_chains_for_citation(
+                self._canon_base_edges, self._canon_base_rev, canon_from, canon_to, hop, MAX_DEPTH
+            )
+            for edge in chains:
+                dedup_key = (edge["from_key"], edge["to_key"], _derivation_key(edge["derivation"]))
+                if dedup_key in seen:
+                    continue
+                if any(
+                    e["from_key"] == edge["from_key"]
+                    and e["to_key"] == edge["to_key"]
+                    and _derivation_key(e["derivation"]) == _derivation_key(edge["derivation"])
+                    for e in self._canon_inferred_by_from.get(edge["from_key"], [])
+                ):
+                    seen.add(dedup_key)
+                    continue
+                seen.add(dedup_key)
+                new_edges.append(edge)
+
+        for edge in new_edges:
+            self._canon_inferred_all.append(edge)
+            self._canon_inferred_by_from.setdefault(edge["from_key"], []).append(edge)
+
+        self._reindex_canon_inferred()
+        self._write_canon_map()
         self._write_canon_cache()
+        return new_edges
+
+    def _canon_on_drop(self, drop_set):
+        """Semi-naive canon-layer maintenance for dropped segments:
+        exactly mirrors the raw layer's on_drop (filter citations from
+        canon_base_edges/canon_base_rev, filter inferred edges whose
+        derivation cites a dropped segment) -- No re-inference of the
+        surviving canon graph, same SS2 guarantee the raw layer gives.
+
+        The canon MAP's CONTENT (raw_key -> canon_key) is never pruned by
+        a drop: it is a memo of a PURE FUNCTION
+        (canonical_key(raw_key, env_pin) -> canon_key) that does not
+        depend on which segments are currently present -- a raw_key's
+        canon_key does not change because the record that first
+        introduced it was dropped, and a stale extra entry for a since-
+        dropped raw_key is harmless (never read unless that exact
+        raw_key is canonicalized again, in which case the memoized
+        answer is still correct -- so a drop-then-re-append of the same
+        raw_key costs zero re-parses). The map's STAMP (its header's
+        `segments` field) DOES still need rewriting after a drop, though
+        -- the manifest changed, so the on-disk stamp must track it or
+        the next mount would see a stamp mismatch and wrongly treat an
+        otherwise-still-correct map as invalid, forcing needless
+        re-parses of every raw_key on the next cold mount. Rewriting the
+        stamp is a cheap re-serialization of the SAME in-memory dict,
+        not a re-parse of anything."""
+        if not self.canon_enabled:
+            return
+
+        new_canon_base_edges = {}
+        new_canon_base_rev = {}
+        for from_key, targets in self._canon_base_edges.items():
+            for to_key, citations in targets.items():
+                kept = [p for p in citations if p[0] not in drop_set]
+                if kept:
+                    new_canon_base_edges.setdefault(from_key, {})[to_key] = kept
+                    new_canon_base_rev.setdefault(to_key, set()).add(from_key)
+        self._canon_base_edges = new_canon_base_edges
+        self._canon_base_rev = new_canon_base_rev
+
+        kept_inferred = [
+            e
+            for e in self._canon_inferred_all
+            if not any(hop_sha in drop_set for hop_sha, _hop_idx in e["derivation"])
+        ]
+        self._canon_inferred_all = kept_inferred
+        self._reindex_canon_inferred()
+        # Persistence (_write_canon_cache/_write_canon_map) is deliberately
+        # NOT done here: on_drop() runs BEFORE drop_segments() removes the
+        # segment from the store's manifest (see drop_segments's own
+        # docstring), so self.store.segments() at this point would still
+        # include the about-to-be-dropped segment -- writing the map/cache
+        # stamp now would stamp it with a manifest state that is about to
+        # become stale, defeating the whole point of keeping the stamp in
+        # sync. drop_segments() calls _write_canon_cache/_write_canon_map
+        # itself, AFTER the store's manifest is actually updated.
 
     def canon_query(self, raw_key):
         """query()'s canonical counterpart: canonicalizes `raw_key` itself
@@ -479,7 +713,7 @@ class LiveGraph:
                 "canon_query() requires LiveGraph(..., canon=True); "
                 "this graph was mounted with canon=False."
             )
-        canon_key = canon_mod.canonical_key(raw_key, nlp=self._canon_nlp)
+        canon_key = self._canon_of_memo(raw_key)
         out = []
         for to_key, citations in sorted(self._canon_base_edges.get(canon_key, {}).items()):
             out.append({
@@ -507,13 +741,15 @@ class LiveGraph:
     def canon_of(self, raw_key):
         """The canon_key a given raw_key maps to under this graph's
         current fold. Convenience for tests/debugging; raises
-        RuntimeError under the same condition canon_query() does."""
+        RuntimeError under the same condition canon_query() does. Uses
+        the same map memo every other canon call site uses (a raw_key
+        already in the map costs a dict lookup, not a re-parse)."""
         if not self.canon_enabled:
             raise RuntimeError(
                 "canon_of() requires LiveGraph(..., canon=True); "
                 "this graph was mounted with canon=False."
             )
-        return canon_mod.canonical_key(raw_key, nlp=self._canon_nlp)
+        return self._canon_of_memo(raw_key)
 
     def was_canon_rebuilt_on_mount(self):
         return self._canon_rebuilt_on_mount
@@ -678,7 +914,11 @@ class LiveGraph:
 
         self._reindex_inferred()
         self._write_cache()
-        self._refresh_canon()
+        # Canon-layer delta: reuses the SAME new_citations this method
+        # just computed (one segment-record pass serves both layers) --
+        # see _canon_on_append's docstring for why this is a correct
+        # semi-naive rule even for the many-to-one canon_key join case.
+        self._canon_on_append(sha, new_citations)
         return new_edges
 
     # ------------------------------------------------------------------
@@ -715,7 +955,7 @@ class LiveGraph:
         self._inferred_all = kept_inferred
         self._reindex_inferred()
         self._write_cache()
-        self._refresh_canon()
+        self._canon_on_drop(drop_set)
 
     # ------------------------------------------------------------------
     # Drop segments through the store (convenience: mirrors store API)
@@ -726,10 +966,24 @@ class LiveGraph:
         graph accordingly. Order matters: graph invalidation reads
         citations already collected in-memory, so this does not need the
         segment files to still exist on disk.
+
+        Canon-layer persistence (_write_canon_cache/_write_canon_map) is
+        deliberately deferred to AFTER self.store.drop_segments(shas)
+        below, not done inside on_drop()/_canon_on_drop() -- writing the
+        map/cache stamp before the store's manifest is actually updated
+        would stamp it with the ABOUT-TO-BE-STALE segment list (the
+        dropped segment still present), so a subsequent mount would see
+        a stamp mismatch against the store's REAL post-drop manifest and
+        wrongly force a full re-parse of every raw_key -- exactly the
+        P75c cost this task exists to eliminate. Caught directly by
+        test_canon_delta.py's drop-then-remount warm-mount check.
         """
         shas = list(shas)
         self.on_drop(shas)
         self.store.drop_segments(shas)
+        if self.canon_enabled:
+            self._write_canon_cache()
+            self._write_canon_map()
 
     def append_segment(self, records):
         """Append records to the underlying store AND fold them into the

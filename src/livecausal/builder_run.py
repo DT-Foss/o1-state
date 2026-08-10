@@ -434,6 +434,7 @@ def run_builder(
     max_seconds=None,
     print_every=10,
     stream=None,
+    canon=False,
 ):
     """The loop itself, factored out of main() so tests can drive it
     directly against a stub window_iter/extractor without going through
@@ -446,8 +447,24 @@ def run_builder(
     object exposing `.docs`) -- curator_yield_run.iter_windows owns its
     stream internally and does not expose one, so this is None on that
     path and the metric falls back to n_windows_total (still monotonic,
-    just coarser)."""
-    graph = LiveGraph(store_dir)
+    just coarser).
+
+    canon=False (default): EXACT pre-Task-12 behavior, byte-identical to
+    every builder run before this parameter existed.
+
+    canon=True (Task 12, following P75c's mandatory cost fix): mounts
+    the store's LiveGraph with canon=True, so every on_append below folds
+    into BOTH the raw adjacency (unchanged) AND the canon-key adjacency
+    (src/livecausal/canon.py + infer.py's persisted canon_map.jsonl /
+    semi-naive canon delta). Extracted RECORDS themselves are completely
+    UNCHANGED -- trigger_key/outcome_key are still whatever
+    extract_validated/curator_yield_run's normalize_entity produced,
+    written to sealed segments exactly as before. Canonicalization stays
+    a pure READ-TIME layer (LIVE_CAUSAL_SPEC SS2's own framing): the
+    builder mounts the graph once and holds it for the whole run, so the
+    delta path (not a per-call full fold) is what actually runs on every
+    append -- see infer.py's LiveGraph.on_append/_canon_on_append."""
+    graph = LiveGraph(store_dir, canon=canon)
     # Evidence ledger hook (found missing by mvp3's demo integration test:
     # this loop sealed segments into the graph but never observed them
     # into evidence.ledger, so evidence_count would read 0 for every edge
@@ -484,6 +501,12 @@ def run_builder(
         "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "store_dir": store_dir,
         "env_pin": env_pin(),
+        "canon": bool(canon),
+        # canon_env_pin travels alongside env_pin only when canon=True --
+        # same "None (not omitted) when off" discipline consult_run.py's
+        # --canon payload already uses, so a reader can tell "canon was
+        # off" apart from "canon was on but env_pin failed to record."
+        "canon_env_pin": graph.canon_env_pin if canon else None,
     }
 
     def current_metrics():
@@ -500,6 +523,20 @@ def run_builder(
             "n_segments": n_segments,
             "n_base_edges": sum(len(v) for v in graph._base_edges.values()),
             "n_inferred_edges": len(graph.inferred_edges()),
+            # canon-layer counterparts, 0 when canon=False (never None --
+            # a metrics consumer should not need to branch on canon to
+            # read this field, it is simply vacuously 0 when the layer
+            # is not mounted).
+            "n_canon_inferred_edges": len(graph.canon_inferred_edges()) if canon else 0,
+            # Mirrored from `status` so run_builder's RETURN VALUE (the
+            # final current_metrics() call, see the bottom of this
+            # function) carries the same canon fields the status FILE
+            # already does -- a caller reading the return value alone
+            # (e.g. a test, or a script that doesn't touch status_path)
+            # should not need to also parse the status JSON to know
+            # whether this run mounted the canon layer.
+            "canon": bool(canon),
+            "canon_env_pin": graph.canon_env_pin if canon else None,
         }
 
     def write_status():
@@ -661,6 +698,14 @@ def main():
                          "(default: a large finite bound; --max-windows/--max-seconds still cut the loop off early)")
     ap.add_argument("--tape-cap", type=int, default=200_000,
                     help="--text-file path only: rolling tape trim window (memory cap on long runs)")
+    ap.add_argument("--canon", action="store_true",
+                    help="Task 12 (P75c follow-up): mount the store's LiveGraph with canon=True, "
+                         "folding every appended segment into BOTH the raw and the canon-key "
+                         "adjacency (src/livecausal/canon.py + infer.py's persisted canon_map.jsonl "
+                         "and semi-naive canon delta -- warm re-mounts stay fast, see "
+                         "test_canon_delta.py). Extracted records are unaffected: canonicalization "
+                         "is a read-time layer, trigger_key/outcome_key are written exactly as "
+                         "before. Off by default: byte-identical to every pre-Task-12 builder run.")
     ap.add_argument("--smoke", action="store_true", help="generate a synthetic causal corpus + fake extractor, run offline")
     ap.add_argument("--tag", default="v0")
     args = ap.parse_args()
@@ -722,6 +767,7 @@ def main():
         max_windows=args.max_windows,
         max_seconds=args.max_seconds,
         stream=stream,
+        canon=args.canon,
     )
 
     print("=" * 74)
