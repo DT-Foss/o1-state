@@ -21,6 +21,7 @@ if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
 from livecausal.infer import LiveGraph  # noqa: E402
+from livecausal.store import LiveStore  # noqa: E402
 from livecausal.evidence import EvidenceLedger, UseLedger  # noqa: E402
 from livecausal.consult_run import (  # noqa: E402
     best_edge_for_key,
@@ -243,6 +244,142 @@ def test_run_consult_is_deterministic(d):
         assert ra["drop_real"] == rb["drop_real"]
 
 
+# ---------------------------------------------------------------------
+# P75 read-side wiring: best_edge_for_key(..., canon=True) finds edges
+# across raw-key variants that differ only by determiner/adjective (the
+# same join shape src/livecausal/test_canon.py's connectivity test
+# exercises directly on LiveGraph), while the exact-string path (canon
+# default False) cannot see across that gap at all.
+# ---------------------------------------------------------------------
+
+def _make_record(trigger, outcome, doc_coord):
+    """Direct store record, real noun-phrase trigger/outcome text (not
+    the trig::X placeholder shape) so canonical_key has something to
+    parse -- same construction test_canon.py uses, kept local here since
+    this test builds its own tiny store rather than going through
+    generate_smoke_store's ML/fake_extractor pipeline (no organism/
+    training needed to exercise query/best_edge_for_key selection logic
+    in isolation)."""
+    return {
+        "trigger": trigger,
+        "mechanism": "causes",
+        "outcome": outcome,
+        "trigger_key": trigger.strip().lower(),
+        "outcome_key": outcome.strip().lower(),
+        "doc_coord": doc_coord,
+        "evidence_count": 1,
+        "use_count": 0,
+        "meta": {},
+    }
+
+
+def test_best_edge_for_key_canon_finds_edge_exact_string_misses(d):
+    # r1's raw trigger is "the resulting recession" (canon_key "recession");
+    # the consult loop queries with the bare word "recession" -- a
+    # DIFFERENT raw surface string that never appears as trigger_key in
+    # the store at all, but shares r1's canon_key. Exact-string lookup
+    # must find nothing; canon=True lookup must find r1.
+    store_dir = os.path.join(d, "store")
+    store = LiveStore(store_dir)
+    store.append_segment([_make_record("the resulting recession", "a sharp rise in unemployment", 0)])
+
+    led = EvidenceLedger(store_dir)
+    graph_raw = LiveGraph(store_dir, canon=False)
+    valid = graph_raw.store.segments()
+
+    # Exact-string path: the query key "recession" is not any record's
+    # trigger_key ("the resulting recession" is), so no edge is found.
+    edge_raw, text_raw = best_edge_for_key(graph_raw, led, valid, "recession", canon=False)
+    assert edge_raw is None and text_raw is None, (
+        "exact-string lookup should NOT find an edge for a raw key that "
+        "never appears verbatim as a trigger_key: {}".format(edge_raw)
+    )
+
+    # Canon path: query key "recession" canonicalizes to "recession",
+    # which matches r1's trigger's canon_key ("the resulting recession"
+    # -> "recession") -- the edge must be found, with real outcome prose
+    # recoverable exactly like the exact-string path recovers it.
+    graph_canon = LiveGraph(store_dir, canon=True)
+    edge_canon, text_canon = best_edge_for_key(graph_canon, led, valid, "recession", canon=True)
+    assert edge_canon is not None, "canon=True lookup should find the joined edge"
+    assert edge_canon["from_key"] == "recession"
+    assert text_canon, "outcome text must be real, non-empty prose"
+    assert "unemployment" in text_canon.lower()
+
+    # canon_env_pin travels on the graph that produced this result --
+    # available for a caller (main()) to stamp into the run's payload.
+    assert graph_canon.canon_env_pin is not None
+    assert graph_canon.canon_env_pin["canon_version"]
+
+
+# ---------------------------------------------------------------------
+# P75 regression: best_edge_for_key/run_consult with canon left at its
+# default (False) must behave identically to the pre-P75 call shape --
+# checked directly against the smoke-graph fixture the existing tests
+# already use, not just a fresh assertion on the new corpus above.
+# ---------------------------------------------------------------------
+
+def test_consult_canon_false_is_regression_identical(d):
+    graph, chains, store_dir, corpus_path = _build_smoke_graph(d)
+    led = EvidenceLedger(store_dir)
+    valid = graph.store.segments()
+    start_key = chains[0][0]
+
+    # Same call, with and without the new keyword argument explicit --
+    # must agree exactly (edge dict equal field-for-field, same text).
+    edge_implicit, text_implicit = best_edge_for_key(graph, led, valid, start_key)
+    edge_explicit, text_explicit = best_edge_for_key(graph, led, valid, start_key, canon=False)
+    assert edge_implicit == edge_explicit
+    assert text_implicit == text_explicit
+
+    # A canon=True graph is not required to run the canon=False path --
+    # this graph was mounted with the default (canon=False) and no
+    # canon_inferred.jsonl file exists, exactly like before P75.
+    assert graph.canon_enabled is False
+    assert not os.path.exists(os.path.join(store_dir, "canon_inferred.jsonl"))
+
+    # run_consult with canon left at its default must match a run that
+    # passes canon=False explicitly, row for row (same seed, same corpus,
+    # same model init) -- the keyword existing at all must not perturb
+    # the default code path.
+    import torch
+    import portable_organism as po
+    import re
+
+    torch.set_num_threads(1)
+    vocab, stoi, unk, mask, val_ids = po.get_vocab()
+
+    with open(corpus_path, "r", encoding="utf-8") as f:
+        words = re.findall(r"[a-zA-Z]{2,}", f.read().lower())
+
+    def _run_once(use_ledger_path, explicit_canon_false):
+        torch.manual_seed(5)
+        organism = po.Organism("regress-test", len(vocab), mask, seed=5)
+        model = organism.model
+        model.eval()
+        dev = next(model.parameters()).device
+        thresh = calibrate_surprise_threshold(words, stoi, unk, model, dev, torch, quantile=0.9, n_calib_words=300)
+        use_ledger = UseLedger(use_ledger_path)
+        kwargs = {"canon": False} if explicit_canon_false else {}
+        return run_consult(
+            graph, led, use_ledger, words, stoi, unk, model, dev, torch,
+            surprise_thresh=thresh, lookahead=8, max_gaps=10, seed=1,
+            **kwargs,
+        )
+
+    dir_default = os.path.join(d, "runDefault")
+    dir_explicit = os.path.join(d, "runExplicit")
+    os.makedirs(dir_default)
+    os.makedirs(dir_explicit)
+
+    result_default = _run_once(dir_default, explicit_canon_false=False)
+    result_explicit = _run_once(dir_explicit, explicit_canon_false=True)
+
+    assert result_default["results"] == result_explicit["results"]
+    assert result_default["mean_delta_real"] == result_explicit["mean_delta_real"]
+    assert result_default["coverage"] == result_explicit["coverage"]
+
+
 def run_all():
     tests = [
         test_best_edge_for_key_finds_real_edge,
@@ -251,6 +388,8 @@ def run_all():
         test_calibrate_surprise_threshold_tracks_distribution,
         test_use_ledger_only_grows_on_positive_delta,
         test_run_consult_is_deterministic,
+        test_best_edge_for_key_canon_finds_edge_exact_string_misses,
+        test_consult_canon_false_is_regression_identical,
     ]
     for t in tests:
         with_tmpdir(t)

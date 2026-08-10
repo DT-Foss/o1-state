@@ -38,6 +38,15 @@ Usage:
   python3 src/livecausal/consult_run.py --smoke
   python3 src/livecausal/consult_run.py --store results/p72_store_run1 --text-file corpus.txt
   python3 src/livecausal/consult_run.py --store results/p72_store_run1 --source wt103
+
+P75 addition: --canon wires the P74 canonicalization organ
+(src/livecausal/canon.py) into the read side -- path SELECTION queries
+the store via query(key, canon=True), so a gap word can find edges filed
+under a different raw surface string sharing its canon_key (see
+best_edge_for_key's docstring). The random-arm control stays on raw
+edges regardless of --canon (run_consult's docstring explains why). Off
+by default: byte-identical to every pre-P75 invocation.
+  python3 src/livecausal/consult_run.py --store results/p72_store_run1 --source wt103 --canon
 """
 import argparse
 import json
@@ -140,14 +149,35 @@ def _record_for_citation(graph, sha, idx):
     return None
 
 
-def best_edge_for_key(graph, evidence_ledger, valid_segments, key):
+def best_edge_for_key(graph, evidence_ledger, valid_segments, key, canon=False):
     """The graph's best-evidence outgoing edge from `key`: among base +
     inferred edges from query(key), pick the one with the highest
     evidence_count on its (from_key, to_key) pair (ties broken by lower
     depth, i.e. more direct evidence first, then by to_key for
     determinism). Returns (edge_dict, outcome_text) or (None, None) if
-    key has no outgoing edges or no record text can be recovered."""
-    edges = graph.query(key)
+    key has no outgoing edges or no record text can be recovered.
+
+    canon=False (default): EXACT pre-P75 behavior, byte-identical to every
+    caller written before this parameter existed -- looks `key` up
+    against the graph's raw exact-string adjacency only.
+
+    canon=True: the read-side wiring for the P74 canonicalization organ
+    (src/livecausal/canon.py). `graph.query(key, canon=True)` itself
+    canonicalizes `key` before lookup and matches against the canonical
+    adjacency -- see infer.py's LiveGraph.query docstring. Requires
+    `graph` to have been constructed with LiveGraph(..., canon=True)
+    (RuntimeError otherwise, raised by query() itself -- not caught
+    here, since a canon=True call against a canon=False graph is a
+    caller bug the run should fail loudly on, not silently degrade).
+
+    Evidence scoring and outcome-text recovery below are UNCHANGED by
+    canon: canon.py never invents a citation, so every returned edge --
+    base or inferred, canonical or raw -- still carries a derivation of
+    real (segment_sha, idx) coordinates pointing at RAW records (see
+    infer.py's canon_query docstring). edge["derivation"][-1] therefore
+    resolves to a real record with real `outcome` prose exactly as it
+    does on the canon=False path -- no shape divergence to accommodate."""
+    edges = graph.query(key, canon=canon)
     if not edges:
         return None, None
 
@@ -221,9 +251,24 @@ def run_consult(
     lookahead=12,
     max_gaps=40,
     seed=60,
+    canon=False,
 ):
     """The loop itself, factored out of main() so tests can drive it
-    directly. Returns the result dict (also the JSON payload's shape)."""
+    directly. Returns the result dict (also the JSON payload's shape).
+
+    canon=False (default): EXACT pre-P75 behavior. canon=True wires the
+    P74 canonicalization organ into the READ side ONLY -- the path
+    selection query, via best_edge_for_key(..., canon=True) below.
+    random_edge_for_key (the control arm) is deliberately called
+    UNCHANGED regardless of `canon`: the paired comparison this loop
+    measures is "does the graph's CHOSEN path beat an arbitrary edge's
+    text," and canonicalizing only the chosen-path side while leaving the
+    control arm on raw edges keeps that comparison honest -- canonicalizing
+    both arms would test something else (whether canon_key adjacency is
+    denser than raw adjacency, not whether path SELECTION quality survives
+    canonicalization). `graph` must be LiveGraph(..., canon=True) when
+    canon=True is passed here (RuntimeError otherwise, from query() itself,
+    not caught -- see best_edge_for_key's docstring)."""
     rng = random.Random(seed)
     ids = [stoi.get(w, unk) for w in words]
     valid_segments = graph.store.segments()
@@ -246,7 +291,7 @@ def run_consult(
         edge, outcome_text = (None, None)
         if is_gap:
             n_spikes_total += 1
-            edge, outcome_text = best_edge_for_key(graph, evidence_ledger, valid_segments, w)
+            edge, outcome_text = best_edge_for_key(graph, evidence_ledger, valid_segments, w, canon=canon)
             is_gap = is_gap and edge is not None
 
         if not is_gap:
@@ -475,6 +520,15 @@ def main():
     ap.add_argument("--warmup-chunk-size", type=int, default=32)
     ap.add_argument("--out", default=os.path.join(REPO_ROOT, "results", "livecausal_consult.json"))
     ap.add_argument("--smoke", action="store_true", help="build a tiny smoke store + demo corpus, run offline")
+    ap.add_argument("--canon", action="store_true",
+                    help="P75: consult against the canonicalization organ's read side "
+                         "(src/livecausal/canon.py) -- mounts the store with "
+                         "LiveGraph(canon=True) and selects the injected path via "
+                         "query(key, canon=True), so a gap word joins edges filed under "
+                         "a DIFFERENT raw surface string when both share a canon_key. "
+                         "The random-arm control is deliberately left on raw edges "
+                         "regardless of this flag (see run_consult's docstring). Default "
+                         "off: byte-identical to every pre-P75 invocation.")
     args = ap.parse_args()
 
     smoke_dir = None
@@ -508,7 +562,7 @@ def main():
         print("[consult] building smoke store + corpus...", flush=True)
         generate_smoke_store(args.store, args.text_file, seed=args.seed)
 
-    graph = LiveGraph(args.store)
+    graph = LiveGraph(args.store, canon=args.canon)
     evidence_ledger = EvidenceLedger(args.store)
     use_ledger = UseLedger(args.store)
 
@@ -585,6 +639,7 @@ def main():
         lookahead=args.lookahead,
         max_gaps=args.max_gaps,
         seed=args.seed,
+        canon=args.canon,
     )
     elapsed = time.time() - t0
 
@@ -602,6 +657,14 @@ def main():
         "n_consult_words": len(consult_words),
         "n_warmup_grad_steps": organism.n_bwd if args.warmup_chunks > 0 else 0,
         "elapsed_seconds": round(elapsed, 2),
+        "canon": args.canon,
+        # canon_env_pin travels with the payload only when --canon is on --
+        # the P70 lesson applied to this run's own artifact: a canon=True
+        # result is not comparable across hosts/spaCy versions without
+        # knowing which canonicalization behavior produced it. None (not
+        # omitted) when --canon is off, so a reader can tell "canon was
+        # off" apart from "canon was on but env_pin failed to record."
+        "canon_env_pin": graph.canon_env_pin if args.canon else None,
         **result,
     }
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
