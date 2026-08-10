@@ -42,6 +42,17 @@ to_key) pair with DIFFERENT mechanisms collide on the same edge_key and
 are exactly what the draft's SS2 "contradiction" case describes (two
 claims about the same node pair, incompatible content) -- conflict
 detection falls out of the existing key rather than needing a new one.
+
+ACCEPTED (Lead review, 2026-08-10): the draft's full triple is not lost,
+just deferred -- every evidence/use ledger line already cites its base
+record by (segment_sha, idx), and each such record still carries its own
+`mechanism` field untouched. Mechanism-exact grouping is therefore an
+IDENTITY REFINEMENT AVAILABLE AT READ TIME: a future fold can re-key any
+ledger's lines by (trigger_key, mechanism, outcome_key) instead of
+(trigger_key, outcome_key) without any schema or identity change here --
+it would just read `record["mechanism"]` for each cited (sha, idx) the
+same way edge_keys_for_derivation already does. No ledger rewrite, no
+infer.py change, would be needed to add that fold.
 """
 
 import hashlib
