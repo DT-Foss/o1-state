@@ -196,7 +196,14 @@ high load is state interference, not reading.** That is precisely why
 compounding has to leave the state — which is this foundation's claim. Disclosed variants: shared indices across multiple
 independent organisms (collective memory); freshness-weighted and
 dividend-monitored replay from the index; index entries as reminders
-injected in-stream at any position; consultation policies trained end-to-end.
+injected in-stream at any position; consultation policies trained
+end-to-end; and — disclosed in full breadth in
+`analysis/LIVE_CAUSAL_SPEC.md` — the LIVE index: append-only sealed
+segments with per-edge derivation provenance, semi-naive
+delta-inference on append, derivation-cited invalidation on
+truncation, content-addressed composition of whole graphs as loadable
+knowledge-weights, and the organism-as-builder loop (gate-curated
+extraction, gap-driven growth, per-edge stranger verification).
 
 The external store also compounds **offline**: a frozen span store
 harvested under the calculus (a knowledge file, sha256-fixed) is not

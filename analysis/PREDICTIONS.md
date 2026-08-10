@@ -2078,3 +2078,29 @@ artifact is a number about the defaults, not about the system.
   fixed-dose curve shape is dial-dependent — the width law's shape
   claims then need per-q measurement; (b) fails ⇒ the dial has a
   width×q interaction at d512 — locate it.
+
+- **P70 — the curator pays in triplets, or it does not (registered
+  2026-08-10, BEFORE the build; the LIVE-CAUSAL bridge experiment,
+  analysis/LIVE_CAUSAL_SPEC.md §4).** P58 measured the gate's
+  selection in tokens (first-ever types/bigrams); the builder loop
+  needs it in the graph's own currency: VALIDATED TRIPLETS. Setup:
+  the P58 protocol re-run carrying raw text alongside tokens — the
+  organism streams WT-103, top-M surprise windows vs seeded-random
+  windows (matched counts and sizes), both window sets run through
+  the deterministic extractor + validation gate (vendor/fabel); no
+  LLM anywhere in the loop.
+  (a) YIELD: validated triplets per kilotoken from surprise windows
+      ≥ 1.3× the random windows'.
+  (b) NOVELTY IN GRAPH CURRENCY: the rate of triplets containing a
+      FIRST-EVER entity (registry over the stream so far) ≥ 1.5×
+      random's.
+  (c) instrument: extraction is deterministic — byte-identical on a
+      repeat pass over the same windows.
+  Falsifiers, pre-committed: (a) fails near 1.0× ⇒ surprise selects
+  novelty the causal extractor cannot harvest (novel ≠ causally
+  structured) — the builder needs a second filter stage (connective
+  density), named before built; (a) INVERTS ⇒ causal connectives
+  live in familiar prose — the curator routes by content class
+  instead of gating extraction; (b) fails ⇒ entity novelty and
+  token novelty diverge — the registry instrument gains an entity
+  mode.
