@@ -1644,6 +1644,40 @@ class FossKIRepl:
         # Commonsense about queries: "what is X?" — only if KB doesn't have a better answer
         # (KB definitions are more detailed; commonsense is generic fallback)
 
+        # "what does X cause?" / "what causes X?" -- Phase 5 addition (revival-probe
+        # Task 15): the fabel/curator_yield_run extractor's native output uses
+        # mechanism labels like "causes", "leads to", "produces" (validated causal
+        # triplets, not attribute facts like "capital"), which none of
+        # core/router.py's _parse_query_for_knowledge patterns cover (those are all
+        # attribute-shaped: capital/known_for/location/born/...). Without this,
+        # facts built live by the organism+fabel pipeline are unreachable through any
+        # natural-language question repl.py already knows how to ask -- this closes
+        # that gap for the single most common fabel mechanism ("causes") rather than
+        # leaving the full builder->adapter->answer loop undemonstrable.
+        m = re.match(r'what\s+does\s+(.+?)\s+cause', q)
+        if m:
+            subject = m.group(1).strip()
+            for s, r, o in self.knowledge.facts:
+                if r.lower() == 'causes' and s.lower().strip() == subject:
+                    # Full-sentence answer, not the bare outcome: bare short
+                    # answers ("cancer") can have zero content-word overlap
+                    # with the question after stop-word stripping and no
+                    # proper-noun capitalization to trigger
+                    # _answer_quality_gate's named-entity exception --
+                    # _answer_quality_gate would then reject a CORRECT
+                    # answer as a spurious Hopfield association. Embedding
+                    # the subject in the answer guarantees topic overlap
+                    # without touching the gate itself (a shared, careful
+                    # anti-hallucination mechanism this addition should not
+                    # weaken for every OTHER caller of _direct_kb_lookup).
+                    return f"{s} causes {o}"
+        m = re.match(r'what\s+causes\s+(.+)', q)
+        if m:
+            target = m.group(1).strip()
+            for s, r, o in self.knowledge.facts:
+                if r.lower() == 'causes' and o.lower().strip().startswith(target):
+                    return f"{s} causes {o}"
+
         # Math expressions — handle before KB lookup
         import math as _math
         m = re.search(r'(?:what\s+is\s+)?the\s+square\s+root\s+of\s+(\d+)', q)

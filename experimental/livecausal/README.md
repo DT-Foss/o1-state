@@ -1,4 +1,4 @@
-# experimental/livecausal/ — LIVE-CAUSAL bridge, revival-probe Phase 2+3+4
+# experimental/livecausal/ — LIVE-CAUSAL bridge, revival-probe Phase 2+3+4+5
 
 Source-of-record copies of the LiveCausalAdapter MVP built during the
 FOSS-KI revival probe (2026-08-10). These files are committed here for
@@ -61,6 +61,47 @@ See `DEMO.md` for the 10-line pitch.
   — the FULL `repl.process()` answer becomes an honest "I don't have
   information about that topic."; re-appending restores everything. 9
   automated checks, all PASS.
+
+- `demo_e2e_loop.py` / `marie_curie_article.txt` (Phase 5, Task 15) — the
+  full-stack proof: `builder_run.py` (`/root/o1lab/src/livecausal/`, the
+  o1-state team's organism+fabel builder loop) streams a fixed local text
+  file (`marie_curie_article.txt`, sentence-per-line, no web scraping),
+  fabel's deterministic `curator_yield_run.extract_validated` (no LLM
+  anywhere) validates causal triplets, folds them into the SAME
+  `LiveStore`/`LiveGraph` a `FossKIRepl(live_causal_store=...)` mounts
+  immediately afterward in the SAME process — no separate conversion
+  step between building and answering. 8 automated checks, all PASS. See
+  `DEMO.md`'s "DEMO 2" section for the full walkthrough and the honest
+  scope note on what iteration this required (see below).
+
+## `builder_run.py` integration (Phase 5)
+
+`builder_run.py` and its `curator_yield_run.py` extraction dependency
+live in `/root/o1lab/src/` (the o1-state team's own repository on this
+machine, alongside the production q-sweeps this probe must never
+disturb) — NOT copied into this repo or `~/fosski-venv/`, since they are
+substantial, actively-developed modules with their own dependency tree
+(`portable_organism.py` → `streaming_train.py` →
+`moebius_scan_transformer_selective.py` → `moebius_attention.py`, the
+last only importable with `/root/o1lab/reference/` added to
+`PYTHONPATH` — a real gap in `/root/o1lab/src/`'s own layout, found by
+tracing the actual `ModuleNotFoundError`, not guessed). `demo_e2e_loop.py`
+invokes `builder_run.py` as a subprocess exactly as a human operator
+would (`python3 /root/o1lab/src/livecausal/builder_run.py --text-file
+... --store-dir ...`), confining ALL of its output to
+`~/fosski-venv/e2e_loop_store` and `~/fosski-venv/e2e_loop_build*` — it
+never writes into `/root/o1lab/results/` (the default `--store-dir`/
+`--out-prefix`, always overridden explicitly by this demo).
+
+`repl.py`'s `_direct_kb_lookup` gained one small addition for this
+phase: a "what does X cause?" / "what causes X?" lookup against
+`self.knowledge.facts` (mechanism `causes`), returning a full sentence
+rather than the bare outcome — see the module-level comment at that call
+site, and `DEMO.md`'s honest scope note, for exactly why and how this
+was traced (not assumed) to close a real gap between fabel's causal-
+mechanism triplet output and `core/router.py`'s pre-existing attribute-
+shaped query patterns (`capital`/`known_for`/`location`/`born`/...,
+none of which cover `causes`).
 
 ## `knowledge_only` mode (Phase 3, corrected in Phase 4)
 
