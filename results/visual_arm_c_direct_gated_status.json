@@ -1,0 +1,11 @@
+{
+  "frame_idx": 50000,
+  "target_frames": 50000,
+  "n_chunks": 3125,
+  "n_bwd": 553,
+  "gate_rate": 0.177,
+  "last_l1": 0.089588,
+  "wall_s": 79.0,
+  "device": "mps",
+  "source": "synthetic"
+}

@@ -1,0 +1,18 @@
+[train_visual] device=mps source=synthetic frames=50000 q=0.75 seed=42 residual=True gate=True
+[train_visual] wrote GIF at frame 5072: /Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f5072.gif
+[train_visual] wrote GIF at frame 10064: /Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f10064.gif
+[train_visual] wrote GIF at frame 15072: /Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f15072.gif
+[train_visual] wrote GIF at frame 20064: /Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f20064.gif
+[train_visual] wrote GIF at frame 25072: /Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f25072.gif
+[train_visual] wrote GIF at frame 30064: /Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f30064.gif
+[train_visual] wrote GIF at frame 35072: /Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f35072.gif
+[train_visual] wrote GIF at frame 40064: /Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f40064.gif
+[train_visual] wrote GIF at frame 45072: /Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f45072.gif
+======================================================================
+[train_visual] DONE: 50000 frames, 3125 chunks, 600 gated (gate_rate=0.192), wall=73.5s, device=mps
+[train_visual] L1 first10: [0.0254, 0.0288, 0.0483, 0.0373, 0.0258, 0.0305, 0.033, 0.0385, 0.0339, 0.0274]
+[train_visual] L1 last10:  [0.0228, 0.0241, 0.0227, 0.0261, 0.0256, 0.0263, 0.0244, 0.02, 0.0205, 0.021]
+[train_visual] GIFs written: ['/Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f5072.gif', '/Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f10064.gif', '/Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f15072.gif', '/Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f20064.gif', '/Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f25072.gif', '/Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f30064.gif', '/Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f35072.gif', '/Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f40064.gif', '/Users/bhkmie/Documents/Forschung/O1_juli/visual/gifs/visual_synthetic_seed42_f45072.gif']
+[train_visual] checkpoint: /Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_a_residual_gated_ckpt.pt
+[train_visual] status: /Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_a_residual_gated_status.json
+[train_visual] metrics: /Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_a_residual_gated_metrics.jsonl

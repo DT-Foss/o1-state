@@ -1,0 +1,17 @@
+[run_three_arms] starting arm_a_residual_gated: /opt/anaconda3/bin/python3 -u /Users/bhkmie/Documents/Forschung/O1_juli/visual/train_visual.py --source synthetic --frames 50000 --q 0.75 --seed 42 --lr 0.001 --out-prefix /Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_a_residual_gated --gif-every 5000 --gif-window 80 --device mps --residual
+[run_three_arms] arm_a_residual_gated done in 75.4s
+[run_three_arms] starting arm_b_residual_nogate: /opt/anaconda3/bin/python3 -u /Users/bhkmie/Documents/Forschung/O1_juli/visual/train_visual.py --source synthetic --frames 50000 --q 0.75 --seed 42 --lr 0.001 --out-prefix /Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate --gif-every 5000 --gif-window 80 --device mps --residual --no-gate
+[run_three_arms] arm_b_residual_nogate done in 143.5s
+[run_three_arms] starting arm_c_direct_gated: /opt/anaconda3/bin/python3 -u /Users/bhkmie/Documents/Forschung/O1_juli/visual/train_visual.py --source synthetic --frames 50000 --q 0.75 --seed 42 --lr 0.001 --out-prefix /Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_c_direct_gated --gif-every 5000 --gif-window 80 --device mps
+[run_three_arms] arm_c_direct_gated done in 81.0s
+
+==============================================================================
+THREE-ARM COMPARISON (50,000 frames each, synthetic, seed=42, LR=1e-3)
+==============================================================================
+arm                            final L1   copy-last L1  gate rate   wall_s
+--------------------------------------------------------------------------
+arm_a_residual_gated             0.0233         0.0225      0.192     75.4  [worse than copy-last]
+arm_b_residual_nogate            0.0226         0.0225      1.000    143.5  [worse than copy-last]
+arm_c_direct_gated               0.0966         0.0225      0.177     81.0  [worse than copy-last]
+
+[run_three_arms] summary written: /Users/bhkmie/Documents/Forschung/O1_juli/results/visual_three_arms_summary.json
