@@ -2714,3 +2714,40 @@ artifact is a number about the defaults, not about the system.
   +0.2216 with 238/500 absolute helps (47.6%). The consult-policy
   organ now has its measured specification: fire in the band,
   skip the extremes.
+
+- **P81 — the dial law is family-generic, transient included
+  (registered 2026-08-11, BEFORE the scored runs; HSSLM harness
+  built and smoke-run on seeds 42/43 — those smoke curves motivate
+  the design and are NOT scored data).** HSSLM (the hierarchical
+  S6 module, now streaming exactly and gating via the organism's
+  own rolling-quantile pattern, organism vocabulary, 5.7M params)
+  shows a strictly monotone gate-rate curve in q that sits BELOW
+  1-q with the deficit growing toward small q (-0.06 at q=0.9 to
+  -0.13 at q=0.5) at a 400-chunk horizon where surprise still
+  falls steeply. Hypothesis: this is the TRANSIENT form of the
+  dial law (a falling surprise trend makes the current value
+  undercut the rolling window's quantile), not an architecture
+  deviation. Scored design, all runs 400 chunks, WT-103, organism
+  vocabulary, gate params GATE_Q grid {0.5,0.65,0.75,0.85,0.9},
+  GATE_WINDOW 200, MIN_WINDOW 30, IGNITION 15:
+  (a) FRESH-SEED REPLICATION on HSSLM (seeds 44, 45): strict
+      monotonicity of rate_stationary in q on both seeds, and
+      cross-seed spread <= 0.03 at every q.
+  (b) THE MATCHED CONTROL decides: a FRESH organism (d128,
+      matched ~5M params, same corpus/vocab/gate params/horizon,
+      seeds 44, 45) runs the identical grid. Bar:
+      |delta_HSSLM(q) - delta_organism(q)| <= 0.05 at every q,
+      where delta = rate_stationary - (1-q). If both
+      architectures under-fire the SAME way, the dial law's
+      transient form is family-generic — F1 x F5 confirmed on a
+      second architecture including its approach to
+      stationarity.
+  (c) DISCIPLINE: per-run JSON with all curve points, both
+      architectures under identical thread clamps beside the
+      running d1024 extension.
+  Falsifiers: (a) fails => the HSSLM curve was seed noise —
+  re-measure before any family claim. (b) fails with the organism
+  tracking 1-q at this horizon while HSSLM does not => the law is
+  NOT family-generic in transient — a real F5 boundary, named and
+  kept at full strength; the stationary-regime comparison then
+  re-registers on longer runs.
