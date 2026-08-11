@@ -1,0 +1,39 @@
+{
+  "train_upto": 6800,
+  "loss_first5": [
+    3.6538,
+    3.1608,
+    4.2988,
+    2.8801,
+    4.737
+  ],
+  "loss_last5": [
+    0.0115,
+    0.0053,
+    0.0012,
+    0.0049,
+    0.0144
+  ],
+  "eval": {
+    "n_heldout": 1200,
+    "n_consequence": 752,
+    "dir_acc": 0.9906914893617021,
+    "mag_acc": 0.8058510638297872,
+    "act_acc_consequence": 0.9920212765957447,
+    "sentence_acc": 0.8018617021276596,
+    "act_acc_silent": 0.9375,
+    "act_prior_silent": 0.9285714285714286,
+    "silence_said": 1.0,
+    "n_comp_holdout": 864,
+    "comp_sentence_acc": 0.02199074074074074
+  },
+  "intervention": {
+    "n_probes": 60,
+    "flip_rate": 0.8166666666666667
+  },
+  "holdout_sentence": [
+    2,
+    2
+  ],
+  "narrate_gif": "/home/claude/o1-state/voice/gifs/voice_narrated_life.gif"
+}
