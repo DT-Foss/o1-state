@@ -202,6 +202,24 @@ def _decode_transition(value: object) -> PublicTransition:
     )
 
 
+def _trace(value: PublicTrace) -> dict[str, Any]:
+    return {
+        "initial": _observe(value.initial),
+        "transitions": [_transition(item) for item in value.transitions],
+    }
+
+
+def _decode_trace(value: object) -> PublicTrace:
+    obj = _exact(value, {"initial", "transitions"}, "public_trace")
+    transitions = obj["transitions"]
+    if not isinstance(transitions, list):
+        raise WireProtocolError("public_trace.transitions must be a list")
+    return PublicTrace(
+        _decode_observation(obj["initial"]),
+        tuple(_decode_transition(item) for item in transitions),
+    )
+
+
 def _payload(value: object) -> tuple[str, dict[str, Any]]:
     if isinstance(value, SessionManifest):
         return "session_manifest", asdict(value)
@@ -212,10 +230,7 @@ def _payload(value: object) -> tuple[str, dict[str, Any]]:
     if isinstance(value, PublicTransition):
         return "public_transition", _transition(value)
     if isinstance(value, PublicTrace):
-        return "public_trace", {
-            "initial": _observe(value.initial),
-            "transitions": [_transition(item) for item in value.transitions],
-        }
+        return "public_trace", _trace(value)
     if isinstance(value, PublicTurn):
         return "public_turn", {
             "turn_id": value.turn_id,
@@ -374,14 +389,7 @@ def decode_message(data: bytes, *, max_message_bytes: int = MAX_MESSAGE_BYTES) -
         if message_type == "public_transition":
             return _decode_transition(payload)
         if message_type == "public_trace":
-            obj = _exact(payload, {"initial", "transitions"}, "public_trace")
-            transitions = obj["transitions"]
-            if not isinstance(transitions, list):
-                raise WireProtocolError("public_trace.transitions must be a list")
-            return PublicTrace(
-                _decode_observation(obj["initial"]),
-                tuple(_decode_transition(item) for item in transitions),
-            )
+            return _decode_trace(payload)
         if message_type == "public_turn":
             obj = _exact(
                 payload,

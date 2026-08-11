@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fertig-grounding-kernel"
-version = "0.1.0"
-description = "Sealed deterministic reference implementation for operational symbol grounding"
+version = "0.2.0"
+description = "Falsifiable operational symbol-grounding reference kernels and sealed protocols"
 requires-python = ">=3.11"
 dependencies = ["numpy>=1.26"]
 
 [project.scripts]
 grounding-kernel = "grounding_kernel.benchmark:main"
+grounding-kernel-v1 = "grounding_kernel.v1_benchmark:main"
 
 [project.optional-dependencies]
 test = ["pytest>=8", "ruff>=0.6"]
@@ -25,4 +26,4 @@ target-version = "py311"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["grounding_kernel*"]
+include = ["grounding_kernel*", "grounding_reference_candidate*"]

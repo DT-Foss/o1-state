@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, fields, is_dataclass
 from enum import Enum
 from hashlib import sha256
-from math import sqrt
+from math import comb, fsum, sqrt
 from pathlib import Path
 from statistics import NormalDist
 from types import MappingProxyType
@@ -109,6 +109,101 @@ def wilson_lower_bound(successes: int, trials: int, confidence: float = 0.95) ->
     return max(0.0, (centre - radius) / denominator)
 
 
+def wilson_upper_bound(successes: int, trials: int, confidence: float = 0.95) -> float:
+    """Two-sided Wilson interval's conservative upper endpoint.
+
+    Positive capability claims use the lower endpoint above.  Negative-control
+    claims need the opposite direction: observing zero shortcut successes is
+    evidence only when the *upper* endpoint is below the predeclared leakage
+    ceiling.
+    """
+
+    if trials < 0 or successes < 0 or successes > trials:
+        raise ValueError("require 0 <= successes <= trials")
+    if not 0.0 < confidence < 1.0:
+        raise ValueError("confidence must lie strictly between zero and one")
+    if trials == 0:
+        return 1.0
+    z = NormalDist().inv_cdf(0.5 + confidence / 2.0)
+    n = float(trials)
+    proportion = successes / n
+    denominator = 1.0 + z * z / n
+    centre = proportion + z * z / (2.0 * n)
+    radius = z * sqrt((proportion * (1.0 - proportion) + z * z / (4.0 * n)) / n)
+    return min(1.0, (centre + radius) / denominator)
+
+
+def _binomial_cdf(successes: int, trials: int, probability: float) -> float:
+    return fsum(
+        comb(trials, index)
+        * probability**index
+        * (1.0 - probability) ** (trials - index)
+        for index in range(successes + 1)
+    )
+
+
+def _binomial_survival(successes: int, trials: int, probability: float) -> float:
+    return fsum(
+        comb(trials, index)
+        * probability**index
+        * (1.0 - probability) ** (trials - index)
+        for index in range(successes, trials + 1)
+    )
+
+
+def clopper_pearson_lower_bound(
+    successes: int,
+    trials: int,
+    confidence: float = 0.95,
+) -> float:
+    """Exact one-sided binomial lower confidence endpoint.
+
+    The returned endpoint has coverage of at least ``confidence`` under the
+    i.i.d. Bernoulli model.  Bisection avoids a SciPy dependency and returns
+    the conservative side of the numerical bracket.
+    """
+
+    if trials < 0 or successes < 0 or successes > trials:
+        raise ValueError("require 0 <= successes <= trials")
+    if not 0.0 < confidence < 1.0:
+        raise ValueError("confidence must lie strictly between zero and one")
+    if trials == 0 or successes == 0:
+        return 0.0
+    alpha = 1.0 - confidence
+    low, high = 0.0, 1.0
+    for _ in range(80):
+        midpoint = (low + high) / 2.0
+        if _binomial_survival(successes, trials, midpoint) < alpha:
+            low = midpoint
+        else:
+            high = midpoint
+    return low
+
+
+def clopper_pearson_upper_bound(
+    successes: int,
+    trials: int,
+    confidence: float = 0.95,
+) -> float:
+    """Exact one-sided binomial upper confidence endpoint."""
+
+    if trials < 0 or successes < 0 or successes > trials:
+        raise ValueError("require 0 <= successes <= trials")
+    if not 0.0 < confidence < 1.0:
+        raise ValueError("confidence must lie strictly between zero and one")
+    if trials == 0 or successes == trials:
+        return 1.0
+    alpha = 1.0 - confidence
+    low, high = 0.0, 1.0
+    for _ in range(80):
+        midpoint = (low + high) / 2.0
+        if _binomial_cdf(successes, trials, midpoint) > alpha:
+            low = midpoint
+        else:
+            high = midpoint
+    return high
+
+
 def bootstrap_mean_lower_bound(
     samples: Iterable[float],
     confidence: float = 0.95,
@@ -177,6 +272,34 @@ class MetricBound:
         )
 
     @classmethod
+    def binary_exact(
+        cls,
+        outcomes: Iterable[bool | int],
+        *,
+        confidence: float = 0.95,
+    ) -> "MetricBound":
+        """Build a one-sided exact Clopper-Pearson Bernoulli bound."""
+
+        values = tuple(outcomes)
+        if any(value not in (False, True, 0, 1) for value in values):
+            raise ValueError("binary outcomes must contain only booleans or 0/1")
+        successes = sum(bool(value) for value in values)
+        sample_size = len(values)
+        estimate = successes / sample_size if sample_size else 0.0
+        return cls(
+            estimate=estimate,
+            lower_bound=clopper_pearson_lower_bound(
+                successes,
+                sample_size,
+                confidence,
+            ),
+            confidence=confidence,
+            sample_size=sample_size,
+            method="clopper-pearson-one-sided",
+            successes=successes,
+        )
+
+    @classmethod
     def scores(
         cls,
         scores: Iterable[float],
@@ -210,8 +333,25 @@ class MetricBound:
         if self.sample_size < 0:
             raise ValueError("sample_size cannot be negative")
 
+    @property
+    def upper_bound(self) -> float:
+        """Return a conservative upper endpoint when this is a binary metric."""
+
+        if self.successes is None:
+            raise ValueError("upper_bound is available only for binary metrics")
+        if self.method == "clopper-pearson-one-sided":
+            return clopper_pearson_upper_bound(
+                self.successes,
+                self.sample_size,
+                self.confidence,
+            )
+        return wilson_upper_bound(self.successes, self.sample_size, self.confidence)
+
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        result = asdict(self)
+        if self.successes is not None:
+            result["upper_bound"] = self.upper_bound
+        return result
 
 
 @dataclass(frozen=True, slots=True)

@@ -7,6 +7,7 @@ import pytest
 
 from grounding_kernel.contracts import Action
 from grounding_kernel.processworld import (
+    AffordanceCounterfactualSet,
     OstensiveRecord,
     ProcessActionKind,
     ProcessConceptKind,
@@ -118,6 +119,22 @@ def test_new_instances_preserve_concept_contract_under_fresh_lexicons() -> None:
     )
 
 
+def test_world_variant_changes_instances_without_changing_public_codebook() -> None:
+    first = ProcessHarness(400, world_variant=0)
+    changed = ProcessHarness(400, world_variant=17)
+
+    assert first.agent.manifest == changed.agent.manifest
+    assert first.agent.action_codes == changed.agent.action_codes
+    assert first.agent.concept_codes == changed.agent.concept_codes
+    assert first.oracle.snapshot() != changed.oracle.snapshot()
+    for harness in (first, changed):
+        positive, negative = harness.oracle.affordance_pair()
+        assert harness.oracle.matches_concept(positive.episode, ProcessConceptKind.SHELTER)
+        assert not harness.oracle.matches_concept(
+            negative.episode, ProcessConceptKind.SHELTER
+        )
+
+
 def test_visually_matched_structures_diverge_only_through_affordance_intervention() -> None:
     harness = ProcessHarness(900)
     snapshot = harness.oracle.snapshot()
@@ -135,6 +152,10 @@ def test_visually_matched_structures_diverge_only_through_affordance_interventio
     positive, negative = harness.oracle.affordance_pair()
     assert positive.token == negative.token
     assert positive.task_feedback and not negative.task_feedback
+    assert tuple(step.action for step in positive.episode.transitions) == tuple(
+        step.action for step in negative.episode.transitions
+    )
+    assert positive.episode.observations[0] == negative.episode.observations[0]
     assert [harness.oracle.decode_action(step.action.code) for step in positive.episode.transitions] == [
         ProcessActionKind.ENTER,
         ProcessActionKind.HAZARD,
@@ -145,6 +166,19 @@ def test_visually_matched_structures_diverge_only_through_affordance_interventio
     assert harness.oracle.decode_outcome(
         negative.episode.transitions[-1].outcome_code
     ) is ProcessOutcomeKind.DAMAGED
+    # The causal result is in raw geometry as well as the legacy opaque
+    # outcome channel: v1 can drop outcome_code without losing the contrast.
+    assert not np.array_equal(
+        positive.episode.transitions[-1].after.pixels,
+        negative.episode.transitions[-1].after.pixels,
+    )
+    assert np.count_nonzero(
+        positive.episode.transitions[-1].before.pixels
+        != positive.episode.transitions[-1].after.pixels
+    ) == np.count_nonzero(
+        negative.episode.transitions[-1].before.pixels
+        != negative.episode.transitions[-1].after.pixels
+    )
 
 
 def test_move_is_temporally_extended_displacement_not_a_single_frame_class() -> None:
@@ -170,8 +204,14 @@ def test_passive_identical_processes_diverge_only_after_perturbation() -> None:
     assert operational_signature(passive_self) == operational_signature(passive_external)
 
     self_sustaining, externally_driven = harness.oracle.process_pair()
-    # Every nonsensory action and outcome code is the same. The divergence is
-    # in ordered pixels after do(perturb), not in a shortcut label.
+    # Every public action field and outcome code is the same. The divergence
+    # is in ordered pixels after do(perturb), not in a target-tracker side
+    # channel or shortcut label.
+    assert tuple(step.action for step in self_sustaining.episode.transitions) == tuple(
+        step.action for step in externally_driven.episode.transitions
+    )
+    assert len({step.action.target for step in self_sustaining.episode.transitions}) == 1
+    assert self_sustaining.episode.observations[0] == externally_driven.episode.observations[0]
     assert self_sustaining.episode.non_sensor_transcript().steps == (
         externally_driven.episode.non_sensor_transcript().steps
     )
@@ -184,6 +224,23 @@ def test_passive_identical_processes_diverge_only_after_perturbation() -> None:
     )
     assert not harness.oracle.matches_concept(
         externally_driven.episode, ProcessConceptKind.RUNNING
+    )
+
+
+def test_target_roles_are_separate_from_matched_causal_process_twins() -> None:
+    harness = ProcessHarness(315)
+
+    first_role, second_role = harness.oracle.target_role_pair()
+    first_role_actions = tuple(step.action for step in first_role.transitions)
+    second_role_actions = tuple(step.action for step in second_role.transitions)
+    assert first_role_actions != second_role_actions
+    assert {step.action.target for step in first_role.transitions}.isdisjoint(
+        {step.action.target for step in second_role.transitions}
+    )
+
+    positive, negative = harness.oracle.process_pair()
+    assert tuple(step.action for step in positive.episode.transitions) == tuple(
+        step.action for step in negative.episode.transitions
     )
 
 
@@ -265,3 +322,34 @@ def test_interactive_agent_steps_only_with_opaque_codes() -> None:
     with pytest.raises(ValueError, match="unknown opaque"):
         harness.agent.step(Action(123_456_789, target))
 
+
+def test_counterfactual_bundle_has_matched_public_worlds_and_no_truth_field() -> None:
+    bundle = ProcessHarness(717, renderer_variant=8, world_variant=4).oracle.affordance_counterfactuals()
+
+    assert isinstance(bundle, AffordanceCounterfactualSet)
+    assert set(AffordanceCounterfactualSet.__dataclass_fields__) == {
+        "target",
+        "diagnostic_actions",
+        "worlds",
+    }
+    assert len(bundle.worlds) == 4
+    assert len(bundle.diagnostic_actions) == 2
+    assert all(action.target == bundle.target for action in bundle.diagnostic_actions)
+    initial = tuple(world.observe() for world in bundle.worlds)
+    assert all(observation == initial[0] for observation in initial[1:])
+
+    final_digests: list[str] = []
+    first_digests: list[str] = []
+    for world in bundle.worlds:
+        world.reset()
+        first = world.step(bundle.diagnostic_actions[0])
+        second = world.step(bundle.diagnostic_actions[1])
+        first_digests.append(first.after.digest())
+        final_digests.append(second.after.digest())
+    assert len(set(first_digests)) == 1
+    # Default pattern order varies the non-target bit inside each adjacent
+    # pair, proving that only the fixed target's affordance changes evidence.
+    assert final_digests[0] == final_digests[1]
+    assert final_digests[2] == final_digests[3]
+    assert final_digests[0] != final_digests[2]
+    assert len({id(world) for world in bundle.worlds}) == len(bundle.worlds)

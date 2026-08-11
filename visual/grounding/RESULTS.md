@@ -1,7 +1,9 @@
 # GroundZero-v0 result record
 
 Date: 2026-08-11  
-Status: scoped operational certificate; not a universal symbol-grounding claim
+Status: archived v0 reference metric bundle; superseded by the stricter claim
+ladder in [`THREAT_MODEL.md`](THREAT_MODEL.md). This was never an adversarial or
+universal symbol-grounding certificate.
 
 ## Reproducible run
 
@@ -49,10 +51,10 @@ certificate score was `1.034353700928628`.
    declared finite action alphabet through depth two and fails closed when its
    transition budget is insufficient.
 
-## Exact claim boundary
+## Exact evidence boundary
 
-This run certifies, for the declared finite microworld family, that the binder
-can learn opaque predicate tokens from ostensive sensorimotor transitions,
+This run shows, for the transparent reference binder in the declared finite
+microworld family, that it can learn opaque predicate tokens from ostensive sensorimotor transitions,
 retain them under a fresh lexicon permutation and nuisance changes, use the
 intervention/outcome pairing, compose a previously unseen typed conjunction,
 and abstain on a predicate absent from both rendering and transition laws.

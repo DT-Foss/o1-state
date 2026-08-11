@@ -172,6 +172,11 @@ class PublicTransition:
     def pixels_changed(self) -> bool:
         return not np.array_equal(self.before.pixels, self.after.pixels)
 
+    def feedback_stripped(self) -> "PublicTransition":
+        """Return the same public transition without corrective feedback."""
+
+        return PublicTransition(self.before, self.action, self.after, None)
+
 
 @dataclass(frozen=True, slots=True)
 class PublicTrace:
@@ -218,12 +223,7 @@ class PublicTrace:
         return PublicTrace(
             self.initial,
             tuple(
-                PublicTransition(
-                    transition.before,
-                    transition.action,
-                    transition.after,
-                    None,
-                )
+                transition.feedback_stripped()
                 for transition in self.transitions
             ),
         )
@@ -361,13 +361,25 @@ class BeliefDecision:
 
 @runtime_checkable
 class InteractiveGrounder(Protocol):
-    """Candidate-side behavior required by the future isolated v1 runner."""
+    """Candidate-side behavior required by the isolated v1 runner.
+
+    Support is deliberately a two-record call: the phase/budget/utterance lives
+    in ``turn`` while the complete outcome-free sensorimotor evidence lives in
+    ``trace``.  Passing only the turn would silently discard the very evidence
+    that is meant to ground its utterance.
+    """
 
     def begin(self, manifest: SessionManifest) -> None: ...
 
-    def observe_support(self, turn: PublicTurn) -> None: ...
+    def observe_support(self, turn: PublicTurn, trace: PublicTrace) -> None: ...
 
     def choose_experiment(self, turn: PublicTurn) -> ExperimentDecision: ...
+
+    def observe_experiment(
+        self,
+        turn: PublicTurn,
+        transition: PublicTransition,
+    ) -> None: ...
 
     def describe(self, trace: PublicTrace) -> DescriptionDecision: ...
 

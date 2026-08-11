@@ -278,6 +278,13 @@ class EvaluationSession:
     def record_experiment(self, transition: PublicTransition, cost: float = 1.0) -> None:
         with self._lock:
             self._require_phase(SessionPhase.ACQUISITION)
+            if (
+                isinstance(transition, PublicTransition)
+                and transition.scalar_feedback is not None
+            ):
+                raise SessionStateError(
+                    "acquisition transitions must be feedback-stripped"
+                )
             self._record_costed_transition(
                 transition, cost, SessionEventKind.EXPERIMENT
             )

@@ -14,6 +14,7 @@ charged to an immutable, hashable experiment ledger.
 
 from __future__ import annotations
 
+from collections import Counter
 from collections.abc import Hashable, Mapping, Sequence
 from dataclasses import asdict, dataclass, field, fields, is_dataclass
 from hashlib import sha256
@@ -76,7 +77,7 @@ class AcquisitionPolicy(Protocol):
         self,
         version_space: "BayesianVersionSpace",
         candidates: Sequence["CandidateIntervention"],
-        ledger: "AcquisitionLedger",
+        ledger: "PolicyLedgerView",
         budget: "ProbeBudget",
     ) -> "ProbeScore | None": ...
 
@@ -195,6 +196,88 @@ class ObservableConsequence:
             raise ValueError("absolute_change must be finite and non-negative")
         if self.scalar_feedback is not None and not isfinite(self.scalar_feedback):
             raise ValueError("scalar_feedback must be finite")
+
+
+@dataclass(frozen=True, slots=True)
+class SensoryTraceConsequence:
+    """Action-, outcome-, and feedback-free consequence of a public trace.
+
+    Only pixel differences are retained.  In particular, the opaque action
+    code and target that caused the change are *conditioned interventions*,
+    not part of the resulting evidence.
+    """
+
+    pixels_changed: tuple[bool, ...]
+    changed_values: tuple[int, ...]
+    absolute_changes: tuple[float, ...]
+    delta_digests: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        lengths = {
+            len(self.pixels_changed),
+            len(self.changed_values),
+            len(self.absolute_changes),
+            len(self.delta_digests),
+        }
+        if lengths != {len(self.pixels_changed)} or not self.pixels_changed:
+            raise ValueError("sensory consequence fields must be non-empty and aligned")
+        if any(value < 0 for value in self.changed_values):
+            raise ValueError("changed pixel-value counts cannot be negative")
+        if any(not isfinite(value) or value < 0.0 for value in self.absolute_changes):
+            raise ValueError("absolute pixel changes must be finite and non-negative")
+
+    @property
+    def digest(self) -> str:
+        return sha256(_canonical_bytes(self)).hexdigest()
+
+
+def sensory_trace_consequence(record: object) -> SensoryTraceConsequence:
+    """Extract a sensor-only signature from a public trace or transition.
+
+    The accepted structural inputs are the current ``PublicTrace``, a sequence
+    of public/current transitions, or one transition.  No action, outcome,
+    token, feedback, or evaluator field is inspected.
+    """
+
+    if isinstance(record, SensoryTraceConsequence):
+        return record
+    if hasattr(record, "transitions"):
+        transitions = tuple(getattr(record, "transitions"))
+    elif isinstance(record, Sequence) and not isinstance(record, (str, bytes, bytearray)):
+        transitions = tuple(record)
+    elif hasattr(record, "before") and hasattr(record, "after"):
+        transitions = (record,)
+    else:
+        raise TypeError("sensory evidence must be a trace or transition sequence")
+    if not transitions:
+        raise ValueError("sensory traces cannot be empty")
+
+    changed: list[bool] = []
+    counts: list[int] = []
+    magnitudes: list[float] = []
+    digests: list[str] = []
+    for transition in transitions:
+        before = _pixel_array(_field(transition, "before"))
+        after = _pixel_array(_field(transition, "after"))
+        if before is None or after is None:
+            raise TypeError("trace observations must expose numeric pixels")
+        if before.shape != after.shape:
+            raise ValueError("before and after pixel shapes differ")
+        difference = after.astype(np.float64) - before.astype(np.float64)
+        count = int(np.count_nonzero(difference))
+        magnitude = float(np.sum(np.abs(difference), dtype=np.float64))
+        payload = str(tuple(int(value) for value in difference.shape)).encode("ascii")
+        payload += np.ascontiguousarray(difference, dtype=np.float64).tobytes()
+        changed.append(count > 0)
+        counts.append(count)
+        magnitudes.append(magnitude)
+        digests.append(sha256(payload).hexdigest())
+    return SensoryTraceConsequence(
+        tuple(changed),
+        tuple(counts),
+        tuple(magnitudes),
+        tuple(digests),
+    )
 
 
 def learner_visible_consequence(record: object) -> Hashable:
@@ -357,6 +440,87 @@ class OperationalHypothesis:
                 f"hypothesis {self.hypothesis_id!r} has no prediction for "
                 f"intervention {intervention_key!r}"
             ) from exc
+
+
+@dataclass(frozen=True, slots=True)
+class OperationalSupportRecord:
+    """One token-free consequence measured in an independent support source."""
+
+    hypothesis_id: Hashable
+    intervention_key: Hashable
+    consequence: Hashable
+    source_id: Hashable
+
+    def __post_init__(self) -> None:
+        if self.hypothesis_id is None:
+            raise ValueError("hypothesis_id cannot be None")
+        for name in ("hypothesis_id", "intervention_key", "consequence", "source_id"):
+            _require_hashable(getattr(self, name), name)
+
+
+def hypotheses_from_support(
+    records: Sequence[OperationalSupportRecord],
+    *,
+    minimum_sources: int = 2,
+    priors: Mapping[Hashable, float] | None = None,
+) -> tuple[OperationalHypothesis, ...]:
+    """Fit categorical operational hypotheses from independent public evidence.
+
+    Every hypothesis must cover the same intervention family, and each row
+    must have observations from ``minimum_sources`` distinct source worlds.
+    Duplicate source/hypothesis/intervention triples fail closed rather than
+    being allowed to inflate empirical support.
+    """
+
+    if isinstance(minimum_sources, bool) or not isinstance(minimum_sources, int):
+        raise TypeError("minimum_sources must be an integer")
+    if minimum_sources < 1:
+        raise ValueError("minimum_sources must be positive")
+    values = tuple(records)
+    if not values or any(not isinstance(record, OperationalSupportRecord) for record in values):
+        raise ValueError("support requires OperationalSupportRecord values")
+
+    counts: dict[Hashable, dict[Hashable, Counter[Hashable]]] = {}
+    sources: dict[tuple[Hashable, Hashable], set[Hashable]] = {}
+    seen: set[tuple[Hashable, Hashable, Hashable]] = set()
+    for record in values:
+        source_key = (record.hypothesis_id, record.intervention_key, record.source_id)
+        if source_key in seen:
+            raise ValueError("duplicate support source for one hypothesis/intervention")
+        seen.add(source_key)
+        counts.setdefault(record.hypothesis_id, {}).setdefault(
+            record.intervention_key, Counter()
+        )[record.consequence] += 1
+        sources.setdefault((record.hypothesis_id, record.intervention_key), set()).add(
+            record.source_id
+        )
+
+    hypothesis_ids = tuple(sorted(counts, key=_stable_key))
+    intervention_sets = {frozenset(counts[identifier]) for identifier in hypothesis_ids}
+    if len(intervention_sets) != 1:
+        raise ValueError("every support hypothesis must cover the same interventions")
+    interventions = next(iter(intervention_sets))
+    for identifier in hypothesis_ids:
+        for intervention in interventions:
+            if len(sources[(identifier, intervention)]) < minimum_sources:
+                raise ValueError(
+                    "each hypothesis/intervention needs independent support sources"
+                )
+
+    if priors is not None and set(priors) != set(hypothesis_ids):
+        raise ValueError("priors must contain every learned hypothesis exactly once")
+    hypotheses: list[OperationalHypothesis] = []
+    for identifier in hypothesis_ids:
+        consequences: dict[Hashable, Mapping[Hashable, float]] = {}
+        for intervention in sorted(interventions, key=_stable_key):
+            row = counts[identifier][intervention]
+            total = sum(row.values())
+            consequences[intervention] = {
+                consequence: frequency / total for consequence, frequency in row.items()
+            }
+        prior = 1.0 if priors is None else float(priors[identifier])
+        hypotheses.append(OperationalHypothesis(identifier, consequences, prior))
+    return tuple(hypotheses)
 
 
 def _entropy(probabilities: Sequence[float]) -> float:
@@ -603,6 +767,59 @@ class BayesianVersionSpace:
         )
 
 
+def _sha256_commitment(value: object, field_name: str) -> str:
+    if not isinstance(value, str) or len(value) != 64 or value.lower() != value:
+        raise ValueError(f"{field_name} must be a lowercase SHA-256 hex digest")
+    try:
+        bytes.fromhex(value)
+    except ValueError as exc:
+        raise ValueError(f"{field_name} must be a lowercase SHA-256 hex digest") from exc
+    return value
+
+
+@dataclass(frozen=True, slots=True)
+class AcquisitionCommitments:
+    """Evaluator commitments, with the target attached only after acquisition.
+
+    ``problem`` and ``policy`` are safe pre-probe design commitments.  ``target``
+    is deliberately optional: a target-bound value is an audit artifact and is
+    rejected by :func:`run_acquisition` until a terminal run exists.
+    """
+
+    problem: str
+    policy: str
+    target: str | None = None
+
+    def __post_init__(self) -> None:
+        for name in ("problem", "policy"):
+            object.__setattr__(
+                self,
+                name,
+                _sha256_commitment(getattr(self, name), f"{name} commitment"),
+            )
+        if self.target is not None:
+            object.__setattr__(
+                self,
+                "target",
+                _sha256_commitment(self.target, "target commitment"),
+            )
+
+    @property
+    def audit_bound(self) -> bool:
+        return self.target is not None
+
+    def bind_target(self, target: str) -> "AcquisitionCommitments":
+        """Return the post-run audit form with one immutable target binding."""
+
+        if self.target is not None:
+            raise ValueError("target commitment is already bound")
+        return AcquisitionCommitments(self.problem, self.policy, target)
+
+    @property
+    def digest(self) -> str:
+        return sha256(_canonical_bytes(self)).hexdigest()
+
+
 @dataclass(frozen=True, slots=True)
 class ProbeBudget:
     """Hard cap shared by active and baseline acquisition policies."""
@@ -654,6 +871,35 @@ class LedgerEntry:
 
 
 @dataclass(frozen=True, slots=True)
+class PolicyLedgerView:
+    """Learner-visible resource history with every evaluator commitment removed."""
+
+    policy: str
+    budget: ProbeBudget
+    design_hash: str
+    entries: tuple[LedgerEntry, ...] = ()
+
+    @property
+    def probes_used(self) -> int:
+        return len(self.entries)
+
+    @property
+    def cost_used(self) -> float:
+        return fsum(entry.cost for entry in self.entries)
+
+    @property
+    def remaining_probes(self) -> int:
+        return self.budget.max_probes - self.probes_used
+
+    @property
+    def remaining_cost(self) -> float:
+        return max(0.0, self.budget.max_cost - self.cost_used)
+
+    def uses(self, intervention_key: Hashable) -> int:
+        return sum(entry.intervention_key == intervention_key for entry in self.entries)
+
+
+@dataclass(frozen=True, slots=True)
 class AcquisitionLedger:
     """Immutable probe/cost account with a policy-independent design hash."""
 
@@ -661,6 +907,7 @@ class AcquisitionLedger:
     budget: ProbeBudget
     design_hash: str
     entries: tuple[LedgerEntry, ...] = ()
+    commitments: AcquisitionCommitments | None = None
 
     @classmethod
     def create(
@@ -668,8 +915,21 @@ class AcquisitionLedger:
         policy: str,
         budget: ProbeBudget,
         candidates: Sequence[CandidateIntervention],
+        commitments: AcquisitionCommitments | None = None,
     ) -> "AcquisitionLedger":
-        return cls(str(policy), budget, _design_hash(budget, candidates))
+        if commitments is not None and not isinstance(commitments, AcquisitionCommitments):
+            raise TypeError("commitments must be AcquisitionCommitments or None")
+        if commitments is not None and commitments.audit_bound:
+            raise ValueError(
+                "target commitments are post-run audit data, not acquisition input"
+            )
+        return cls(
+            str(policy),
+            budget,
+            _design_hash(budget, candidates),
+            (),
+            commitments,
+        )
 
     @property
     def probes_used(self) -> int:
@@ -691,6 +951,30 @@ class AcquisitionLedger:
     def ledger_hash(self) -> str:
         return sha256(_canonical_bytes(asdict(self))).hexdigest()
 
+    @property
+    def experiment_hash(self) -> str:
+        """Policy-independent hash of resources plus committed experiment identity."""
+
+        return sha256(
+            _canonical_bytes(
+                {
+                    "design_hash": self.design_hash,
+                    "commitments": self.commitments,
+                }
+            )
+        ).hexdigest()
+
+    @property
+    def policy_view(self) -> PolicyLedgerView:
+        """Return a copy containing only policy-visible resource history."""
+
+        return PolicyLedgerView(
+            self.policy,
+            self.budget,
+            self.design_hash,
+            self.entries,
+        )
+
     def uses(self, intervention_key: Hashable) -> int:
         return sum(entry.intervention_key == intervention_key for entry in self.entries)
 
@@ -708,7 +992,26 @@ class AcquisitionLedger:
             raise ValueError("ledger entry policy does not match ledger")
         if self.remaining_probes < 1 or entry.cost > self.remaining_cost + _EPSILON:
             raise ValueError("ledger entry exceeds budget")
-        return AcquisitionLedger(self.policy, self.budget, self.design_hash, self.entries + (entry,))
+        return AcquisitionLedger(
+            self.policy,
+            self.budget,
+            self.design_hash,
+            self.entries + (entry,),
+            self.commitments,
+        )
+
+    def bind_target_audit(self, target: str) -> "AcquisitionLedger":
+        """Attach a target commitment to a completed evaluator audit ledger."""
+
+        if self.commitments is None:
+            raise ValueError("target audit binding requires design commitments")
+        return AcquisitionLedger(
+            self.policy,
+            self.budget,
+            self.design_hash,
+            self.entries,
+            self.commitments.bind_target(target),
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -722,7 +1025,7 @@ class InformationGainPolicy:
         self,
         version_space: BayesianVersionSpace,
         candidates: Sequence[CandidateIntervention],
-        ledger: AcquisitionLedger,
+        ledger: PolicyLedgerView,
         budget: ProbeBudget,
     ) -> ProbeScore | None:
         del ledger, budget
@@ -752,7 +1055,7 @@ class RandomPolicy:
         self,
         version_space: BayesianVersionSpace,
         candidates: Sequence[CandidateIntervention],
-        ledger: AcquisitionLedger,
+        ledger: PolicyLedgerView,
         budget: ProbeBudget,
     ) -> ProbeScore | None:
         del budget
@@ -781,7 +1084,7 @@ class PassivePolicy:
         self,
         version_space: BayesianVersionSpace,
         candidates: Sequence[CandidateIntervention],
-        ledger: AcquisitionLedger,
+        ledger: PolicyLedgerView,
         budget: ProbeBudget,
     ) -> ProbeScore | None:
         del budget
@@ -811,6 +1114,15 @@ class AcquisitionRun:
     @property
     def cost_used(self) -> float:
         return self.ledger.cost_used
+
+    def bind_target_audit(self, target: str) -> "AcquisitionRun":
+        """Return the terminal run with its evaluator-only target audit bound."""
+
+        return AcquisitionRun(
+            self.version_space,
+            self.decision,
+            self.ledger.bind_target_audit(target),
+        )
 
 
 def _validate_candidates(
@@ -854,12 +1166,18 @@ def run_acquisition(
     policy: AcquisitionPolicy | None = None,
     encoder: ConsequenceEncoder = learner_visible_consequence,
     confidence: float = 1.0,
+    commitments: AcquisitionCommitments | None = None,
 ) -> AcquisitionRun:
     """Run one deterministic, budgeted acquisition policy to termination."""
 
     candidates = _validate_candidates(version_space, candidates)
     selected_policy: AcquisitionPolicy = policy or InformationGainPolicy()
-    ledger = AcquisitionLedger.create(selected_policy.name, budget, candidates)
+    ledger = AcquisitionLedger.create(
+        selected_policy.name,
+        budget,
+        candidates,
+        commitments,
+    )
     state = version_space
 
     while True:
@@ -874,7 +1192,7 @@ def run_acquisition(
                 _terminal_decision(state, "BUDGET_EXHAUSTED", reason),
                 ledger,
             )
-        score = selected_policy.select(state, eligible, ledger, budget)
+        score = selected_policy.select(state, eligible, ledger.policy_view, budget)
         if score is None or score.intervention not in eligible:
             return AcquisitionRun(
                 state,
@@ -942,6 +1260,7 @@ def run_policy_baselines(
     passive_order: Sequence[Hashable] = (),
     encoder: ConsequenceEncoder = learner_visible_consequence,
     confidence: float = 1.0,
+    commitments: AcquisitionCommitments | None = None,
 ) -> Mapping[str, AcquisitionRun]:
     """Run active, seeded-random and passive policies on one declared design.
 
@@ -965,14 +1284,16 @@ def run_policy_baselines(
             policy=selected_policy,
             encoder=encoder,
             confidence=confidence,
+            commitments=commitments,
         )
-    design_hashes = {run.ledger.design_hash for run in runs.values()}
-    if len(design_hashes) != 1:
+    experiment_hashes = {run.ledger.experiment_hash for run in runs.values()}
+    if len(experiment_hashes) != 1:
         raise RuntimeError("baseline policies did not execute the same candidate/budget design")
     return MappingProxyType(runs)
 
 
 __all__ = [
+    "AcquisitionCommitments",
     "AcquisitionDecision",
     "AcquisitionLedger",
     "AcquisitionPolicy",
@@ -987,12 +1308,17 @@ __all__ = [
     "LearnerVisibleTransition",
     "LedgerEntry",
     "ObservableConsequence",
+    "OperationalSupportRecord",
     "OperationalHypothesis",
     "PassivePolicy",
+    "PolicyLedgerView",
     "ProbeBudget",
     "ProbeScore",
     "RandomPolicy",
+    "SensoryTraceConsequence",
+    "hypotheses_from_support",
     "learner_visible_consequence",
     "run_acquisition",
     "run_policy_baselines",
+    "sensory_trace_consequence",
 ]

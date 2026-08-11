@@ -339,6 +339,7 @@ class _ProcessEngine:
         codebook: _Codebook,
         semantic_rng: np.random.Generator,
         render_rng: np.random.Generator,
+        world_variant: int = 0,
     ) -> None:
         self.config = config
         self.codebook = codebook
@@ -353,19 +354,32 @@ class _ProcessEngine:
         self._probe_color = tuple(int(value) for value in render_rng.integers(120, 245, size=3))
         self._shield_color = tuple(int(value) for value in render_rng.integers(150, 256, size=3))
         self._damage_color = tuple(int(value) for value in render_rng.integers(70, 210, size=3))
+        if self._shield_color == self._probe_color:
+            self._shield_color = (
+                (self._shield_color[0] + 1) % 256,
+                self._shield_color[1],
+                self._shield_color[2],
+            )
+        if self._damage_color == self._probe_color:
+            self._damage_color = (
+                (self._damage_color[0] + 1) % 256,
+                self._damage_color[1],
+                self._damage_color[2],
+            )
         self._roof_style = int(render_rng.integers(0, 3))
         self._texture_phase = int(render_rng.integers(0, 2))
 
         structure_centers = [(18, 21), (54, 21)]
         protective_side = int(semantic_rng.integers(0, 2))
+        instance_base = world_variant * 1_000
         self._structures = [
-            _Structure(index, center, index == protective_side)
+            _Structure(instance_base + index, center, index == protective_side)
             for index, center in enumerate(structure_centers)
         ]
         mover_rows = [47, 58]
         self_side = int(semantic_rng.integers(0, 2))
         self._movers = [
-            _Mover(100 + index, (12, row), index == self_side)
+            _Mover(instance_base + 100 + index, (12, row), index == self_side)
             for index, row in enumerate(mover_rows)
         ]
         self._negative_control = bool(semantic_rng.integers(0, 2))
@@ -593,12 +607,44 @@ class _ProcessEngine:
 
     def _draw_probe(self, frame: np.ndarray, center: Pixel) -> None:
         cx, cy = center
-        color = self._probe_color
+        if self._hazard_state == 0:
+            frame[cy - 1 : cy + 2, cx - 1 : cx + 2] = self._probe_color
+            return
+
+        # Protection and damage are raw visual consequences, not merely
+        # opaque outcome-code differences.  Both glyphs use nine foreground
+        # pixels, have the same 5x5 extent and induce the same aggregate
+        # changed-pixel count; only their spatial arrangement differs.  This
+        # keeps the context pair transcript-matched while making pixels
+        # causally necessary.
         if self._hazard_state > 0:
             color = self._shield_color
-        elif self._hazard_state < 0:
+            offsets = (
+                (-2, 0),
+                (-1, 0),
+                (0, 0),
+                (1, 0),
+                (2, 0),
+                (0, -2),
+                (0, -1),
+                (0, 1),
+                (0, 2),
+            )
+        else:
             color = self._damage_color
-        frame[cy - 1 : cy + 2, cx - 1 : cx + 2] = color
+            offsets = (
+                (-2, -1),
+                (-1, -1),
+                (1, -1),
+                (-1, 1),
+                (1, 1),
+                (2, 1),
+                (-1, -2),
+                (0, 0),
+                (1, 2),
+            )
+        for dx, dy in offsets:
+            frame[cy + dy, cx + dx] = color
 
 
 class ProcessWorld:
@@ -657,6 +703,38 @@ class ProcessWorld:
         return self.__episode_capability()
 
 
+@dataclass(frozen=True, slots=True)
+class AffordanceCounterfactualSet:
+    """Matched public worlds for evaluator-controlled active acquisition.
+
+    Pattern truth and construction parameters are deliberately absent.  The
+    evaluator retains the requested ordering; a learner receives only
+    independent public worlds, one common image-space target and one common
+    sequence of opaque diagnostic actions.
+    """
+
+    target: Pixel
+    diagnostic_actions: tuple[Action, ...]
+    worlds: tuple[ProcessWorld, ...]
+
+    def __post_init__(self) -> None:
+        target = (
+            _strict_int(self.target[0], "target"),
+            _strict_int(self.target[1], "target"),
+        )
+        actions = tuple(self.diagnostic_actions)
+        worlds = tuple(self.worlds)
+        if not actions or not all(isinstance(action, Action) for action in actions):
+            raise ValueError("diagnostic_actions must contain public Action records")
+        if not worlds or not all(isinstance(world, ProcessWorld) for world in worlds):
+            raise ValueError("worlds must contain independent ProcessWorld capabilities")
+        if any(action.target != target for action in actions):
+            raise ValueError("every diagnostic action must use the common target")
+        object.__setattr__(self, "target", target)
+        object.__setattr__(self, "diagnostic_actions", actions)
+        object.__setattr__(self, "worlds", worlds)
+
+
 class _ProcessOracle:
     """Evaluator-only semantic capability."""
 
@@ -710,9 +788,69 @@ class _ProcessOracle:
     def _action(self, kind: ProcessActionKind, target: Pixel) -> Action:
         return Action(self._engine.codebook.actions[kind], target)
 
-    def _structure_episode(self, object_id: int) -> PublicEpisode:
+    def affordance_counterfactuals(
+        self,
+        patterns: Sequence[tuple[bool, bool]] = (
+            (False, False),
+            (False, True),
+            (True, False),
+            (True, True),
+        ),
+        *,
+        target_index: int = 0,
+    ) -> AffordanceCounterfactualSet:
+        """Construct same-render public worlds differing only in latent affordance.
+
+        The returned record carries no requested pattern labels.  Callers that
+        evaluate hypotheses retain ``patterns`` outside the learner boundary.
+        """
+
+        target_index = _strict_int(target_index, "target_index")
+        if target_index not in (0, 1):
+            raise ValueError("target_index must be 0 or 1")
+        converted: list[tuple[bool, bool]] = []
+        for pattern in patterns:
+            if not isinstance(pattern, (tuple, list)) or len(pattern) != 2:
+                raise TypeError("patterns must contain Boolean pairs")
+            if not all(isinstance(value, (bool, np.bool_)) for value in pattern):
+                raise TypeError("patterns must contain Boolean pairs")
+            converted.append((bool(pattern[0]), bool(pattern[1])))
+        if not converted:
+            raise ValueError("at least one counterfactual pattern is required")
+
+        target = self._engine.structure_center(
+            self._engine._structures[target_index].object_id
+        )
+        actions = (
+            self._action(ProcessActionKind.ENTER, target),
+            self._action(ProcessActionKind.HAZARD, target),
+        )
+        worlds: list[ProcessWorld] = []
+        for pattern in converted:
+            clone = self._engine.fork()
+            clone.reset()
+            for structure, protective in zip(clone._structures, pattern, strict=True):
+                structure.protective = protective
+            clone._initial = clone._state_copy()
+            clone.reset()
+            worlds.append(ProcessWorld(clone))
+        return AffordanceCounterfactualSet(target, actions, tuple(worlds))
+
+    def _structure_episode(
+        self,
+        object_id: int,
+        *,
+        protective: bool | None = None,
+    ) -> PublicEpisode:
         engine = self._engine.fork()
         engine.reset()
+        if protective is not None:
+            selected = next(
+                structure for structure in engine._structures if structure.object_id == object_id
+            )
+            selected.protective = bool(protective)
+            engine._initial = engine._state_copy()
+            engine.reset()
         target = engine.structure_center(object_id)
         engine.step(Action(engine.codebook.actions[ProcessActionKind.ENTER], target))
         engine.step(Action(engine.codebook.actions[ProcessActionKind.HAZARD], target))
@@ -721,21 +859,55 @@ class _ProcessOracle:
     def affordance_pair(self) -> tuple[OstensiveRecord, OstensiveRecord]:
         snapshot = self.snapshot()
         token = self.encode_concept(ProcessConceptKind.SHELTER)
+        # Counterfactualize one and the same visible structure.  Positive and
+        # negative records therefore have byte-identical public actions and
+        # initial pixels; only the hidden affordance and its raw consequence
+        # differ.
+        anchor = snapshot.protective_structure
         return (
-            OstensiveRecord(token, self._structure_episode(snapshot.protective_structure), True),
-            OstensiveRecord(token, self._structure_episode(snapshot.nonprotective_structure), False),
+            OstensiveRecord(
+                token,
+                self._structure_episode(anchor, protective=True),
+                True,
+            ),
+            OstensiveRecord(
+                token,
+                self._structure_episode(anchor, protective=False),
+                False,
+            ),
         )
 
-    def _movement_episode(self, object_id: int, *, perturb: bool) -> PublicEpisode:
+    def _movement_episode(
+        self,
+        object_id: int,
+        *,
+        perturb: bool,
+        self_sustaining: bool | None = None,
+    ) -> PublicEpisode:
         engine = self._engine.fork()
         engine.reset()
+        if self_sustaining is not None:
+            selected = next(
+                mover for mover in engine._movers if mover.object_id == object_id
+            )
+            selected.self_sustaining = bool(self_sustaining)
+            selected.perturbed = False
+            selected.stalled = False
+            engine._initial = engine._state_copy()
+            engine.reset()
         advance = engine.codebook.actions[ProcessActionKind.ADVANCE]
         perturb_code = engine.codebook.actions[ProcessActionKind.PERTURB]
-        engine.step(Action(advance, engine.mover_center(object_id)))
+        initial_x, initial_y = engine.mover_center(object_id)
+        # One fixed open-loop target lies within reach both before and after
+        # each possible displacement.  It prevents a tracker/oracle from
+        # writing the observed process outcome back into future Action.target
+        # coordinates.
+        target = (initial_x + engine.config.displacement, initial_y)
+        engine.step(Action(advance, target))
         if perturb:
-            engine.step(Action(perturb_code, engine.mover_center(object_id)))
-        engine.step(Action(advance, engine.mover_center(object_id)))
-        engine.step(Action(advance, engine.mover_center(object_id)))
+            engine.step(Action(perturb_code, target))
+        engine.step(Action(advance, target))
+        engine.step(Action(advance, target))
         return engine.episode()
 
     def passive_process_pair(self) -> tuple[PublicEpisode, PublicEpisode]:
@@ -745,6 +917,18 @@ class _ProcessOracle:
             self._movement_episode(snapshot.external_mover, perturb=False),
         )
 
+    def target_role_pair(self) -> tuple[PublicEpisode, PublicEpisode]:
+        """Return evaluator-curated demonstrations of the two visible actors.
+
+        These episodes deliberately have different public targets: their only
+        purpose is to ground two target-role words to distinct referents.  They
+        are not positive/negative evidence for a process concept; causal
+        process twins must come from :meth:`process_pair`, whose complete
+        public action transcripts are exactly matched.
+        """
+
+        return self.passive_process_pair()
+
     def movement_pair(self) -> tuple[OstensiveRecord, OstensiveRecord]:
         token = self.encode_concept(ProcessConceptKind.MOVING)
         left, right = self.passive_process_pair()
@@ -753,15 +937,24 @@ class _ProcessOracle:
     def process_pair(self) -> tuple[OstensiveRecord, OstensiveRecord]:
         snapshot = self.snapshot()
         token = self.encode_concept(ProcessConceptKind.RUNNING)
+        anchor = snapshot.self_sustaining_mover
         return (
             OstensiveRecord(
                 token,
-                self._movement_episode(snapshot.self_sustaining_mover, perturb=True),
+                self._movement_episode(
+                    anchor,
+                    perturb=True,
+                    self_sustaining=True,
+                ),
                 True,
             ),
             OstensiveRecord(
                 token,
-                self._movement_episode(snapshot.external_mover, perturb=True),
+                self._movement_episode(
+                    anchor,
+                    perturb=True,
+                    self_sustaining=False,
+                ),
                 False,
             ),
         )
@@ -872,20 +1065,30 @@ class ProcessHarness:
         config: ProcessConfig | None = None,
         *,
         renderer_variant: int = 0,
+        world_variant: int = 0,
     ) -> None:
         seed = _strict_int(seed, "seed")
         renderer_variant = _strict_int(renderer_variant, "renderer_variant")
-        if seed < 0 or renderer_variant < 0:
-            raise ValueError("seed and renderer_variant must be non-negative")
+        world_variant = _strict_int(world_variant, "world_variant")
+        if seed < 0 or renderer_variant < 0 or world_variant < 0:
+            raise ValueError("seed, renderer_variant and world_variant must be non-negative")
         selected = config if config is not None else ProcessConfig()
         if not isinstance(selected, ProcessConfig):
             raise TypeError("config must be a ProcessConfig")
         codebook = _Codebook.generate(seed)
-        semantic_rng = np.random.default_rng(np.random.SeedSequence((seed, 0x5E1A)))
+        semantic_rng = np.random.default_rng(
+            np.random.SeedSequence((seed, world_variant, 0x5E1A))
+        )
         render_rng = np.random.default_rng(
             np.random.SeedSequence((seed, renderer_variant, 0xBADC0DE))
         )
-        engine = _ProcessEngine(selected, codebook, semantic_rng, render_rng)
+        engine = _ProcessEngine(
+            selected,
+            codebook,
+            semantic_rng,
+            render_rng,
+            world_variant,
+        )
         self.agent = ProcessWorld(engine)
         self.oracle = _ProcessOracle(engine)
 
@@ -908,4 +1111,3 @@ def audit_process_agent(agent: ProcessWorld) -> tuple[str, ...]:
         "pos",
     }
     return tuple(sorted(name for name in dir(agent) if name in forbidden))
-

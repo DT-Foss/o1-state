@@ -70,11 +70,21 @@ class NonIdentifiabilityWitness:
 
 @dataclass(frozen=True, slots=True)
 class PredicateGroundability:
-    """Whether a declared predicate factors through the operational quotient."""
+    """Whether a declared predicate factors through the operational quotient.
+
+    This is a necessary identifiability condition inside the declared finite
+    model, not by itself evidence that a learner acquired or uses the predicate.
+    """
 
     groundable: bool
     quotient: tuple[tuple[Hashable, ...], ...]
     witness: NonIdentifiabilityWitness | None = None
+
+    @property
+    def quotient_compatible(self) -> bool:
+        """Explicit name for the scoped necessary condition."""
+
+        return self.groundable
 
 
 @dataclass(frozen=True, slots=True)

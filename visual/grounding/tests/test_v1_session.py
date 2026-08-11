@@ -68,7 +68,7 @@ def test_full_commit_support_acquire_freeze_query_sequence_is_auditable() -> Non
     )
     session.record_support(turn, trace)
     session.begin_acquisition()
-    session.record_experiment(transition, 1.25)
+    session.record_experiment(transition.feedback_stripped(), 1.25)
     session.freeze(_digest("checkpoint"))
     session.record_query(Utterance((9001,)), ActionDecision(None, 1.0))
     ledger = session.complete()
@@ -111,9 +111,12 @@ def test_all_three_budgets_fail_closed() -> None:
             trace,
         )
     session.begin_acquisition()
+    with pytest.raises(SessionStateError, match="feedback-stripped"):
+        session.record_experiment(transition, 1.0)
+    assert session.ledger.intervention_cost_used == 0.0
     with pytest.raises(SessionBudgetError, match="cost"):
-        session.record_experiment(transition, 2.01)
-    session.record_experiment(transition, 2.0)
+        session.record_experiment(transition.feedback_stripped(), 2.01)
+    session.record_experiment(transition.feedback_stripped(), 2.0)
     session.freeze(_digest("checkpoint"))
     session.record_query(Utterance((1,)), ActionDecision(None, 1.0))
     with pytest.raises(SessionBudgetError, match="query"):

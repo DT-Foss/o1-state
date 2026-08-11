@@ -5,7 +5,7 @@ import inspect
 import pytest
 
 import grounding_kernel.language as language_module
-from grounding_kernel.composition import And, Atom
+from grounding_kernel.composition import And, Atom, Not, Or, Relation, entity
 from grounding_kernel.language import (
     UNKNOWN,
     Demonstration,
@@ -46,6 +46,11 @@ def _factorial_training() -> tuple[Demonstration, ...]:
         Demonstration((TOKEN_11, TOKEN_22), _referent(VALUE_11, VALUE_22), (2, 102)),
         Demonstration((TOKEN_12, TOKEN_21), _referent(VALUE_12, VALUE_21), (3, 103)),
     )
+
+
+def _proof_nodes(proof: object) -> tuple[object, ...]:
+    premises = getattr(proof, "premises")
+    return (proof,) + tuple(node for premise in premises for node in _proof_nodes(premise))
 
 
 def test_factorial_holdout_is_composed_bidirectionally_without_utterance_lookup() -> None:
@@ -231,6 +236,111 @@ def test_symbolic_theft_uses_least_fixed_point_and_cycles_remain_unknown() -> No
     assert closure.confidence(cycle_b) == 0.0
     assert closure.unresolved_cycles == ((cycle_a, cycle_b),)
     assert learner.composition_anchors[TOKEN_11] == pytest.approx(1.0)
+    assert learner.materialize_definition(cycle_a).status is Resolution.UNKNOWN
+
+
+def test_grounded_definition_materializes_an_executor_ready_referent_and_proof() -> None:
+    composed = 600_001
+    learner = GroundedLanguageLearner().fit(_factorial_training()).add_definitions(
+        {composed: And(Atom(TOKEN_12), Atom(TOKEN_22))}
+    )
+
+    result = learner.materialize_definition(composed)
+    assert result.status is Resolution.RESOLVED
+    assert result.resolved
+    assert result.referent == _referent(VALUE_12, VALUE_22)
+    assert result.candidate_meanings == result.referent.meanings
+    assert result.definition.expression == And(Atom(TOKEN_12), Atom(TOKEN_22))
+    assert result.proof.rule == "materialize-grounded-definition"
+    assert result.proof.premises[0].rule == "least-fixed-point-symbolic-theft"
+    assert result.proof.premises[0].evidence
+
+    leaves = [
+        proof
+        for proof in _proof_nodes(result.proof)
+        if getattr(proof, "rule") == "direct-operational-leaf"
+    ]
+    assert len(leaves) == 2
+    assert all(leaf.evidence for leaf in leaves)
+    assert all(evidence.startswith("demo:") for leaf in leaves for evidence in leaf.evidence)
+
+    # An executor consumes the materialized frame directly; it need not know
+    # which lexical leaves or dictionary expression produced it.
+    def execute(frame: GroundedReferent) -> tuple[OperationalMeaning, ...]:
+        return frame.meanings
+
+    assert execute(result.referent) == _referent(VALUE_12, VALUE_22).meanings
+    assert learner.ground_definition(composed) == result
+    assert learner.definition_to_referent(composed) == result
+
+
+def test_materialization_expands_grounded_definition_chains_to_direct_leaves() -> None:
+    inner = 600_010
+    outer = 600_011
+    directly_grounded_meaning = OperationalMeaning(TYPE_2, VALUE_22)
+    learner = GroundedLanguageLearner().fit(_factorial_training()).add_definitions(
+        {
+            inner: And(Atom(TOKEN_12), Atom(directly_grounded_meaning)),
+            outer: Atom(inner),
+        }
+    )
+
+    result = learner.materialize_definition(outer)
+    assert result.resolved
+    assert result.referent == _referent(VALUE_12, VALUE_22)
+    rules = {getattr(proof, "rule") for proof in _proof_nodes(result.proof)}
+    assert "expand-grounded-definition" in rules
+    assert "direct-operational-leaf" in rules
+
+
+def test_duplicate_and_conflicting_definition_leaves_fail_closed() -> None:
+    duplicate = 600_020
+    conflict = 600_021
+    learner = GroundedLanguageLearner().fit(_factorial_training()).add_definitions(
+        {
+            duplicate: And(Atom(TOKEN_11), Atom(TOKEN_11)),
+            conflict: And(Atom(TOKEN_11), Atom(TOKEN_12)),
+        }
+    )
+
+    repeated = learner.materialize_definition(duplicate)
+    competing = learner.materialize_definition(conflict)
+    assert repeated.status is Resolution.UNKNOWN
+    assert repeated.referent is None
+    assert repeated.proof.rule == "duplicate-definition-leaf"
+    assert repeated.candidate_meanings == (OperationalMeaning(TYPE_1, VALUE_11),)
+
+    assert competing.status is Resolution.AMBIGUOUS
+    assert competing.referent is None
+    assert competing.proof.rule == "ambiguous-definition-referent"
+    assert set(competing.candidate_meanings) == {
+        OperationalMeaning(TYPE_1, VALUE_11),
+        OperationalMeaning(TYPE_1, VALUE_12),
+    }
+
+
+def test_nonconjunctive_grounded_definitions_are_not_materialized() -> None:
+    disjunction = 600_030
+    negation = 600_031
+    relation = 600_032
+    learner = GroundedLanguageLearner().fit(_factorial_training()).add_definitions(
+        {
+            disjunction: Or(Atom(TOKEN_11), Atom(TOKEN_12)),
+            negation: Not(Atom(TOKEN_11)),
+            relation: Relation(TOKEN_22, entity(TOKEN_11), entity(TOKEN_21)),
+        }
+    )
+
+    for symbol in (disjunction, negation, relation):
+        assert learner.resolve_definition(symbol).resolved
+        result = learner.materialize_definition(symbol)
+        assert result.status is Resolution.UNKNOWN
+        assert result.referent is None
+        assert result.proof.rule == "unknown-definition-referent"
+        assert any(
+            getattr(proof, "rule") == "non-materializable-operator"
+            for proof in _proof_nodes(result.proof)
+        )
 
 
 def test_language_module_has_no_oracle_or_semantic_enum_dependency() -> None:

@@ -1,0 +1,121 @@
+{
+  "acquisition_cost_consumed": 8.0,
+  "adversarial_certificate": false,
+  "artifact_commitment": "c312515cf9895e2dcaa5454a60faa8b914761245a29f849bbb2f243207af896b",
+  "axes": [
+    {
+      "evidence_hash": "cbac9fe4d3cd03a79e2ca1120d1031254f9f774b46f9104d1bbecf90ea48b2b3",
+      "name": "artifact_before_dataset_materialization",
+      "note": "Artifact/SDK commitment preceded the sole post-begin case factory call.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "fa2b4ac12aa5e426522cc9cfd62dc2f21a992aa17f82003c56d58af71864698c",
+      "name": "single_persistent_checkpoint",
+      "note": "Every support, probe, and query used one persistent frozen process.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "c8d2c34a8bfc2b3b7efacb2f10955667ab3c3bfd9d3a71e8c5f21a6662f073a4",
+      "name": "active_causal_belief",
+      "note": "Two evaluator-executed probes identify the opaque causal hypothesis.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "f20ab30097c9d3b30ba01c239ce368d02507642366ad3e7400072cee57c91d4f",
+      "name": "heldout_factorial_action",
+      "note": "The unshown fourth role\u00d7action cell is executed and externally scored.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "e5e81b46b5cfd2c616f0fe17ac6fd8995c210ef689750b1c1f51e8e63381f988",
+      "name": "heldout_reverse_description",
+      "note": "Both an independent trace and the candidate's own execution map back to the withheld utterance.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "4fa965f4258c33939dd71c7a0c4c6d67924912016e9d7c5c059f45c4f3e5ba16",
+      "name": "grounded_definition_base",
+      "note": "The grounded zero-feedback definition resolves and executes externally.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "5a1f1d6f265cd0809e2eb13e9d3cfe98762a7731aa0080872b85b589ec206110",
+      "name": "grounded_definition_middle",
+      "note": "The grounded zero-feedback definition resolves and executes externally.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "d8392b3755c2bc4f6e00b3ceba78401e83ad9f35a0d4e7f9ad7ea8b0a35b2583",
+      "name": "grounded_definition_chain",
+      "note": "The grounded zero-feedback definition resolves and executes externally.",
+      "passed": true
+    }
+  ],
+  "benchmark_definition_commitment": "d6b7349b7fbcba7b2911013084420fcad947e71c1599068d0c44ff370712f80d",
+  "candidate_request_count": 118,
+  "checkpoint_commitment": "96b706f1cd95a0b6175e35682c275d02ec2fd546256d4c2bb571154d64edcdb2",
+  "claim_scope": "Honest-reference Grade-3 operational diagnostic; not a universal symbol-grounding solution, not an adversarial certificate, and not Grade-4 isolation.",
+  "controls": [
+    {
+      "evidence_hash": "09fce890058ce72f7d8f69ce56afe6b7f2c95fdce7c71089693ebdd696613dbb",
+      "name": "probe_association_shuffle_safe",
+      "note": "A consequential probe-ID shuffle is unknown; an observationally identical swap remains equivariant.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "d8a19699df44e45a1e2943de67799add45e21a2550fe6b079fd11a5b57aeb88f",
+      "name": "temporal_corruption_rejected",
+      "note": "A reversed temporal/action sequence is not named as the heldout process.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "5e9b8f105b26976032e50ef6bac5252f95684fc1ded805e5610f1ed98980ae1a",
+      "name": "static_sensor_not_operational",
+      "note": "Shape-correct static pixels neither complete nor pass the external scorer.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "1d3a86ca1998ddf41602af0334dce8fce3ae0e696faa3b4b6b67b80339bbabeb",
+      "name": "fresh_symbol_abstention",
+      "note": "A fresh ungrounded surface symbol triggers explicit abstention.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "a1427f4724e86b044ee6d110e2417e0b09f40b7848fd7d9ecbda2e94863a8085",
+      "name": "unannounced_remap_abstention",
+      "note": "An unannounced fresh remapping is rejected rather than guessed.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "6eaab02f97d322ad928a1b2d4e5a61f31660335a2178902899bd473310d1b0ac",
+      "name": "ungrounded_cycle_abstention",
+      "note": "Both symbols in a mutually recursive definition without causal anchor remain unknown.",
+      "passed": true
+    },
+    {
+      "evidence_hash": "10f20a96a95ece29906ffd44d2b88b85506da48826a299a3f4cc6fde28d1d1a4",
+      "name": "feedback_outcome_free_trajectory_channel",
+      "note": "Trajectory evidence omits reward and evaluator outcome codes; ostensive corrections remain support-turn-only.",
+      "passed": true
+    }
+  ],
+  "dataset_commitment": "1b61f86ff8bfe118159cae7dc253b373400328ad932ccbddee3cf727979f9482",
+  "ledger_commitment": "ecb100612626732ebc9b77b86d3b1442975105a63a74359278d4b3f3dff16f11",
+  "manifest_commitment": "94e63134df19993e47a6babc84ea40168c18758937dc7c8df85d418d10144c2e",
+  "motor_action_cost_consumed": 45.0,
+  "motor_resets_consumed": 17,
+  "noncompensatory": true,
+  "passed": true,
+  "permutation_variant": 0,
+  "protocol_version": "grounding-grade3-honest-diagnostic/1",
+  "renderer_variant": 0,
+  "report_hash": "d144ec0468c72b52cd1631250b282e77e38af31a73da5547ee212f69a3a38957",
+  "schema_commitment": "f8457d936956ee5360192dddd8c86bef30684c121305733f31d9db122460e520",
+  "sdk_commitment": "4df7e651fc8b1cecbbab5260b55092bd4a38b17cb5adf7a6fbdbc2bcb1ecd7bf",
+  "sealed_queries_consumed": 14,
+  "seed": 1,
+  "support_records_consumed": 43,
+  "support_worlds": 2,
+  "universal_certificate": false
+}

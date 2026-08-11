@@ -1,7 +1,9 @@
 # GroundZero-v1: from grounded concepts to learned language
 
-Status: executable research contract under implementation. This document does
-not widen the already certified v0 claim.
+Status: claim-grade-2 reference self-test implemented. The serialized
+persistent-candidate protocol is implemented separately; an adversarial
+certificate remains blocked until one externally sandboxed frozen candidate
+drives every axis.
 
 ## The question being answered
 
@@ -11,8 +13,9 @@ sensorimotor distinction, use that word to control behavior, and combine it in
 an utterance it has never memorized.
 
 The benchmark does not tell the learner that one word is a noun and another a
-verb. It exposes only raw observations, opaque actions/outcomes, opaque token
-sequences, task feedback, and a finite interaction budget. Typed internal
+verb. It exposes only raw observations, opaque actions, opaque token sequences,
+support-only generic feedback, and a finite interaction budget. Mandatory v1
+traces contain no outcome-code channel. Typed internal
 operators are allowed as a computational bias; evaluator POS tags, English
 names, latent object IDs and codebook maps are forbidden learner inputs.
 
@@ -69,9 +72,11 @@ The ledger records the prior, every candidate score, the chosen experiment,
 the observed public consequence, the posterior, and the stopping reason.
 Identical hypotheses remain unresolved; the learner must not invent a label.
 
-Active learning passes only if it reaches the same correct posterior with no
-more probes than random and passive baselines over preregistered seeds. All
-methods receive the same hypothesis family, observations and action budget.
+Active learning passes only if hypotheses were induced from independent public
+support worlds, every selected experiment actually executes through public
+`reset/step`, and paired cost-to-correct is strictly lower than exhaustive
+random-order and counterbalanced-passive baselines. Failures are censored at
+the committed budget; all methods share one problem/policy/target commitment.
 
 ## Language induction without POS supervision
 
@@ -125,30 +130,44 @@ must carry a proof tree terminating in sensorimotor episodes.
 V1 uses an intersection test; every axis and its coverage floor must pass.
 
 1. **Active acquisition efficiency:** correct posterior under the probe budget;
-   active is no worse than random/passive on paired worlds.
+   active has strict paired cost-to-correct savings over exhaustive random and
+   counterbalanced passive policies. The policy sees a redacted ledger without
+   the evaluator-private target commitment, and a real
+   intervention/consequence derangement must destroy resolution.
 2. **Object affordance invariance:** new shelter instances/renderers pass;
    visually matched non-protective twins fail.
 3. **Process causality and order:** new trajectories pass; shuffled time and
-   externally displaced endpoint twins fail.
-4. **Description to action:** a held-out utterance produces the intended
+   externally displaced endpoint twins fail. Matched twins expose byte-identical
+   action codes, vectors and every target coordinate.
+4. **Sensor-context necessity:** full raw RGB resolves a context twin with an
+   identical nonsensory transcript; sensorless complete-action-target,
+   action-only, target-only and action/outcome-only controls do not.
+5. **Description to action:** a held-out utterance produces the intended
    intervention/policy and world consequence.
-5. **World to description:** a held-out operational fact is described with a
-   semantically correct learned utterance.
-6. **Factorial composition:** withheld token combinations and deeper programs
+6. **Trace to description:** an independently executed feedback-free public
+   world trace is recognized against its evaluator-committed operational
+   referent, described, parsed back and re-executed in a second fresh world.
+7. **Factorial composition:** withheld token combinations and deeper programs
    are executed without direct composite examples.
-7. **Lexicon permutation equivariance:** a fresh bijection of all surface tokens
+8. **Lexicon permutation equivariance:** a fresh bijection of all surface tokens
    changes utterances but not behavior or recovered programs.
-8. **Symbolic theft:** a definition-only word transfers with a grounded proof;
-   an unanchored definition cycle remains unknown.
-9. **Open-set honesty:** causally disconnected and unsupported concepts are
-   rejected with calibrated abstention.
+9. **Symbolic theft:** a definition-only word transfers with a grounded proof;
+   an unanchored definition cycle and a deleted leaf remain unknown, while a
+   swapped leaf changes the actual behavior.
+10. **Open-set honesty:** causally disconnected and unsupported concepts are
+   rejected with explicit `UNKNOWN`; this v1 gate tests abstention behavior and
+   coverage, not probabilistic calibration.
 
 ## Baselines and kill conditions
 
-Run the same frozen splits with static pixels only, tokens only, actions only,
-shuffled action/outcome pairs, shuffled temporal order, shuffled
-utterance/referent pairs, full-utterance lookup, majority/chance, passive probe
-selection and an evaluator oracle.
+The registered negative controls are sensorless complete-action-target,
+action-only, target-only, action/outcome-only, full-utterance lookup,
+target-rank-only, shuffled action/consequence pairs, shuffled temporal order,
+and deleted/swapped definition leaves. Passive and exhaustive-random policies
+are paired active-learning comparators rather than leakage controls. Evaluator
+oracle predicates are positive scoring preconditions and never candidate
+inputs. The required control registry is fail-closed: omitting a named kill
+invalidates the run.
 
 The v1 claim is invalid if any shortcut baseline passes a grounding gate, if a
 fresh token is predicted before exposure, if the active method receives extra
@@ -157,8 +176,10 @@ train/test share world, object, renderer, lexicon or composite identities.
 
 ## Claim boundary
 
-Passing v1 would establish a finite operational instance of learning words and
-simple compositional language from interaction. It would not yet establish
+Passing the current reference self-test establishes that these transparent
+components can realize a finite operational instance of learning words and a
+simple compositional motor code. It is not a certificate for an arbitrary
+candidate. Even a later adversarial v1 pass would not establish
 open-world natural language, social convention, recursion without depth bound,
 pragmatics, autobiographical meaning, human concepts in their full cultural
 scope, consciousness or alignment.

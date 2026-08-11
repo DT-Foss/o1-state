@@ -1,23 +1,32 @@
 from __future__ import annotations
 
 import ast
+from collections.abc import Sequence
 from pathlib import Path
 
 import numpy as np
 import pytest
 
 from grounding_kernel.active import (
+    AcquisitionCommitments,
     BayesianVersionSpace,
     CandidateIntervention,
     InformationGainPolicy,
     ObservableConsequence,
     OperationalHypothesis,
+    OperationalSupportRecord,
+    PolicyLedgerView,
     ProbeBudget,
+    ProbeScore,
+    SensoryTraceConsequence,
+    hypotheses_from_support,
     learner_visible_consequence,
     run_acquisition,
     run_policy_baselines,
+    sensory_trace_consequence,
 )
 from grounding_kernel.benchmark import GroundingEvidence
+from grounding_kernel.certificates import manifest_hash
 from grounding_kernel.contracts import Action, Observation, Transition
 from grounding_kernel.v1_contracts import PublicTransition
 
@@ -111,7 +120,7 @@ def test_exact_entropy_per_cost_and_bayesian_update() -> None:
             (cheap,),
             lambda _payload: "left",
             ProbeBudget(0, 0.0),
-        ).ledger,
+        ).ledger.policy_view,
         ProbeBudget(1, 10.0),
     )
     assert choice is not None and choice.intervention.key == "cheap"
@@ -216,6 +225,151 @@ def test_v1_transition_needs_no_semantic_outcome_code() -> None:
     assert signature.outcome_code is None
     assert signature.scalar_feedback == pytest.approx(0.25)
     assert signature.pixels_changed
+
+
+def test_sensor_only_trace_signature_ignores_action_outcome_and_feedback() -> None:
+    before = _observation(1, 0)
+    after = _observation(2, 1)
+    first = Transition(before, Action(101, (1, 2), (1, 0)), after, 201)
+    second = Transition(before, Action(999, (4, 4), (-1, 0)), after, 777)
+    public = PublicTransition(before, Action(313, (0, 0)), after, scalar_feedback=-0.75)
+
+    one = sensory_trace_consequence(first)
+    two = sensory_trace_consequence(second)
+    three = sensory_trace_consequence(public)
+
+    assert isinstance(one, SensoryTraceConsequence)
+    assert one == two == three
+    assert one.digest == two.digest == three.digest
+
+
+def test_hypotheses_require_independent_support_sources() -> None:
+    records = tuple(
+        OperationalSupportRecord(hypothesis, intervention, consequence, source)
+        for hypothesis, rows in {
+            "blind-a": {"left": "x", "right": "u"},
+            "blind-b": {"left": "y", "right": "v"},
+        }.items()
+        for source in ("world-1", "world-2")
+        for intervention, consequence in rows.items()
+    )
+    learned = hypotheses_from_support(records, minimum_sources=2)
+
+    assert tuple(item.hypothesis_id for item in learned) == ("blind-a", "blind-b")
+    assert dict(learned[0].distribution("left")) == {"x": 1.0}
+    with pytest.raises(ValueError, match="independent support"):
+        hypotheses_from_support(
+            tuple(record for record in records if record.source_id == "world-1"),
+            minimum_sources=2,
+        )
+
+
+def test_problem_policy_commitments_bind_during_run_and_target_binds_after() -> None:
+    commitments = AcquisitionCommitments("1" * 64, "2" * 64)
+    target = "3" * 64
+    hypotheses = (
+        OperationalHypothesis("h0", {"probe": "x"}),
+        OperationalHypothesis("h1", {"probe": "y"}),
+    )
+    runs = run_policy_baselines(
+        BayesianVersionSpace("token", hypotheses),
+        (CandidateIntervention("probe"),),
+        lambda _payload: "x",
+        ProbeBudget(1, 1.0),
+        commitments=commitments,
+    )
+
+    assert {run.ledger.commitments for run in runs.values()} == {commitments}
+    assert all(run.ledger.commitments is not None for run in runs.values())
+    assert all(not run.ledger.commitments.audit_bound for run in runs.values())  # type: ignore[union-attr]
+    assert len({run.ledger.experiment_hash for run in runs.values()}) == 1
+    assert len({run.ledger.design_hash for run in runs.values()}) == 1
+
+    audited = tuple(run.bind_target_audit(target) for run in runs.values())
+    assert {run.ledger.commitments for run in audited} == {
+        commitments.bind_target(target)
+    }
+    assert len({run.ledger.experiment_hash for run in audited}) == 1
+
+    with pytest.raises(ValueError, match="post-run audit"):
+        run_acquisition(
+            BayesianVersionSpace("token", hypotheses),
+            (CandidateIntervention("probe"),),
+            lambda _payload: "x",
+            ProbeBudget(1, 1.0),
+            commitments=commitments.bind_target(target),
+        )
+
+
+class _OldTargetEnumerationPolicy:
+    name = "adversarial-target-enumerator"
+
+    def __init__(self, nonce: str) -> None:
+        self.nonce = nonce
+        self.recovered: tuple[object, ...] = ()
+        self.received_view = False
+
+    def select(
+        self,
+        version_space: BayesianVersionSpace,
+        candidates: Sequence[CandidateIntervention],
+        ledger: PolicyLedgerView,
+        budget: ProbeBudget,
+    ) -> ProbeScore | None:
+        self.received_view = isinstance(ledger, PolicyLedgerView)
+        visible_target = getattr(getattr(ledger, "commitments", None), "target", None)
+        self.recovered = tuple(
+            hypothesis.hypothesis_id
+            for hypothesis in version_space.hypotheses
+            if manifest_hash(
+                {
+                    "nonce": self.nonce,
+                    "opaque_token": version_space.token,
+                    "positive_operational_signature": hypothesis.hypothesis_id,
+                }
+            )
+            == visible_target
+        )
+        return InformationGainPolicy().select(
+            version_space,
+            candidates,
+            ledger,
+            budget,
+        )
+
+
+def test_policy_view_defeats_the_old_target_commitment_enumerator() -> None:
+    hypotheses = (
+        OperationalHypothesis("h0", {"probe": "x"}),
+        OperationalHypothesis("h1", {"probe": "y"}),
+    )
+    nonce = "formerly-public-nonce"
+    target_digest = manifest_hash(
+        {
+            "nonce": nonce,
+            "opaque_token": "token",
+            "positive_operational_signature": "h0",
+        }
+    )
+    adversary = _OldTargetEnumerationPolicy(nonce)
+    commitments = AcquisitionCommitments("1" * 64, "2" * 64)
+
+    run = run_acquisition(
+        BayesianVersionSpace("token", hypotheses),
+        (CandidateIntervention("probe"),),
+        lambda _payload: "x",
+        ProbeBudget(1, 1.0),
+        policy=adversary,
+        commitments=commitments,
+    )
+
+    assert adversary.received_view
+    assert adversary.recovered == ()
+    assert "commitment" not in repr(run.ledger.policy_view).lower()
+    assert run.ledger.commitments == commitments
+    assert run.bind_target_audit(target_digest).ledger.commitments == (
+        commitments.bind_target(target_digest)
+    )
 
 
 class _GuardedEvidence:

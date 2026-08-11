@@ -12,8 +12,11 @@ from grounding_kernel.certificates import (
     MetricBound,
     binary_axis,
     bootstrap_mean_lower_bound,
+    clopper_pearson_lower_bound,
+    clopper_pearson_upper_bound,
     manifest_hash,
     wilson_lower_bound,
+    wilson_upper_bound,
 )
 
 
@@ -52,6 +55,31 @@ def test_wilson_bound_is_conservative_and_handles_empty_evidence() -> None:
     assert wilson_lower_bound(100, 100) < 1.0
     with pytest.raises(ValueError):
         wilson_lower_bound(2, 1)
+
+
+def test_wilson_upper_bound_supports_negative_control_claims() -> None:
+    assert wilson_upper_bound(0, 0) == 1.0
+    assert 0.0 < wilson_upper_bound(0, 24) < 0.2
+    assert wilson_upper_bound(10, 10) == pytest.approx(1.0)
+    metric = MetricBound.binary([False] * 24)
+
+    assert metric.upper_bound == wilson_upper_bound(0, 24)
+    assert metric.to_dict()["upper_bound"] == metric.upper_bound
+    with pytest.raises(ValueError, match="binary"):
+        _ = MetricBound.scores([0.1, 0.2], resamples=1_000).upper_bound
+
+
+def test_exact_one_sided_binomial_bounds_are_conservative_and_dependency_free() -> None:
+    lower = clopper_pearson_lower_bound(32, 32)
+    upper = clopper_pearson_upper_bound(0, 32)
+    metric = MetricBound.binary_exact((False,) * 32)
+
+    assert lower == pytest.approx(0.05 ** (1.0 / 32.0))
+    assert upper == pytest.approx(1.0 - 0.05 ** (1.0 / 32.0))
+    assert metric.method == "clopper-pearson-one-sided"
+    assert metric.upper_bound == pytest.approx(upper)
+    assert clopper_pearson_lower_bound(0, 0) == 0.0
+    assert clopper_pearson_upper_bound(0, 0) == 1.0
 
 
 def test_bootstrap_bound_is_deterministic_and_below_mean() -> None:

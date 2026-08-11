@@ -16,7 +16,9 @@ factorial combinations in both interpretation and description.
 Dictionary definitions are grounded separately through
 :func:`grounding_kernel.composition.least_fixed_point`.  Only meanings and
 tokens directly anchored by paired demonstrations seed that closure; a closed
-dictionary cycle therefore remains unknown.
+dictionary cycle therefore remains unknown.  Grounded ``Atom``/``And``
+definitions can additionally be materialized into a proof-carrying
+``GroundedReferent`` whose leaves retain their direct demonstration evidence.
 """
 
 from __future__ import annotations
@@ -31,7 +33,7 @@ import json
 from types import MappingProxyType
 from typing import Any, TypeAlias
 
-from .composition import ClosureResult, Expression, least_fixed_point
+from .composition import And, Atom, ClosureResult, Expression, Not, Or, Relation, least_fixed_point
 
 
 OpaqueToken: TypeAlias = Hashable
@@ -298,6 +300,35 @@ class DefinitionResult:
     @property
     def resolved(self) -> bool:
         return self.status is Resolution.RESOLVED
+
+
+@dataclass(frozen=True, slots=True)
+class DefinitionReferentResult:
+    """Proof-carrying materialization of a definition into an executor frame.
+
+    ``referent`` is present only when every expression leaf traces to direct
+    paired evidence and the conjunction contains exactly one value for every
+    opaque operational ``type_id``.  ``candidate_meanings`` remains available
+    on conflicts for audit, but must never be executed unless ``resolved``.
+    """
+
+    symbol: Hashable
+    status: Resolution
+    referent: GroundedReferent | None
+    candidate_meanings: tuple[OperationalMeaning, ...]
+    definition: DefinitionResult
+    proof: LanguageProof
+
+    @property
+    def resolved(self) -> bool:
+        return self.status is Resolution.RESOLVED and self.referent is not None
+
+
+@dataclass(frozen=True, slots=True)
+class _ExpressionMaterialization:
+    status: Resolution
+    meanings: tuple[OperationalMeaning, ...]
+    proof: LanguageProof
 
 
 @dataclass(frozen=True, slots=True)
@@ -834,6 +865,265 @@ class GroundedLanguageLearner:
 
     symbolic_theft = resolve_definition
 
+    def _evidence_for_meaning(self, meaning: OperationalMeaning) -> tuple[str, ...]:
+        return tuple(
+            sorted(
+                evidence_id
+                for (_token, candidate), evidence_ids in self._binding_evidence.items()
+                if candidate == meaning
+                for evidence_id in evidence_ids
+            )
+        )
+
+    def _materialize_atom_symbol(
+        self,
+        symbol: Hashable,
+        closure: ClosureResult,
+        trail: tuple[Hashable, ...],
+    ) -> _ExpressionMaterialization:
+        if isinstance(symbol, OperationalMeaning):
+            evidence = self._evidence_for_meaning(symbol)
+            if evidence:
+                return _ExpressionMaterialization(
+                    Resolution.RESOLVED,
+                    (symbol,),
+                    LanguageProof(
+                        "direct-operational-leaf",
+                        f"{_canonical_text(symbol)} is directly grounded",
+                        evidence,
+                    ),
+                )
+
+        direct = tuple(sorted(self._token_meanings.get(symbol, ()), key=_meaning_key))
+        if len(direct) == 1:
+            meaning = direct[0]
+            return _ExpressionMaterialization(
+                Resolution.RESOLVED,
+                direct,
+                LanguageProof(
+                    "direct-operational-leaf",
+                    f"{symbol!r} -> {_canonical_text(meaning)}",
+                    tuple(sorted(self._binding_evidence[(symbol, meaning)])),
+                ),
+            )
+        if len(direct) > 1:
+            premises = tuple(
+                LanguageProof(
+                    "competing-direct-leaf",
+                    f"{symbol!r} -> {_canonical_text(meaning)}",
+                    tuple(sorted(self._binding_evidence[(symbol, meaning)])),
+                )
+                for meaning in direct
+            )
+            return _ExpressionMaterialization(
+                Resolution.AMBIGUOUS,
+                direct,
+                LanguageProof(
+                    "ambiguous-operational-leaf",
+                    f"{symbol!r} has multiple direct operational meanings",
+                    premises=premises,
+                ),
+            )
+
+        nested = self._definitions.get(symbol)
+        if nested is None:
+            return _ExpressionMaterialization(
+                Resolution.UNKNOWN,
+                (),
+                LanguageProof(
+                    "unanchored-operational-leaf",
+                    f"{symbol!r} has no direct binding or grounded definition",
+                ),
+            )
+        if symbol in trail:
+            return _ExpressionMaterialization(
+                Resolution.UNKNOWN,
+                (),
+                LanguageProof(
+                    "cyclic-definition-leaf",
+                    f"definition cycle encountered at {symbol!r}",
+                    (f"trail={trail!r}",),
+                ),
+            )
+        if closure.confidence(symbol) <= closure.tolerance or closure.proof(symbol) is None:
+            return _ExpressionMaterialization(
+                Resolution.UNKNOWN,
+                (),
+                LanguageProof(
+                    "ungrounded-nested-definition",
+                    f"nested definition {symbol!r} has no grounding closure proof",
+                ),
+            )
+        child = self._materialize_expression(nested, closure, trail + (symbol,))
+        return _ExpressionMaterialization(
+            child.status,
+            child.meanings,
+            LanguageProof(
+                "expand-grounded-definition",
+                f"expanded nested definition {symbol!r}",
+                premises=(child.proof,),
+            ),
+        )
+
+    def _materialize_expression(
+        self,
+        expression: Expression,
+        closure: ClosureResult,
+        trail: tuple[Hashable, ...],
+    ) -> _ExpressionMaterialization:
+        if isinstance(expression, Atom):
+            return self._materialize_atom_symbol(expression.symbol, closure, trail)
+        if isinstance(expression, And):
+            children = tuple(
+                self._materialize_expression(term, closure, trail)
+                for term in expression.terms
+            )
+            meanings = tuple(
+                meaning for child in children for meaning in child.meanings
+            )
+            if any(child.status is Resolution.AMBIGUOUS for child in children):
+                status = Resolution.AMBIGUOUS
+                rule = "ambiguous-conjunct"
+            elif any(child.status is not Resolution.RESOLVED for child in children):
+                status = Resolution.UNKNOWN
+                rule = "unknown-conjunct"
+            else:
+                status = Resolution.RESOLVED
+                rule = "materialize-conjunction"
+            return _ExpressionMaterialization(
+                status,
+                meanings,
+                LanguageProof(
+                    rule,
+                    f"materialized {len(children)} conjuncts",
+                    premises=tuple(child.proof for child in children),
+                ),
+            )
+        if isinstance(expression, Or):
+            operator = "Or"
+        elif isinstance(expression, Not):
+            operator = "Not"
+        elif isinstance(expression, Relation):
+            operator = "Relation"
+        else:  # pragma: no cover - add_definitions validates the closed expression union.
+            operator = type(expression).__name__
+        return _ExpressionMaterialization(
+            Resolution.UNKNOWN,
+            (),
+            LanguageProof(
+                "non-materializable-operator",
+                f"{operator} does not determine one positive operational referent",
+            ),
+        )
+
+    def materialize_definition(self, symbol: Hashable) -> DefinitionReferentResult:
+        """Materialize a grounded ``Atom``/``And`` definition for execution.
+
+        Least-fixed-point grounding is necessary but not sufficient: every
+        eventual leaf must also resolve to direct paired evidence, and the
+        flattened conjunction must contain exactly one value per opaque
+        ``type_id``.  Dictionary text alone never manufactures a referent.
+        """
+
+        definition = self.resolve_definition(symbol)
+        if not definition.resolved or definition.expression is None:
+            proof = LanguageProof(
+                "definition-grounding-required",
+                f"definition {symbol!r} cannot be materialized",
+                premises=(definition.proof,),
+            )
+            return DefinitionReferentResult(
+                symbol,
+                Resolution.UNKNOWN,
+                None,
+                (),
+                definition,
+                proof,
+            )
+
+        materialized = self._materialize_expression(
+            definition.expression,
+            definition.closure,
+            (symbol,),
+        )
+        unique_meanings = tuple(sorted(set(materialized.meanings), key=_meaning_key))
+        by_type: defaultdict[Hashable, set[OperationalMeaning]] = defaultdict(set)
+        for meaning in unique_meanings:
+            by_type[meaning.type_id].add(meaning)
+        conflicts = tuple(
+            (type_id, tuple(sorted(meanings, key=_meaning_key)))
+            for type_id, meanings in sorted(by_type.items(), key=lambda item: _stable_key(item[0]))
+            if len(meanings) > 1
+        )
+
+        if materialized.status is Resolution.AMBIGUOUS or conflicts:
+            conflict_evidence = (
+                f"conflicting_type_ids={_canonical_text(conflicts)}",
+            ) if conflicts else ()
+            proof = LanguageProof(
+                "ambiguous-definition-referent",
+                f"definition {symbol!r} has competing operational values",
+                conflict_evidence,
+                (definition.proof, materialized.proof),
+            )
+            return DefinitionReferentResult(
+                symbol,
+                Resolution.AMBIGUOUS,
+                None,
+                unique_meanings,
+                definition,
+                proof,
+            )
+
+        if materialized.status is not Resolution.RESOLVED:
+            proof = LanguageProof(
+                "unknown-definition-referent",
+                f"definition {symbol!r} has no executable referent",
+                premises=(definition.proof, materialized.proof),
+            )
+            return DefinitionReferentResult(
+                symbol,
+                Resolution.UNKNOWN,
+                None,
+                unique_meanings,
+                definition,
+                proof,
+            )
+
+        if len(materialized.meanings) != len(unique_meanings):
+            proof = LanguageProof(
+                "duplicate-definition-leaf",
+                f"definition {symbol!r} repeats an operational leaf",
+                premises=(definition.proof, materialized.proof),
+            )
+            return DefinitionReferentResult(
+                symbol,
+                Resolution.UNKNOWN,
+                None,
+                unique_meanings,
+                definition,
+                proof,
+            )
+
+        referent = GroundedReferent(unique_meanings)
+        proof = LanguageProof(
+            "materialize-grounded-definition",
+            f"definition {symbol!r} -> {_canonical_text(referent)}",
+            (f"closure_confidence={definition.confidence!r}",),
+            (definition.proof, materialized.proof),
+        )
+        return DefinitionReferentResult(
+            symbol,
+            Resolution.RESOLVED,
+            referent,
+            unique_meanings,
+            definition,
+            proof,
+        )
+
+    ground_definition = materialize_definition
+    definition_to_referent = materialize_definition
+
 
 def _meaning_sequence_key(
     meanings: Sequence[OperationalMeaning],
@@ -846,6 +1136,7 @@ LanguageLearner = GroundedLanguageLearner
 
 __all__ = [
     "UNKNOWN",
+    "DefinitionReferentResult",
     "DefinitionResult",
     "Demonstration",
     "DescriptionResult",

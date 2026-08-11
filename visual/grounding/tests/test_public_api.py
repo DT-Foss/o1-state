@@ -6,12 +6,16 @@ import grounding_kernel as kernel
 from grounding_kernel.benchmark import main
 
 
-def test_curated_public_api_exposes_the_complete_v0_path() -> None:
-    assert kernel.__version__ == "0.1.0"
+def test_curated_public_api_exposes_v0_and_the_hardened_v1_seams() -> None:
+    assert kernel.__version__ == "0.2.0"
     assert kernel.Binder is kernel.SensorimotorBinder
     assert callable(kernel.least_fixed_point)
     assert callable(kernel.run_isolated_learner)
     assert kernel.EvaluatorHarness(1).agent.action_codes
+    assert kernel.ProcessHarness(1).agent.action_codes
+    assert callable(kernel.commit_candidate_artifact)
+    assert kernel.ClosedLoopProgramExecutor
+    assert kernel.GroundedLanguageLearner
 
 
 def test_cli_runs_the_real_binder_and_emits_a_compact_certificate(capsys: object) -> None:
