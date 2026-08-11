@@ -1,0 +1,45 @@
+{
+  "checkpoints": [
+    {
+      "frame": 0,
+      "probe_hit": 0.20833333333333334,
+      "probe_l1": 0.06710437099294116
+    },
+    {
+      "frame": 512,
+      "probe_hit": 0.3645833333333333,
+      "probe_l1": 0.05941838744911365
+    },
+    {
+      "frame": 1008,
+      "probe_hit": 0.5,
+      "probe_l1": 0.05942714105670651
+    },
+    {
+      "frame": 1504,
+      "probe_hit": 0.5208333333333334,
+      "probe_l1": 0.0624738788853089
+    },
+    {
+      "frame": 2000,
+      "probe_hit": 0.6145833333333334,
+      "probe_l1": 0.05996353652638694
+    },
+    {
+      "frame": 2512,
+      "probe_hit": 0.6041666666666666,
+      "probe_l1": 0.059346419700887054
+    },
+    {
+      "frame": 3008,
+      "probe_hit": 0.5520833333333334,
+      "probe_l1": 0.05926118382679609
+    },
+    {
+      "frame": 3504,
+      "probe_hit": 0.5208333333333334,
+      "probe_l1": 0.062285337606833004
+    }
+  ],
+  "note": "post-hoc diagnostic arm, NOT registered: true action word, flipped shift sign"
+}
