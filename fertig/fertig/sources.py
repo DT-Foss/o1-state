@@ -138,9 +138,21 @@ def extract_causal(text: str, base_conf: float = 0.35,
 def extract_relations(text: str, base_conf: float = 0.40,
                       max_triplets: int = 40
                       ) -> List[Tuple[str, str, str, float]]:
-    """Schema-getrieben: fertig.relations -> fertig.primitives.RELATIONS."""
+    """Schema-getrieben: fertig.relations -> fertig.primitives.RELATIONS.
+
+    KEIN 1:1-Aequivalent: die alte base_conf war eine ABSOLUTE Konfidenz,
+    die JEDEM emittierten Triplet zugewiesen wurde (Quellen-Tier, z.B.
+    0.30 fuer duckduckgo, 0.45 fuer wiktionary). Die neue
+    relations.extract_relations traegt pro RelationSpec/Pattern eine
+    EIGENE Konfidenz (0.34-0.60, aus dem Schema) und skaliert diese nur
+    MULTIPLIKATIV ueber confidence_scale. Bruecke: base_conf wird relativ
+    zum alten Default (0.40) skaliert, sodass der Default-Aufruf
+    (base_conf=0.40 -> confidence_scale=1.0) das Schema-Konfidenz-
+    Spektrum unveraendert durchreicht; abweichende Quellen-Tiers stauchen
+    oder strecken es proportional. Das ist eine bewusste Naeherung, keine
+    Gleichheit der beiden Konfidenz-Semantiken."""
     from .relations import extract_relations as _schema_extract
-    return _schema_extract(text, base_conf=base_conf,
+    return _schema_extract(text, confidence_scale=base_conf / 0.40,
                            max_triplets=max_triplets)
 
 

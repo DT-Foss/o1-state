@@ -1,80 +1,162 @@
-"""
-fertig.relations — schema-getriebene Relations-Extraktion.
-
-Nutzung: Die Extraktion mappt Oberflächenformen IN das geschlossene
-Primitiv-Schema (fertig.primitives.RELATIONS). Der Graph speichert nur
-kanonische Primitiv-Namen; QA matcht auf dem Schema. Keine wachsende
-Relations-Liste mehr — neue Oberflächenformen sind Lexikon-Einträge,
-keine neuen Relationen.
-"""
+"""Schema-driven relation extraction with conservative quality gates."""
 
 from __future__ import annotations
 
 import re
-from typing import Dict, List, Tuple
+from dataclasses import dataclass
+from typing import Iterable, Optional
 
 from . import primitives
-from .sources import _negated, _np, _ok_np, extract_causal
+
+Triplet = tuple[str, str, str, float]
+
+_LEADING = {
+    "a", "an", "the", "this", "that", "these", "those", "some",
+    "any", "each", "every", "its", "their", "our", "your", "my",
+}
+_PRONOUNS = {
+    "i", "you", "he", "she", "it", "we", "they", "me", "him", "her",
+    "us", "them", "who", "which", "there", "here",
+}
+_BAD_TERMINALS = {
+    "is", "are", "was", "were", "be", "been", "being", "can", "could",
+    "may", "might", "will", "would", "shall", "should", "has", "have",
+    "had", "do", "does", "did",
+}
+_NEGATION = re.compile(r"\b(?:not|no|never|without|rarely|seldom|neither|nor)\b", re.I)
 
 
-def extract_relations(text: str, base_conf: float = 0.40,
-                      max_triplets: int = 40
-                      ) -> List[Tuple[str, str, str, float]]:
-    """Schema-getrieben: für jede Primitiv-Klasse mit Mustern werden
-    Sätze gescannt; die Mechanismen sind kanonische Primitiv-Namen.
+def split_sentences(text: str) -> list[str]:
+    """Split prose without requiring a space after punctuation."""
 
-    Sonderfälle:
-      created_in   : Subjekt vor dem Verb, Jahr als Objekt
-      comparative  : Adjektiv + Vergleichsobjekt, Primitiv = adj_than
-    Kausale Sätze laufen durch den gemeinsamen Kern (extract_causal) mit
-    kanonischer Normalisierung.
+    return [s.strip() for s in re.split(r"(?<=[.!?])(?:\s+|$)|[\r\n]+", text)
+            if s.strip()]
+
+
+def is_negated(sentence: str) -> bool:
+    """Conservative guard: reject a sentence containing explicit negation."""
+
+    return bool(_NEGATION.search(sentence))
+
+
+def normalize_entity(value: str, *, max_words: int = 12) -> Optional[str]:
+    """Normalize an entity phrase while preserving years and other numbers."""
+
+    words = re.findall(r"[a-z0-9]+(?:'[a-z]+)?", str(value).casefold())
+    while words and words[0] in _LEADING:
+        words.pop(0)
+    while words and words[-1] in {"and", "or", "but"}:
+        words.pop()
+    if not words or len(words) > max_words:
+        return None
+    if len(words) == 1 and words[0] in _PRONOUNS:
+        return None
+    if words[-1] in _BAD_TERMINALS:
+        return None
+    if not any(len(word) >= 2 or word.isdigit() for word in words):
+        return None
+    return " ".join(words)
+
+
+@dataclass(frozen=True)
+class ExtractionStats:
+    sentences: int
+    emitted: int
+    negated: int
+    rejected_entities: int
+
+
+def extract_relations(
+    text: str,
+    *,
+    confidence_scale: float = 1.0,
+    max_triplets: int = 40,
+    families: Optional[Iterable[primitives.RelationFamily | str]] = None,
+    with_stats: bool = False,
+) -> list[Triplet] | tuple[list[Triplet], ExtractionStats]:
+    """Extract canonical relations from text.
+
+    Every regex is owned by the canonical relation registry and must expose
+    named ``subject`` and ``object`` groups.  Unknown relations cannot be
+    emitted by this function.
     """
-    out: List[Tuple[str, str, str, float]] = []
-    for sent in re.split(r"(?<=[.!?])\s+", text):
-        if _negated(sent):
+
+    if confidence_scale < 0.0:
+        raise ValueError("confidence_scale must be non-negative")
+    allowed = None
+    if families is not None:
+        allowed = {primitives.RelationFamily(f) for f in families}
+
+    best: dict[tuple[str, str, str], float] = {}
+    sentences = split_sentences(text)
+    negated = rejected = 0
+    for sentence in sentences:
+        if is_negated(sentence):
+            negated += 1
             continue
-        for name, spec in primitives.RELATIONS.items():
-            patterns = spec.get("patterns")
-            if not patterns:
+        for spec in primitives.RELATIONS.values():
+            if allowed is not None and spec.family not in allowed:
                 continue
-            for pat in patterns:
-                m = re.search(pat, sent, flags=re.I)
-                if not m:
+            for pattern in spec.patterns:
+                match = re.search(pattern.regex, sentence, flags=re.IGNORECASE)
+                if match is None:
                     continue
-                if name == "created_in":
-                    year = m.group(2)
-                    before = sent[:m.start()].strip()
-                    subj = _np(re.split(r"[,;]|(?:^|\s)(?:in|with|by) ",
-                                        before)[-1])
-                    if _ok_np(subj):
-                        out.append((subj, "created_in", year,
-                                    spec["conf"]))
+                subject = normalize_entity(match.group("subject"))
+                obj = normalize_entity(match.group("object"))
+                if subject is None or obj is None or subject == obj:
+                    rejected += 1
                     break
-                if name == "comparative":
-                    adj, obj = m.group(1).lower(), m.group(2)
-                    before = sent[:m.start()].strip()
-                    subj = _np(re.split(r"[,;]", before)[-1])
-                    if _ok_np(subj) and len(obj.split()) <= 8:
-                        out.append((subj, adj + "_than", _np(obj),
-                                    spec["conf"]))
-                    break
-                # Objekt-Muster: Subjekt bis zum Verb
-                vm = re.search(r"\b(?:is|are|consists|contains|includes|"
-                               r"comprises|can)\s+", sent)
-                if not vm:
-                    break
-                before = sent[:vm.start()].strip()
-                subj = _np(re.split(r"[,;]", before)[-1])
-                obj = _np(m.group(1))
-                if _ok_np(subj) and _ok_np(obj):
-                    out.append((subj, name, obj, spec["conf"]))
+                confidence = pattern.confidence
+                if confidence is None:
+                    confidence = spec.confidence
+                confidence = min(1.0, max(0.0, confidence * confidence_scale))
+                key = (subject, spec.name, obj)
+                best[key] = max(best.get(key, 0.0), confidence)
                 break
-    # kausaler Kern (kanonisch normalisiert)
-    for a, b, c, conf in extract_causal(text, base_conf=base_conf * 0.9):
-        out.append((a, primitives.normalize_mechanism(b), c, conf))
-    # Dedupe (max-Konfidenz)
-    best: Dict[Tuple[str, str, str], float] = {}
-    for a, b, c, conf in out:
-        key = (a, b, c)
-        best[key] = max(best.get(key, 0.0), conf)
-    return [(a, b, c, conf) for (a, b, c), conf in best.items()][:max_triplets]
+
+    rows = [(a, relation, b, confidence)
+            for (a, relation, b), confidence in best.items()]
+    rows.sort(key=lambda row: (-row[3], row[0], row[1], row[2]))
+    rows = rows[:max(0, max_triplets)]
+    if not with_stats:
+        return rows
+    return rows, ExtractionStats(
+        sentences=len(sentences), emitted=len(rows), negated=negated,
+        rejected_entities=rejected,
+    )
+
+
+def canonicalize_triplets(
+    triplets: Iterable[tuple[str, str, str, float]],
+    *,
+    canonical_only: bool = False,
+    min_confidence: float = 0.0,
+) -> tuple[list[Triplet], list[Triplet]]:
+    """Normalize external triplets and quarantine rejected/unknown rows."""
+
+    accepted: dict[tuple[str, str, str], float] = {}
+    rejected: list[Triplet] = []
+    for raw_a, raw_relation, raw_b, raw_confidence in triplets:
+        a = normalize_entity(raw_a)
+        b = normalize_entity(raw_b)
+        try:
+            confidence = float(raw_confidence)
+        except (TypeError, ValueError):
+            confidence = -1.0
+        canonical = primitives.canonicalize_mechanism(raw_relation)
+        normalized = canonical or primitives.normalize_mechanism(raw_relation)
+        raw_row: Triplet = (
+            str(raw_a), str(raw_relation), str(raw_b), max(confidence, 0.0)
+        )
+        if (a is None or b is None or a == b or normalized is None
+                or confidence < min_confidence
+                or confidence > 1.0
+                or (canonical_only and canonical is None)):
+            rejected.append(raw_row)
+            continue
+        key = (a, normalized, b)
+        accepted[key] = max(accepted.get(key, 0.0), confidence)
+    rows = [(a, relation, b, confidence)
+            for (a, relation, b), confidence in accepted.items()]
+    rows.sort(key=lambda row: (row[0], row[1], row[2]))
+    return rows, rejected

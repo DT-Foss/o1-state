@@ -25,7 +25,7 @@ import numpy as np
 
 from . import sampler
 from .vision import signature, signature_distance
-from . import primitives
+from . import noether
 
 
 # ---------------------------------------------------------------------------
@@ -107,10 +107,10 @@ def understand(raw_frames: List[np.ndarray]) -> Dict:
     sig_motion = float(prof.mean())
     pix = np.mean([np.abs(raw_frames[i + 1] - raw_frames[i]).mean()
                    for i in range(len(raw_frames) - 1)])
-    period = primitives.detect_periodicity(prof.tolist(), tol=0.15)
+    period = noether.detect_periodicity(prof.tolist(), tol=0.15)
     med = float(np.median(prof))
     cuts = int((prof > max(3.0 * med, 0.05)).sum())
-    parity = primitives.detect_parity(prof.tolist(), tol=0.15)
+    parity = noether.detect_parity(prof.tolist(), tol=0.15)
     return {
         "frames": len(raw_frames),
         "bewegt": (sig_motion > SIG_MOTION_THRESHOLD or

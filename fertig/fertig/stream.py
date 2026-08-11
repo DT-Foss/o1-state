@@ -22,7 +22,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
-from . import primitives
+from . import noether
 from .vision import signature_distance
 from . import video as video_mod
 from .video import SIGNATURE_NOISE
@@ -122,7 +122,7 @@ class StreamLearner:
 
     def state(self) -> Dict:
         """Aktueller Verständnis-Zustand (konstante Größe)."""
-        period = primitives.detect_periodicity(
+        period = noether.detect_periodicity(
             self.motion_history, tol=0.15) if len(self.motion_history) > 8 \
             else None
         return {
