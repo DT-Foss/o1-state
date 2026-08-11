@@ -1,0 +1,432 @@
+{
+  "registered": "P83",
+  "store": "results/p83_store_copy",
+  "seed": 83,
+  "node_budget": 5000,
+  "clause_a": {
+    "lazy_mount_s": 1.2627,
+    "eager_mount_s": 4.7545,
+    "speedup": 3.77,
+    "bar_speedup_ge_5": false,
+    "bar_lazy_le_5s": true
+  },
+  "clause_b": {
+    "n_keys": 50,
+    "n_exact_equal": 50,
+    "n_truncated": 0,
+    "n_truncated_strict_subset": 0,
+    "n_fail": 0,
+    "bar_all_agree": true,
+    "median_lazy_query_s": 1e-05
+  },
+  "clause_c": {
+    "closure_calls_lazy": 0,
+    "bar_zero_closures": true,
+    "n_dropped": 10,
+    "n_recheck_keys": 20,
+    "stale_citations": [],
+    "bar_no_stale": true
+  },
+  "per_key": [
+    {
+      "key": "number of nato member states also pledged to",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 6.7e-05
+    },
+    {
+      "key": "wwf",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1.7e-05
+    },
+    {
+      "key": "melrose",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 3.2e-05
+    },
+    {
+      "key": "air theater about proposed legislation in",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 8e-06
+    },
+    {
+      "key": "authority ( mda ) from exhibiting a painting",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 8e-06
+    },
+    {
+      "key": "in the champions league , barcelona",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 8e-06
+    },
+    {
+      "key": "88 balls",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 8e-06
+    },
+    {
+      "key": "a direct effort",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 7e-06
+    },
+    {
+      "key": "surrounding towns were already",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 7e-06
+    },
+    {
+      "key": "developer had",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 7e-06
+    },
+    {
+      "key": "considered that faulks had \"",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 6e-06
+    },
+    {
+      "key": "chivers ' life",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 9e-06
+    },
+    {
+      "key": "he is the first victorian since shane warne to",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 47,
+      "n_eager": 47,
+      "lazy_query_s": 0.000292
+    },
+    {
+      "key": "after being",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 3,
+      "n_eager": 3,
+      "lazy_query_s": 2.8e-05
+    },
+    {
+      "key": "virginia tech",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 5,
+      "n_eager": 5,
+      "lazy_query_s": 2.1e-05
+    },
+    {
+      "key": "a katy perry @-@",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 7e-06
+    },
+    {
+      "key": "jennifer celotta to",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 2e-05
+    },
+    {
+      "key": "brood spreads the",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 25,
+      "n_eager": 25,
+      "lazy_query_s": 0.000152
+    },
+    {
+      "key": "i 'm not",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 8,
+      "n_eager": 8,
+      "lazy_query_s": 5.6e-05
+    },
+    {
+      "key": "hassett made 38 as australia",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1.3e-05
+    },
+    {
+      "key": "proper way the record @-@",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 7,
+      "n_eager": 7,
+      "lazy_query_s": 5.2e-05
+    },
+    {
+      "key": "upon execution of such a program , the module",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1.5e-05
+    },
+    {
+      "key": "daniel sedin",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 2.3e-05
+    },
+    {
+      "key": "much cultural heritage",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1e-05
+    },
+    {
+      "key": "time , garfield had",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1e-05
+    },
+    {
+      "key": "some aircraft were only allowed 40 % of the",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1e-05
+    },
+    {
+      "key": "the individual soul",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 9e-06
+    },
+    {
+      "key": "earwigs have five molts in the year",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 9e-06
+    },
+    {
+      "key": "walked out , it was all",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 9e-06
+    },
+    {
+      "key": "machine guns",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 2,
+      "n_eager": 2,
+      "lazy_query_s": 1.9e-05
+    },
+    {
+      "key": "catholic church",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1.1e-05
+    },
+    {
+      "key": "a broadway",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1.1e-05
+    },
+    {
+      "key": "though told she has no chance , she perseveres and",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 5,
+      "n_eager": 5,
+      "lazy_query_s": 4e-05
+    },
+    {
+      "key": "407 etr 's decision",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1.3e-05
+    },
+    {
+      "key": "155 km",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1e-05
+    },
+    {
+      "key": "the unfamiliar role",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1e-05
+    },
+    {
+      "key": "mission avenue resulted in a",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 5,
+      "n_eager": 5,
+      "lazy_query_s": 4e-05
+    },
+    {
+      "key": "houses and damaged the roofs of two others",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 0.00016
+    },
+    {
+      "key": "induct her into their clan",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1.1e-05
+    },
+    {
+      "key": "reinforce the 21st army group",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 1e-05
+    },
+    {
+      "key": "the nira",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 7,
+      "n_eager": 7,
+      "lazy_query_s": 4.5e-05
+    },
+    {
+      "key": "comptiq 's editorial department",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 8e-06
+    },
+    {
+      "key": "popularity of these pursuits in the warmer months",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 7e-06
+    },
+    {
+      "key": "head coach frank beamer 's emphasis on",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 6e-06
+    },
+    {
+      "key": "music video for the song",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 6e-06
+    },
+    {
+      "key": "match against al @-@ quwa al @-@ jawiya 1 \u2013 0",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 6e-06
+    },
+    {
+      "key": "treasurer of the navy",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 8e-06
+    },
+    {
+      "key": "schleswig",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 6e-06
+    },
+    {
+      "key": "yves guillemot",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 1,
+      "n_eager": 1,
+      "lazy_query_s": 6e-06
+    },
+    {
+      "key": "her experience",
+      "truncated": false,
+      "ok": true,
+      "n_lazy": 2,
+      "n_eager": 2,
+      "lazy_query_s": 1.1e-05
+    }
+  ]
+}

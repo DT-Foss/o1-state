@@ -2899,3 +2899,66 @@ artifact is a number about the defaults, not about the system.
   eager inference. That wall is the lazy organ's target; its
   measurement on this exact store is P83's setup, not this
   score.
+
+- **P83 — the lazy organ meets the real dense artifact
+  (registered 2026-08-11, BEFORE the run; organ committed with
+  its test suite, measured so far only on synthetic stores —
+  10.7s→0.04s mount on a 1M-edge synthetic. Instrument:
+  wt103_full_store, the P76 artifact — 20,274 segments, 64,876
+  base edges, density 1.628, the densest real graph we own.
+  All work on a COPY (the read-only-artifact rule), same x86
+  runner that built it, runner script src/livecausal/p83_run.py
+  written after this block, seed 83.)**
+  (a) THE MOUNT: lazy mount ≥ 5× faster than eager mount on the
+      same copy AND absolute lazy mount ≤ 5s. Both timed cold
+      (no inferred.jsonl cache present for the eager arm; lazy
+      ignores caches by contract). The measured multiple reports
+      at whatever it is — the bar is deliberately conservative
+      because both arms share the segment-read cost and this
+      store's read/closure split is unmeasured.
+  (b) ANSWERS AGREE 50/50: 50 seeded keys from the base
+      adjacency; for every untruncated lazy answer, exact edge-set
+      equality with the eager answer (kind, from, to, depth,
+      derivation); for every truncated one, strict subset with
+      the truncation flag True. n_truncated at node_budget=5000
+      reports descriptively — on a density-1.628 graph at least
+      one hub key is expected to truncate; zero truncations
+      makes the budget claim untested and says so in the score.
+  (c) ACCOUNTING AND DROPS: closure_calls stays exactly 0 on the
+      lazy graph across mount + 50 queries + 10 seeded segment
+      drops; after the drops, re-queries of the touched
+      neighborhoods cite no dropped sha in any derivation.
+  Falsifiers: (a) fails ⇒ the segment read, not the closure, is
+  the real wall on dense stores — a streaming/indexed mount
+  becomes the named next organ, with the read/closure split
+  measured and attached. (b) fails ⇒ the bounded DFS drops
+  edges silently — blocks lazy as a default mode anywhere until
+  localized. (c) fails ⇒ hidden materialization or stale
+  citations after drops — same block, engine-level.
+
+  **P83 SCORED (2026-08-11, results/livecausal_p83.json, x86
+  runner, 96MB store copy).** (a) FAIL against the 5× bar:
+  speedup 3.77× — lazy mount 1.26s, eager mount 4.75s. The
+  absolute clause holds (1.26s ≤ 5s), the multiple does not,
+  and the falsifier's split is measured and attached: segment
+  read ≈ 1.26s shared by both arms, closure + cache-write ≈
+  3.49s (73% of eager). The sharper reading this measurement
+  buys: BATCH closure at mount is cheap on this store — 4.75s
+  once — while the P76 cost curve showed the incremental
+  per-append delta path at 1.47s median PER APPEND at the same
+  density. The wall the project measured three times lives in
+  the builder's append loop, not in the reader's mount. The
+  streaming/indexed mount stays a named organ but binds at the
+  next order of magnitude, extrapolated through P76's yield
+  law; at this scale both absolutes are practical. (b) PASS
+  50/50 exact equality, zero disagreements — but n_truncated=0,
+  so the pre-registered caveat is active: the node-budget
+  contract went untested here. Located why: uniform key
+  sampling on a hub-concentrated graph — reachable sets in the
+  sample ran median 1, max 47, while the density-1.628 mass
+  sits in hubs the sample never hit. Hub-targeted sampling
+  (top-degree keys) is the named instrument for the truncation
+  clause. (c) PASS: closure_calls exactly 0 across mount + 50
+  queries + 10 drops; 20 post-drop re-queries cite no dropped
+  sha. The organ is correct and bounded on the real artifact;
+  the mount-speed claim stands only in absolute form.
