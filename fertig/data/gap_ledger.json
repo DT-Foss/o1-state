@@ -1,0 +1,41 @@
+{
+ "updated": "2026-08-11 10:41",
+ "benchmarks": {
+  "SNIPS": {
+   "fertig": 0.937,
+   "deepseek": 0.9643,
+   "gap": 0.0273,
+   "unser_weg": "Mehrwort-Verben + Objekt-Phrasen lernen"
+  },
+  "HellaSwag": {
+   "fertig": 0.267,
+   "deepseek": 0.4167,
+   "gap": 0.1497,
+   "unser_weg": "4-gram + Pattern-Bank"
+  },
+  "WinoGrande": {
+   "fertig": 0.509,
+   "deepseek": 0.6667,
+   "gap": 0.1577,
+   "unser_weg": "Weltwissen \u2192 Graph-Wachstum"
+  },
+  "HumanEval": {
+   "fertig": 0.0,
+   "deepseek": 1.0,
+   "gap": 1.0,
+   "unser_weg": "Code-Grammatik + Fragment-Lernen (FORGE-Territorium)"
+  },
+  "QuantQA": {
+   "fertig": 0.4,
+   "deepseek": 1.0,
+   "gap": 0.6,
+   "unser_weg": "Quantitative Anker + Einheiten-Check"
+  },
+  "BLiMP-Struktur": {
+   "fertig": 0.8056,
+   "deepseek": 1.0,
+   "gap": 0.1944,
+   "unser_weg": "Struktur-Regeln erweitern"
+  }
+ }
+}

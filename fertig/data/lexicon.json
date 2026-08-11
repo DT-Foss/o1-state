@@ -1,0 +1,919 @@
+{
+ "actions": {
+  "absolutely": {
+   "action": "absolutely",
+   "weight": 0.556
+  },
+  "across": {
+   "action": "across",
+   "weight": 0.5
+  },
+  "affect": {
+   "action": "affect",
+   "weight": 0.5
+  },
+  "allow": {
+   "action": "allow",
+   "weight": 0.75
+  },
+  "allows": {
+   "action": "allows",
+   "weight": 1.0
+  },
+  "along": {
+   "action": "along",
+   "weight": 0.5
+  },
+  "among": {
+   "action": "among",
+   "weight": 0.8
+  },
+  "analysed": {
+   "action": "analysed",
+   "weight": 1.0
+  },
+  "anticipate": {
+   "action": "anticipate",
+   "weight": 0.5
+  },
+  "applying": {
+   "action": "applying",
+   "weight": 0.857
+  },
+  "assumes": {
+   "action": "assumes",
+   "weight": 0.5
+  },
+  "asunder": {
+   "action": "asunder",
+   "weight": 0.5
+  },
+  "august": {
+   "action": "august",
+   "weight": 0.5
+  },
+  "between": {
+   "action": "between",
+   "weight": 0.5
+  },
+  "beyond": {
+   "action": "beyond",
+   "weight": 0.5
+  },
+  "blew": {
+   "action": "blew",
+   "weight": 0.5
+  },
+  "boil": {
+   "action": "boil",
+   "weight": 0.714
+  },
+  "breaking": {
+   "action": "breaking",
+   "weight": 0.5
+  },
+  "causing": {
+   "action": "causing",
+   "weight": 0.5
+  },
+  "changing": {
+   "action": "changing",
+   "weight": 0.5
+  },
+  "clearly": {
+   "action": "clearly",
+   "weight": 0.667
+  },
+  "closed": {
+   "action": "closed",
+   "weight": 0.667
+  },
+  "comparison": {
+   "action": "comparison",
+   "weight": 0.5
+  },
+  "confine": {
+   "action": "confine",
+   "weight": 0.5
+  },
+  "connect": {
+   "action": "connect",
+   "weight": 0.5
+  },
+  "considering": {
+   "action": "considering",
+   "weight": 0.5
+  },
+  "continuously": {
+   "action": "continuously",
+   "weight": 0.5
+  },
+  "cools": {
+   "action": "cools",
+   "weight": 0.5
+  },
+  "draws": {
+   "action": "draws",
+   "weight": 0.5
+  },
+  "drive": {
+   "action": "drive",
+   "weight": 0.5
+  },
+  "driving": {
+   "action": "driving",
+   "weight": 0.5
+  },
+  "during": {
+   "action": "during",
+   "weight": 0.667
+  },
+  "encumbered": {
+   "action": "encumbered",
+   "weight": 0.5
+  },
+  "exactly": {
+   "action": "exactly",
+   "weight": 0.615
+  },
+  "exhaust": {
+   "action": "exhaust",
+   "weight": 0.667
+  },
+  "exhibiting": {
+   "action": "exhibiting",
+   "weight": 0.667
+  },
+  "exploding": {
+   "action": "exploding",
+   "weight": 0.5
+  },
+  "feeds": {
+   "action": "feeds",
+   "weight": 1.0
+  },
+  "follows": {
+   "action": "follows",
+   "weight": 0.667
+  },
+  "from": {
+   "action": "from",
+   "weight": 0.653
+  },
+  "heats": {
+   "action": "heats",
+   "weight": 0.5
+  },
+  "ignite": {
+   "action": "ignite",
+   "weight": 0.5
+  },
+  "ii": {
+   "action": "ii",
+   "weight": 0.5
+  },
+  "increasing": {
+   "action": "increasing",
+   "weight": 0.5
+  },
+  "inhale": {
+   "action": "inhale",
+   "weight": 0.5
+  },
+  "into": {
+   "action": "into",
+   "weight": 0.502
+  },
+  "introducing": {
+   "action": "introducing",
+   "weight": 1.0
+  },
+  "leave": {
+   "action": "leave",
+   "weight": 0.833
+  },
+  "leaves": {
+   "action": "leaves",
+   "weight": 0.75
+  },
+  "limestone": {
+   "action": "limestone",
+   "weight": 0.667
+  },
+  "mill": {
+   "action": "mill",
+   "weight": 0.5
+  },
+  "modify": {
+   "action": "modify",
+   "weight": 1.0
+  },
+  "namely": {
+   "action": "namely",
+   "weight": 0.545
+  },
+  "near": {
+   "action": "near",
+   "weight": 0.667
+  },
+  "need": {
+   "action": "need",
+   "weight": 0.5
+  },
+  "notes": {
+   "action": "notes",
+   "weight": 0.5
+  },
+  "notice": {
+   "action": "notice",
+   "weight": 0.5
+  },
+  "oxidize": {
+   "action": "oxidize",
+   "weight": 0.5
+  },
+  "page": {
+   "action": "page",
+   "weight": 0.526
+  },
+  "perform": {
+   "action": "perform",
+   "weight": 1.0
+  },
+  "placing": {
+   "action": "placing",
+   "weight": 1.0
+  },
+  "poured": {
+   "action": "poured",
+   "weight": 0.5
+  },
+  "press": {
+   "action": "press",
+   "weight": 0.5
+  },
+  "prevent": {
+   "action": "prevent",
+   "weight": 1.0
+  },
+  "prevented": {
+   "action": "prevented",
+   "weight": 0.5
+  },
+  "raise": {
+   "action": "raise",
+   "weight": 0.75
+  },
+  "reach": {
+   "action": "reach",
+   "weight": 0.5
+  },
+  "reduce": {
+   "action": "reduce",
+   "weight": 1.0
+  },
+  "regards": {
+   "action": "regards",
+   "weight": 0.667
+  },
+  "rendered": {
+   "action": "rendered",
+   "weight": 0.5
+  },
+  "representing": {
+   "action": "representing",
+   "weight": 0.5
+  },
+  "resists": {
+   "action": "resists",
+   "weight": 0.5
+  },
+  "retain": {
+   "action": "retain",
+   "weight": 0.75
+  },
+  "sacrifice": {
+   "action": "sacrifice",
+   "weight": 1.0
+  },
+  "search": {
+   "action": "search",
+   "weight": 0.5
+  },
+  "separately": {
+   "action": "separately",
+   "weight": 0.5
+  },
+  "series": {
+   "action": "series",
+   "weight": 0.5
+  },
+  "serve": {
+   "action": "serve",
+   "weight": 0.5
+  },
+  "shillings": {
+   "action": "shillings",
+   "weight": 0.5
+  },
+  "stopping": {
+   "action": "stopping",
+   "weight": 0.5
+  },
+  "through": {
+   "action": "through",
+   "weight": 0.571
+  },
+  "towards": {
+   "action": "towards",
+   "weight": 1.0
+  },
+  "traced": {
+   "action": "traced",
+   "weight": 1.0
+  },
+  "tried": {
+   "action": "tried",
+   "weight": 0.625
+  },
+  "under": {
+   "action": "under",
+   "weight": 0.567
+  },
+  "undergo": {
+   "action": "undergo",
+   "weight": 0.667
+  },
+  "underneath": {
+   "action": "underneath",
+   "weight": 0.5
+  },
+  "upon": {
+   "action": "upon",
+   "weight": 0.535
+  },
+  "using": {
+   "action": "using",
+   "weight": 0.5
+  },
+  "wash": {
+   "action": "wash",
+   "weight": 1.0
+  },
+  "washing": {
+   "action": "washing",
+   "weight": 0.5
+  },
+  "watch": {
+   "action": "watch",
+   "weight": 0.75
+  },
+  "weigh": {
+   "action": "weigh",
+   "weight": 0.5
+  },
+  "whenever": {
+   "action": "whenever",
+   "weight": 0.667
+  },
+  "whereas": {
+   "action": "whereas",
+   "weight": 0.667
+  }
+ },
+ "nouns": {
+  "action": 0.412,
+  "adhesion": 1.0,
+  "advantageous": 0.5,
+  "air": 0.529,
+  "alcohol": 0.5,
+  "alteration": 0.5,
+  "amount": 0.5,
+  "analogy": 0.333,
+  "analysis": 0.667,
+  "annoyance": 0.5,
+  "aperture": 1.0,
+  "apparatus": 0.368,
+  "appearance": 0.667,
+  "application": 0.5,
+  "arrangement": 0.333,
+  "ascending": 0.571,
+  "ascent": 1.0,
+  "assistance": 0.5,
+  "atmosphere": 0.946,
+  "attention": 0.429,
+  "axis": 1.0,
+  "balance": 0.833,
+  "ball": 0.667,
+  "balloon": 0.556,
+  "bar": 0.5,
+  "barrel": 0.417,
+  "basin": 0.5,
+  "bath": 1.0,
+  "battery": 0.485,
+  "beautiful": 0.333,
+  "beauty": 0.4,
+  "bent": 0.333,
+  "best": 0.583,
+  "bladder": 0.714,
+  "blown": 0.333,
+  "blowpipe": 0.812,
+  "blowpipes": 1.0,
+  "blue": 0.429,
+  "body": 0.355,
+  "bogs": 1.0,
+  "bottle": 0.385,
+  "bottles": 0.385,
+  "bottom": 1.0,
+  "box": 0.333,
+  "boys": 0.333,
+  "breath": 0.8,
+  "brightest": 0.5,
+  "brilliancy": 0.667,
+  "brilliant": 0.4,
+  "brown": 0.333,
+  "bubble": 0.5,
+  "candle": 0.854,
+  "carbon": 0.309,
+  "carbonaceous": 0.5,
+  "carbonate": 0.333,
+  "card": 0.333,
+  "careless": 0.5,
+  "case": 0.607,
+  "centre": 1.0,
+  "certain": 0.476,
+  "chamber": 0.5,
+  "charge": 0.5,
+  "chemical": 0.517,
+  "chimney": 0.6,
+  "chloride": 0.333,
+  "circumstance": 0.333,
+  "clean": 0.4,
+  "clever": 0.5,
+  "coals": 0.75,
+  "cock": 0.333,
+  "cold": 0.333,
+  "colour": 0.333,
+  "colourless": 0.5,
+  "colours": 0.5,
+  "column": 1.0,
+  "combination": 0.333,
+  "combustion": 0.398,
+  "common": 0.304,
+  "complete": 1.0,
+  "complicated": 0.333,
+  "component": 1.0,
+  "composition": 0.833,
+  "compound": 0.714,
+  "condensable": 0.4,
+  "condensation": 1.0,
+  "conical": 0.667,
+  "connection": 0.667,
+  "consideration": 0.667,
+  "contents": 0.9,
+  "continued": 0.5,
+  "continuous": 0.667,
+  "contrast": 0.333,
+  "copper": 0.368,
+  "coppered": 0.5,
+  "cork": 1.0,
+  "correct": 0.5,
+  "cotton": 0.556,
+  "couple": 1.0,
+  "course": 0.5,
+  "covering": 0.5,
+  "crack": 0.5,
+  "crucible": 0.667,
+  "cubic": 0.941,
+  "cubit": 1.0,
+  "cup": 0.706,
+  "current": 0.464,
+  "currents": 1.0,
+  "cylinder": 0.4,
+  "cylindrical": 0.5,
+  "days": 0.5,
+  "dense": 0.333,
+  "dew": 0.5,
+  "diagram": 0.75,
+  "diamond": 0.333,
+  "difference": 0.714,
+  "dimness": 0.5,
+  "discharge": 0.667,
+  "dish": 0.778,
+  "distance": 0.5,
+  "division": 0.5,
+  "drawing": 0.6,
+  "drop": 0.667,
+  "drops": 0.6,
+  "dry": 0.333,
+  "earth": 0.833,
+  "east": 0.5,
+  "economy": 0.5,
+  "edge": 0.8,
+  "effect": 0.571,
+  "effects": 0.4,
+  "egg": 0.571,
+  "elasticity": 0.5,
+  "electric": 0.875,
+  "electricity": 0.5,
+  "elementary": 0.5,
+  "empty": 0.4,
+  "end": 0.5,
+  "ends": 0.667,
+  "evening": 0.333,
+  "examination": 0.5,
+  "example": 0.667,
+  "exceedingly": 0.333,
+  "excellent": 0.333,
+  "excess": 0.5,
+  "existence": 0.5,
+  "expansion": 0.667,
+  "experience": 0.5,
+  "experiment": 0.562,
+  "explosion": 0.857,
+  "explosive": 0.667,
+  "external": 0.667,
+  "extra": 0.5,
+  "extraordinary": 0.5,
+  "extreme": 0.667,
+  "extremities": 0.5,
+  "eye": 0.75,
+  "eyes": 1.0,
+  "facts": 0.333,
+  "faculties": 0.5,
+  "fair": 0.667,
+  "fat": 0.8,
+  "fellow": 1.0,
+  "few": 0.8,
+  "fiery": 1.0,
+  "fine": 0.364,
+  "finger": 1.0,
+  "fireplace": 0.5,
+  "first": 0.375,
+  "flame": 0.657,
+  "flames": 0.4,
+  "flask": 0.556,
+  "flat": 0.5,
+  "fluid": 0.552,
+  "fluted": 0.5,
+  "following": 1.0,
+  "food": 0.6,
+  "form": 0.5,
+  "former": 0.364,
+  "forty": 0.5,
+  "frames": 0.5,
+  "free": 0.308,
+  "freezing": 0.667,
+  "friend": 0.667,
+  "friends": 0.5,
+  "front": 1.0,
+  "fuel": 0.371,
+  "fullest": 0.5,
+  "fumes": 0.5,
+  "furnace": 1.0,
+  "furnaces": 0.4,
+  "fusion": 0.4,
+  "future": 0.333,
+  "game": 1.0,
+  "gas": 0.31,
+  "general": 0.471,
+  "generator": 0.667,
+  "glass": 0.5,
+  "glittering": 1.0,
+  "globe": 1.0,
+  "globule": 0.75,
+  "glorious": 0.4,
+  "glowing": 0.5,
+  "glycerine": 0.5,
+  "good": 0.571,
+  "government": 0.333,
+  "gradual": 0.5,
+  "grain": 0.667,
+  "grate": 0.75,
+  "great": 0.5,
+  "greater": 0.4,
+  "greatest": 0.5,
+  "groove": 1.0,
+  "gun": 0.667,
+  "gunpowder": 0.4,
+  "gutter": 0.5,
+  "guttering": 0.5,
+  "hand": 0.824,
+  "handle": 0.75,
+  "hands": 0.833,
+  "hard": 0.667,
+  "head": 1.0,
+  "heap": 1.0,
+  "heat": 0.358,
+  "heavy": 0.5,
+  "high": 0.444,
+  "highest": 1.0,
+  "history": 0.3,
+  "hole": 1.0,
+  "honour": 1.0,
+  "horizontal": 0.667,
+  "horse": 1.0,
+  "houses": 0.667,
+  "hundred": 0.75,
+  "ice": 0.423,
+  "idea": 1.0,
+  "ignition": 0.5,
+  "illustrations": 0.3,
+  "image": 0.333,
+  "imitation": 0.5,
+  "inch": 0.625,
+  "independent": 0.333,
+  "india": 0.5,
+  "ingot": 0.5,
+  "inside": 0.5,
+  "insoluble": 1.0,
+  "intention": 0.667,
+  "interest": 1.0,
+  "inverted": 0.5,
+  "iron": 0.432,
+  "irregular": 0.5,
+  "irregularity": 1.0,
+  "jar": 0.646,
+  "jet": 1.0,
+  "juvenile": 0.667,
+  "kindness": 0.8,
+  "knowledge": 0.571,
+  "laboratory": 1.0,
+  "lamp": 0.486,
+  "large": 0.423,
+  "larger": 0.368,
+  "last": 0.333,
+  "latter": 1.0,
+  "laws": 1.0,
+  "least": 0.333,
+  "lecturer": 1.0,
+  "level": 0.5,
+  "life": 0.429,
+  "light": 0.316,
+  "lighted": 0.667,
+  "lighter": 0.5,
+  "lightest": 1.0,
+  "lightning": 0.5,
+  "lime": 0.426,
+  "line": 1.0,
+  "liquid": 0.5,
+  "litharge": 0.5,
+  "little": 0.738,
+  "living": 0.5,
+  "lot": 1.0,
+  "lower": 0.5,
+  "lump": 0.75,
+  "lungs": 0.933,
+  "magnificent": 0.5,
+  "manufacture": 0.667,
+  "market": 1.0,
+  "mass": 0.385,
+  "material": 0.857,
+  "matter": 0.318,
+  "mean": 0.4,
+  "measure": 0.333,
+  "measures": 0.333,
+  "mercury": 0.4,
+  "mere": 1.0,
+  "metal": 0.467,
+  "metallic": 0.857,
+  "middle": 1.0,
+  "mind": 0.5,
+  "minds": 0.5,
+  "mixing": 0.5,
+  "mixture": 0.579,
+  "moment": 0.824,
+  "most": 0.556,
+  "mould": 1.0,
+  "moulded": 0.333,
+  "moulds": 0.5,
+  "mouth": 1.0,
+  "multitude": 1.0,
+  "muriate": 0.5,
+  "muriatic": 0.4,
+  "name": 0.5,
+  "natural": 0.5,
+  "negative": 1.0,
+  "new": 0.5,
+  "next": 0.368,
+  "nitrogen": 0.35,
+  "notion": 0.4,
+  "number": 0.4,
+  "object": 0.667,
+  "ocean": 0.333,
+  "oil": 0.615,
+  "old": 0.5,
+  "operations": 0.333,
+  "opportunity": 1.0,
+  "ordinary": 0.556,
+  "ore": 0.333,
+  "organs": 0.75,
+  "original": 1.0,
+  "other": 0.484,
+  "others": 0.4,
+  "outside": 0.778,
+  "own": 0.579,
+  "oxide": 0.333,
+  "oxyhydrogen": 1.0,
+  "pale": 0.5,
+  "palmitic": 0.5,
+  "paper": 0.421,
+  "particular": 0.375,
+  "passage": 0.5,
+  "peculiar": 0.5,
+  "pellet": 0.5,
+  "perfectly": 0.364,
+  "period": 1.0,
+  "permanent": 0.5,
+  "phenomenon": 1.0,
+  "philosopher": 1.0,
+  "philosophical": 0.5,
+  "philosophy": 0.429,
+  "phosphorus": 0.375,
+  "piece": 0.589,
+  "pile": 0.667,
+  "pint": 0.833,
+  "pipe": 0.583,
+  "pipes": 0.5,
+  "plants": 0.333,
+  "plate": 0.75,
+  "platinums": 0.667,
+  "plums": 0.5,
+  "poker": 1.0,
+  "poles": 0.75,
+  "popgun": 0.5,
+  "porous": 0.333,
+  "positive": 0.667,
+  "potassium": 0.318,
+  "pound": 0.6,
+  "pouring": 0.5,
+  "powder": 0.333,
+  "power": 0.477,
+  "precious": 0.5,
+  "preparation": 0.5,
+  "presence": 0.714,
+  "pressure": 0.7,
+  "pretty": 0.312,
+  "principles": 0.75,
+  "process": 0.412,
+  "product": 0.444,
+  "products": 0.417,
+  "progress": 1.0,
+  "proof": 0.429,
+  "proper": 0.556,
+  "proportion": 0.5,
+  "proportions": 1.0,
+  "protecting": 0.5,
+  "pump": 0.545,
+  "purpose": 0.708,
+  "purposes": 0.4,
+  "qualities": 0.5,
+  "quality": 0.5,
+  "quantity": 0.44,
+  "question": 0.667,
+  "quiet": 0.667,
+  "real": 0.5,
+  "reason": 0.385,
+  "reasoning": 0.4,
+  "regular": 0.714,
+  "relation": 0.571,
+  "remaining": 0.667,
+  "remarks": 0.5,
+  "representative": 1.0,
+  "repulsion": 0.5,
+  "required": 0.333,
+  "residue": 0.5,
+  "respective": 1.0,
+  "rest": 1.0,
+  "result": 0.581,
+  "retort": 0.75,
+  "right": 0.357,
+  "ring": 1.0,
+  "rolling": 0.5,
+  "room": 0.5,
+  "rouble": 0.5,
+  "royal": 1.0,
+  "russian": 0.75,
+  "safe": 0.333,
+  "sake": 0.333,
+  "salt": 0.4,
+  "same": 0.944,
+  "screen": 1.0,
+  "second": 1.0,
+  "separation": 0.5,
+  "shadow": 0.5,
+  "shape": 0.417,
+  "sheet": 0.5,
+  "short": 0.4,
+  "side": 0.318,
+  "sides": 0.7,
+  "single": 1.0,
+  "size": 0.667,
+  "slag": 1.0,
+  "smaller": 0.5,
+  "smallest": 1.0,
+  "smoke": 0.333,
+  "soap": 0.455,
+  "soft": 0.5,
+  "solid": 0.553,
+  "solution": 0.333,
+  "soots": 0.5,
+  "sort": 0.444,
+  "sound": 0.667,
+  "source": 0.5,
+  "spark": 0.5,
+  "specific": 0.667,
+  "specimen": 0.5,
+  "spermaceti": 0.333,
+  "spirit": 0.5,
+  "splinter": 0.5,
+  "sponge": 0.6,
+  "spoon": 0.75,
+  "steady": 0.5,
+  "steps": 0.5,
+  "sticking": 0.667,
+  "stone": 0.5,
+  "stop": 0.5,
+  "stores": 0.5,
+  "stream": 0.571,
+  "streets": 1.0,
+  "strength": 0.333,
+  "strip": 0.5,
+  "strong": 0.3,
+  "stronger": 0.5,
+  "study": 0.333,
+  "subject": 0.6,
+  "sucker": 0.5,
+  "suds": 0.333,
+  "sulphur": 0.571,
+  "sun": 0.667,
+  "sunlight": 0.5,
+  "supporting": 0.333,
+  "surface": 0.789,
+  "sustenance": 1.0,
+  "system": 1.0,
+  "table": 0.8,
+  "tables": 1.0,
+  "tail": 1.0,
+  "taper": 0.75,
+  "telegram": 1.0,
+  "temperature": 0.667,
+  "terminal": 0.5,
+  "test": 0.368,
+  "tests": 0.333,
+  "third": 1.0,
+  "tinfoil": 0.4,
+  "tobacco": 1.0,
+  "ton": 1.0,
+  "top": 0.964,
+  "torch": 0.5,
+  "towel": 1.0,
+  "train": 1.0,
+  "treatment": 1.0,
+  "trees": 0.5,
+  "true": 0.4,
+  "truth": 0.667,
+  "trying": 0.5,
+  "tube": 0.63,
+  "tubes": 0.6,
+  "tumbler": 0.667,
+  "twelve": 0.5,
+  "union": 1.0,
+  "upper": 0.667,
+  "uralian": 1.0,
+  "utility": 0.333,
+  "valuable": 0.333,
+  "value": 0.8,
+  "valve": 1.0,
+  "vaporous": 0.833,
+  "vapour": 0.457,
+  "variety": 0.5,
+  "various": 0.455,
+  "vast": 0.5,
+  "very": 0.354,
+  "vessel": 0.593,
+  "vigorous": 0.5,
+  "volatility": 1.0,
+  "voltaic": 0.895,
+  "warmth": 0.333,
+  "water": 0.307,
+  "wax": 0.52,
+  "weight": 0.562,
+  "weights": 0.571,
+  "welding": 0.333,
+  "whale": 0.5,
+  "whole": 1.0,
+  "wick": 0.88,
+  "wine": 0.5,
+  "wire": 0.361,
+  "wires": 0.5,
+  "word": 1.0,
+  "workmen": 1.0,
+  "workshops": 0.5,
+  "world": 1.0,
+  "wrong": 0.5,
+  "yellow": 0.5,
+  "zinc": 0.333
+ },
+ "tokens": 41940
+}
