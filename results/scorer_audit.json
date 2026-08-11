@@ -1,14 +1,14 @@
 {
   "generated_by": "src/score_predictions_v2.py",
   "predictions_file": "analysis/PREDICTIONS.md",
-  "n_predictions": 72,
+  "n_predictions": 78,
   "coverage_summary": {
     "full": 10,
     "partial": 8,
-    "prose": 27,
-    "in_flight": 2,
+    "prose": 33,
+    "in_flight": 0,
     "withdrawn": 1,
-    "registered": 24
+    "registered": 26
   },
   "n_mismatches": 0,
   "mismatches": [],
@@ -2099,7 +2099,7 @@
     "P68": {
       "pid": "P68",
       "title": "the crossing deepens, or it plateaus (registered\n  2026-08-10, BEFORE the resume).",
-      "status": "in_flight",
+      "status": "registered",
       "verdict_words": [],
       "artifacts_named": [],
       "artifacts_found": [],
@@ -2109,13 +2109,12 @@
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "none",
-      "note": "artifact pos_d1024_status.json reports phase=running \u2014 skipped"
+      "coverage": "prose-only (not yet scored)"
     },
     "P69": {
       "pid": "P69",
       "title": "the valley is a shape, or it is a q-artifact (registered\n  2026-08-10, BEFORE the launch).",
-      "status": "in_flight",
+      "status": "registered",
       "verdict_words": [],
       "artifacts_named": [],
       "artifacts_found": [],
@@ -2125,8 +2124,7 @@
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "none",
-      "note": "artifact pos_d1024_status.json reports phase=running \u2014 skipped"
+      "coverage": "prose-only (not yet scored)"
     },
     "P70": {
       "pid": "P70",
@@ -2422,6 +2420,129 @@
         "UNPARSEABLE": 0
       },
       "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P74": {
+      "pid": "P74",
+      "title": "the append curve on a real graph at 10\u00d7 (registered\n  2026-08-10, BEFORE the run; scale harness built and reviewed,\n  6/6 tests green on three machines, smoke on dense synthetic data\n  already showed 82\u00d7 \u2014 the shape of the risk is known and stated\n  up front).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/livecausal_scale_run1.json"
+      ],
+      "artifacts_found": [
+        "livecausal_scale_run1.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P75": {
+      "pid": "P75",
+      "title": "canonicalization lifts the measured constraint\n  (registered 2026-08-10, BEFORE the run; organ committed 4d807c6,\n  6/6 tests plus full livecausal regression green).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/canon_probe_cross.json",
+        "results/livecausal_p75.json",
+        "results/livecausal_p75_cost_recheck.json"
+      ],
+      "artifacts_found": [
+        "canon_probe_cross.json",
+        "livecausal_p75.json",
+        "livecausal_p75_cost_recheck.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P77": {
+      "pid": "P77",
+      "title": "the injection mechanism isolated (registered 2026-08-10,\n  BEFORE the run; harness committed 4519382, 13/13 tests green\n  incl. the grid-ledger-isolation regression).",
+      "status": "scored",
+      "verdict_words": [
+        "CONFIRMED",
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/livecausal_p77_grid.json"
+      ],
+      "artifacts_found": [
+        "livecausal_p77_grid.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P78": {
+      "pid": "P78",
+      "title": "the lived reader (registered 2026-08-10, BEFORE the\n  run; harness committed d88ada9, 17/17 tests incl. byte-identical\n  forward roundtrip).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/livecausal_p78_grid.json"
+      ],
+      "artifacts_found": [
+        "livecausal_p78_grid.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P79": {
+      "pid": "P79",
+      "title": "the consult policy and the three lives (registered\n  2026-08-10, BEFORE the overnight run; readers converted from the\n  same 40h-POS snapshot as P78, forward-load verified).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
+    },
+    "P80": {
+      "pid": "P80",
+      "title": "the band replicates (registered 2026-08-10, BEFORE the\n  run; same-night replication of P79's discovered shape on a\n  fresh seed with doubled statistics).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
     }
   }
 }

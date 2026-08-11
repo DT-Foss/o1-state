@@ -1,8 +1,12 @@
-# EVIDENCE CALCULUS — DRAFT (for Lead review)
+# EVIDENCE CALCULUS — DRAFT (Lead-reviewed 2026-08-10)
 
-**Status: DRAFT. Not binding. Written as MVP-7 design groundwork, no code
-changes made. Options are laid out with trade-offs; each section ends with
-a recommendation.**
+**Status: Design phase ACCEPTED (Lead review, 2026-08-10) — all three
+recommendations approved: separate evidence ledger as a computed fold,
+coexistence + read-time dominance + threshold-free unconditional
+inference with a contested flag, and a use.ledger with logical sequence
+numbers kept strictly separate from evidence_count. Implementation
+follows after MVP-4, not part of this document. Options are laid out
+with trade-offs; each section ends with a recommendation.**
 
 Scope: how the live graph counts evidence for a base edge, resolves
 contradictory triplets, and lets `use_count` grow — all without breaking
@@ -43,6 +47,14 @@ observations.
   needs different W; doc_coord is `int|list` per the schema (P55 rule)
   so "distance" needs a type-aware definition (flat int diff for text,
   structural distance for the (lane_seed, episode, frame, offset) form).
+
+**REVIEW NOTE (Lead, 2026-08-10):** if the window heuristic (Option A)
+is what implementation ends up using, the chosen W must be written into
+the evidence ledger's header — never left as an implicit code constant —
+so the `evidence_count` fold stays fully reproducible from the ledger
+file alone, matching the store's segment-header self-description
+pattern. W is itself a knob per the recommendation below, so it needs
+the same self-description discipline as everything else in this draft.
 
 **Option B — segment provenance.** Two records count as independent
 evidence if they were curated into different segments (i.e., different

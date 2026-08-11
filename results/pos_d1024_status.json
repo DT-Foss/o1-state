@@ -1,9 +1,9 @@
 {
-  "pid": 79534,
-  "phase": "done",
+  "pid": 99350,
+  "phase": "running",
   "config": {
-    "hours": 16.0,
-    "target_tokens": 50000000,
+    "hours": 40.0,
+    "target_tokens": 150000000,
     "d_model": 1024,
     "batch": 8,
     "chunk": 64,
@@ -30,57 +30,39 @@
     "pause_rss_gb": 12.0,
     "pause_disk_gb": 5.0,
     "no_index": true,
-    "resume": false,
+    "resume": true,
     "tag": "d1024"
   },
-  "started_utc": "2026-08-06T05:38:34Z",
-  "wall_s": 42373.6,
-  "n_streamed": 50000384,
-  "tok_per_s": 1180.0,
-  "rss_gb": 2.265,
-  "disk_free_gb": 13.5,
-  "stream_docs": 138532,
-  "stream_reconnects": 1,
+  "started_utc": "2026-08-10T11:43:26Z",
+  "wall_s": 105624.2,
+  "n_streamed": 129842176,
+  "tok_per_s": 1229.3,
+  "rss_gb": 2.562,
+  "disk_free_gb": 14.1,
+  "stream_docs": 357604,
+  "stream_reconnects": 12,
   "arms": {
     "A1": {
       "grad_tokens": 0,
-      "n_chunks": 97657,
+      "n_chunks": 253598,
       "n_bwd": 0
     },
     "A2": {
-      "grad_tokens": 50000384,
-      "n_chunks": 97657,
-      "n_bwd": 97657
+      "grad_tokens": 129842176,
+      "n_chunks": 253598,
+      "n_bwd": 253598
     },
     "A3": {
-      "grad_tokens": 9903104,
-      "n_chunks": 97657,
-      "n_bwd": 19342
+      "grad_tokens": 26049536,
+      "n_chunks": 253598,
+      "n_bwd": 50878
+    },
+    "A3R": {
+      "grad_tokens": 5571584,
+      "n_chunks": 53771,
+      "n_bwd": 10882
     }
   },
   "index": null,
-  "twin_forked": false,
-  "digest": "3c572b5a8cfee569028d371191a89014ab22d4fd0e2bc199e8f1ab8bb973eccb",
-  "final": {
-    "type": "eval",
-    "wall_s": 42340.9,
-    "n_streamed": 50000384,
-    "rss_gb": 2.273,
-    "arms": {
-      "A1": {
-        "heldout": 8.689296,
-        "grad_tokens": 0
-      },
-      "A2": {
-        "heldout": 5.446357,
-        "grad_tokens": 50000384
-      },
-      "A3": {
-        "heldout": 5.416426,
-        "grad_tokens": 9903104,
-        "gate_frac_recent": 0.2,
-        "gate_frac_cum": 0.1981
-      }
-    }
-  }
+  "twin_forked": true
 }
