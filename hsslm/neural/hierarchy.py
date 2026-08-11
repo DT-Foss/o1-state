@@ -262,45 +262,49 @@ class DiscourseComposer(nn.Module):
             nn.Sigmoid(),
         )
         self.composition = CompositionLayer(d_model, dropout)
-        self.discourse_state: Optional[torch.Tensor] = None
 
     def forward(
         self,
         sentence_states: torch.Tensor,
-        reset_state: bool = False,
-    ) -> torch.Tensor:
+        discourse_state: Optional[torch.Tensor] = None,
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
         """
         Args:
             sentence_states: (B, S, d_model) sentence-level states.
-            reset_state: If True, reset discourse state (new document).
+            discourse_state: Optional (B, d_model) running discourse state
+                carried from a previous call/chunk. None starts fresh (zeros)
+                -- this is the ONLY way discourse continuity crosses calls now;
+                there is no module-level mutable state, so a caller doing
+                detach-carry (states = [s.detach() for s in states]) also
+                detaches the discourse state correctly instead of silently
+                leaking gradients across chunks.
 
         Returns:
-            (B, S, d_model) discourse-enriched sentence representations.
+            - (B, S, d_model) discourse-enriched sentence representations.
+            - (B, d_model) final discourse state, to pass as `discourse_state`
+              on the next call for continuity (detach it yourself for
+              streaming/chunked inference).
         """
         B, S, D = sentence_states.shape
         device = sentence_states.device
 
-        if reset_state or self.discourse_state is None or self.discourse_state.shape[0] != B:
-            self.discourse_state = torch.zeros(B, D, device=device)
+        if discourse_state is None or discourse_state.shape[0] != B:
+            discourse_state = torch.zeros(B, D, device=device)
 
         discourse_states = []
         for s in range(S):
             current = sentence_states[:, s, :]  # (B, D)
 
             # Compute gate
-            combined = torch.cat([current, self.discourse_state], dim=-1)  # (B, 2D)
+            combined = torch.cat([current, discourse_state], dim=-1)  # (B, 2D)
             gate = self.gate_proj(combined)  # (B, D)
 
             # Gated update: mix current sentence with previous discourse
-            self.discourse_state = gate * current + (1 - gate) * self.discourse_state
-            discourse_states.append(self.discourse_state.clone())
+            discourse_state = gate * current + (1 - gate) * discourse_state
+            discourse_states.append(discourse_state)
 
         discourse_tensor = torch.stack(discourse_states, dim=1)  # (B, S, D)
-        return self.composition(discourse_tensor)
-
-    def reset(self) -> None:
-        """Reset internal discourse state. Call at document boundaries."""
-        self.discourse_state = None
+        return self.composition(discourse_tensor), discourse_state
 
 
 class HierarchicalComposer(nn.Module):
@@ -327,6 +331,7 @@ class HierarchicalComposer(nn.Module):
         token_states: torch.Tensor,
         boundaries: Dict[str, List[torch.Tensor]],
         return_all_levels: bool = True,
+        discourse_state: Optional[torch.Tensor] = None,
     ) -> Dict[str, torch.Tensor]:
         """Run full hierarchical composition.
 
@@ -334,12 +339,25 @@ class HierarchicalComposer(nn.Module):
             token_states: (B, L, d_model) from SSM core.
             boundaries: Dict with "word" and "sentence" boundary tensors.
             return_all_levels: If True, return all intermediate reps.
+            discourse_state: Optional (B, d_model) running discourse state
+                from a previous call, for streaming/chunked continuity.
+                Caller is responsible for detaching it between chunks the
+                same way the SSM states are detached.
 
         Returns:
-            Dict with representations at each level.
+            Dict with representations at each level, plus
+            "discourse_state": (B, d_model) final discourse state to carry
+            into the next call.
+
+        NOTE on chunked/streaming use: word/sentence boundaries here are
+        assumed to already be expressed in THIS call's local token indices
+        (i.e. the caller must re-derive/re-offset boundary tensors per
+        chunk -- they are not automatically shifted). This composer only
+        fixes discourse-state continuity; boundary re-offsetting across
+        chunks is a separate concern left to the caller.
         """
         if not self.enabled:
-            return {"token": token_states}
+            return {"token": token_states, "discourse_state": discourse_state}
 
         # Get boundaries
         word_boundaries = boundaries.get("word_boundaries", boundaries.get("word", []))
@@ -366,7 +384,9 @@ class HierarchicalComposer(nn.Module):
                 result["sentence"] = sentence_states
 
                 # Discourse composition
-                discourse_states = self.discourse_composer(sentence_states)
+                discourse_states, discourse_state = self.discourse_composer(
+                    sentence_states, discourse_state
+                )
                 result["discourse"] = discourse_states
             else:
                 # If no sentence boundaries, use phrases as proxy
@@ -377,7 +397,9 @@ class HierarchicalComposer(nn.Module):
                 ]
                 sentence_states = self.sentence_composer(phrase_states, fake_bound)
                 result["sentence"] = sentence_states
-                discourse_states = self.discourse_composer(sentence_states)
+                discourse_states, discourse_state = self.discourse_composer(
+                    sentence_states, discourse_state
+                )
                 result["discourse"] = discourse_states
         else:
             # No word boundaries: create fake single-word per token
@@ -388,6 +410,12 @@ class HierarchicalComposer(nn.Module):
                 torch.tensor([[0, L]], device=token_states.device) for _ in range(B)
             ]
             result["sentence"] = self.sentence_composer(token_states, fake_bound)
-            result["discourse"] = self.discourse_composer(result["sentence"])
+            discourse_states, discourse_state = self.discourse_composer(
+                result["sentence"], discourse_state
+            )
+            result["discourse"] = discourse_states
+
+        result["discourse_state"] = discourse_state
+        return result
 
         return result

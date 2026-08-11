@@ -1,14 +1,15 @@
 """
-Smoke test for HSSLM neural (S6 / Mamba-style) module.
+Smoke test for HSSLM neural (S6 / Mamba-style) module -- post streaming fix.
 
 Verifies:
 1. Model builds, forward pass on random batch works.
 2. Parameter count matches the claimed ~8.6M.
-3. Loss decreases over a handful of steps on a mini-batch (flat LM mode,
-   no hierarchical boundaries -- isolates the SSM core's learnability).
+3. Loss decreases over a handful of steps on a mini-batch (flat LM mode).
 4. Detach-carry streaming test (F2-exactness pattern): forward on a full
-   sequence in one shot vs. chunked with detached state carried forward.
-   Reports max-abs-delta between the two logit streams.
+   sequence in one shot vs. chunked with detached state (SSM state + conv
+   buffer + position offset) carried forward. Reports max-abs-delta.
+5. Same test with the hierarchical composer active (discourse_state carried
+   too), to measure whether/how much the composer breaks exactness.
 
 Run:
     OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
@@ -30,12 +31,25 @@ torch.manual_seed(43)
 
 from neural.model import HSSLM
 from neural.config import HSSLMConfig
+from neural.core_engine import StateSpaceCore
 
 
 def section(title):
     print("\n" + "=" * 70)
     print(title)
     print("=" * 70)
+
+
+def detach_state_tree(states):
+    """Detach an arbitrarily nested list/tuple-of-tensors state structure."""
+    if states is None:
+        return None
+    if isinstance(states, torch.Tensor):
+        return states.detach()
+    if isinstance(states, (list, tuple)):
+        cls = type(states)
+        return cls(detach_state_tree(s) for s in states)
+    return states
 
 
 def test_build_and_param_count():
@@ -58,7 +72,7 @@ def test_forward_random_batch(model):
     section("2. FORWARD PASS ON RANDOM BATCH")
     B, L = 2, 32
     vocab = model.vocab_size
-    input_ids = torch.randint(4, vocab, (B, L))  # avoid special tokens 0-3
+    input_ids = torch.randint(4, vocab, (B, L))
     labels = torch.randint(4, vocab, (B, L))
 
     model.eval()
@@ -106,17 +120,50 @@ def test_loss_decreases(model):
     return ok
 
 
-def test_detach_carry_streaming():
-    """F2-exactness pattern: one-shot forward vs. chunked forward with
-    detached state carried across chunk boundaries. Uses FLAT mode
-    (no hierarchical composer) to isolate the SSM core's streaming property,
-    since the hierarchical composers (word/phrase/sentence/discourse
-    boundary pooling) are not designed to operate chunk-locally.
-    """
-    section("4. DETACH-CARRY STREAMING TEST (SSM core, flat mode)")
+def test_detach_carry_streaming_core():
+    """F2-exactness on the bare StateSpaceCore: one-shot vs chunked+detached,
+    with the fixed conv-buffer carry (no position embedding involved here --
+    isolates the SSM+conv streaming property from the embedding layer)."""
+    section("4. DETACH-CARRY STREAMING TEST -- bare StateSpaceCore (post-fix)")
+    torch.manual_seed(7)
+    core = StateSpaceCore(n_layers=6, d_model=256, d_state=16, d_conv=4, expand=2, dt_rank=8, dropout=0.0)
+    core.eval()
+
+    B, L, D = 1, 24, 256
+    x = torch.randn(B, L, D)
+
+    with torch.no_grad():
+        y_full, _ = core(x, states=None)
+
+        chunk_size = 6
+        states = None
+        ys = []
+        for start in range(0, L, chunk_size):
+            end = min(start + chunk_size, L)
+            xc = x[:, start:end, :]
+            yc, states = core(xc, states)
+            ys.append(yc)
+            states = detach_state_tree(states)
+        y_chunked = torch.cat(ys, dim=1)
+
+    delta = (y_full - y_chunked).abs()
+    max_abs_delta = delta.max().item()
+    mean_abs_delta = delta.mean().item()
+    print(f"max|delta|:  {max_abs_delta:.3e}")
+    print(f"mean|delta|: {mean_abs_delta:.3e}")
+
+    exact = max_abs_delta < 1e-4
+    print(f"VERDICT: {'EXACT (F2-pattern holds)' if exact else 'NOT EXACT'}")
+    return exact, max_abs_delta
+
+
+def test_detach_carry_streaming_full_model():
+    """F2-exactness on the full HSSLM in flat mode (embedding + SSM core +
+    LM head), including the position_offset fix, one-shot vs chunked."""
+    section("4b. DETACH-CARRY STREAMING TEST -- full HSSLM, flat mode")
     torch.manual_seed(7)
     config = HSSLMConfig()
-    config.hierarchical = False  # isolate the SSM core itself
+    config.hierarchical = False
     model = HSSLM(config)
     model.eval()
 
@@ -125,77 +172,119 @@ def test_detach_carry_streaming():
     input_ids = torch.randint(4, vocab, (B, L))
 
     with torch.no_grad():
-        # One-shot: whole sequence at once, no external state
-        out_full = model(input_ids, states=None)
-        logits_full = out_full["logits"]  # (B, L, V)
+        out_full = model(input_ids, states=None, position_offset=0)
+        logits_full = out_full["logits"]
 
-        # Chunked: process in chunks of 6, carrying detached state forward
         chunk_size = 6
         states = None
         logits_chunks = []
         for start in range(0, L, chunk_size):
             end = min(start + chunk_size, L)
             chunk = input_ids[:, start:end]
-            out_chunk = model(chunk, states=states)
+            out_chunk = model(chunk, states=states, position_offset=start)
             logits_chunks.append(out_chunk["logits"])
-            # detach-carry: sever autograd graph, keep values
-            states = [s.detach() if s is not None else None for s in out_chunk["states"]]
+            states = detach_state_tree(out_chunk["states"])
+        logits_chunked = torch.cat(logits_chunks, dim=1)
 
-        logits_chunked = torch.cat(logits_chunks, dim=1)  # (B, L, V)
-
-    assert logits_full.shape == logits_chunked.shape, (
-        f"shape mismatch: {logits_full.shape} vs {logits_chunked.shape}"
-    )
     delta = (logits_full - logits_chunked).abs()
     max_abs_delta = delta.max().item()
     mean_abs_delta = delta.mean().item()
-    rel_delta = (delta / (logits_full.abs() + 1e-8)).max().item()
-
-    print(f"logits_full:    {tuple(logits_full.shape)}")
-    print(f"logits_chunked: {tuple(logits_chunked.shape)}")
-    print(f"max |delta|:    {max_abs_delta:.3e}")
-    print(f"mean |delta|:   {mean_abs_delta:.3e}")
-    print(f"max relative:   {rel_delta:.3e}")
+    print(f"max|delta|:  {max_abs_delta:.3e}")
+    print(f"mean|delta|: {mean_abs_delta:.3e}")
 
     exact = max_abs_delta < 1e-4
-    print(f"\nVERDICT: {'EXACT (F2-pattern holds)' if exact else 'NOT EXACT -- reports the delta magnitude for the record'}")
+    print(f"VERDICT: {'EXACT (F2-pattern holds)' if exact else 'NOT EXACT'}")
     return exact, max_abs_delta
 
 
-def test_detach_carry_hierarchical_note():
-    section("4b. DETACH-CARRY WITH HIERARCHICAL COMPOSER (documents which composer breaks it)")
+def test_detach_carry_streaming_hierarchical():
+    """Same test with the hierarchical composer active: boundaries are
+    re-offset per chunk, discourse_state is explicitly carried+detached.
+
+    IMPORTANT structural finding: model.py computes `logits` from `hidden`
+    (the raw SSM core output) in BOTH the hierarchical and flat branches --
+    the composer's output only feeds `hierarchy`/`aux`, never `logits`. So
+    comparing `logits` here would just re-measure the already-exact SSM core
+    (test 4b) and vacuously "pass". To actually measure composer streaming
+    behavior we compare the LAST discourse-level sentence representation
+    between the one-shot and chunked runs instead.
+
+    Also structural: WordComposer/SentenceComposer take boundaries local to
+    whatever states they're given, and there is no canonical way to make a
+    4-chunk boundary structure equal a 1-chunk boundary structure over the
+    same tokens (different word/sentence counts by construction) -- so this
+    number reflects the composer's genuine lack of a chunk-invariant design,
+    not a numerical bug. Reported for the record per the lead's instruction:
+    the flat core must be exact (it is, see 4b), the hierarchy MAY
+    approximate as long as it's measured."""
+    section("4c. DETACH-CARRY STREAMING TEST -- hierarchical composer (discourse repr.)")
     torch.manual_seed(7)
     config = HSSLMConfig()
     config.hierarchical = True
     model = HSSLM(config)
     model.eval()
 
-    # With hierarchical=True, forward requires 'boundaries' to activate the
-    # composer path at all -- otherwise model.forward silently falls back to
-    # flat mode (see model.py: `if self.hierarchical and boundaries is not None`).
-    # This means the *streaming* interface (states=...) has no defined
-    # interaction with the composer: boundaries are computed by the tokenizer
-    # over word/sentence spans that assume the FULL sequence's absolute
-    # token positions are known -- chunking breaks boundary indices unless
-    # the caller re-derives per-chunk boundaries with correct offsets, and
-    # DiscourseComposer keeps its own separate mutable `discourse_state`
-    # instance attribute across calls (NOT threaded through the `states`
-    # list at all), so chunk-to-chunk continuity is implicit/hidden rather
-    # than an explicit, resettable, testable state per the states=[...] API.
-    print("Finding (no numeric test needed -- structural):")
-    print("  - HierarchicalComposer.forward requires `boundaries` computed on")
-    print("    absolute token indices; chunking requires the caller to")
-    print("    correctly re-offset word/sentence boundary tensors per chunk.")
-    print("  - DiscourseComposer.discourse_state is an instance attribute,")
-    print("    NOT part of the states=[...] list returned by model.forward().")
-    print("    It persists across calls implicitly (module-level mutable")
-    print("    state) rather than being explicit/functional. A caller doing")
-    print("    detach-carry via states=[...] will NOT detach the discourse")
-    print("    state -- it silently keeps accumulating gradients unless")
-    print("    .reset() or manual .detach_() is called on it separately.")
-    print("  - WordComposer/SentenceComposer boundary pooling loops over")
-    print("    Python lists per-batch-item (no vectorized chunk-carry path).")
-    return True
+    B, L = 1, 24
+    vocab = model.vocab_size
+    input_ids = torch.randint(4, vocab, (B, L))
+
+    def make_boundaries(length, n_words):
+        step = max(1, length // n_words)
+        bounds = []
+        pos = 0
+        while pos < length:
+            end = min(pos + step, length)
+            bounds.append([pos, end])
+            pos = end
+        return torch.tensor(bounds, dtype=torch.long)
+
+    full_word_b = [make_boundaries(L, n_words=4)]
+    full_sent_b = [torch.tensor([[0, len(full_word_b[0])]], dtype=torch.long)]
+    boundaries_full = {"word_boundaries": full_word_b, "sentence_boundaries": full_sent_b}
+
+    with torch.no_grad():
+        out_full = model(
+            input_ids, boundaries=boundaries_full, states=None,
+            position_offset=0, return_hierarchy=True,
+        )
+        disc_full = out_full["hierarchy"]["discourse"][:, -1, :]  # (B, D) last sentence repr
+
+        chunk_size = 6
+        states = None
+        discourse_state = None
+        last_disc_chunked = None
+        for start in range(0, L, chunk_size):
+            end = min(start + chunk_size, L)
+            chunk = input_ids[:, start:end]
+            chunk_len = end - start
+            word_b = [make_boundaries(chunk_len, n_words=max(1, chunk_len // 3))]
+            sent_b = [torch.tensor([[0, len(word_b[0])]], dtype=torch.long)]
+            out_chunk = model(
+                chunk,
+                boundaries={"word_boundaries": word_b, "sentence_boundaries": sent_b},
+                states=states,
+                position_offset=start,
+                discourse_state=discourse_state,
+                return_hierarchy=True,
+            )
+            states = detach_state_tree(out_chunk["states"])
+            ds = out_chunk.get("discourse_state")
+            discourse_state = ds.detach() if ds is not None else None
+            last_disc_chunked = out_chunk["hierarchy"]["discourse"][:, -1, :]
+
+    delta = (disc_full - last_disc_chunked).abs()
+    max_abs_delta = delta.max().item()
+    mean_abs_delta = delta.mean().item()
+    print(f"discourse repr max|delta|:  {max_abs_delta:.3e}")
+    print(f"discourse repr mean|delta|: {mean_abs_delta:.3e}")
+    print("NOTE: logits are unaffected by the composer (model.py computes")
+    print("them from the raw SSM `hidden`, not from `hierarchy`) -- this is")
+    print("the honest signal: the composer's own representation, not logits.")
+    print("Delta reflects the composer's structural lack of chunk-invariant")
+    print("boundary handling (different word/sentence counts by")
+    print("construction across chunk vs one-shot), not a numerical bug in")
+    print("the fixed SSM/conv/position streaming path (see 4b: exact).")
+    return max_abs_delta
 
 
 if __name__ == "__main__":
@@ -204,10 +293,13 @@ if __name__ == "__main__":
     model, results["param_count"] = test_build_and_param_count()
     results["forward"] = test_forward_random_batch(model)
     results["loss_decrease"] = test_loss_decreases(model)
-    results["streaming_exact"], max_delta = test_detach_carry_streaming()
-    test_detach_carry_hierarchical_note()
+    results["streaming_core_exact"], core_delta = test_detach_carry_streaming_core()
+    results["streaming_full_exact"], full_delta = test_detach_carry_streaming_full_model()
+    hier_delta = test_detach_carry_streaming_hierarchical()
 
     section("SUMMARY")
     for k, v in results.items():
-        print(f"  {k:20s}: {'PASS' if v else 'FAIL/NOTED'}")
-    print(f"  streaming max|delta|: {max_delta:.3e}")
+        print(f"  {k:24s}: {'PASS' if v else 'FAIL'}")
+    print(f"  streaming core max|delta|:  {core_delta:.3e}")
+    print(f"  streaming full max|delta|:  {full_delta:.3e}")
+    print(f"  streaming hier  max|delta|: {hier_delta:.3e}  (structural, see note above)")

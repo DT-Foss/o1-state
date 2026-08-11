@@ -66,10 +66,19 @@ class HierarchicalEmbedding(nn.Module):
         with torch.no_grad():
             self.token_embedding.weight[0].fill_(0)
 
-    def forward(self, input_ids: torch.Tensor) -> torch.Tensor:
+    def forward(self, input_ids: torch.Tensor, position_offset: int = 0) -> torch.Tensor:
         """
         Args:
             input_ids: (B, L) token IDs.
+            position_offset: Absolute position of input_ids[:, 0] in the full
+                sequence. Defaults to 0 (one-shot / first chunk). A streaming
+                caller processing chunk k of chunk_size C must pass
+                position_offset=k*C so position embeddings continue correctly
+                across chunk boundaries instead of restarting at 0 every call
+                (restarting at 0 is a real bug for chunked/streaming
+                inference: the SSM recurrent state carries real history, but
+                the position embedding would otherwise silently claim every
+                chunk starts the sequence).
 
         Returns:
             (B, L, 256) contextualized embeddings.
@@ -79,8 +88,11 @@ class HierarchicalEmbedding(nn.Module):
         # Token embeddings
         tok_emb = self.token_embedding(input_ids)  # (B, L, 256)
 
-        # Position embeddings
-        positions = torch.arange(L, device=input_ids.device).unsqueeze(0)  # (1, L)
+        # Position embeddings, offset for chunked/streaming continuation
+        positions = torch.arange(
+            position_offset, position_offset + L, device=input_ids.device
+        ).unsqueeze(0)  # (1, L)
+        positions = positions.clamp(max=self.max_seq_len - 1)
         pos_emb = self.position_embedding(positions)  # (1, L, 256)
 
         # Combine and normalize

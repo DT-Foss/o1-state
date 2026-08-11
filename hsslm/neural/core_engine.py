@@ -234,12 +234,20 @@ class MambaBlock(nn.Module):
         self.in_proj = nn.Linear(d_model, self.d_inner * 2, bias=bias)
         # 256 * 1024 = 262,144 params
 
-        # Short convolution (depthwise separable) on x_branch
+        # Short convolution (depthwise separable) on x_branch.
+        # padding=0 here: causal left-context is supplied explicitly by the
+        # caller via the conv-buffer element of `state` (see forward()), not
+        # by Conv1d's own zero-padding. Zero-padding every chunk independently
+        # is exactly what broke streaming exactness at chunk boundaries
+        # (verified: F2 test showed the SSM recurrence carries state correctly,
+        # but max|delta| spiked to ~0.2 at every chunk start and decayed over
+        # ~d_conv-1 positions -- the fingerprint of a conv that forgets its
+        # real left-context on each call).
         self.conv1d = nn.Conv1d(
             in_channels=self.d_inner,
             out_channels=self.d_inner,
             kernel_size=d_conv,
-            padding=d_conv - 1,
+            padding=0,
             groups=self.d_inner,  # depthwise: each channel convolved separately
             bias=True,
         )
@@ -263,19 +271,26 @@ class MambaBlock(nn.Module):
     def forward(
         self,
         x: torch.Tensor,
-        state: Optional[torch.Tensor] = None,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        state: Optional[Tuple[Optional[torch.Tensor], Optional[torch.Tensor]]] = None,
+    ) -> Tuple[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
         """
         Args:
             x: (B, L, d_model) input.
-            state: Optional previous SSM state.
+            state: Optional (ssm_state, conv_buffer) tuple from a previous
+                chunk. ssm_state: (B, d_inner, d_state) SSM recurrent state.
+                conv_buffer: (B, d_inner, d_conv - 1) last real inputs to the
+                depthwise conv from the previous chunk, used as left-context
+                instead of zero-padding (this is what makes chunked streaming
+                match one-shot processing at chunk boundaries).
 
         Returns:
             - output: (B, L, d_model).
-            - state: Final SSM state.
+            - state: (ssm_state, conv_buffer) tuple for the next chunk.
         """
         B, L, D = x.shape
         assert D == self.d_model, f"Expected d_model={self.d_model}, got {D}"
+
+        ssm_state, conv_buffer = state if state is not None else (None, None)
 
         # Residual
         residual = x
@@ -287,15 +302,36 @@ class MambaBlock(nn.Module):
         xz = self.in_proj(x)  # (B, L, 2 * d_inner)
         x_branch, z_branch = xz.chunk(2, dim=-1)  # each (B, L, d_inner)
 
-        # Short convolution on x_branch
-        # Conv1d expects (B, C, L) so transpose
-        x_conv = self.conv1d(x_branch.transpose(1, 2))  # (B, d_inner, L + pad)
-        x_conv = x_conv[:, :, :L]  # crop padding: (B, d_inner, L)
+        # Short convolution on x_branch, with explicit causal left-context.
+        # Conv1d expects (B, C, L) so transpose.
+        x_branch_t = x_branch.transpose(1, 2)  # (B, d_inner, L)
+        if conv_buffer is None:
+            # First chunk (or non-streaming one-shot call): zero left-context,
+            # matching Conv1d's own zero-padding behavior for a cold start.
+            left_context = torch.zeros(
+                B, self.d_inner, self.d_conv - 1,
+                device=x_branch_t.device, dtype=x_branch_t.dtype,
+            )
+        else:
+            left_context = conv_buffer
+        x_padded = torch.cat([left_context, x_branch_t], dim=-1)  # (B, d_inner, d_conv-1+L)
+        x_conv = self.conv1d(x_padded)  # (B, d_inner, L) -- no internal padding now
         x_conv = x_conv.transpose(1, 2)  # (B, L, d_inner)
         x_conv = F.silu(x_conv)
 
+        # New conv buffer: the real last (d_conv - 1) pre-activation inputs
+        # of this chunk, to seed the next chunk's left-context.
+        new_conv_buffer = x_branch_t[:, :, -(self.d_conv - 1):].contiguous()
+        if new_conv_buffer.shape[-1] < self.d_conv - 1:
+            # Chunk shorter than the conv window: pad on the left with
+            # whatever context we had (keeps buffer width constant).
+            pad_needed = (self.d_conv - 1) - new_conv_buffer.shape[-1]
+            new_conv_buffer = torch.cat(
+                [left_context[:, :, -pad_needed:], new_conv_buffer], dim=-1
+            )
+
         # Selective SSM
-        x_ssm, state = self.ssm(x_conv, state)  # (B, L, d_inner)
+        x_ssm, new_ssm_state = self.ssm(x_conv, ssm_state)  # (B, L, d_inner)
 
         # Gating: multiply with activated z_branch
         x_gated = x_ssm * F.silu(z_branch)  # (B, L, d_inner)
@@ -305,7 +341,7 @@ class MambaBlock(nn.Module):
         output = self.dropout(output)
 
         # Residual connection
-        return output + residual, state
+        return output + residual, (new_ssm_state, new_conv_buffer)
 
 
 class StateSpaceCore(nn.Module):
@@ -361,16 +397,17 @@ class StateSpaceCore(nn.Module):
     def forward(
         self,
         x: torch.Tensor,
-        states: Optional[List[torch.Tensor]] = None,
-    ) -> Tuple[torch.Tensor, List[torch.Tensor]]:
+        states: Optional[List[Tuple[Optional[torch.Tensor], Optional[torch.Tensor]]]] = None,
+    ) -> Tuple[torch.Tensor, List[Tuple[torch.Tensor, torch.Tensor]]]:
         """
         Args:
             x: (B, L, d_model) embedded input.
-            states: Optional list of per-layer SSM states for recurrent inference.
+            states: Optional list of per-layer (ssm_state, conv_buffer)
+                tuples for recurrent/chunked inference.
 
         Returns:
             - output: (B, L, d_model) processed sequence.
-            - states: List of final SSM states per layer.
+            - states: List of final (ssm_state, conv_buffer) tuples per layer.
         """
         if states is None:
             states = [None] * self.n_layers
@@ -383,7 +420,9 @@ class StateSpaceCore(nn.Module):
         x = self.final_norm(x)
         return x, new_states
 
-    def init_states(self, batch_size: int, device: torch.device) -> List[torch.Tensor]:
+    def init_states(
+        self, batch_size: int, device: torch.device
+    ) -> List[Tuple[torch.Tensor, torch.Tensor]]:
         """Initialize empty states for recurrent generation.
 
         Args:
@@ -391,9 +430,15 @@ class StateSpaceCore(nn.Module):
             device: Target device.
 
         Returns:
-            List of (B, d_inner, d_state) zero tensors, one per layer.
+            List of (ssm_state, conv_buffer) tuples, one per layer:
+                - ssm_state: (B, d_inner, d_state) zeros.
+                - conv_buffer: (B, d_inner, d_conv - 1) zeros.
         """
+        d_conv = self.layers[0].d_conv if self.n_layers > 0 else 4
         return [
-            torch.zeros(batch_size, self.d_inner, self.d_state, device=device)
+            (
+                torch.zeros(batch_size, self.d_inner, self.d_state, device=device),
+                torch.zeros(batch_size, self.d_inner, d_conv - 1, device=device),
+            )
             for _ in range(self.n_layers)
         ]

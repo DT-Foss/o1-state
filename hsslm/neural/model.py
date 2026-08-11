@@ -124,6 +124,8 @@ class HSSLM(nn.Module):
         labels: Optional[torch.Tensor] = None,
         return_hierarchy: bool = False,
         states: Optional[List[torch.Tensor]] = None,
+        position_offset: int = 0,
+        discourse_state: Optional[torch.Tensor] = None,
     ) -> Dict[str, torch.Tensor]:
         """Forward pass.
 
@@ -133,6 +135,17 @@ class HSSLM(nn.Module):
             labels: Optional (B, L) target IDs for loss.
             return_hierarchy: Return hierarchical representations.
             states: Optional per-layer states for recurrent inference.
+            position_offset: Absolute position of input_ids[:, 0] in the full
+                sequence. A streaming caller carrying `states` across chunks
+                MUST pass the running token count here, or position
+                embeddings silently restart at 0 every chunk (see
+                HierarchicalEmbedding.forward docstring).
+            discourse_state: Optional (B, d_model) running discourse state
+                from a previous call (hierarchical mode only). This used to
+                be an untracked module-level mutable attribute on
+                DiscourseComposer -- it is now explicit and returned as
+                result["discourse_state"], so a caller doing detach-carry on
+                `states` should detach this too (see hierarchy.py).
 
         Returns:
             Dict with:
@@ -140,10 +153,11 @@ class HSSLM(nn.Module):
                 - "loss": scalar (if labels)
                 - "hierarchy": hierarchical representations (if requested)
                 - "states": final layer states (for recurrent generation)
+                - "discourse_state": final discourse state (hierarchical mode)
                 - "aux": auxiliary predictions (if hierarchical)
         """
         # 1. Embed
-        x = self.embedding(input_ids)  # (B, L, D)
+        x = self.embedding(input_ids, position_offset=position_offset)  # (B, L, D)
 
         # 2. SSM core
         hidden, new_states = self.core(x, states)  # (B, L, D)
@@ -152,7 +166,8 @@ class HSSLM(nn.Module):
         result = {"states": new_states}
 
         if self.hierarchical and boundaries is not None:
-            hierarchy = self.composer(hidden, boundaries)
+            hierarchy = self.composer(hidden, boundaries, discourse_state=discourse_state)
+            result["discourse_state"] = hierarchy.get("discourse_state")
             result["hierarchy"] = hierarchy if return_hierarchy else None
 
             # 4a. LM head on token-level states
