@@ -1,0 +1,22 @@
+[grounding_bridge] device=mps seed=3 episodes=24
+[grounding_bridge] arm (i) binder -- reference, unmodified
+[grounding_bridge] arm (ii) bridge_untrained -- fresh random-init encoder
+[grounding_bridge] arm (iii) bridge_trained -- /Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt
+
+====================================================================================================
+THREE-ARM GROUNDING BENCHMARK COMPARISON
+====================================================================================================
+axis                                            binder      bridge_untrained        bridge_trained
+--------------------------------------------------------------------------------------------------
+token_remapping_equivariance    cov=1.000 lcb=0.862 PASScov=0.000 lcb=0.000 FAILcov=0.000 lcb=0.000 FAIL
+nuisance_transfer               cov=1.000 lcb=0.862 PASScov=0.000 lcb=0.000 FAILcov=0.000 lcb=0.000 FAIL
+intervention_necessity          cov=1.000 lcb=0.862 PASScov=0.000 lcb=0.000 FAILcov=0.000 lcb=0.000 FAIL
+unseen_composition              cov=1.000 lcb=0.862 PASScov=0.958 lcb=0.279 FAILcov=0.958 lcb=0.314 FAIL
+honest_abstention               cov=1.000 lcb=0.862 PASScov=1.000 lcb=0.862 PASScov=1.000 lcb=0.862 PASS
+
+static_pixels_no_action (control)                0.0833                0.0833                0.0833
+rejected_as_grounder                              True                  True                  True
+overall passed                                    True                 False                 False
+score                                           1.0344               -1.4286               -1.4286
+
+[grounding_bridge] full results written: results/grounding_bridge_three_arms.json

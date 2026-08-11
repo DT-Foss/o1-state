@@ -1,0 +1,39 @@
+[grounding_bridge] device=mps seed=3 episodes=24 projection_dim=48
+[grounding_bridge] arm (1) binder -- reference, unmodified
+[grounding_bridge] arm (2) bridge_untrained_proj48 -- fresh random-init encoder, 48-dim random projection
+[grounding_bridge] arm (3) bridge_trained_proj48 -- /Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt, 48-dim random projection
+[grounding_bridge] arm (4) bridge_trained_raw -- control, no projection (the prior arm, carried along in this same run for direct coverage)
+
+====================================================================================================
+FOUR-ARM GROUNDING BENCHMARK COMPARISON
+====================================================================================================
+axis                                            binderbridge_untrained_proj48 bridge_trained_proj48    bridge_trained_raw
+-------------------------------------------------------------------------------------------------------------------------
+token_remapping_equivariance    cov=1.000 lcb=0.862 PASScov=0.000 lcb=0.000 FAILcov=0.917 lcb=0.742 FAILcov=0.000 lcb=0.000 FAIL
+nuisance_transfer               cov=1.000 lcb=0.862 PASScov=0.000 lcb=0.000 FAILcov=0.917 lcb=0.742 FAILcov=0.000 lcb=0.000 FAIL
+intervention_necessity          cov=1.000 lcb=0.862 PASScov=0.000 lcb=0.000 FAILcov=0.917 lcb=0.742 FAILcov=0.000 lcb=0.000 FAIL
+unseen_composition              cov=1.000 lcb=0.862 PASScov=0.833 lcb=0.180 FAILcov=0.750 lcb=0.212 FAILcov=0.958 lcb=0.314 FAIL
+honest_abstention               cov=1.000 lcb=0.862 PASScov=1.000 lcb=0.862 PASScov=1.000 lcb=0.862 PASScov=1.000 lcb=0.862 PASS
+
+static_pixels_no_action (control)                0.0833                0.0833                0.0833                0.0833
+rejected_as_grounder                              True                  True                  True                  True
+overall passed                                    True                 False                 False                 False
+score                                           1.0344               -1.4286               -0.9614               -1.4286
+
+====================================================================================================
+DISTANCE DIAGNOSIS -- bridge_trained at the projected dimension
+====================================================================================================
+--- distance diagnosis at projection_dim=48 ---
+token 459591995: 12 training records, calibrated threshold=0.6636
+  leave-one-out distances to own prototype: [0.1615, 0.187, 0.1981, 0.2024, 0.2293, 0.2296, 0.2325, 0.2329, 0.2457, 0.2487, 0.3019, 0.6083]
+
+eval-time distances on the first 5 token_cases (all candidate prototypes):
+  case 0: expected=459591995 pred=459591995 distances={459591995: 0.2514, 176733286: 1.4656, 984459072: 1.549, 873552895: 1.5226, 699895873: 1.4865, 906974385: 1.5059}
+  case 1: expected=176733286 pred=176733286 distances={459591995: 1.4898, 176733286: 0.158, 984459072: 1.5201, 873552895: 1.47, 699895873: 1.4145, 906974385: 1.6554}
+  case 2: expected=984459072 pred=984459072 distances={459591995: 1.5348, 176733286: 1.5063, 984459072: 0.2254, 873552895: 1.5564, 699895873: 1.5815, 906974385: 1.6166}
+  case 3: expected=873552895 pred=873552895 distances={459591995: 1.6422, 176733286: 1.6009, 984459072: 1.6914, 873552895: 0.5491, 699895873: 0.6489, 906974385: 1.6531}
+  case 4: expected=699895873 pred=None distances={459591995: 1.5921, 176733286: 1.4982, 984459072: 1.6734, 873552895: 0.4777, 699895873: 0.519, 906974385: 1.6456}
+
+acceptance rate over all 24 token_cases: 22/24 = 0.917
+
+[grounding_bridge] full results written: results/grounding_bridge_four_arms.json
