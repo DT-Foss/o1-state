@@ -3111,6 +3111,36 @@ artifact is a number about the defaults, not about the system.
   beyond doubt against its own controls; its SIZE is not yet
   pinned, and the sweep is what pins it.
 
+- **P85c — the sweep pins the size (registered 2026-08-11,
+  BEFORE the run).** The instrument P85b's falsifier mandated.
+  Kernel: the refreshed lab generation (a793f57), with v0
+  semantics verified bit-stable across the refresh (reference
+  score identical to 15 decimals, scope_hash identical) — so
+  numbers remain comparable in meaning to P85/P85b even though
+  those ran on the prior generation. Learner instrument frozen
+  as before: arm_b checkpoint (sha b4fd00b8…), projection dim
+  48 / seed 1234. Sweep: benchmark seeds {3, 5, 7, 11, 13},
+  n=96 episodes each, three arms per seed (binder reference,
+  bridge_untrained_proj48, bridge_trained_proj48).
+  (a) THE CONTRAST: pooled trained coverage on the three core
+      axes ≥ 10× pooled untrained, over all five seeds.
+  (b) THE SIZE: every single seed's trained coverage on the
+      three core axes ≥ 0.5 — the signal does not vanish on
+      any seed; the pooled estimate over all 480 trained
+      episodes, with its interval, is the number this
+      registration exists to produce and carries forward as
+      THE size claim, whatever it is.
+  (c) CONTROLS: negative control rejected in every arm on
+      every seed; binder reference passes all five axes on
+      every seed.
+  Falsifiers: (a) fails ⇒ the projection is doing the work
+  after all — a projection-seed sweep at fixed benchmark seed
+  becomes the next instrument. (b) fails on any seed ⇒
+  seed-level fragility is the finding — per-case analysis of
+  the failing seed before any pooling, no pooled claim made.
+  (c) fails ⇒ instrument break across the kernel refresh —
+  bisect the two generations before anything else.
+
 - **P86 — the dial law reaches pixels (registered 2026-08-11;
   ARTIFACT CLAUSE: the instrument is the three-arm visual run's
   own per-16-frame telemetry — results/visual_arm_a_residual_
