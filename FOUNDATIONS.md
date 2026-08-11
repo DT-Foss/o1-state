@@ -248,7 +248,7 @@ by 0.5 GB across four orders of magnitude. The position-free variant is what
 carries this: at 256× the same comparison gives NoPE ×0.973 against ×4.23 for
 the position-bearing Selective arm and ×11.25 for Pure
 (`results/length_extrap_v2_extreme.json`) — the wall is the position term,
-not the length. Extended independently by the lifetime organism: **7.4B+
+not the length. Extended independently by the lifetime organism: **10.0B+
 tokens streamed through one 1.7M-parameter life** at RSS 0.69–0.83 GB the
 entire way — the stretch from 0.87B past 7B in a single OS process over
 ~12 days, with the one stall (an upstream HF hang) self-healed from the

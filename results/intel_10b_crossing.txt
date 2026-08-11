@@ -1,0 +1,7 @@
+THE 10-BILLION-TOKEN CROSSING — documented 2026-08-11
+Machine class: x86 lifetime runner (passive read only)
+Log line at capture:
+[lifetime] 2026-08-11T07:47:47 tok=10,008,524,800 step=19547900 loss_ema= 4.192 rss=0.80GB 5,945 tok/s
+Crossing time (interpolated from steady 5,945 tok/s): ~2026-08-11T07:22 UTC
+Resident memory at 10B tokens: 0.80 GB. Rate constant since launch.
+The life is sequential: this asset is accumulated wall-clock, not parallelizable compute.
