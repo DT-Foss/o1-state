@@ -14,6 +14,21 @@ Wort ist:
 
 Gebundene Fakten wandern in den Welt-Graphen (z. B. (cheetah, runs_at,
 "110 km/h")) und machen quantitative Fragen beantwortbar.
+
+EVIDENZ-TIER-EHRLICHKEIT (per _codex_lab/primitive_schema_snapshot/
+LIVE_GROUNDING_READONLY_REVIEW.md, ADR-0001-grounding-is-a-certificate.md):
+Dieses Modul liefert NIEMALS "direct_sensorimotor" Grounding im
+Harnad-Sinn -- perceptual_anchor ist Cross-Modal-Transfer MENSCHLICHER
+Bedeutung (CLIP wurde aus menschlichen Bild-Text-Paaren trainiert,
+Wikipedia waehlte das Bild anhand des Wortes), quantitative_anchors ist
+menschliche Text-Zeugenschaft (eine Zahl aus einem Wikipedia-Artikel ist
+kein kalibrierter Sensor-Messwert des Agenten selbst). Empfohlene,
+ehrlichere Namen (als Aliase unten ergaenzt, OHNE die bestehenden Namen zu
+entfernen -- cli.py und Tests rufen weiterhin die alten Namen):
+  perceptual_anchor    -> clip_cross_modal_evidence
+  quantitative_anchors -> textual_quantity_evidence
+  grounding_coverage   -> proxy_evidence_coverage
+  ground_symbol        -> collect_anchor_evidence
 """
 
 from __future__ import annotations
@@ -148,8 +163,39 @@ _QUANT_VERBS = {
 }
 
 
+def _parse_number(raw: str) -> Optional[float]:
+    """Parse a matched number that may use ',' as a thousands separator
+    OR as a decimal separator (English web text mixes both). '6,350'
+    (thousands) must parse to 6350.0, not 6.350 -- treating every comma as
+    a decimal point silently corrupted every thousands-grouped number this
+    function ever saw (caught by test_extract_quantitative_thousands_comma
+    below, which the pre-existing test never checked -- it only asserted
+    the unit STRING was present, never the parsed value).
+
+    Heuristic: a comma followed by exactly 3 digits (optionally repeated,
+    e.g. "1,234,567") is a thousands separator; a comma followed by 1-2
+    digits at the end of the string is a decimal separator (e.g. "6,35").
+    This matches how English-locale web text actually punctuates numbers;
+    it is a heuristic, not a full locale parser, and is documented as such.
+    """
+    if re.fullmatch(r"\d{1,3}(,\d{3})+", raw):
+        return float(raw.replace(",", ""))
+    if re.fullmatch(r"\d+,\d{1,2}", raw):
+        return float(raw.replace(",", "."))
+    try:
+        return float(raw.replace(",", ""))
+    except ValueError:
+        return None
+
+
 def extract_quantitative(text: str) -> List[Tuple[str, str, float]]:
-    """Quantitative Fakten: (Verb-Kontext, 'Zahl Einheit', Konfidenz)."""
+    """Quantitative Fakten: (Verb-Kontext, 'Zahl Einheit', geparster Zahlenwert).
+
+    Der dritte Tupel-Eintrag ist der geparste NUMERISCHE WERT der Messung
+    (via _parse_number), nicht eine Konfidenz -- der urspruengliche
+    Docstring nannte es "Konfidenz", was irrefuehrend war: dieser Wert wird
+    unten NIE als Konfidenz verwendet, quantitative_anchors() haengt eine
+    separate, tier-basierte Konfidenz an (Infobox/Summary/Volltext/Web)."""
     out = []
     for sent in re.split(r"(?<=[.!?])\s+", text):
         low = sent.lower()
@@ -160,9 +206,8 @@ def extract_quantitative(text: str) -> List[Tuple[str, str, float]]:
             window = sent[idx + len(verb):idx + len(verb) + 60]
             m = _UNIT_RE.search(window)
             if m:
-                try:
-                    val = float(m.group(1).replace(",", "."))
-                except ValueError:
+                val = _parse_number(m.group(1))
+                if val is None:
                     continue
                 out.append((verb, f"{m.group(1)} {m.group(2).lower()}",
                             val))
@@ -188,9 +233,16 @@ _QUANT_INFOBAR = {"mass", "weight", "speed", "top_speed", "length",
 
 
 def quantitative_anchors(word: str, sources_list: Optional[List[str]] = None,
-                         ) -> List[Tuple[str, str, float]]:
+                         ) -> List[Tuple[str, str, float, float]]:
     """Quantitative Anker: Wikipedia-Infobox (strukturiert) zuerst, dann
-    Wikipedia-Text, dann Web (nur als Ergänzung)."""
+    Wikipedia-Text, dann Web (nur als Ergänzung).
+
+    Rueckgabe: (Verb-Kontext, 'Zahl Einheit', geparster Zahlenwert,
+    Quellen-Tier-Konfidenz). Frueher wurden extract_quantitative()'s
+    geparste Zahlenwerte hier verworfen (List-Comprehensions banden sie an
+    '_' und ersetzten die Position durch die Tier-Konfidenz) -- der
+    numerische Wert und die Konfidenz sind jetzt beide erhalten, als zwei
+    getrennte Positionen statt einer Ueberschreibung der anderen."""
     anchors = []
     # 1. Infobox: strukturierte quantitative Felder (höchste Konfidenz)
     try:
@@ -201,12 +253,14 @@ def quantitative_anchors(word: str, sources_list: Optional[List[str]] = None,
         if key in _QUANT_INFOBAR:
             m = _UNIT_RE.search(val)
             if m:
-                anchors.append((key, f"{m.group(1)} {m.group(2).lower()}",
-                                0.70))
+                num = _parse_number(m.group(1))
+                if num is not None:
+                    anchors.append((key, f"{m.group(1)} {m.group(2).lower()}",
+                                    num, 0.70))
     # 2. Wikipedia-Text (Summary zuerst, dann Volltext-Fallback)
     title, desc, extract = sources.scrape.wikipedia_summary(word)
     if extract:
-        anchors += [(v, u, 0.50) for v, u, _ in
+        anchors += [(v, u, val, 0.50) for v, u, val in
                     extract_quantitative(extract[:4000])]
     if not anchors:
         # Volltext: den ganzen Artikel crawlen (Trafilatura)
@@ -215,22 +269,22 @@ def quantitative_anchors(word: str, sources_list: Optional[List[str]] = None,
             "https://en.wikipedia.org/wiki/" +
             urllib.parse.quote(title.replace(" ", "_")))
         if len(full) > 500:
-            anchors += [(v, u, 0.45) for v, u, _ in
+            anchors += [(v, u, val, 0.45) for v, u, val in
                         extract_quantitative(full[:12000])]
     # 3. Web nur, wenn noch keine Anker gefunden wurden
     if not anchors:
         for url in sources._ddg_urls(f"{word} speed weight size")[:2]:
             text = sources.extract_text(url)
             if len(text) > 200:
-                anchors += [(v, u, 0.35) for v, u, _ in
+                anchors += [(v, u, val, 0.35) for v, u, val in
                             extract_quantitative(text)]
     seen = set()
     uniq = []
-    for v, u, conf in anchors:
+    for v, u, val, conf in anchors:
         key = (v, u)
         if key not in seen:
             seen.add(key)
-            uniq.append((v, u, conf))
+            uniq.append((v, u, val, conf))
     return uniq[:6]
 
 
@@ -274,10 +328,25 @@ def grounding_coverage(graph_triplets: List[Tuple[str, str, str, float]],
     }
 
 
-def ground_symbol(word: str, store: bool = True,
+def ground_symbol(word: str, store: bool = False,
                   verbose: bool = True) -> dict:
-    """Ein Symbol vollständig erden: perzeptuell + quantitativ,
-    gebundene Fakten in den Welt-Graphen."""
+    """Collect anchor evidence for a symbol (perceptual + quantitative) and,
+    if store=True, write the resulting facts into the world graph.
+
+    NOTE per LIVE_GROUNDING_READONLY_REVIEW.md (_codex_lab, read-only
+    review of this module): store now defaults to False. A research/anchor-
+    collection API that mutates shared state by default is a footgun --
+    the caller who wants persistence (cli.py's `fertig ground --all`) now
+    passes store=True explicitly (see cmd_ground below), everyone else gets
+    a read-only evidence collection call by default.
+
+    The stored confidence per quantitative anchor is now the anchor's OWN
+    measured confidence (from quantitative_anchors: infobox=0.70, summary
+    text=0.50, full article=0.45, web fallback=0.35), not a flat constant
+    0.55 that discarded the source-tier signal quantitative_anchors already
+    computed -- see quantitative_anchors' docstring for what each tier
+    means. The perceptual anchor's CLIP similarity was already stored
+    correctly (unchanged)."""
     from . import gaps as gaps_mod
     result = {"word": word}
     # 1. Perzeptuell
@@ -293,9 +362,9 @@ def ground_symbol(word: str, store: bool = True,
         if pa:
             key = (word, "has_image", "perceptual")
             best[key] = max(best.get(key, 0.0), pa["similarity"])
-        for verb, unit, val in qa:
+        for verb, unit, val, conf in qa:
             key = (word, verb.replace(" ", "_"), unit)
-            best[key] = max(best.get(key, 0.0), 0.55)
+            best[key] = max(best.get(key, 0.0), conf)
         gaps_mod._save_world([(a, b, c, conf)
                               for (a, b, c), conf in best.items()])
         result["graph_triplets"] = len(best)
@@ -306,6 +375,19 @@ def ground_symbol(word: str, store: bool = True,
         else:
             print(f"  perzeptuell : nicht gebunden")
         print(f"  quantitativ : {len(qa)} Anker")
-        for v, u, val in qa[:4]:
-            print(f"    {v} {u} ({val})")
+        for v, u, val, conf in qa[:4]:
+            print(f"    {v} {u} ({val}, conf={conf})")
     return result
+
+
+# ---------------------------------------------------------------------------
+# Ehrliche Namens-Aliase (ADR-0001-grounding-is-a-certificate.md, siehe
+# Modul-Docstring). Reine Umbenennungen -- gleiches Verhalten, gleiche
+# Signatur, keine der bestehenden Namen wird entfernt (cli.py und die
+# bestehenden Tests rufen weiterhin perceptual_anchor/quantitative_anchors/
+# grounding_coverage/ground_symbol unveraendert).
+# ---------------------------------------------------------------------------
+clip_cross_modal_evidence = perceptual_anchor
+textual_quantity_evidence = quantitative_anchors
+proxy_evidence_coverage = grounding_coverage
+collect_anchor_evidence = ground_symbol

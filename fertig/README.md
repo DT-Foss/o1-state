@@ -340,3 +340,19 @@ Schwelle) ist die Fortschritts-Metrik.
 3. **Ehrliche Sackgassen**: Endet der Graph, endet der Walk — kein Füllsel.
 4. **Kein Training**: keine Gradienten, keine Embeddings, keine Gewichte.
    Reines Zählen, Ziehen, und gemessene Übergänge.
+
+**Ausnahme (explizit, nicht Teil der Kern-Garantie)**: Die optionale
+Grounding-Schicht (`fertig.grounding`, `fertig ground`) nutzt für die
+perzeptuelle Bindung (`clip_cross_modal_evidence`, vormals
+`perceptual_anchor`) ein **vortrainiertes CLIP-Modell mit gelernten
+Gewichten** — das widerspricht Garantie 4 für diesen einen, klar
+abgegrenzten Modulteil. Die Kern-Sprach-Pipeline (Graph-Walk, Speech,
+Corpus, Mined, Intent, Tools, Arena) bleibt vollständig gewichtsfrei;
+CLIP wird ausschließlich als optionale `cross_modal_proxy`-Evidenzquelle
+in der Grounding-Schicht verwendet (siehe
+`_codex_lab/primitive_schema_snapshot/ADR-0001-grounding-is-a-certificate.md`
+für die Evidenz-Tier-Trennung: `direct_sensorimotor` vs. `cross_modal_proxy`
+vs. `textual_evidence` werden nie zu einem gemeinsamen Konfidenzwert
+vermischt). Ohne `open_clip` installiert degradiert die Grounding-Schicht
+sauber (perzeptuelle Anker liefern `None`, quantitative Anker und der
+Rest des Systems funktionieren unverändert weiter).

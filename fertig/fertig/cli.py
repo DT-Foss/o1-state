@@ -355,7 +355,11 @@ def cmd_ground(args) -> int:
         anchored = {}
         for i, word in enumerate(symbols, 1):
             print(f"[{i}/{len(symbols)}] ", end="")
-            res = g.ground_symbol(word, verbose=False)
+            # store=True explicit: ground_symbol's default flipped to False
+            # (LIVE_GROUNDING_READONLY_REVIEW.md finding -- a research API
+            # should not mutate shared state by default); --all's whole
+            # point is to persist grounding facts, so it opts in here.
+            res = g.ground_symbol(word, store=True, verbose=False)
             anchored[word] = bool(res["perceptual"] or res["quantitative"])
         trips = gaps_mod._load_world()
         cov = g.grounding_coverage(trips, anchored)
@@ -366,7 +370,10 @@ def cmd_ground(args) -> int:
         print(f"  (perzeptuell: CLIP-Bilder, quantitativ: Zahlen+Einheiten)")
     else:
         for word in args.word:
-            g.ground_symbol(word)
+            # store=True explicit: preserve `fertig ground <word>`'s prior
+            # behavior (single-word grounding was always meant to persist)
+            # against ground_symbol's new store=False default.
+            g.ground_symbol(word, store=True)
     return 0
 
 
