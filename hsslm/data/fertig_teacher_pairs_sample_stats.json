@@ -1,0 +1,26 @@
+{
+  "n_pairs": 500,
+  "family_distribution": {
+    "unknown": 457,
+    "causal": 36,
+    "function": 7
+  },
+  "opener_distribution": {
+    "Consequently,": 123,
+    "This means": 123,
+    "As a result,": 121,
+    "Therefore,": 119,
+    "However,": 7,
+    "(kein Opener)": 7
+  },
+  "char_len": {
+    "min": 31,
+    "max": 118,
+    "mean": 66.796
+  },
+  "word_len": {
+    "min": 4,
+    "max": 25,
+    "mean": 10.65
+  }
+}
