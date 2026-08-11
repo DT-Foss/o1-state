@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "core": "s6",
+    "struct_idx": 5000,
+    "wall_s": 2581.7
+  },
+  "seen_pairs": [
+    {
+      "idx": 0,
+      "structure": "<fact> its predecessors | is caused by | story <say>",
+      "target_head": "as its predecessors , the story runs parallel to the first game and follows the",
+      "decoded": "and a de and de and a de of and de and a a a a olympic of a a a a a a a olympic of a <say> and a a a olympic of committee and a <say> and",
+      "unk_mass": 0.1085
+    },
+    {
+      "idx": 500,
+      "structure": "<fact> land boundaries ecosystem | stretches | across the <say>",
+      "target_head": "into streams , rivers and lakes , impact the natural fresh @-@ water ecosystems and",
+      "decoded": "and a de and de and a de of and de and a a a a olympic of committee and a de of de de and a a a rio of committee and a de of de and de and",
+      "unk_mass": 0.1159
+    },
+    {
+      "idx": 1500,
+      "structure": "<fact> actress jasika nicole | developed | fear <say>",
+      "target_head": "December 2012 interview , actress Jasika Nicole stated that she developed a fear of butterflies",
+      "decoded": "and a a de of de and de and de and a a a a a a olympic of committee and a de of de de and a a a rio of committee and a de of de and de",
+      "unk_mass": 0.1142
+    }
+  ],
+  "novel": [
+    {
+      "structure": "<fact> heavy rain | flooded | the river valley <say>",
+      "decoded": "and a de and de and a de of and de and a a a a olympic of committee and a de of de de and a a a rio of committee and a de of de and de and",
+      "unk_mass": 0.1158
+    },
+    {
+      "structure": "<fact> the new engine | improved | fuel efficiency <say>",
+      "decoded": "and a de and de and de and de and a a a a a a olympic of committee and a de of de de and a a a rio of committee and a de of de and de and",
+      "unk_mass": 0.1164
+    },
+    {
+      "structure": "<fact> the treaty | ended | the long war <say>",
+      "decoded": "and a a de of de and a de of de and a a a a olympic of committee and a de of de de and a a a rio of committee and a de of de and de and",
+      "unk_mass": 0.1154
+    }
+  ],
+  "lm": {
+    "prompt": "the game was released in",
+    "continuation": "<say> and a de of and de and de and de and and de de and a a a olympic of committee and a de of de de and a a a rio of committee of de and de and",
+    "unk_mass": 0.1234
+  }
+}
