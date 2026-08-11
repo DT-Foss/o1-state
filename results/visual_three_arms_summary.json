@@ -1,0 +1,32 @@
+{
+  "arm_a_residual_gated": {
+    "out_prefix": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_a_residual_gated",
+    "wall_s": 75.4,
+    "n_chunks": 3125,
+    "final_l1": 0.0233,
+    "final_copy_last_l1": 0.0225,
+    "gate_rate_overall": 0.192,
+    "l1_first": 0.0254,
+    "l1_last": 0.021
+  },
+  "arm_b_residual_nogate": {
+    "out_prefix": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate",
+    "wall_s": 143.5,
+    "n_chunks": 3125,
+    "final_l1": 0.0226,
+    "final_copy_last_l1": 0.0225,
+    "gate_rate_overall": 1.0,
+    "l1_first": 0.0254,
+    "l1_last": 0.0205
+  },
+  "arm_c_direct_gated": {
+    "out_prefix": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_c_direct_gated",
+    "wall_s": 81.0,
+    "n_chunks": 3125,
+    "final_l1": 0.0966,
+    "final_copy_last_l1": 0.0225,
+    "gate_rate_overall": 0.177,
+    "l1_first": 0.4851,
+    "l1_last": 0.0896
+  }
+}
