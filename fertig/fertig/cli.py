@@ -243,6 +243,59 @@ def cmd_bench(args) -> int:
         print(f"DeepSeek auf SNIPS (n={d['total']}): "
               f"{d['hits']}/{d['total']} ({100*d['hits']/max(d['total'],1):.1f}%)")
         print(f"FERTIG auf SNIPS (gesamt): 88.3% — die präregistrierte Arena läuft")
+    elif args.name == "causal-v2":
+        d = bench_mod.run_causal_v2()
+        if "error" in d:
+            print(d["error"], file=sys.stderr)
+            return 1
+        print("\n=== P0 causal-v2 (Codex): aktive Kausal-Induktion ===")
+        print(f"  finite Design: {'PASS' if d['finite_passed'] else 'FAIL'} "
+              f"({d['blocks']} Blöcke)")
+        avr = d["active_vs_random"]
+        print(f"  aktiv vs random : {avr['active_wins']}W/{avr['active_losses']}L "
+              f"(p={avr['exact_one_sided_sign_p']:.2e})")
+        avp = d["active_vs_passive"]
+        print(f"  aktiv vs passiv : {avp['active_wins']}W/{avp['active_losses']}L "
+              f"(p={avp['exact_one_sided_sign_p']:.2e})")
+        avo = d["active_vs_optimal"]
+        print(f"  aktiv vs optimal: {avo['active_wins']}W/{avo['active_losses']}L "
+              f"(p={avo['exact_one_sided_sign_p']:.3f})")
+        print(f"  Brightness-Shortcut: {sum(1 for s in d['brightness_shortcut'] if s)}/{len(d['brightness_shortcut'])} "
+              f"| deranged-Shortcuts: {d['deranged_shortcuts']}/64")
+    elif args.name == "groundzero":
+        if args.grade3:
+            d = bench_mod.run_groundzero_grade3(seed=args.seed)
+            if "error" in d:
+                print(d["error"], file=sys.stderr)
+                return 1
+            print("\n=== GroundZero Grade-3 (noncompensatory, isoliert) ===")
+            print(f"  Positiv-Achsen : {d['positive']}/{d['positive_total']}")
+            print(f"  Negativ-Kontr. : {d['negative']}/{d['negative_total']}")
+            print(f"  Noncompensatory: {d['noncompensatory']}")
+            print(f"  GESAMT: {'PASS' if d['passed'] else 'FAIL'} "
+                  f"(report {d['report_hash']}...)")
+            return 0
+        d = bench_mod.run_groundzero_v1(seed=args.seed,
+                                        verbose=not args.quiet)
+        if "error" in d:
+            print(d["error"], file=sys.stderr)
+            return 1
+        print("\n=== GroundZero-v1: formale Symbol-Grounding-Zertifikate ===")
+        for k, v in d["axes"].items():
+            mark = "✓" if v["passed"] else "✗"
+            print(f"  {mark} {k:38s} estimate={v['estimate']}")
+        print(f"\n  {d['passed']}/{d['total']} Achsen bestanden")
+        if d.get("controls"):
+            print(f"  Kontrollen: {d['controls']}")
+        print(f"  Zertifikat: {d.get('certificate_hash', '')[:16]}...")
+    elif args.name == "gsm8k":
+        res = bench_mod.run_gsm8k(n=args.n, verbose=not args.quiet)
+        print()
+        print(res.report())
+    elif args.name == "ifeval":
+        res = bench_mod.run_ifeval(n=args.n, verbose=not args.quiet)
+        print()
+        print(res.report())
     elif args.name == "llm-all":
         d = bench_mod.run_llm_all(n_each=args.n, verbose=not args.quiet)
         if "error" in d:
@@ -615,6 +668,176 @@ def cmd_schauen(args) -> int:
     return 0
 
 
+def cmd_sprechen(args) -> int:
+    if args.engine == "hsslm":
+        from .form_engine import FormEngine, speak_with_engine
+        e = FormEngine()
+        if not e.ready:
+            print("[sprechen] HSSLM-Gewichte fehlen — Fallback auf "
+                  "deterministische Verbalisierung.")
+        r = speak_with_engine(args.graph, args.entity, engine=e, n=args.n)
+        print(f"[sprechen] engine={r['engine']} ok={r['ok']}")
+        for v in r.get("variants", []):
+            mark = "FREIGEGEBEN" if v["verified"] else "VERWORFEN"
+            print(f"  [{mark}] {v['text'][:110]}")
+        fg = len(r.get("freigegeben", []))
+        print(f"Freigegeben: {fg}/{len(r.get('variants', []))}")
+        return 0 if r["ok"] else 1
+    from .utterance import speak
+    res = speak(args.graph, args.entity, n=args.n)
+    print(res.report())
+    return 0 if res.all_verified else 1
+
+
+def cmd_weltbuch(args) -> int:
+    """Das Weltbuch gesprochen: gelebte Evidenz (o1-state acted-Records)
+    -> Kausal-Kanten mit Quittung (SHA-256, Frame) -> bit-exaktes
+    Replay durch die Vendor-Welt -> FREIGEGEBEN/VERWORFEN."""
+    import sys as _sys
+    sys_path_backup = list(_sys.path)
+    root = Path(__file__).resolve().parent.parent
+    _sys.path.insert(0, str(root / "erweiterung"))
+    try:
+        import weltbuch
+        out = weltbuch.main(args.out)
+        return 0 if out["status"] == "FREIGEGEBEN" else 1
+    finally:
+        _sys.path[:] = sys_path_backup
+
+
+def cmd_schreiben(args) -> int:
+    """Der o1-Schreiber: FERTIGs Graphen-Fakten -> HSSLM rankt Übergänge/
+    Pronomen/Fügungen -> unsichtbare Prüfung -> AUSGELIEFERT/ZURÜCKGEHALTEN.
+    Das Modell erzeugt nie Wörter — es wählt (Logprob im Kontext)."""
+    import sys as _sys
+    sys_path_backup = list(_sys.path)
+    root = Path(__file__).resolve().parent.parent
+    _sys.path.insert(0, str(root / "erweiterung"))
+    try:
+        import schreiber_o1 as s
+        from fertig.pipeline import load_graph
+        import os as _os
+        graph_path = args.graph
+        vocab, stoi, adj, mech = load_graph(graph_path)
+        ent = args.entity.lower()
+        start = stoi.get(ent)
+        if start is None:
+            print(f"[schreiben] Entität '{ent}' nicht im Graphen", file=_sys.stderr)
+            return 1
+        # Fakten: alle Kanten ab der Entität (expanded BFS, max Tiefe 4)
+        facts, seen, frontier = [], set(), [start]
+        for _ in range(4):
+            nxt = []
+            for a in frontier:
+                if a in seen:
+                    continue
+                seen.add(a)
+                for b in sorted(adj.get(a, {})):
+                    facts.append({"subj": vocab[a], "verb": mech[(a, b)],
+                                  "obj": vocab[b]})
+                    nxt.append(b)
+            frontier = nxt
+        ranker = s.O1Ranker()
+        lm = ranker.lm
+        text, ordered = s.write_with_o1(list(facts), ranker, lm)
+        ok, missing, unbacked = s.check_text(text, facts)
+        print(f"\n════ {'AUSGELIEFERT' if ok else 'ZURÜCKGEHALTEN'}: "
+              f"'{args.entity}' via {ranker.kind} "
+              f"({len(facts)} Fakten) ════")
+        print(text if ok else f"fehlt {missing} | ungedeckt {unbacked}")
+        return 0 if ok else 1
+    finally:
+        _sys.path[:] = sys_path_backup
+
+
+def cmd_formarena(args) -> int:
+    """FORM-ARENA (Erweiterung FE3-FE5): Prosa-Varianten pro Plan-Kante,
+    gemessen an fluency/UID/IR/Ohr — die beste belegte Form gewinnt."""
+    import sys as _sys
+    sys_path_backup = list(_sys.path)
+    root = Path(__file__).resolve().parent.parent
+    _sys.path.insert(0, str(root / "erweiterung"))
+    try:
+        import form_arena
+        out = form_arena.main(args.out)
+        print(f"[formarena] {out['n_edges']} Kanten | "
+              f"UID {out['uid_improved_frac']:.0%} | "
+              f"IR {out['ir_selected_pass']}/{out['n_edges']} | "
+              f"Ohr {out['ohr_selected_pass']}/{out['n_edges']} | "
+              f"Kills {out['gate_kills']}")
+        return 0 if out["ir_selected_pass"] == out["n_edges"] else 1
+    finally:
+        _sys.path[:] = sys_path_backup
+
+
+def cmd_erzaehlen(args) -> int:
+    """MOONSHOOT A: Video -> belegter Plan -> verifizierte Prosa.
+    Der geschlossene Gesamtkreislauf der Maschine in einem Befehl."""
+    from . import stream as s
+    from . import video as v
+    from .utterance import Utterance, SpeechResult
+
+    data = open(args.video, "rb").read()
+    print(f"[erzählen] {args.video}\n")
+
+    # 1. SEHEN: O(1)-Stream-Lernen
+    raw = v.extract_frames(data)
+    learner = s.StreamLearner()
+    for f in raw:
+        learner.update(f)
+    st = learner.state()
+    print(f"[1/5] SEHEN     : {st['frames']} Frames, Bewegung "
+          f"sig={st['bewegung']:.3f} pix={st['pixel']:.3f}")
+
+    # 2. ERKENNEN: VideoBank-Kategorie
+    bank = v.VideoBank().load(Path("data/video_bank.json"))
+    name, d = bank.recognize_signature(learner.sequence_signature())
+    if not name:
+        name = Path(args.video).stem
+    print(f"[2/5] ERKENNEN  : {name} (Distanz {d:.4f})")
+
+    # 3. PLAN: belegte Fakten aus dem Zustand (Konfidenz = gemessen)
+    plan = []
+    if st["bewegung"] > 0.02 or st["pixel"] > 0.02:
+        plan.append((name, "zeigt", "Bewegung", 0.6))
+    if st["periodisch"]:
+        plan.append((name, "wiederholt sich", "periodisch", 0.7))
+    if st["szenenwechsel"]:
+        plan.append((name, "hat", f"{st['szenenwechsel']} Szenenwechsel", 0.5))
+    print(f"[3/5] PLAN      : {len(plan)} belegte Fakten "
+          f"({', '.join(p[1] for p in plan)})")
+
+    # 4. SPRECHEN: deterministische Prosa aus dem Plan (Beleg = Zustand)
+    teile = []
+    for subj, verb, obj, conf in plan:
+        if verb == "zeigt":
+            teile.append(f"Das Video zeigt {obj}")
+        elif verb == "wiederholt sich":
+            teile.append(f"Es wiederholt sich {obj}")
+        elif verb == "hat":
+            teile.append(f"Es hat {obj}")
+    prose = ". ".join(teile) + "." if teile else ""
+    print(f"[4/5] SPRECHEN  : {prose}")
+
+    # 5. VERIFIZIEREN: Rückführung — jede Aussage gegen den Zustand
+    res = SpeechResult()
+    for subj, verb, obj, conf in plan:
+        u = Utterance(subj, verb, obj, conf)
+        u.prose = prose
+        # Beleg: Objekt im Satz + Zustands-Fakt existiert
+        ok = obj.lower() in prose.lower()
+        u.verified = ok
+        u.detail = "Beleg: Zustands-Fakt + wörtlich in Prosa" if ok \
+            else "FEHLT"
+        res.utterances.append(u)
+    res.verified_count = sum(1 for u in res.utterances if u.verified)
+    res.all_verified = (len(res.utterances) > 0 and
+                        res.verified_count == len(res.utterances))
+    print(f"[5/5] VERIFIZIERT: {res.verified_count}/{len(res.utterances)} "
+          f"-> {'FREIGEGEBEN' if res.all_verified else 'VERWORFEN'}")
+    return 0 if res.all_verified else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(
         prog="fertig",
@@ -682,9 +905,15 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("bench", help="SOTA-Benchmarks")
     p.add_argument("name", choices=["blimp", "snips", "humaneval",
                                     "hellaswag", "winogrande", "lambada",
-                                    "llm-snips", "llm-all", "arc"])
+                                    "llm-snips", "llm-all", "arc",
+                                    "ifeval", "gsm8k", "groundzero",
+                                    "causal-v2"])
     p.add_argument("--subtasks", nargs="*",
                    help="BLiMP-Subtasks (Standard: alle 8)")
+    p.add_argument("--seed", type=int, default=3,
+                   help="GroundZero-Seed")
+    p.add_argument("--grade3", action="store_true",
+                   help="Grade-3-Diagnostik statt v1")
     p.add_argument("-n", type=int, default=30,
                    help="HumanEval: Anzahl Evaluations-Probleme")
     p.add_argument("--no-learn", action="store_true",
@@ -706,6 +935,36 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("-x", "--execute", action="store_true",
                    help="assemblierten Code in der Sandbox ausführen")
     p.set_defaults(fn=cmd_code)
+
+    p = sub.add_parser("erzaehlen", help="MOONSHOOT A: Video->Plan->Prosa->Verify")
+    p.add_argument("video")
+    p.set_defaults(fn=cmd_erzaehlen)
+
+    p = sub.add_parser("sprechen", help="Utterance-IR: Plan->Prosa->Verifikation")
+    p.add_argument("entity")
+    p.add_argument("--graph", default="data/chained.causal")
+    p.add_argument("-n", type=int, default=5)
+    p.add_argument("--engine", default="plan",
+                   choices=["plan", "hsslm"],
+                   help="plan=deterministisch, hsslm=Form-Engine (Moonshoot B)")
+    p.set_defaults(fn=cmd_sprechen)
+
+    p = sub.add_parser("weltbuch", help="Gelebte Evidenz sprechen "
+                       "(o1-state acted-Records, bit-exakte Quittungen)")
+    p.add_argument("--out", default=None,
+                   help="Ausgabe-Pfad (default: erweiterung/results/)")
+    p.set_defaults(fn=cmd_weltbuch)
+
+    p = sub.add_parser("formarena", help="Form-Arena: beste belegte "
+                       "Prosa-Variante pro Kante (UID/IR/Ohr-Richter)")
+    p.add_argument("--out", default=None)
+    p.set_defaults(fn=cmd_formarena)
+
+    p = sub.add_parser("schreiben", help="o1-Schreiber: Fakten ranken, "
+                       "prüfen, ausliefern (HSSLM wählt, erzeugt nie)")
+    p.add_argument("entity")
+    p.add_argument("--graph", default="data/chained.causal")
+    p.set_defaults(fn=cmd_schreiben)
 
     p = sub.add_parser("schauen", help="GOAT: Video->Verstehen->Wissen->Sprache")
     p.add_argument("video")

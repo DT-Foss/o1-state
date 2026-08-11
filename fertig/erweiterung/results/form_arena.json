@@ -1,0 +1,485 @@
+{
+  "n_edges": 21,
+  "corpus": "faraday_candle.txt",
+  "uid_improved_or_equal": 21,
+  "uid_improved_frac": 1.0,
+  "fluency_default_mean": -8.9229,
+  "fluency_selected_mean": -8.7447,
+  "fluency_rel_change": 0.02,
+  "ir_selected_pass": 21,
+  "ohr_selected_pass": 21,
+  "gate_kills": {
+    "killed_ir": 0,
+    "killed_ohr": 21,
+    "degraded": 0
+  },
+  "selected_variant_histogram": {
+    "default": 14,
+    "cleft": 1,
+    "chain": 6
+  },
+  "rows": [
+    {
+      "edge": "smoking -[causes]-> tar buildup",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Smoking causes tar buildup.",
+        "fluency": -8.9221,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Smoking causes tar buildup.",
+        "fluency": -8.9221,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "smoking -[indirectly leads to]-> lung damage",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Smoking indirectly leads to lung damage.",
+        "fluency": -3.8702,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Smoking indirectly leads to lung damage.",
+        "fluency": -3.8702,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "tar buildup -[causes]-> lung damage",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Tar buildup causes lung damage.",
+        "fluency": -8.9221,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Tar buildup causes lung damage.",
+        "fluency": -8.9221,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "tar buildup -[indirectly leads to]-> breathlessness",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Tar buildup indirectly leads to breathlessness.",
+        "fluency": -3.8702,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Tar buildup indirectly leads to breathlessness.",
+        "fluency": -3.8702,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "tar buildup -[indirectly leads to]-> cancer",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Tar buildup indirectly leads to the cancer.",
+        "fluency": -3.5939,
+        "uid_var": 0.0763,
+        "n_scored_words": 2,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Tar buildup indirectly leads to the cancer.",
+        "fluency": -3.5939,
+        "uid_var": 0.0763,
+        "n_scored_words": 2,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "lung damage -[causes]-> breathlessness",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Lung damage causes breathlessness.",
+        "fluency": -8.9221,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Lung damage causes breathlessness.",
+        "fluency": -8.9221,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "lung damage -[leads to]-> cancer",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Lung damage leads to the cancer.",
+        "fluency": -3.5939,
+        "uid_var": 0.0763,
+        "n_scored_words": 2,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Lung damage leads to the cancer.",
+        "fluency": -3.5939,
+        "uid_var": 0.0763,
+        "n_scored_words": 2,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "breathlessness -[reduces]-> exercise",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Breathlessness reduces exercise.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Breathlessness reduces exercise.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "breathlessness -[indirectly inhibits via blocking promoter]-> health",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Breathlessness indirectly inhibits via blocking promoter health.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Breathlessness indirectly inhibits via blocking promoter health.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "breathlessness -[indirectly promotes via inhibition]-> heart disease",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Breathlessness indirectly promotes via inhibition the heart disease.",
+        "fluency": -5.7058,
+        "uid_var": 9.0058,
+        "n_scored_words": 2,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "cleft",
+        "prose": "It is breathlessness that indirectly promotes via inhibition the heart disease.",
+        "fluency": -4.9572,
+        "uid_var": 3.5296,
+        "n_scored_words": 5,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "exercise -[improves]-> health",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Exercise improves health.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Exercise improves health.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "exercise -[prevents]-> heart disease",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Exercise prevents the heart disease.",
+        "fluency": -8.5448,
+        "uid_var": 1.2435,
+        "n_scored_words": 3,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Exercise prevents the heart disease.",
+        "fluency": -8.5448,
+        "uid_var": 1.2435,
+        "n_scored_words": 3,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "stress -[damages]-> health",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Stress damages health.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Stress damages health.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "poor sleep -[causes]-> stress",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Poor sleep causes stress.",
+        "fluency": -8.9221,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Poor sleep causes stress.",
+        "fluency": -8.9221,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "caffeine -[prevents]-> sleep",
+      "source": "health",
+      "default": {
+        "name": "default",
+        "prose": "Caffeine prevents sleep.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "default",
+        "prose": "Caffeine prevents sleep.",
+        "fluency": -10.0208,
+        "uid_var": 0.0,
+        "n_scored_words": 1,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "pressing the left key -[shifts]-> the view 3 pixels to the left",
+      "source": "weltbuch",
+      "default": {
+        "name": "default",
+        "prose": "Pressing the left key shifts the view 3 pixels to the left.",
+        "fluency": -10.9982,
+        "uid_var": 39.4755,
+        "n_scored_words": 7,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "chain",
+        "prose": "Pressing the left key shifts the view 3 pixels to the left in every measured case.",
+        "fluency": -10.8846,
+        "uid_var": 37.5905,
+        "n_scored_words": 11,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "pressing the left key -[shifts]-> the view 2 pixels to the left",
+      "source": "weltbuch",
+      "default": {
+        "name": "default",
+        "prose": "Pressing the left key shifts the view 2 pixels to the left.",
+        "fluency": -10.9982,
+        "uid_var": 39.4755,
+        "n_scored_words": 7,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "chain",
+        "prose": "Pressing the left key shifts the view 2 pixels to the left in every measured case.",
+        "fluency": -10.8846,
+        "uid_var": 37.5905,
+        "n_scored_words": 11,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "pressing the left key -[shifts]-> the view 1 pixel to the left",
+      "source": "weltbuch",
+      "default": {
+        "name": "default",
+        "prose": "Pressing the left key shifts the view 1 pixel to the left.",
+        "fluency": -10.9982,
+        "uid_var": 39.4755,
+        "n_scored_words": 7,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "chain",
+        "prose": "Pressing the left key shifts the view 1 pixel to the left in every measured case.",
+        "fluency": -10.8846,
+        "uid_var": 37.5905,
+        "n_scored_words": 11,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "pressing the right key -[shifts]-> the view 1 pixel to the right",
+      "source": "weltbuch",
+      "default": {
+        "name": "default",
+        "prose": "Pressing the right key shifts the view 1 pixel to the right.",
+        "fluency": -13.1385,
+        "uid_var": 44.5795,
+        "n_scored_words": 7,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "chain",
+        "prose": "Pressing the right key shifts the view 1 pixel to the right in every measured case.",
+        "fluency": -12.2543,
+        "uid_var": 42.1124,
+        "n_scored_words": 11,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "pressing the right key -[shifts]-> the view 2 pixels to the right",
+      "source": "weltbuch",
+      "default": {
+        "name": "default",
+        "prose": "Pressing the right key shifts the view 2 pixels to the right.",
+        "fluency": -13.1385,
+        "uid_var": 44.5795,
+        "n_scored_words": 7,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "chain",
+        "prose": "Pressing the right key shifts the view 2 pixels to the right in every measured case.",
+        "fluency": -12.2543,
+        "uid_var": 42.1124,
+        "n_scored_words": 11,
+        "ir": true,
+        "ohr": true
+      }
+    },
+    {
+      "edge": "pressing the right key -[shifts]-> the view 3 pixels to the right",
+      "source": "weltbuch",
+      "default": {
+        "name": "default",
+        "prose": "Pressing the right key shifts the view 3 pixels to the right.",
+        "fluency": -13.1385,
+        "uid_var": 44.5795,
+        "n_scored_words": 7,
+        "ir": true,
+        "ohr": true
+      },
+      "selected": {
+        "name": "chain",
+        "prose": "Pressing the right key shifts the view 3 pixels to the right in every measured case.",
+        "fluency": -12.2543,
+        "uid_var": 42.1124,
+        "n_scored_words": 11,
+        "ir": true,
+        "ohr": true
+      }
+    }
+  ]
+}

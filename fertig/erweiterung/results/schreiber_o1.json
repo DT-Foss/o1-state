@@ -1,0 +1,20 @@
+{
+  "model": "hsslm_o1",
+  "free_generation_note": "HSSLM-C frei gesampelt degeneriert ('—that,—that,…') — deshalb rankt das Modell nur; es erzeugt nie Wörter, es wählt.",
+  "health": {
+    "released": true,
+    "n_facts": 15,
+    "missing": [],
+    "unbacked": [],
+    "text": "Caffeine prevents sleep. Poor sleep causes stress. Stress damages health. Smoking indirectly leads to lung damage. Smoking causes tar buildup. Yet lung damage causes breathlessness. Lung damage leads to the cancer. Yet breathlessness reduces exercise. Yet breathlessness indirectly inhibits via blocking promoter health. It also indirectly promotes via inhibition the heart disease. Exercise improves health. It also prevents the heart disease. Tar buildup indirectly leads to breathlessness. Tar buildup indirectly leads to the cancer. Tar buildup causes lung damage.",
+    "model_differs_from_fallback": true
+  },
+  "weltbuch": {
+    "released": true,
+    "n_facts": 6,
+    "missing": [],
+    "unbacked": [],
+    "text": "Pressing the left key shifts the view 1 pixel to the left in every measured case. In the end, pressing the left key shifts the view 2 pixels to the left in every measured case. In the end, pressing the left key shifts the view 3 pixels to the left in every measured case. And pressing the right key shifts the view 1 pixel to the right in every measured case. It also shifts the view 2 pixels to the right. It also shifts the view 3 pixels to the right.",
+    "model_differs_from_fallback": true
+  }
+}

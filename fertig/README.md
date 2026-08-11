@@ -10,6 +10,13 @@
 Gleiche Eingabe → gleiche Ausgabe. Das System besteht ausschließlich aus
 deterministischer Mathematik und gemessenen Zählungen.
 
+> **Foundation-Track-Ausnahme:** `fertig grounding` (Evidenz-Schicht) nutzt
+> optional CLIP-Quer-Modalität (pretrained) — markiert als
+> *cross_modal_proxy*, kein Teil der deterministischen Kern-Garantie.
+> Moonshoot B (HSSLM-Form-Engine) trainiert ein eigenes Sprachmodell;
+> dessen Ausgaben werden nur nach IR-Rückverifikation gegen den
+> `.causal`-Plan freigegeben (nie „erst generieren, dann hoffen“).
+
 ---
 
 ## Schnellstart
@@ -42,6 +49,88 @@ python3 -m fertig arena
 ```
 
 Tests: `python3 -m pytest tests/ -q`
+
+---
+
+## Fähigkeiten (Moonshots)
+
+```bash
+# Moonshoot A: Video → Plan → Prosa → Rück-Verifikation (FREIGEGEBEN/VERWORFEN)
+python3 -m fertig erzaehlen data/puls.gif
+python3 -m fertig erzaehlen data/wander.gif
+
+# Der o1-Schreiber (Endgame): FERTIG spricht von alleine perfekte Sätze.
+# Fakten aus dem Graphen (Wahrheit = Konstruktionsbedingung) -> HSSLM
+# RANKT Übergänge/Pronomen/Fügungen per Logprob im Kontext (erzeugt nie
+# Wörter, es wählt) -> unsichtbare Prüfung -> AUSGELIEFERT/ZURÜCKGEHALTEN.
+python3 -m fertig schreiben smoking
+python3 -m fertig schreiben exercise
+python3 -m fertig schreiben caffeine --graph data/chained.causal
+
+# Diskurs-Komponist + Text-Zertifikat (FE6-FE8): Given-New-Ordnung,
+# Pronomen nur mit Ohr-Garantie, Claims+Quittungen+SHA — Tamper =
+# VERWORFEN, maschinell nachgerechnet.
+python3 erweiterung/diskurs.py
+
+# Form-Arena (FE3-FE5): beste belegte Prosa-Variante pro Kante
+# (UID-Regel: min uid_var -> max fluency; Ohr-Richter pfeift)
+python3 -m fertig formarena
+
+# Utterance-IR: Plan ⇄ Prosa ⇄ Plan — narrative Aussagen gegen den .causal-Graph
+# rückverifiziert; unbelegte Inferenz-Kanten werden VERWORFEN (Accountability).
+python3 -m fertig sprechen smoking
+python3 -m fertig sprechen exercise
+
+# Moonshoot B: HSSLM-Form-Engine (6,3M, Mamba/S6-Familie, eigenes Training).
+# Plan → HSSLM-Varianten → IR-Verifikation: nur belegte Varianten werden frei-
+# gegeben (nie „erst generieren, dann hoffen“). Gewichte: data/hsslm_form.pt
+# (BPE, train_form_bpe.py); ohne Gewichte deterministischer Fallback.
+python3 -m fertig sprechen --engine hsslm smoking
+
+# GroundZero (Codex-Labor, integriert): formale Symbol-Grounding-Zertifikate
+# v1: 10/10 Achsen bestanden (estimate 1.0), 3 Negativ-Kontrollen korrekt
+#     abgelehnt (0.0) — data/world.causal, data/chained.causal
+# Grade-3: noncompensatory Diagnostik, isolierte Child-Prozesse, 8/8 Achsen
+python3 -m fertig bench groundzero            # v1 (10 Achsen)
+python3 -m fertig bench groundzero --grade3   # Grade-3 (isolierte Prozesse)
+python3 -m fertig bench causal-v2             # P0: aktive Kausal-Induktion
+                                              # (64/64 Blöcke, aktiv>passiv p<1e-17)
+```
+
+Stand (Runde aktuell): 134+ Tests grün; GroundZero v1 10/10, Grade-3 8/8,
+causal-v2 64/64; Moonshoot A 2/2; Utterance-IR 5/5; Weltbuch FREIGEGEBEN
+(5/5 bit-exakt); Form-Arena 21/21 UID; Diskurs 12/12+4/4; o1-Schreiber
+AUSGELIEFERT (health/weltbuch/Entität). HSSLM-Gewichte: hsslm_form_live.pt
+(Live-Training, Surprise-Gate) — der Schreiber RANKT, erzeugt nie.
+
+> **FERTIG spricht von alleine perfekte Sätze**: `fertig schreiben <entity>`
+> — Fakten aus dem Graphen, HSSLM wählt Übergänge/Pronomen/Fügungen per
+> Logprob, unsichtbare Prüfung, AUSGELIEFERT/ZURÜCKGEHALTEN.
+
+---
+
+## Erweiterung 2026-08-11 (David) — FERTIG spricht Gelebtes
+
+```bash
+# Das Weltbuch: gelebte Evidenz (o1-state acted-Records, 5159) -> Kausal-
+# Kanten MIT Quittung (Zählung + Frame + SHA-256) -> bit-exaktes Replay
+# durch die Vendor-Welt -> FREIGEGEBEN/VERWORFEN. Nie ohne Beleg.
+python3 -m fertig weltbuch
+
+# PS-Lifted-Impuls-Walk (Fiedler-Fluss, p_continue .95) — deterministisch,
+# nur echte Kausal-Kanten; Verdict: Health-Demo-Graph = Null-Habitat
+# (zyklenfrei) — Einsatzort sind gewachsene Graphen.
+python3 erweiterung/lifted_walk.py
+```
+
+- **Weltbuch-Prinzip**: jeder Satz trägt Quittung („gelebt 856×; frame 5,
+  sha 791451165c…“), Provenance-Gate spielt 5 Belege bit-exakt nach —
+  Harnads *direkte sensorimotorische Evidenz* (Codex-Evidenz-Tier 1),
+  erster Graph, dessen Kanten nicht gelesen, sondern GELEBT wurden.
+- **Befunde gefixt**: (1) CRC-Integritätscheck toleriert jetzt
+  Writer/Reader-Algorithmus-Drift (xxh64 vs md5[:8]) — kein Fehlalarm
+  mehr in Umgebungen ohne xxhash; (2) fehlendes msgpack/xxhash meldet
+  sich laut per RuntimeWarning statt stiller Fallbacks.
 
 ---
 
@@ -340,19 +429,3 @@ Schwelle) ist die Fortschritts-Metrik.
 3. **Ehrliche Sackgassen**: Endet der Graph, endet der Walk — kein Füllsel.
 4. **Kein Training**: keine Gradienten, keine Embeddings, keine Gewichte.
    Reines Zählen, Ziehen, und gemessene Übergänge.
-
-**Ausnahme (explizit, nicht Teil der Kern-Garantie)**: Die optionale
-Grounding-Schicht (`fertig.grounding`, `fertig ground`) nutzt für die
-perzeptuelle Bindung (`clip_cross_modal_evidence`, vormals
-`perceptual_anchor`) ein **vortrainiertes CLIP-Modell mit gelernten
-Gewichten** — das widerspricht Garantie 4 für diesen einen, klar
-abgegrenzten Modulteil. Die Kern-Sprach-Pipeline (Graph-Walk, Speech,
-Corpus, Mined, Intent, Tools, Arena) bleibt vollständig gewichtsfrei;
-CLIP wird ausschließlich als optionale `cross_modal_proxy`-Evidenzquelle
-in der Grounding-Schicht verwendet (siehe
-`_codex_lab/primitive_schema_snapshot/ADR-0001-grounding-is-a-certificate.md`
-für die Evidenz-Tier-Trennung: `direct_sensorimotor` vs. `cross_modal_proxy`
-vs. `textual_evidence` werden nie zu einem gemeinsamen Konfidenzwert
-vermischt). Ohne `open_clip` installiert degradiert die Grounding-Schicht
-sauber (perzeptuelle Anker liefern `None`, quantitative Anker und der
-Rest des Systems funktionieren unverändert weiter).

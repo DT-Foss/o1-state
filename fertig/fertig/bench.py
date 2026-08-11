@@ -498,6 +498,247 @@ def run_lambada(verbose: bool = True) -> BenchResult:
 
 
 # ---------------------------------------------------------------------------
+# GroundZero-v1: formale Symbol-Grounding-Zertifikate (Codex-Benchmark)
+# ---------------------------------------------------------------------------
+
+_GZ_V1 = (Path(__file__).resolve().parent.parent / "_codex_lab" /
+          "grounding_kernel_v0")
+
+
+def run_groundzero_grade3(seed: int = 1, verbose: bool = True) -> dict:
+    """Grade-3: noncompensatory Diagnostik — 8 positive Achsen + 7
+    negative Kontrollen in isolierten Child-Prozessen (Codex)."""
+    import subprocess
+    import sys
+    if not (_GZ_V1 / "grounding_kernel").exists():
+        return {"error": f"GroundZero-v1 fehlt: {_GZ_V1}"}
+    cmd = [sys.executable, "-m", "grounding_kernel.v1_grade3_benchmark",
+           "--seed", str(seed), "--support-worlds", "2"]
+    try:
+        out = subprocess.run(cmd, capture_output=True, text=True,
+                             cwd=str(_GZ_V1), timeout=900)
+        data = json.loads(out.stdout)
+    except Exception as e:
+        return {"error": str(e)}
+    axes = data.get("axes", [])
+    checks = data.get("checks", [])
+    passed = data.get("passed")
+    return {"passed": passed,
+            "positive": sum(1 for a in axes if a.get("passed")),
+            "positive_total": len(axes),
+            "negative": sum(1 for c in checks if c.get("passed")),
+            "negative_total": len(checks),
+            "noncompensatory": data.get("noncompensatory"),
+            "report_hash": data.get("report_hash", "")[:16]}
+
+
+def run_causal_v2(verbose: bool = True) -> dict:
+    """P0 causal-v2 (Codex): 8 Mechanismen aus rohen RGB-Übergängen
+    induzieren, ungezeigte 3-Aktions-Pläne komponieren, aktive
+    Intervention vs Random/Passiv — finite synthetische Prüfung."""
+    import subprocess, sys
+    if not (_GZ_V1 / "grounding_kernel").exists():
+        return {"error": f"GroundZero fehlt: {_GZ_V1}"}
+    code = ("from grounding_kernel.causal_world_v2 import run_causal_v2_experiment\n"
+            "r = run_causal_v2_experiment()\n"
+            "d = r.detail\n"
+            "import json\n"
+            "print(json.dumps({\n"
+            "  'finite_passed': d['finite_design_passed'],\n"
+            "  'blocks': d['outer_blocks'],\n"
+            "  'active_vs_random': d['random_cost_comparison'],\n"
+            "  'active_vs_passive': d['passive_cost_comparison'],\n"
+            "  'active_vs_optimal': d['optimal_fixed_cost_comparison'],\n"
+            "  'brightness_shortcut': d['brightness_argmax_success_by_block'],\n"
+            "  'deranged_shortcuts': sum(1 for b in d['shortcut_coverage_by_block']['ablation-deranged-probe-result-association'] if b),\n"
+            "}))\n")
+    try:
+        out = subprocess.run([sys.executable, "-c", code],
+                             capture_output=True, text=True, timeout=1800,
+                             cwd=str(_GZ_V1))
+        data = json.loads(out.stdout.strip().split("\n")[-1])
+    except Exception as e:
+        return {"error": str(e)}
+    return data
+
+
+def run_groundzero_v1(seed: int = 3, verbose: bool = True) -> dict:
+    """Führt den GroundZero-v1-Zertifikatslauf aus (Codex, unabhängig).
+    Die Achsen beweisen: Symbole aus Sensorik+Aktion erworben (kein
+    symbol theft), aktives Lernen, Komposition, ehrliche Abstinenz."""
+    import subprocess
+    import sys
+    if not (_GZ_V1 / "grounding_kernel").exists():
+        return {"error": f"GroundZero-v1 fehlt: {_GZ_V1}"}
+    cmd = [sys.executable, "-m", "grounding_kernel.v1_benchmark",
+           "--seed", str(seed), "--compact"]
+    try:
+        out = subprocess.run(cmd, capture_output=True, text=True,
+                             cwd=str(_GZ_V1), timeout=600)
+        data = json.loads(out.stdout)
+    except Exception as e:
+        return {"error": str(e)}
+    axes = data.get("axes", {})
+    passed = [k for k, v in axes.items() if v.get("passed")]
+    total = len(axes)
+    return {"axes": {k: {"estimate": v["estimate"], "passed": v["passed"]}
+                     for k, v in axes.items()},
+            "passed": len(passed), "total": total,
+            "certificate_hash": data.get("certificate_hash"),
+            "controls": data.get("controls")}
+
+
+# ---------------------------------------------------------------------------
+# GSM8K: neurosymbolisches Rechnen (MathSolver)
+# ---------------------------------------------------------------------------
+
+_GSM8K_URL = ("https://huggingface.co/datasets/openai/gsm8k/"
+              "resolve/main/main/test-00000-of-00001.parquet")
+
+
+def run_gsm8k(n: int = 100, verbose: bool = True) -> BenchResult:
+    """GSM8K pass@1 mit dem MathSolver (Zahlen + Templates + exakte
+    Bruchrechnung). Die Lücke zu LLMs (mit CoT ~90%) ist das registrierte
+    Ziel: Operationsketten-Parsing."""
+    from .math import solve, gold_answer
+    p = _fetch(_GSM8K_URL, "gsm8k_test.parquet")
+    rows = _read_parquet(p)[:n]
+    hits = total = 0
+    for r in rows:
+        ans = solve(r["question"])
+        gold = gold_answer(r["answer"])
+        total += 1
+        if ans is not None and gold and float(ans) == float(gold):
+            hits += 1
+    return BenchResult("GSM8K", hits, total, "0% (arithmetisch)",
+                       note="LLM mit CoT ~90%; Operationsketten = nächster "
+                            "Bau (FORGE-Territorium)")
+
+
+# ---------------------------------------------------------------------------
+# IFEval: Instruktions-Konstraint-Extraktion (neurosymbolisch)
+# ---------------------------------------------------------------------------
+
+_IFEval_URL = ("https://huggingface.co/datasets/google/IFEval/"
+               "resolve/main/ifeval_input_data.jsonl")
+
+# gold instruction_id -> Kategorie (aus dem IFEval-Schema)
+def _ifeval_gold_categories(ids) -> set:
+    cats = set()
+    for i in ids:
+        part = i.split(":")[0].strip()
+        if part in ("word_count", "letter_count", "length_constraints"):
+            cats.add("zaehlen")
+        elif part == "punctuation":
+            cats.add("zeichensetzung")
+        elif part == "keywords":
+            cats.add("schluesselwoerter")
+        elif part in ("formatting", "change_case"):
+            cats.add("format")
+        elif part in ("detectable_content", "combine"):
+            cats.add("inhalt")
+        elif part == "language":
+            cats.add("sprache")
+        elif part == "multi-turn":
+            cats.add("multi_turn")
+    return cats
+
+
+def _ifeval_detect(prompt: str) -> set:
+    """Instruktionen -> verifizierbare Konstraint-Kategorien.
+    Generelle linguistische Muster — nicht IFEval-spezifisch, sondern
+    die formale Struktur von Instruktionen überhaupt."""
+    p = prompt.lower()
+    cats = set()
+    import re
+    if re.search(r"\b\d+\s*(?:\+|or more|more|less|to|and)?\s*"
+                 r"(?:words?|letters?|paragraphs?|sentences?)\b", p):
+        cats.add("zaehlen")
+    if re.search(r"(?:no|without|do not (?:use|include|have|contain)|"
+                 r"not allowed to (?:use|include|have|contain)|"
+                 r"don't (?:use|include|have|contain)|avoid|refrain from)"
+                 r"\b[^.]*?"
+                 r"\b(?:commas?|periods?|exclamation|punctuation|"
+                 r"apostrophes?)\b", p):
+        cats.add("zeichensetzung")
+    if re.search(r'["\'\'][^"\'\']{2,}["\'\']', p) or \
+            re.search(r"\bkeywords?\b", p) or \
+            re.search(r"\bthe (?:word|letter|phrase)\s+['\"][^'\"]+['\"]"
+                      r"|\bthe (?:word|letter|phrase)\s+[a-z]+\b", p) or \
+            re.search(r"letter [a-z]\b.*(?:appear|occur)", p):
+        cats.add("schluesselwoerter")
+    if re.search(r"json|markdown|bullet|list|table|title|heading|"
+                 r"uppercase|capitalize|lowercase|lower case|capital "
+                 r"letters|capitalized", p):
+        cats.add("format")
+    if re.search(r"\[[a-z][a-z ]{1,20}\]", p) or \
+            re.search(r"\b(?:start|begin)\s+(?:with|by|the|your)", p) or \
+            re.search(r"\b(?:end|finish|conclude)\s+(?:with|by|the|your|"
+                      r"this|that|it)", p) or \
+            re.search(r"\bpostscript|p\.?s\.?\b|placeholder|marked with "
+                      r"section", p):
+        cats.add("inhalt")
+    _LANGS = ("german|french|spanish|chinese|japanese|korean|hindi|"
+              "punjabi|kannada|italian|portuguese|russian|arabic|marathi|"
+              "persian|turkish|dutch|swedish|norwegian|polish|czech|greek|"
+              "hebrew|thai|vietnamese|indonesian|malay|bengali|urdu|tamil|"
+              "telugu")
+    # Nicht-englische Sprache irgendwo = Sprachwahl (Englisch ist Default)
+    if (re.search(r"(?:only|entirely|solely|strictly|all)\s+(?:using|in|"
+                  r"in the|written in)\s+the?\s*(" + _LANGS +
+                  r"|english)\s+language", p)
+            or re.search(r"\b(?:using|in|written in)\s+only\s+the?\s*(" +
+                         _LANGS + r")\s+language", p)
+            or re.search(r"\b(" + _LANGS + r")\s+language\b", p)):
+        cats.add("sprache")
+    return cats
+
+
+def _fetch_ifeval(n: int) -> list:
+    p = _fetch(_IFEval_URL, "ifeval.jsonl")
+    rows = [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines()]
+    return rows[:n]
+
+
+@dataclass
+class IfevalResult:
+    precision: float
+    recall: float
+    f1: float
+    total: int
+    per_cat: Dict[str, Tuple[int, int]]
+
+    def report(self) -> str:
+        lines = [f"IFEval-Konstraint-Extraktion ({self.total} Instruktionen):",
+                 f"  Präzision {100*self.precision:.1f}% | "
+                 f"Recall {100*self.recall:.1f}% | F1 {100*self.f1:.1f}%"]
+        for cat, (h, t) in sorted(self.per_cat.items()):
+            lines.append(f"  {cat:16s} {h}/{t} ({100*h/max(t,1):.0f}%)")
+        return "\n".join(lines)
+
+
+def run_ifeval(n: int = 50, verbose: bool = True) -> IfevalResult:
+    """Die Maschine liest eine Instruktion und formt sie in verifizierbare
+    Konstraint-Kategorien — gemessen gegen den IFEval-Gold-Standard."""
+    rows = _fetch_ifeval(n)
+    tp = fp = fn = 0
+    per_cat: Dict[str, Tuple[int, int]] = {}
+    for r in rows:
+        gold = _ifeval_gold_categories(r.get("instruction_id_list", []))
+        pred = _ifeval_detect(r["prompt"])
+        tp += len(gold & pred)
+        fp += len(pred - gold)
+        fn += len(gold - pred)
+        for c in gold:
+            h, t = per_cat.get(c, (0, 0))
+            per_cat[c] = (h + (1 if c in pred else 0), t + 1)
+    precision = tp / max(tp + fp, 1)
+    recall = tp / max(tp + fn, 1)
+    f1 = 2 * precision * recall / max(precision + recall, 1e-9)
+    return IfevalResult(precision, recall, f1, len(rows), per_cat)
+
+
+# ---------------------------------------------------------------------------
 # LLM-All-Arena: alle Benchmarks gegen DeepSeek + Gap-Ledger
 # ---------------------------------------------------------------------------
 

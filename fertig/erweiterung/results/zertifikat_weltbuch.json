@@ -1,0 +1,290 @@
+{
+  "name": "weltbuch",
+  "text": "Pressing the left key shifts the view 1 pixel to the left in every measured case. It also shifts the view 2 pixels to the left. It also shifts the view 3 pixels to the left. Pressing the right key shifts the view 1 pixel to the right in every measured case. It also shifts the view 2 pixels to the right. It also shifts the view 3 pixels to the right.",
+  "text_sha256": "5a3b2a54e57bf4846836ae0e071d33ecad78036e4898229e22163d07aa8b0b77",
+  "claims": [
+    {
+      "subj": "pressing the left key",
+      "verb": "shifts",
+      "obj": "the view 1 pixel to the left",
+      "conf": 0.95,
+      "receipt": {
+        "count": 832,
+        "quotes": [
+          {
+            "frame": 3,
+            "base_seed": 42,
+            "action": 0,
+            "dx": -1,
+            "sha_pre": "a424e138b72b6e5358bf7ad3a35d30a9b05227251831a2522b037c0e41ef6eeb",
+            "sha_post": "52ff9006c0231aa6b67e7ef21cbcf28cf52ed9c2764a4ba3eaec641acb4b1f48"
+          },
+          {
+            "frame": 6,
+            "base_seed": 42,
+            "action": 0,
+            "dx": -1,
+            "sha_pre": "cff9434b29eab3ba723b5e6b6bc5bf63a7c9e0c3b88e04645b5e2c7e3dae450c",
+            "sha_post": "46b2d38b3c8494705775d2ae7a8c0a8025d8e5ea440710960bf007cb8c2e0df2"
+          },
+          {
+            "frame": 15,
+            "base_seed": 42,
+            "action": 0,
+            "dx": -1,
+            "sha_pre": "9e78f48ebcbea1e779bd4bbdbd7284199936b4c4f9b71eb336e6333a51362632",
+            "sha_post": "61b3cd203493107fc8a1fee5fb2b4e09283fa3ab4876ca6f742679a5c1667366"
+          }
+        ]
+      }
+    },
+    {
+      "subj": "pressing the left key",
+      "verb": "shifts",
+      "obj": "the view 2 pixels to the left",
+      "conf": 0.95,
+      "receipt": {
+        "count": 872,
+        "quotes": [
+          {
+            "frame": 16,
+            "base_seed": 42,
+            "action": 0,
+            "dx": -2,
+            "sha_pre": "61b3cd203493107fc8a1fee5fb2b4e09283fa3ab4876ca6f742679a5c1667366",
+            "sha_post": "b1b8bbfdd66f8d78faec895a516d6742778dade0e89f41c7b2bf92b1caebe99c"
+          },
+          {
+            "frame": 25,
+            "base_seed": 42,
+            "action": 0,
+            "dx": -2,
+            "sha_pre": "5ec0a0147b903974f7d2d09a82e02bf710cc2f3ecb7ca349739f0ba6683495e1",
+            "sha_post": "6eb08e4b66e3c8b9a5f5d626fefd09a0fd6cfc65ca608a02b7cb8706a6749de1"
+          },
+          {
+            "frame": 31,
+            "base_seed": 42,
+            "action": 0,
+            "dx": -2,
+            "sha_pre": "e3eee4059a588a6b9b66d681a49feaaf13d47a9f728a5107fc0dddc5cf3849e0",
+            "sha_post": "e20e8f9c5051378d74603a0e2bbade645906612cb14a26e961605b74af689df5"
+          }
+        ]
+      }
+    },
+    {
+      "subj": "pressing the left key",
+      "verb": "shifts",
+      "obj": "the view 3 pixels to the left",
+      "conf": 0.95,
+      "receipt": {
+        "count": 856,
+        "quotes": [
+          {
+            "frame": 5,
+            "base_seed": 42,
+            "action": 0,
+            "dx": -3,
+            "sha_pre": "791451165c6ffb059b3c0685f7af3e99d82a0ebfea0688c54e5fb5cbc361e640",
+            "sha_post": "cff9434b29eab3ba723b5e6b6bc5bf63a7c9e0c3b88e04645b5e2c7e3dae450c"
+          },
+          {
+            "frame": 11,
+            "base_seed": 42,
+            "action": 0,
+            "dx": -3,
+            "sha_pre": "8fcee4ca91976e6a2072b4a3a20c35b2ba8eabb307a6334aced348e16487c7ed",
+            "sha_post": "2781bc390e6b9c954ce2130e2d5f9066d3a3e2e52639d8bf206d446669c458d4"
+          },
+          {
+            "frame": 20,
+            "base_seed": 42,
+            "action": 0,
+            "dx": -3,
+            "sha_pre": "5fd08dcb77cbeb4bfd3593696408c1f93d1e941a103e1403b8798a956e83706b",
+            "sha_post": "8aa467df41a471d01c8253ec75042fce661c2892cd54d401ade5c19ab352aa50"
+          }
+        ]
+      }
+    },
+    {
+      "subj": "pressing the right key",
+      "verb": "shifts",
+      "obj": "the view 1 pixel to the right",
+      "conf": 0.95,
+      "receipt": {
+        "count": 883,
+        "quotes": [
+          {
+            "frame": 0,
+            "base_seed": 42,
+            "action": 1,
+            "dx": 1,
+            "sha_pre": "852c9a6a5b105a726b8ca0c76e978b20c3aba11efc6f6f07b090bbdb0e56c183",
+            "sha_post": "add0132d408282059b56496c9e2c3717db189e4831f781320671d75397b7bcac"
+          },
+          {
+            "frame": 9,
+            "base_seed": 42,
+            "action": 1,
+            "dx": 1,
+            "sha_pre": "8ccb3dc8fb10222e06777d68674f0377477c556bcf402762b3ee05f576eeeee5",
+            "sha_post": "cfd8b5651511e6a2c9675ff725492ff415fa94fe470535086e606bdf73538e52"
+          },
+          {
+            "frame": 18,
+            "base_seed": 42,
+            "action": 1,
+            "dx": 1,
+            "sha_pre": "6681cfe200057a005637fd118b4b63819a460ae565a83c275d74c4b94d184d7d",
+            "sha_post": "0f15d7ba78387776cf304e10a0c2edb1f0e9e3fac1aa9426f7199397f30aab57"
+          }
+        ]
+      }
+    },
+    {
+      "subj": "pressing the right key",
+      "verb": "shifts",
+      "obj": "the view 2 pixels to the right",
+      "conf": 0.95,
+      "receipt": {
+        "count": 864,
+        "quotes": [
+          {
+            "frame": 1,
+            "base_seed": 42,
+            "action": 1,
+            "dx": 2,
+            "sha_pre": "add0132d408282059b56496c9e2c3717db189e4831f781320671d75397b7bcac",
+            "sha_post": "6a4ac72dec543e78fdac7b1b63ee9ef0d43101ae6bcd1390fe0b3498e104cfa6"
+          },
+          {
+            "frame": 4,
+            "base_seed": 42,
+            "action": 1,
+            "dx": 2,
+            "sha_pre": "52ff9006c0231aa6b67e7ef21cbcf28cf52ed9c2764a4ba3eaec641acb4b1f48",
+            "sha_post": "791451165c6ffb059b3c0685f7af3e99d82a0ebfea0688c54e5fb5cbc361e640"
+          },
+          {
+            "frame": 19,
+            "base_seed": 42,
+            "action": 1,
+            "dx": 2,
+            "sha_pre": "0f15d7ba78387776cf304e10a0c2edb1f0e9e3fac1aa9426f7199397f30aab57",
+            "sha_post": "5fd08dcb77cbeb4bfd3593696408c1f93d1e941a103e1403b8798a956e83706b"
+          }
+        ]
+      }
+    },
+    {
+      "subj": "pressing the right key",
+      "verb": "shifts",
+      "obj": "the view 3 pixels to the right",
+      "conf": 0.95,
+      "receipt": {
+        "count": 852,
+        "quotes": [
+          {
+            "frame": 2,
+            "base_seed": 42,
+            "action": 1,
+            "dx": 3,
+            "sha_pre": "6a4ac72dec543e78fdac7b1b63ee9ef0d43101ae6bcd1390fe0b3498e104cfa6",
+            "sha_post": "a424e138b72b6e5358bf7ad3a35d30a9b05227251831a2522b037c0e41ef6eeb"
+          },
+          {
+            "frame": 8,
+            "base_seed": 42,
+            "action": 1,
+            "dx": 3,
+            "sha_pre": "cb9f0dcad87c7f5d205eda4ea76c121050ee67b583be1dea4fa3c6f0960133b6",
+            "sha_post": "8ccb3dc8fb10222e06777d68674f0377477c556bcf402762b3ee05f576eeeee5"
+          },
+          {
+            "frame": 14,
+            "base_seed": 42,
+            "action": 1,
+            "dx": 3,
+            "sha_pre": "81b7479197a60d0f66e20a1934391033c95b78779c376dd4c58868aab3bc4c40",
+            "sha_post": "9e78f48ebcbea1e779bd4bbdbd7284199936b4c4f9b71eb336e6333a51362632"
+          }
+        ]
+      }
+    }
+  ],
+  "metrics": {
+    "discourse_uid_var": 46.3677,
+    "fluency": -14.787,
+    "coherence": [
+      4,
+      4
+    ]
+  },
+  "ear": {
+    "all_exact": true,
+    "transcript": [
+      {
+        "sentence": "Pressing the left key shifts the view 1 pixel to the left in every measured case.",
+        "heard_subj": "pressing the left key",
+        "expected": [
+          "pressing the left key",
+          "shifts",
+          "the view 1 pixel to the left"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also shifts the view 2 pixels to the left.",
+        "heard_subj": "pressing the left key",
+        "expected": [
+          "pressing the left key",
+          "shifts",
+          "the view 2 pixels to the left"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also shifts the view 3 pixels to the left.",
+        "heard_subj": "pressing the left key",
+        "expected": [
+          "pressing the left key",
+          "shifts",
+          "the view 3 pixels to the left"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "Pressing the right key shifts the view 1 pixel to the right in every measured case.",
+        "heard_subj": "pressing the right key",
+        "expected": [
+          "pressing the right key",
+          "shifts",
+          "the view 1 pixel to the right"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also shifts the view 2 pixels to the right.",
+        "heard_subj": "pressing the right key",
+        "expected": [
+          "pressing the right key",
+          "shifts",
+          "the view 2 pixels to the right"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also shifts the view 3 pixels to the right.",
+        "heard_subj": "pressing the right key",
+        "expected": [
+          "pressing the right key",
+          "shifts",
+          "the view 3 pixels to the right"
+        ],
+        "exact": true
+      }
+    ]
+  }
+}

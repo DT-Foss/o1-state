@@ -21,12 +21,26 @@ try:
     HAS_MSGPACK = True
 except ImportError:
     HAS_MSGPACK = False
+    import warnings
+    warnings.warn(
+        "msgpack fehlt — _vendor/dotcausal fällt auf JSON-Decode zurück "
+        "und kann bei binären .causal-Dateien kryptisch fehlschlagen. "
+        "Installation: pip install msgpack",
+        RuntimeWarning,
+    )
 
 try:
     import xxhash
     HAS_XXHASH = True
 except ImportError:
     HAS_XXHASH = False
+    import warnings
+    warnings.warn(
+        "xxhash fehlt — CRC-Integritätsprüfung nutzt md5[:8]-Fallback; "
+        "mit xxh64 geschriebene Dateien werden weiterhin erkannt "
+        "(beide Algorithmen werden geprüft). pip install xxhash",
+        RuntimeWarning,
+    )
 
 from .core import (
     MAGIC,
@@ -73,6 +87,20 @@ def _compute_crc(data: bytes) -> bytes:
         return struct.pack('<Q', xxhash.xxh64(data).intdigest())
     else:
         return hashlib.md5(data).digest()[:8]
+
+
+def _compute_crc_alt(data: bytes) -> bytes:
+    """Alternativer CRC-Algorithmus (Algorithmus-Drift-Toleranz):
+
+    Dateien können mit xxh64 ODER md5[:8] geschrieben worden sein,
+    je nach Umgebung des Writers. Ein Leser ohne xxhash würde sonst
+    einen Fehlalarm ("Integrity check FAILED") auf korrekte Dateien
+    werfen. Die Prüfung versucht beide — passend ist passend.
+    """
+    if HAS_XXHASH:
+        return hashlib.md5(data).digest()[:8]
+    else:
+        return struct.pack('<Q', xxhash.xxh64(data).intdigest())
 
 
 # =============================================================================
@@ -334,10 +362,14 @@ class CausalReader:
             computed_crc = _compute_crc(content)
 
             if stored_crc != computed_crc:
-                raise ValueError(
-                    f"Integrity check FAILED for {self.filepath}!\n"
-                    f"The file may be corrupted."
-                )
+                # Algorithmus-Drift-Toleranz: der Writer kann mit dem
+                # jeweils anderen CRC-Verfahren geschrieben haben.
+                alt_crc = _compute_crc_alt(content)
+                if stored_crc != alt_crc:
+                    raise ValueError(
+                        f"Integrity check FAILED for {self.filepath}!\n"
+                        f"The file may be corrupted."
+                    )
 
         # Parse offsets
         offsets = []

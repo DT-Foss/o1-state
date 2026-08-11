@@ -1,0 +1,25 @@
+{
+  "graph": "chained.causal",
+  "n_entities": 12,
+  "n_edges": 15,
+  "n_starts": 8,
+  "n_seeds": 5,
+  "pc": 0.95,
+  "tau": 0.3,
+  "determinism_ok": true,
+  "crc_note": "chained.causal mit verify_integrity=False geladen (CRC-Mismatch, an FERTIG-Team gemeldet)",
+  "baseline": {
+    "mean_hops": 2.375,
+    "median_hops": 2.0,
+    "edge_coverage": 0.6,
+    "abort_rate": 0.0
+  },
+  "lifted": {
+    "mean_hops": 2.325,
+    "median_hops": 2.0,
+    "edge_coverage": 0.6667,
+    "abort_rate": 0.0
+  },
+  "hops_ratio": 0.979,
+  "coverage_ratio": 1.111
+}

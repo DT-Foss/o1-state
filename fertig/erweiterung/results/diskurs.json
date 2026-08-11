@@ -1,0 +1,48 @@
+{
+  "health": {
+    "text": "Smoking causes tar buildup. It also indirectly leads to lung damage. Tar buildup causes lung damage. It also indirectly leads to breathlessness. It also indirectly leads to the cancer. Lung damage causes breathlessness. It also leads to the cancer. Breathlessness reduces exercise. It also indirectly inhibits via blocking promoter health. It also indirectly promotes via inhibition the heart disease. Exercise improves health. It also prevents the heart disease. Caffeine prevents sleep. Poor sleep causes stress. Stress damages health.",
+    "n_sentences": 15,
+    "coherence": [
+      12,
+      12
+    ],
+    "coherence_at_max": true,
+    "discourse_uid_var": 43.7283,
+    "discourse_uid_var_naive_order": 47.9915,
+    "uid_composed_le_naive": true,
+    "n_pronominalized": 7,
+    "n_pron_blocked": 0,
+    "gate_probe": {
+      "probe_sentence": "It also causes lung damage.",
+      "blocked": true
+    },
+    "ear_all_exact": true,
+    "certificate_status": "FREIGEGEBEN",
+    "verify_fails": [],
+    "tamper_text_detected": true,
+    "tamper_receipt_detected": null
+  },
+  "weltbuch": {
+    "text": "Pressing the left key shifts the view 1 pixel to the left in every measured case. It also shifts the view 2 pixels to the left. It also shifts the view 3 pixels to the left. Pressing the right key shifts the view 1 pixel to the right in every measured case. It also shifts the view 2 pixels to the right. It also shifts the view 3 pixels to the right.",
+    "n_sentences": 6,
+    "coherence": [
+      4,
+      4
+    ],
+    "coherence_at_max": true,
+    "discourse_uid_var": 46.3677,
+    "discourse_uid_var_naive_order": 48.3476,
+    "uid_composed_le_naive": true,
+    "n_pronominalized": 4,
+    "n_pron_blocked": 0,
+    "gate_probe": {
+      "probe_sentence": "It also shifts the view 1 pixel to the right.",
+      "blocked": true
+    },
+    "ear_all_exact": true,
+    "certificate_status": "FREIGEGEBEN",
+    "verify_fails": [],
+    "tamper_text_detected": true,
+    "tamper_receipt_detected": true
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "training": {
+    "chunks": 1281,
+    "bwd": 200,
+    "gate_rate": 0.1561,
+    "surprise_first25_mean": 2.7261,
+    "surprise_last50_mean": 1.4241,
+    "wall_s": 780.1,
+    "ckpt": "/tmp/fertig_new/FERTIG/data/hsslm_form_live.pt"
+  },
+  "evaluation": {
+    "vorher": {
+      "distinct_ratio_mean": 0.0,
+      "loops": 3,
+      "free_released": 0,
+      "samples": [
+        "Smoking causes tar buildup. ition,—thated.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.puttarrivenobrucharrubrigagagred",
+        "Smoking causes tar buildup. iteargagrefironlying,—that.causes.causes.causes.causes.causes.causes.causes.),—that,—that,—thating,—that,—that,—that.causes.causes.buildup.causes.causes.causes.causes.causes.causes.causes"
+      ],
+      "free_paragraphs": [
+        "The story begins with smoking. ition,—thated.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.causes.puttarrivenobrucharrubrigagagredenoblocuriouslying,—that,—iting,—that"
+      ]
+    },
+    "nachher": {
+      "distinct_ratio_mean": 0.164,
+      "loops": 3,
+      "free_released": 0,
+      "samples": [
+        "Smoking causes tar buildup. to to to to to to the to to to the to to to to to the to to to to the to the to to to to to to to to to to the ",
+        "Smoking causes tar buildup. to to to the to to to to to to to to the to the the to to to to the the to to to to to to to to pixep to the the"
+      ],
+      "free_paragraphs": [
+        "The story begins with smoking. to to to to to to the to to to the to to to to to the to to to to the to the to to to to to to to to to to the to the to to to to to to to to "
+      ]
+    }
+  }
+}

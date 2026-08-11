@@ -1,0 +1,260 @@
+{
+  "name": "health",
+  "text": "Smoking causes tar buildup. It also indirectly leads to lung damage. Tar buildup causes lung damage. It also indirectly leads to breathlessness. It also indirectly leads to the cancer. Lung damage causes breathlessness. It also leads to the cancer. Breathlessness reduces exercise. It also indirectly inhibits via blocking promoter health. It also indirectly promotes via inhibition the heart disease. Exercise improves health. It also prevents the heart disease. Caffeine prevents sleep. Poor sleep causes stress. Stress damages health.",
+  "text_sha256": "0f31e29a7dbc24908524c0f0a5179d2cace7d30d56e416c6abc8dafe4bddeef9",
+  "claims": [
+    {
+      "subj": "smoking",
+      "verb": "causes",
+      "obj": "tar buildup",
+      "conf": 0.9
+    },
+    {
+      "subj": "smoking",
+      "verb": "indirectly leads to",
+      "obj": "lung damage",
+      "conf": 0.6075
+    },
+    {
+      "subj": "tar buildup",
+      "verb": "causes",
+      "obj": "lung damage",
+      "conf": 0.9
+    },
+    {
+      "subj": "tar buildup",
+      "verb": "indirectly leads to",
+      "obj": "breathlessness",
+      "conf": 0.5737
+    },
+    {
+      "subj": "tar buildup",
+      "verb": "indirectly leads to",
+      "obj": "cancer",
+      "conf": 0.441
+    },
+    {
+      "subj": "lung damage",
+      "verb": "causes",
+      "obj": "breathlessness",
+      "conf": 0.85
+    },
+    {
+      "subj": "lung damage",
+      "verb": "leads to",
+      "obj": "cancer",
+      "conf": 0.7
+    },
+    {
+      "subj": "breathlessness",
+      "verb": "reduces",
+      "obj": "exercise",
+      "conf": 0.8
+    },
+    {
+      "subj": "breathlessness",
+      "verb": "indirectly inhibits via blocking promoter",
+      "obj": "health",
+      "conf": 0.54
+    },
+    {
+      "subj": "breathlessness",
+      "verb": "indirectly promotes via inhibition",
+      "obj": "heart disease",
+      "conf": 0.51
+    },
+    {
+      "subj": "exercise",
+      "verb": "improves",
+      "obj": "health",
+      "conf": 0.9
+    },
+    {
+      "subj": "exercise",
+      "verb": "prevents",
+      "obj": "heart disease",
+      "conf": 0.85
+    },
+    {
+      "subj": "caffeine",
+      "verb": "prevents",
+      "obj": "sleep",
+      "conf": 0.85
+    },
+    {
+      "subj": "poor sleep",
+      "verb": "causes",
+      "obj": "stress",
+      "conf": 0.8
+    },
+    {
+      "subj": "stress",
+      "verb": "damages",
+      "obj": "health",
+      "conf": 0.8
+    }
+  ],
+  "metrics": {
+    "discourse_uid_var": 43.7283,
+    "fluency": -15.5788,
+    "coherence": [
+      12,
+      12
+    ]
+  },
+  "ear": {
+    "all_exact": true,
+    "transcript": [
+      {
+        "sentence": "Smoking causes tar buildup.",
+        "heard_subj": "smoking",
+        "expected": [
+          "smoking",
+          "causes",
+          "tar buildup"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also indirectly leads to lung damage.",
+        "heard_subj": "smoking",
+        "expected": [
+          "smoking",
+          "indirectly leads to",
+          "lung damage"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "Tar buildup causes lung damage.",
+        "heard_subj": "tar buildup",
+        "expected": [
+          "tar buildup",
+          "causes",
+          "lung damage"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also indirectly leads to breathlessness.",
+        "heard_subj": "tar buildup",
+        "expected": [
+          "tar buildup",
+          "indirectly leads to",
+          "breathlessness"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also indirectly leads to the cancer.",
+        "heard_subj": "tar buildup",
+        "expected": [
+          "tar buildup",
+          "indirectly leads to",
+          "cancer"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "Lung damage causes breathlessness.",
+        "heard_subj": "lung damage",
+        "expected": [
+          "lung damage",
+          "causes",
+          "breathlessness"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also leads to the cancer.",
+        "heard_subj": "lung damage",
+        "expected": [
+          "lung damage",
+          "leads to",
+          "cancer"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "Breathlessness reduces exercise.",
+        "heard_subj": "breathlessness",
+        "expected": [
+          "breathlessness",
+          "reduces",
+          "exercise"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also indirectly inhibits via blocking promoter health.",
+        "heard_subj": "breathlessness",
+        "expected": [
+          "breathlessness",
+          "indirectly inhibits via blocking promoter",
+          "health"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also indirectly promotes via inhibition the heart disease.",
+        "heard_subj": "breathlessness",
+        "expected": [
+          "breathlessness",
+          "indirectly promotes via inhibition",
+          "heart disease"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "Exercise improves health.",
+        "heard_subj": "exercise",
+        "expected": [
+          "exercise",
+          "improves",
+          "health"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "It also prevents the heart disease.",
+        "heard_subj": "exercise",
+        "expected": [
+          "exercise",
+          "prevents",
+          "heart disease"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "Caffeine prevents sleep.",
+        "heard_subj": "caffeine",
+        "expected": [
+          "caffeine",
+          "prevents",
+          "sleep"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "Poor sleep causes stress.",
+        "heard_subj": "poor sleep",
+        "expected": [
+          "poor sleep",
+          "causes",
+          "stress"
+        ],
+        "exact": true
+      },
+      {
+        "sentence": "Stress damages health.",
+        "heard_subj": "stress",
+        "expected": [
+          "stress",
+          "damages",
+          "health"
+        ],
+        "exact": true
+      }
+    ]
+  }
+}

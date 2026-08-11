@@ -1,0 +1,94 @@
+{
+  "n_records": 5159,
+  "n_edges": 6,
+  "edges": [
+    {
+      "text": "Pressing the left key shifts the view 3 pixels to the left.",
+      "receipt": "[gelebt 856x; z.B. frame 5, sha 791451165c…]",
+      "edge": [
+        "pressing the left key",
+        "the view 3 pixels to the left"
+      ],
+      "count": 856
+    },
+    {
+      "text": "Pressing the left key shifts the view 2 pixels to the left.",
+      "receipt": "[gelebt 872x; z.B. frame 16, sha 61b3cd2034…]",
+      "edge": [
+        "pressing the left key",
+        "the view 2 pixels to the left"
+      ],
+      "count": 872
+    },
+    {
+      "text": "Pressing the left key shifts the view 1 pixel to the left.",
+      "receipt": "[gelebt 832x; z.B. frame 3, sha a424e138b7…]",
+      "edge": [
+        "pressing the left key",
+        "the view 1 pixel to the left"
+      ],
+      "count": 832
+    },
+    {
+      "text": "Pressing the right key shifts the view 1 pixel to the right.",
+      "receipt": "[gelebt 883x; z.B. frame 0, sha 852c9a6a5b…]",
+      "edge": [
+        "pressing the right key",
+        "the view 1 pixel to the right"
+      ],
+      "count": 883
+    },
+    {
+      "text": "Pressing the right key shifts the view 2 pixels to the right.",
+      "receipt": "[gelebt 864x; z.B. frame 1, sha add0132d40…]",
+      "edge": [
+        "pressing the right key",
+        "the view 2 pixels to the right"
+      ],
+      "count": 864
+    },
+    {
+      "text": "Pressing the right key shifts the view 3 pixels to the right.",
+      "receipt": "[gelebt 852x; z.B. frame 2, sha 6a4ac72dec…]",
+      "edge": [
+        "pressing the right key",
+        "the view 3 pixels to the right"
+      ],
+      "count": 852
+    }
+  ],
+  "n_discarded_unbacked": 0,
+  "provenance": {
+    "picks": [
+      {
+        "frame": 339,
+        "exact": true,
+        "dx_redetected": true
+      },
+      {
+        "frame": 50,
+        "exact": true,
+        "dx_redetected": true
+      },
+      {
+        "frame": 307,
+        "exact": true,
+        "dx_redetected": true
+      },
+      {
+        "frame": 213,
+        "exact": true,
+        "dx_redetected": true
+      },
+      {
+        "frame": 226,
+        "exact": true,
+        "dx_redetected": true
+      }
+    ],
+    "exact": "5/5",
+    "pass": true
+  },
+  "status": "FREIGEGEBEN",
+  "note": "Belege via Vendor-Snapshot _vendor_o1welt.py (o1-state Commit b575b3f) nachgespielt"
+}

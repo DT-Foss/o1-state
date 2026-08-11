@@ -1,0 +1,16 @@
+{
+  "health": {
+    "released": true,
+    "n_facts": 15,
+    "missing": [],
+    "unbacked": [],
+    "text": "The story begins with smoking. Smoking causes tar buildup, and smoking also indirectly leads to lung damage on its own. The tar buildup causes lung damage of its own; over time, tar buildup indirectly leads to breathlessness, and in the worst case tar buildup indirectly leads to cancer. Once lung damage sets in, that lung damage causes breathlessness directly, and lung damage leads to cancer as well. Breathlessness then closes the trap: breathlessness reduces exercise, breathlessness indirectly inhibits via blocking promoter health, and breathlessness indirectly promotes via inhibition heart disease. Yet exercise is exactly the thing worth keeping: exercise improves health and exercise prevents heart disease. Two quieter threads run alongside. Caffeine prevents sleep; poor sleep causes stress; and stress damages health in the end."
+  },
+  "weltbuch": {
+    "released": true,
+    "n_facts": 6,
+    "missing": [],
+    "unbacked": [],
+    "text": "The organism has learned what its own hands do. Pressing the left key shifts the view 1 pixel to the left when the step is small; with more momentum, pressing the left key shifts the view 2 pixels to the left, and at full stride pressing the left key shifts the view 3 pixels to the left. The mirror image holds on the other side: pressing the right key shifts the view 1 pixel to the right, pressing the right key shifts the view 2 pixels to the right, and pressing the right key shifts the view 3 pixels to the right. Every one of these sentences was lived hundreds of times before it was written down."
+  }
+}
