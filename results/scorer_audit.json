@@ -1,14 +1,14 @@
 {
   "generated_by": "src/score_predictions_v2.py",
   "predictions_file": "analysis/PREDICTIONS.md",
-  "n_predictions": 78,
+  "n_predictions": 79,
   "coverage_summary": {
     "full": 10,
     "partial": 8,
-    "prose": 33,
-    "in_flight": 0,
+    "prose": 34,
+    "in_flight": 2,
     "withdrawn": 1,
-    "registered": 26
+    "registered": 24
   },
   "n_mismatches": 0,
   "mismatches": [],
@@ -2099,7 +2099,7 @@
     "P68": {
       "pid": "P68",
       "title": "the crossing deepens, or it plateaus (registered\n  2026-08-10, BEFORE the resume).",
-      "status": "registered",
+      "status": "in_flight",
       "verdict_words": [],
       "artifacts_named": [],
       "artifacts_found": [],
@@ -2109,12 +2109,13 @@
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "prose-only (not yet scored)"
+      "coverage": "none",
+      "note": "artifact pos_d1024_status.json reports phase=running \u2014 skipped"
     },
     "P69": {
       "pid": "P69",
       "title": "the valley is a shape, or it is a q-artifact (registered\n  2026-08-10, BEFORE the launch).",
-      "status": "registered",
+      "status": "in_flight",
       "verdict_words": [],
       "artifacts_named": [],
       "artifacts_found": [],
@@ -2124,7 +2125,8 @@
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "prose-only (not yet scored)"
+      "coverage": "none",
+      "note": "artifact pos_d1024_status.json reports phase=running \u2014 skipped"
     },
     "P70": {
       "pid": "P70",
@@ -2534,6 +2536,21 @@
       "verdict_words": [
         "PASS"
       ],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
+    },
+    "P81": {
+      "pid": "P81",
+      "title": "the dial law is family-generic, transient included\n  (registered 2026-08-11, BEFORE the scored runs; HSSLM harness\n  built and smoke-run on seeds 42/43 \u2014 those smoke curves motivate\n  the design and are NOT scored data).",
+      "status": "scored",
+      "verdict_words": [],
       "artifacts_named": [],
       "artifacts_found": [],
       "checks": [],

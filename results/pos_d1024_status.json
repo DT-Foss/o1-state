@@ -34,33 +34,33 @@
     "tag": "d1024"
   },
   "started_utc": "2026-08-10T11:43:26Z",
-  "wall_s": 105624.2,
-  "n_streamed": 129842176,
-  "tok_per_s": 1229.3,
-  "rss_gb": 2.562,
-  "disk_free_gb": 14.1,
-  "stream_docs": 357604,
+  "wall_s": 110015.6,
+  "n_streamed": 135024128,
+  "tok_per_s": 1227.3,
+  "rss_gb": 2.526,
+  "disk_free_gb": 18.8,
+  "stream_docs": 372404,
   "stream_reconnects": 12,
   "arms": {
     "A1": {
       "grad_tokens": 0,
-      "n_chunks": 253598,
+      "n_chunks": 263719,
       "n_bwd": 0
     },
     "A2": {
-      "grad_tokens": 129842176,
-      "n_chunks": 253598,
-      "n_bwd": 253598
+      "grad_tokens": 135024128,
+      "n_chunks": 263719,
+      "n_bwd": 263719
     },
     "A3": {
-      "grad_tokens": 26049536,
-      "n_chunks": 253598,
-      "n_bwd": 50878
+      "grad_tokens": 27099648,
+      "n_chunks": 263719,
+      "n_bwd": 52929
     },
     "A3R": {
-      "grad_tokens": 5571584,
-      "n_chunks": 53771,
-      "n_bwd": 10882
+      "grad_tokens": 6631424,
+      "n_chunks": 63892,
+      "n_bwd": 12952
     }
   },
   "index": null,
