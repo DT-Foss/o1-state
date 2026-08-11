@@ -2962,3 +2962,43 @@ artifact is a number about the defaults, not about the system.
   queries + 10 drops; 20 post-drop re-queries cite no dropped
   sha. The organ is correct and bounded on the real artifact;
   the mount-speed claim stands only in absolute form.
+
+- **P84 — the wall that named the organ: ConceptNet full, lazy
+  (registered 2026-08-11, BEFORE the run).** History: the full
+  189,719-record ConceptNet mount is the measurement that made
+  lazy inference a named organ — eager materialization ran out
+  of memory at 21GB and every demo since ran on a 15k slice.
+  Now the organ exists and P83 proved it correct on the dense
+  WT-103 artifact; this run points it at the store class that
+  broke eager. Instrument: the full ConceptNet segment store on
+  the x86 data host (if only the slice exists as segments, the
+  full store is built first via the established adapter path —
+  append-only base records, no eager mount at any point).
+  Process guards, part of the registration: explicit
+  address-space cap 12GB + nice, single-threaded, so the
+  registered sweeps sharing the machine are never at risk.
+  (a) THE MOUNT: lazy mount completes with peak RSS ≤ 8GB and
+      wall ≤ 300s — against eager's 21GB OOM on the same class.
+  (b) TRUNCATION FINALLY TESTED: 50 uniform keys + 20
+      hub-targeted keys (top out-degree in the base adjacency);
+      at node_budget=5000 at least one hub key truncates WITH
+      the flag up; every truncated answer well-formed;
+      closure_calls exactly 0 throughout. ConceptNet's degree
+      distribution is the reason this clause is testable here:
+      its hubs are real, unlike the WT-103 sample P83 drew.
+  (c) BASE-EDGE GROUND TRUTH + DETERMINISM: for 20 sampled
+      keys, the base-edge subset of the lazy answer equals a
+      direct raw-segment scan (no closure involved either way);
+      a second lazy mount reproduces all sampled answers
+      identically.
+  Falsifiers: (a) fails ⇒ the BASE adjacency itself is the
+  memory wall at this store class — segment-partitioned or
+  spill-to-disk adjacency becomes the named next organ, with
+  the adjacency's measured footprint attached. (b) fails with
+  no hub truncating ⇒ the budget unit is miscalibrated against
+  real degree distributions — recalibrate against the measured
+  degrees and re-register before any budget claim. (c) fails ⇒
+  the base-edge path breaks on this store class — localize
+  against the fosski-merge specifics (string doc_coords,
+  evidence-key segment fallback) before anything else runs on
+  ConceptNet.
