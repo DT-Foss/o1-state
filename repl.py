@@ -100,7 +100,7 @@ class FossKIRepl:
     """Interactive REPL for FOSS-KI."""
 
     def __init__(self, knowledge_dim=128, lm_order=5, live_causal_store=None,
-                 knowledge_only=None):
+                 knowledge_only=None, sovereign_embeddings=None):
         # Core components
         # LiveCausalAdapter switch: live_causal_store kwarg takes priority
         # over the FOSSKI_LIVECAUSAL_STORE env var; both default to unset,
@@ -134,6 +134,28 @@ class FossKIRepl:
         self.knowledge_only = (
             knowledge_only if knowledge_only is not None
             else bool(os.environ.get('FOSSKI_KNOWLEDGE_ONLY'))
+        )
+
+        # Souveränitäts-Probe (Task 19, revival-probe): sovereign_embeddings
+        # kwarg takes priority over FOSSKI_SOVEREIGN_EMBEDDINGS=1; both
+        # default to unset/False, which is BYTE-IDENTICAL default behavior
+        # (self.reservoir/self.emb_store load from Qwen3 exactly as before
+        # this flag existed). When True, the Reservoir ESN + its embedding
+        # store are built from the A3 organism's OWN learned embed.weight
+        # (experimental/sovereignty/a3_embedding_store.py) instead of
+        # Qwen3-1.7B's frozen pretrained embeddings -- no Qwen data enters
+        # this path at all when the flag is on (see that module's
+        # "SOVEREIGNTY CONTRACT" docstring section for exactly what is
+        # checked). residual_hopfield stays disabled either way when this
+        # flag is on -- it depends on pre-extracted Qwen transformer
+        # layer-18 residuals, a Qwen-derived artifact with no A3
+        # equivalent (A3 is a 2-layer from-scratch organism, not a
+        # pretrained transformer with 18+ layers to have taken residuals
+        # from) -- see a3_embedding_store.py's module docstring, "ONE
+        # HONEST EXCEPTION FOUND DURING MAPPING" section.
+        self.sovereign_embeddings = (
+            sovereign_embeddings if sovereign_embeddings is not None
+            else bool(os.environ.get('FOSSKI_SOVEREIGN_EMBEDDINGS'))
         )
         self.lm = None  # Lazy-loaded
         self.router = VortexRouter(
@@ -234,21 +256,39 @@ class FossKIRepl:
             except Exception as e:
                 print(f"FLM load failed: {e}")
 
-        # Reservoir ESN with Qwen3 embeddings (core architecture)
+        # Reservoir ESN with Qwen3 embeddings (core architecture) --
+        # OR, under sovereign_embeddings, the A3 organism's own 128d
+        # embed.weight instead (Task 19, revival-probe). The pretrained
+        # reservoir_readout.npz was trained against Qwen's 512d vectors
+        # -- loading it under a 128d embedding store would silently
+        # produce garbage (W_out's shape wouldn't even match input_dim),
+        # so sovereign mode NEVER loads that cached readout and always
+        # retrains from the KB, on A3's own signal, from scratch.
         self.reservoir = None
         self.emb_store = None
         try:
-            from core.reservoir_lm import build_reservoir_lm
-            self.reservoir, self.emb_store = build_reservoir_lm()
-            if self.reservoir:
-                print(f"  Reservoir ESN: {self.reservoir.reservoir_size} nodes, "
-                      f"{self.emb_store.dim}d embeddings")
-                readout_path = os.path.join(base, 'data', 'reservoir_readout.npz')
-                if os.path.exists(readout_path):
-                    self.reservoir.load_readout(readout_path)
-                    print(f"  Reservoir readout loaded")
-                else:
+            if self.sovereign_embeddings:
+                sov_dir = os.path.join(base, 'experimental', 'sovereignty')
+                if sov_dir not in sys.path:
+                    sys.path.insert(0, sov_dir)
+                from a3_embedding_store import build_reservoir_lm_a3
+                self.reservoir, self.emb_store = build_reservoir_lm_a3()
+                if self.reservoir:
+                    print(f"  Reservoir ESN (SOVEREIGN/A3): {self.reservoir.reservoir_size} "
+                          f"nodes, {self.emb_store.dim}d embeddings (no Qwen data)")
                     self._train_reservoir_from_kb()
+            else:
+                from core.reservoir_lm import build_reservoir_lm
+                self.reservoir, self.emb_store = build_reservoir_lm()
+                if self.reservoir:
+                    print(f"  Reservoir ESN: {self.reservoir.reservoir_size} nodes, "
+                          f"{self.emb_store.dim}d embeddings")
+                    readout_path = os.path.join(base, 'data', 'reservoir_readout.npz')
+                    if os.path.exists(readout_path):
+                        self.reservoir.load_readout(readout_path)
+                        print(f"  Reservoir readout loaded")
+                    else:
+                        self._train_reservoir_from_kb()
         except Exception as e:
             print(f"Reservoir load failed: {e}")
 
@@ -259,27 +299,40 @@ class FossKIRepl:
             self.extracted_attn = ExtractedAttention()
             # Ricci Attention (geometric O(n) for importance)
             self.ricci_attn = RicciAttention(coupling=0.3, n_diffusion_steps=3)
-            # Raw 2048d embeddings for attention computation
+            # Raw 2048d embeddings for attention computation -- SKIPPED
+            # under sovereign_embeddings: this file (qwen3_1.7b_embeddings.npy)
+            # is Qwen data, full stop, regardless of what self.emb_store is;
+            # loading it here would silently reintroduce the exact
+            # dependency the swap exists to remove.
             raw_emb = None
-            raw_path = os.path.join(base, 'data', 'qwen3_1.7b_embeddings.npy')
-            if os.path.exists(raw_path):
-                import numpy as _np
-                raw_emb = _np.load(raw_path).astype(_np.float32)
+            if not self.sovereign_embeddings:
+                raw_path = os.path.join(base, 'data', 'qwen3_1.7b_embeddings.npy')
+                if os.path.exists(raw_path):
+                    import numpy as _np
+                    raw_emb = _np.load(raw_path).astype(_np.float32)
 
-            # lm_head for vocabulary decoding (reservoir → text)
+            # lm_head for vocabulary decoding (reservoir → text) -- SKIPPED
+            # under sovereign_embeddings for the same reason: qwen3_lm_head.npy
+            # and qwen3_1.7b_vocab.json are both Qwen artifacts. A3 has no
+            # lm_head of its own to substitute (p78_reader_A3.pt's checkpoint
+            # is an MLM-pretrained embedding table, not a full causal LM with
+            # its own output projection) -- this is a second, separate
+            # sovereignty gap beyond the embedding table itself, documented
+            # honestly here rather than papered over with a fake decoder.
             _lm_head = None
             _id2token = None
-            lm_head_path = os.path.join(base, 'data', 'qwen3_lm_head.npy')
-            if os.path.exists(lm_head_path):
-                import numpy as _np
-                _lm_head = _np.load(lm_head_path).astype(_np.float32)
-                # id2token from vocab
-                vocab_path = os.path.join(base, 'data', 'qwen3_1.7b_vocab.json')
-                if os.path.exists(vocab_path):
-                    with open(vocab_path) as _f:
-                        _t2i = json.load(_f)
-                    _id2token = {v: k for k, v in _t2i.items()}
-                    print(f"  lm_head decoder: {_lm_head.shape[0]} vocab entries")
+            if not self.sovereign_embeddings:
+                lm_head_path = os.path.join(base, 'data', 'qwen3_lm_head.npy')
+                if os.path.exists(lm_head_path):
+                    import numpy as _np
+                    _lm_head = _np.load(lm_head_path).astype(_np.float32)
+                    # id2token from vocab
+                    vocab_path = os.path.join(base, 'data', 'qwen3_1.7b_vocab.json')
+                    if os.path.exists(vocab_path):
+                        with open(vocab_path) as _f:
+                            _t2i = json.load(_f)
+                        _id2token = {v: k for k, v in _t2i.items()}
+                        print(f"  lm_head decoder: {_lm_head.shape[0]} vocab entries")
 
             # Hopfield Template Bank (Qwen3 512d, Modern Hopfield)
             hopfield = None
@@ -312,6 +365,35 @@ class FossKIRepl:
                 multi_hop=self.multi_hop,
                 commonsense=self.commonsense,
             )
+            if self.sovereign_embeddings:
+                # FossPipeline.configure() self-loads ResidualHopfield
+                # unconditionally (core/foss_pipeline.py:107-108) --
+                # it is not one of configure()'s own kwargs, so it must
+                # be disabled explicitly here. ResidualHopfield stores
+                # pre-extracted Qwen transformer LAYER-18 RESIDUAL STATES
+                # (see a3_embedding_store.py's "ONE HONEST EXCEPTION"
+                # docstring section) -- a Qwen-derived artifact with no
+                # A3 equivalent (A3 is a 2-layer from-scratch organism).
+                self.pipeline.residual_hopfield = None
+                # A THIRD Qwen-derived artifact found only by this crash,
+                # not by the original mapping: FossPipeline.configure()
+                # (core/foss_pipeline.py:132) also self-loads
+                # data/qwen3_mlp_facts.npz -- 198 entity vectors "stolen"
+                # from Qwen3's MLP layers, 2048d, matched via
+                # self._token2id/self.raw_emb in _mlp_retrieve() (line
+                # 807). Those two attributes are never set on the
+                # pipeline object under sovereign_embeddings (repl.py
+                # only gates the local raw_emb/_lm_head variables passed
+                # into configure(), not this self-loaded matrix), so
+                # _mlp_retrieve() raised an uncaught AttributeError
+                # inside FossPipeline.query(), silently swallowed by
+                # this method's own try/except -- which meant NONE of
+                # the pipeline's scores (reservoir, attention, hopfield)
+                # ever returned, and the REPL fell through to
+                # instructor_route instead. Disabling the matrix here
+                # lets _mlp_retrieve's own None-check (line 374) skip it
+                # cleanly, same pattern as residual_hopfield above.
+                self.pipeline._mlp_matrix_normed = None
             n_active = sum(1 for x in [self.reservoir, self.extracted_attn,
                                         self.ricci_attn, self.knowledge, _lm_head,
                                         self.multi_hop, hopfield] if x is not None)
