@@ -2832,3 +2832,70 @@ artifact is a number about the defaults, not about the system.
   reading: the policy mechanism works (skips are free, selection
   improves the per-consult average), the window placement is the
   open variable — one number to move, not a mechanism to rebuild.
+
+- **P76 — the dense-regime bar, density-normalized (registered
+  2026-08-11; ARTIFACT CLAUSE: the instrument is the overnight
+  WT-103 full build's own per-append telemetry —
+  results/wt103_full_metrics.jsonl, 20,274 appends over 11.6h on
+  the x86 runner, stopped by the pre-armed 08:00 deadline with
+  every segment sealed. The build predates this registration and
+  its AGGREGATE endpoints were seen (64,876 base / 105,626
+  inferred edges, final density 1.628); the per-step yield
+  relationship has not been computed by anyone. The
+  pre-commitment is over that relationship's form and the bars
+  below; the scoring script is written after this block.)** P74
+  discovered density is not scale-invariant, voided its sparse
+  4× bar as pre-committed, and promised re-registration in
+  density-normalized form: expected per-append inferred yield
+  ≈ k · density_pre · n_new_base (mvp2's collision form — each
+  new base key meets an existing graph whose per-key edge
+  multiplicity IS the density). This build sits 3.2× past P74's
+  frontier (20,272 vs 6,401 segments) and extends the density
+  journey 0.037 → 0.262 → 1.628. Canon was OFF (canon:false in
+  every row): this is exact-key density, eager inference — the
+  regime P74 mapped, continued.
+  (a) THE YIELD LAW: split the build into fifths by append
+      index; in each fifth compute r_b = Σ n_new_inferred /
+      Σ (density_pre × n_new_base), density_pre taken from the
+      previous row's edge totals. Bar: max(r_b)/min(r_b) ≤ 3
+      over fifths 2–5 (first fifth is burn-in: density ≈ 0,
+      ratio undefined-noisy) — the normalized constant k is a
+      graph invariant. Contrast clause, binding alongside: the
+      UN-normalized per-base yield (Σ n_new_inferred / Σ
+      n_new_base per fifth) spreads ≥ 5× across fifths 2–5 —
+      the raw quantity is NOT stable, so the normalization does
+      real work.
+  (b) COST CURVE, descriptive as P74 committed: median
+      append_seconds per fifth, first→last, each with its
+      density attached. No bar — the eager-inference cost wall
+      is the lazy organ's target and measures separately (P83).
+  Falsifiers: (a) fails high (spread > 3×) ⇒ density alone
+  under-determines yield; the missing variable is key-popularity
+  skew, and the per-key degree distribution over build time
+  becomes the next registered instrument. Contrast clause fails
+  (raw spread < 5×) ⇒ the regime stayed effectively linear and
+  the normalization is vacuous here — re-registers on a denser
+  artifact before any claim about k.
+
+  **P76 SCORED (2026-08-11, results/livecausal_p76_yield.json,
+  script src/livecausal/p76_yield.py over the build's own 20,274
+  append rows).** (a) PASS, decisively: r_b over fifths 2–5 =
+  2.361 / 2.413 / 2.756 / 2.964, spread 1.255× against the 3×
+  bar. Contrast clause PASS: raw per-base yield runs 0.584 →
+  1.206 → 2.343 → 3.902 across the same fifths, spread 6.68×
+  against the 5× bar. The law P74 promised is measured: inferred
+  yield per append ≈ k · density_pre · n_new_base with k ≈
+  2.4–3.0 across the entire dense regime, while the raw yield
+  moves 6.7× — density is the explanatory variable, and the
+  append-cost story of P74 collapses into one number. Residual
+  worth naming: k drifts monotonically upward (2.36 → 2.96,
+  +26% over 16,000 appends) — a second-order term consistent
+  with key-popularity skew accumulating; it stays well inside
+  the bar here and becomes the falsifier's instrument only if a
+  future artifact pushes it past 3×. (b) descriptive as
+  registered: median append_seconds per fifth 0.018 / 0.093 /
+  0.299 / 0.764 / 1.469 at densities 0.153 / 0.367 / 0.647 /
+  1.069 / 1.628 — an 81× cost climb first→last fifth under
+  eager inference. That wall is the lazy organ's target; its
+  measurement on this exact store is P83's setup, not this
+  score.

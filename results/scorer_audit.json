@@ -1,11 +1,11 @@
 {
   "generated_by": "src/score_predictions_v2.py",
   "predictions_file": "analysis/PREDICTIONS.md",
-  "n_predictions": 79,
+  "n_predictions": 81,
   "coverage_summary": {
     "full": 10,
     "partial": 8,
-    "prose": 34,
+    "prose": 36,
     "in_flight": 2,
     "withdrawn": 1,
     "registered": 24
@@ -2469,6 +2469,28 @@
       },
       "coverage": "prose-only (no clause fields in artifact)"
     },
+    "P76": {
+      "pid": "P76",
+      "title": "the dense-regime bar, density-normalized (registered\n  2026-08-11; ARTIFACT CLAUSE: the instrument is the overnight\n  WT-103 full build's own per-append telemetry \u2014\n  results/wt103_full_metrics.jsonl, 20,274 appends over 11.6h on\n  the x86 runner, stopped by the pre-armed 08:00 deadline with\n  every segment sealed. The build predates this registration and\n  its AGGREGATE endpoints were seen (64,876 base / 105,626\n  inferred edges, final density 1.628); the per-step yield\n  relationship has not been computed by anyone. The\n  pre-commitment is over that relationship's form and the bars\n  below; the scoring script is written after this block.)",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/livecausal_p76_yield.json",
+        "results/wt103_full_metrics.jsonl"
+      ],
+      "artifacts_found": [
+        "livecausal_p76_yield.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
+    },
     "P77": {
       "pid": "P77",
       "title": "the injection mechanism isolated (registered 2026-08-10,\n  BEFORE the run; harness committed 4519382, 13/13 tests green\n  incl. the grid-ledger-isolation regression).",
@@ -2560,6 +2582,27 @@
         "UNPARSEABLE": 0
       },
       "coverage": "prose-only (no loadable json artifact)"
+    },
+    "P82": {
+      "pid": "P82",
+      "title": "the band policy flips the bill (registered 2026-08-11,\n  BEFORE the run; policy organ committed with 21/21 tests, band\n  edges self-calibrated from the stream's own surprise\n  distribution, never hard-coded).",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/livecausal_p82_always.json"
+      ],
+      "artifacts_found": [
+        "livecausal_p82_always.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
     }
   }
 }
