@@ -1029,7 +1029,7 @@ responsible disclosure to IBM PSIRT). The complete list, with venues and DOIs, i
 
 ---
 
-## The FOSS-KI merge (`integrations/foss-ki/`)
+## The FOSS-KI merge (`fosski/experimental/livecausal/`)
 
 A second, independent answer engine gets folded onto the same living file. FOSS-KI
 (Reservoir/Hopfield/Intent, first built March 2026) is a non-transformer answer engine that
@@ -1098,7 +1098,7 @@ graph density is not scale-invariant, and dense regimes need bounded or lazy inf
 than an eager full closure at mount time. That is now a named next attack on the LIVE-CAUSAL
 engine itself, not a footnote: the same organ that will need to serve a full 500K-relation
 ConceptNet or any comparably dense corpus.
-→ `integrations/foss-ki/README.md`, `integrations/foss-ki/DEMO.md`
+→ `fosski/experimental/livecausal/README.md`, `fosski/experimental/livecausal/DEMO.md`
 
 ---
 
@@ -1178,7 +1178,7 @@ o1-state/
 │   │   evidence.py, demo.py + test_*.py                          LIVE-CAUSAL (§20)
 │   └── score_predictions_v2.py                                   the auto-falsifier
 ├── vendor/fabel/            the .causal deterministic knowledge engine (the index)
-├── integrations/foss-ki/    the FOSS-KI merge onto the living store (converters, adapter,
+├── fosski/experimental/livecausal/    the FOSS-KI merge onto the living store (converters, adapter,
 │   the cut/append and end-to-end-loop demos)                     the FOSS-KI merge
 ├── analysis/                theory, pre-registered predictions, research logs
 ├── results/                 measured JSON + logs — the evidence
@@ -1186,7 +1186,7 @@ o1-state/
 ```
 
 `reference/` = architecture · `src/` = experiments · `vendor/fabel/` = knowledge index ·
-`integrations/foss-ki/` = the merged answer engine · `analysis/` = theory ·
+`fosski/experimental/livecausal/` = the merged answer engine · `analysis/` = theory ·
 `results/` = measured JSON · `plots/` = figures.
 
 ---

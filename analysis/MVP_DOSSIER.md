@@ -1,11 +1,12 @@
-# LIVE-CAUSAL — MVP Dossier (DRAFT)
+# LIVE-CAUSAL — MVP Dossier
 
-> **Status: DRAFT.** This is a first pass for internal Lead review, not a
-> distributed document. Every number below has an artifact path; nothing
-> here is rounded past what the source JSON states, and every falsifier
-> that fired is reported at the same strength as every pass. Machine
-> classes are named by role (an ARM development machine, two x86 runners),
-> never by hostname.
+> **Status: canonical internal dossier** (promoted from draft 2026-08-11).
+> Every number below has an artifact path; nothing here is rounded past
+> what the source JSON states, and every falsifier that fired is reported
+> at the same strength as every pass. Machine classes are named by role
+> (an ARM development machine, two x86 runners), never by hostname. The
+> investor-facing presentation is cut from this document when the meeting
+> exists, not before.
 
 ---
 
@@ -112,6 +113,8 @@ own pre-committed bar.
 | P71 | The live graph never rebuilds | 40 segments: incremental and full-rebuild closures sha256-identical (`c6a96567…`). 16× data growth (5→80 segments): append time grows 1.68× (bar ≤4×; median 7.9ms → 13.3ms), delta-yield holds constant at 190 new edges per append regardless of graph size. Truncation: 5 repetitions, **0 closure computations** on drop, 5/5 bit-equal to a full batch rebuild. | `results/livecausal_p71.json` |
 | P72 | The builder builds, end to end | Two full runs, real WT-103 text, spaCy-strict extractor path pinned: **2,046 base records**, **644 segments**, wall clock **281.8s** (under five minutes) on a 4-core x86 runner. Second run reproduces all 644 segment SHAs bit-identically — zero full rebuilds. Direction-3 stranger audit: **30/30 edges verified, 30/30 two-mount consensus**. Gated fraction **0.2053**, inside the q=0.75 dial band [0.20, 0.30]. | `results/p72_run1.json`, `results/p72_compare.json`, `results/p72_verify.json` |
 | P73 | Consult-back on the real graph | Machinery sound and deterministic: 0 ledger violations, 14/14 use citations resolve against live segments, two runs byte-identical including the use.ledger sha256. Value honestly negative: coverage **0.0162** (40 of 2,471 spikes answerable by exact key) and the real-path arm does **not** beat the random arm (mean Δ −0.0040 vs −0.0023) — both numbers localize to entity canonicalization, agreeing with P72's write-side finding. | `results/livecausal_consult_run1.json`, `results/livecausal_consult_run2.json` |
+| P78 | Does a genuinely lived reader make consultation work? | **The channel lives.** The gated arm of a 40h/896M-token life reacts ~175× more strongly to injection than a fresh model (0.1223 vs 0.0007) and all four full-record-text cells clear the +0.01 bar (best +0.137, 13×) — the three earlier nulls were reader inertness, not therapy failure. Honest: a differential win (relevant paths cost less than random), absolute deltas still negative overall. | `results/livecausal_p78_grid.json` |
+| P79/P80 | The consult policy and the three lives (replicated, n=2) | **The gate buys consultability:** the gated life (225M gradient tokens) matches the dense life (896M) at ~0.98× pooled — same consultability, 25% of the spend; the frozen life is inert (0.0008). **The policy is a band-pass:** the middle surprise tercile leads both tails on both seeds, and inside the band the arc's first ABSOLUTE wins appear (+0.012/+0.016 mean, ~58% of consults helping outright). Policy spec: fire in the band, skip the extremes. | `results/livecausal_p79_{A1,A2,A3}.json`, `results/livecausal_p80_{A2,A3}.json` |
 | P70 | Does the gate's curation raise validated-triplet yield over random windows? | **No — the falsifier fires.** Surprise-selected windows: 18.13 validated triplets/kilotoken. Seeded-random windows: 18.60. Yield ratio **0.974** (bar 1.3× — fail). Entity-novelty ratio **1.03** (bar 1.5× — fail). Double-pass extraction stays byte-identical (pass). **Policy consequence, taken straight from the falsifier:** extraction runs ungated on every window; the surprise gate curates what the organism *learns from*, not what the curator *may extract* — a real result folded directly into the builder's design (Section 2's `windows (gated / total): 11 / 80` line is this policy, live). | `results/curator_yield.json` |
 | P60 | Cross-ISA stranger verification | Forward (ARM→x86): **10/10** bit-exact, 10/10 consensus. Reverse (x86→ARM): **9/10** — the falsifier fires on one entry (lane 4205, episode 0, frame 14: a single token, one quantization bin apart), localized to a 1-ULP float block-mean reduction-order difference between ISAs and answered with a normative fix (integer-exact token quantization). Net: **19/20** sampled entries bit-exact across both directions. | `results/stranger_verify.json`, `results/stranger_verify_arm.json` |
 | P55 | The frozen file answers by own key | After dosed replay of a sha256-frozen file, the reader completes the file's own entries **0.264 nats better** than its no-file twin (bar 0.05, 5.3× over) — keyed recall, not diffuse fertilization. | `results/keyed_file.json` |
