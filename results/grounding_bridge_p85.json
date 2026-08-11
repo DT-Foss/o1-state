@@ -1,0 +1,168 @@
+{
+  "p85_instrument": {
+    "ckpt_path": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt",
+    "ckpt_sha256": "b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd",
+    "projection_dim": 48,
+    "projection_seed": 1234,
+    "benchmark_seed": 3,
+    "episodes": 96
+  },
+  "arms": {
+    "binder": {
+      "benchmark_id": "ground-zero-v0",
+      "learner": "binder",
+      "passed": true,
+      "score": 1.2019055151779054,
+      "scope_hash": "17dd96d72e415f4887b2946a4b1121ea326a9ca058b4134463034504540107c1",
+      "certificate_hash": "15c4c75a5e8cf8c64e688762bc462ffffc437afb67663a8c799b76d079bb2a0e",
+      "axes": {
+        "token_remapping_equivariance": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9615244121423244,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9615244121423244,
+          "passed": true
+        },
+        "nuisance_transfer": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9615244121423244,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9615244121423244,
+          "passed": true
+        },
+        "intervention_necessity": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9615244121423244,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9615244121423244,
+          "passed": true
+        },
+        "unseen_composition": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9615244121423244,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9615244121423244,
+          "passed": true
+        },
+        "honest_abstention": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9615244121423244,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9615244121423244,
+          "passed": true
+        }
+      },
+      "controls": {
+        "static_pixels_no_action": {
+          "estimate": 0.19791666666666666,
+          "coverage": 1.0,
+          "rejected_as_grounder": true
+        }
+      }
+    },
+    "bridge_untrained_proj48": {
+      "benchmark_id": "ground-zero-v0",
+      "learner": "bridge_untrained_proj48",
+      "passed": false,
+      "score": -1.423310942237668,
+      "scope_hash": "9dfb8533cf3ea331999585aff82e998a0f23379e06d72adecdbe2554a5f4e616",
+      "certificate_hash": "5ad56bf859d65c4fbf9827b35964c1c91f5fb20b1ede9528762501fcefba9af3",
+      "axes": {
+        "token_remapping_equivariance": {
+          "estimate": 0.010416666666666666,
+          "lower_bound_95": 0.0018411702168162514,
+          "coverage": 0.020833333333333332,
+          "coverage_lower_bound_95": 0.005731969852430422,
+          "passed": false
+        },
+        "nuisance_transfer": {
+          "estimate": 0.010416666666666666,
+          "lower_bound_95": 0.0018411702168162514,
+          "coverage": 0.020833333333333332,
+          "coverage_lower_bound_95": 0.005731969852430422,
+          "passed": false
+        },
+        "intervention_necessity": {
+          "estimate": 0.010416666666666666,
+          "lower_bound_95": 0.0018411702168162514,
+          "coverage": 0.020833333333333332,
+          "coverage_lower_bound_95": 0.005731969852430422,
+          "passed": false
+        },
+        "unseen_composition": {
+          "estimate": 0.3854166666666667,
+          "lower_bound_95": 0.29425768590940465,
+          "coverage": 0.7916666666666666,
+          "coverage_lower_bound_95": 0.6999975294751407,
+          "passed": false
+        },
+        "honest_abstention": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9615244121423244,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9615244121423244,
+          "passed": true
+        }
+      },
+      "controls": {
+        "static_pixels_no_action": {
+          "estimate": 0.19791666666666666,
+          "coverage": 1.0,
+          "rejected_as_grounder": true
+        }
+      }
+    },
+    "bridge_trained_proj48": {
+      "benchmark_id": "ground-zero-v0",
+      "learner": "bridge_trained_proj48",
+      "passed": false,
+      "score": -0.426464185382262,
+      "scope_hash": "9dfb8533cf3ea331999585aff82e998a0f23379e06d72adecdbe2554a5f4e616",
+      "certificate_hash": "beb4ff7c77fd885049b19eb2ac0e4bcfe030703002e6c499e15de31855e4b8fb",
+      "axes": {
+        "token_remapping_equivariance": {
+          "estimate": 0.8645833333333334,
+          "lower_bound_95": 0.7819886149785561,
+          "coverage": 0.9166666666666666,
+          "coverage_lower_bound_95": 0.8441009676029042,
+          "passed": false
+        },
+        "nuisance_transfer": {
+          "estimate": 0.8645833333333334,
+          "lower_bound_95": 0.7819886149785561,
+          "coverage": 0.9166666666666666,
+          "coverage_lower_bound_95": 0.8441009676029042,
+          "passed": false
+        },
+        "intervention_necessity": {
+          "estimate": 0.8645833333333334,
+          "lower_bound_95": 0.7819886149785561,
+          "coverage": 0.9166666666666666,
+          "coverage_lower_bound_95": 0.8441009676029042,
+          "passed": true
+        },
+        "unseen_composition": {
+          "estimate": 0.46875,
+          "lower_bound_95": 0.3720607443853214,
+          "coverage": 0.8854166666666666,
+          "coverage_lower_bound_95": 0.8063737876272059,
+          "passed": false
+        },
+        "honest_abstention": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9615244121423244,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9615244121423244,
+          "passed": true
+        }
+      },
+      "controls": {
+        "static_pixels_no_action": {
+          "estimate": 0.19791666666666666,
+          "coverage": 1.0,
+          "rejected_as_grounder": true
+        }
+      }
+    }
+  }
+}

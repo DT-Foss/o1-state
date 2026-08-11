@@ -3063,6 +3063,34 @@ artifact is a number about the defaults, not about the system.
   claim about learned representation collapses and says so at
   full strength.
 
+  **P85 SCORED (2026-08-11, results/grounding_bridge_p85.json,
+  instrument frozen and verifiable — ckpt sha256, projection
+  dim/seed, benchmark seed all recorded in the artifact's
+  p85_instrument block).** (a) FAIL, and precisely on the
+  pre-committed statistics branch: coverage held ROCK-STABLE at
+  0.917 on all three core axes — 88/96, the identical rate to
+  22/24, four times the data without a point of drift — while
+  the Wilson LCB rose 0.742 → 0.782. Against the benchmark's
+  own per-axis bars that already flips one axis:
+  intervention_necessity now PASSES; nuisance_transfer (bar
+  0.80) misses by 0.018 of LCB; token_remapping_equivariance
+  (bar 0.85) needs roughly n≈350 at this coverage. No bar sits
+  above 0.917, so the asymptote clears everything —
+  the consequence is exactly the registered one: n scales
+  again (384), same frozen instrument, no story change. One
+  axis to watch honestly: unseen_composition runs on far fewer
+  effective trials (LCB 0.372 at coverage 0.885) and may still
+  be interval-limited at 384 — if it alone stays short there,
+  its trial count, not the representation, is the named issue.
+  (b) PASS, sharper than at n=24: untrained coverage 0.021
+  (2/96, chance-level) against 0.917 — the contrast is the
+  training, confirmed at 4× data. (c) PASS: static-pixels
+  negative control rejected as grounder for all three arms,
+  binder reference passes all five axes (LCB 0.962), frozen
+  instrument checkable by hash. The binding signal is real and
+  stable; what it still lacks is interval width, and only
+  that.
+
 - **P86 — the dial law reaches pixels (registered 2026-08-11;
   ARTIFACT CLAUSE: the instrument is the three-arm visual run's
   own per-16-frame telemetry — results/visual_arm_a_residual_

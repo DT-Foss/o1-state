@@ -1,0 +1,31 @@
+[grounding_bridge][P85] device=mps seed=3 episodes=96 projection_dim=48 projection_seed=1234 ckpt=/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt ckpt_sha256=b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd
+[grounding_bridge][P85] arm (1) binder -- reference, unmodified
+[grounding_bridge][P85] arm (2) bridge_untrained_proj48
+[grounding_bridge][P85] arm (3) bridge_trained_proj48
+
+====================================================================================================
+P85 STATISTICS RUN -- FROZEN INSTRUMENT
+====================================================================================================
+{
+  "ckpt_path": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt",
+  "ckpt_sha256": "b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd",
+  "projection_dim": 48,
+  "projection_seed": 1234,
+  "benchmark_seed": 3,
+  "episodes": 96
+}
+
+axis                                            binderbridge_untrained_proj48 bridge_trained_proj48
+---------------------------------------------------------------------------------------------------
+token_remapping_equivariance    cov=1.000 lcb=0.962 PASScov=0.021 lcb=0.002 FAILcov=0.917 lcb=0.782 FAIL
+nuisance_transfer               cov=1.000 lcb=0.962 PASScov=0.021 lcb=0.002 FAILcov=0.917 lcb=0.782 FAIL
+intervention_necessity          cov=1.000 lcb=0.962 PASScov=0.021 lcb=0.002 FAILcov=0.917 lcb=0.782 PASS
+unseen_composition              cov=1.000 lcb=0.962 PASScov=0.792 lcb=0.294 FAILcov=0.885 lcb=0.372 FAIL
+honest_abstention               cov=1.000 lcb=0.962 PASScov=1.000 lcb=0.962 PASScov=1.000 lcb=0.962 PASS
+
+static_pixels_no_action (control)                0.1979                0.1979                0.1979
+rejected_as_grounder                              True                  True                  True
+overall passed                                    True                 False                 False
+score                                           1.2019               -1.4233               -0.4265
+
+[grounding_bridge][P85] full results written: results/grounding_bridge_p85.json
