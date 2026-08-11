@@ -3027,3 +3027,38 @@ artifact is a number about the defaults, not about the system.
   5000 nearly a third of UNIFORM ConceptNet keys truncate —
   budget choice is a live policy variable on world-knowledge
   graphs, not a corner case.
+
+- **P85 — the binding signal survives statistics (registered
+  2026-08-11, BEFORE the run).** The four-arm exploration
+  (results/grounding_bridge_four_arms.json, committed 4b0e749)
+  found: with a fixed random projection to 48 dims, the TRAINED
+  frame-prediction encoder reaches coverage 0.917 (22/24) on
+  token-remapping equivariance, nuisance transfer, and
+  intervention necessity, while the UNTRAINED encoder stays at
+  0.000 under the identical projection matrix and the
+  unprojected control replicates the prior negative. What
+  failed was only the Wilson lower bound (0.742 at n=24). This
+  run buys the statistics with the instrument FROZEN: same
+  arm_b checkpoint, same projection (dim 48, seed 1234), same
+  benchmark seed 3, episodes raised 24 → 96. Three arms:
+  binder reference, bridge_untrained_proj48,
+  bridge_trained_proj48.
+  (a) THE PASS: bridge_trained_proj48 reaches passed=true by
+      the benchmark's own criterion on ALL five mandatory axes
+      at n=96 — the threshold is the instrument's, delegated
+      as pre-committed, not tuned by us after seeing data.
+  (b) THE CONTRAST HOLDS: bridge_untrained_proj48 stays failed
+      on the three axes with coverage ≤ 0.25 — the signal is
+      the training, not the projection or the architecture.
+  (c) CONTROLS: static-pixels negative control rejected for
+      all three arms; binder reference passes as always;
+      checkpoint and projection parameters recorded in the
+      artifact (frozen-instrument claim checkable).
+  Falsifiers: (a) fails with coverage ≥ 0.85 but LCB short ⇒
+  pure statistics — n scales again, stated plainly, no story
+  change. (a) fails with coverage DROPPING below 0.85 ⇒ the
+  24-episode result was seed luck — a multi-seed sweep becomes
+  the instrument before any binding claim. (b) fails (untrained
+  climbs) ⇒ the projection itself grounds at this n — the
+  claim about learned representation collapses and says so at
+  full strength.
