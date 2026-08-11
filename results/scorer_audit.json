@@ -1,14 +1,14 @@
 {
   "generated_by": "src/score_predictions_v2.py",
   "predictions_file": "analysis/PREDICTIONS.md",
-  "n_predictions": 83,
+  "n_predictions": 85,
   "coverage_summary": {
     "full": 10,
     "partial": 8,
-    "prose": 38,
+    "prose": 39,
     "in_flight": 2,
     "withdrawn": 1,
-    "registered": 24
+    "registered": 25
   },
   "n_mismatches": 0,
   "mismatches": [],
@@ -2637,6 +2637,44 @@
       ],
       "artifacts_found": [
         "livecausal_p84.json"
+      ],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P85": {
+      "pid": "P85",
+      "title": "the binding signal survives statistics (registered\n  2026-08-11, BEFORE the run).",
+      "status": "registered",
+      "verdict_words": [],
+      "artifacts_named": [
+        "results/grounding_bridge_four_arms.json"
+      ],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (not yet scored)"
+    },
+    "P86": {
+      "pid": "P86",
+      "title": "the dial law reaches pixels (registered 2026-08-11;\n  ARTIFACT CLAUSE: the instrument is the three-arm visual run's\n  own per-16-frame telemetry \u2014 results/visual_arm_a_residual_\n  gated_metrics.jsonl (gated, q=0.75) and visual_arm_b_residual_\n  nogate_metrics.jsonl (dense), 3,125 rows each, committed\n  c448aae. Known at registration: the endpoint aggregates\n  (final L1 0.0233 gated vs 0.0226 dense, final cumulative\n  gate_rate 0.192, warmup opens at 1.0). Unanalyzed by anyone:\n  the per-decile trajectory and the last-fifth means \u2014 the\n  clauses below bet on those. Scoring script written after\n  this block.)",
+      "status": "scored",
+      "verdict_words": [
+        "PASS"
+      ],
+      "artifacts_named": [
+        "results/visual_p86_dial.json"
+      ],
+      "artifacts_found": [
+        "visual_p86_dial.json"
       ],
       "checks": [],
       "check_summary": {

@@ -1,0 +1,29 @@
+{
+  "registered": "P86",
+  "n_rows": 3125,
+  "clause_a": {
+    "mean_l1_gated_last_fifth": 0.023906,
+    "mean_l1_dense_last_fifth": 0.023077,
+    "quality_ratio": 0.9653,
+    "admission_share_overall": 0.192,
+    "bar_ratio_ge_095": true,
+    "bar_share_le_025": true
+  },
+  "clause_b": {
+    "decile_admission_rates": [
+      0.1603,
+      0.0929,
+      0.1474,
+      0.1731,
+      0.2019,
+      0.2212,
+      0.234,
+      0.2115,
+      0.234,
+      0.2429
+    ],
+    "bar_deciles_3_10_le_025": true,
+    "settled_amplitude": 0.2429,
+    "language_reference": 0.25
+  }
+}

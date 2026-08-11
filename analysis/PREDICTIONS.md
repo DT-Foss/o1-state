@@ -3062,3 +3062,57 @@ artifact is a number about the defaults, not about the system.
   climbs) ⇒ the projection itself grounds at this n — the
   claim about learned representation collapses and says so at
   full strength.
+
+- **P86 — the dial law reaches pixels (registered 2026-08-11;
+  ARTIFACT CLAUSE: the instrument is the three-arm visual run's
+  own per-16-frame telemetry — results/visual_arm_a_residual_
+  gated_metrics.jsonl (gated, q=0.75) and visual_arm_b_residual_
+  nogate_metrics.jsonl (dense), 3,125 rows each, committed
+  c448aae. Known at registration: the endpoint aggregates
+  (final L1 0.0233 gated vs 0.0226 dense, final cumulative
+  gate_rate 0.192, warmup opens at 1.0). Unanalyzed by anyone:
+  the per-decile trajectory and the last-fifth means — the
+  clauses below bet on those. Scoring script written after
+  this block.)** P81 measured the dial law's family shape on
+  language (S6 and organism cores: the gate under-fires below
+  1−q, amplitude architecture-specific). This scores whether
+  the SAME shape holds on pixels — a third substrate.
+  (a) THE DIAL: over the last fifth of rows, mean L1(dense) /
+      mean L1(gated) ≥ 0.95 while the gated arm's overall
+      admission share stays ≤ 0.25 — at most a 5% quality gap
+      at a quarter of the gradient spend, the language-side
+      dial carried to pixels.
+  (b) THE SHAPE: per-decile INSTANTANEOUS admission rate (mean
+      of the gated flag per decile of rows): deciles 3–10 all
+      run ≤ 1−q = 0.25 — the under-fire regime of P81, on
+      pixels, through the whole post-warmup life; the settled
+      amplitude reports against language's ≈0.25 (pixels are
+      expected deeper at 0.19, the architecture-specific
+      amplitude clause of P81 extended by one substrate).
+  Falsifiers: (a) fails ⇒ the pixel gate buys less than the
+  language gate at matched q — the gap is quantified and the
+  Stützräder curriculum becomes the named lever for visual
+  gating, not plain surprise quantiles. (b) fails (any
+  post-warmup decile fires above 0.25) ⇒ the pixel surprise
+  distribution drifts against the calibrated quantile — gate
+  recalibration on pixel-surprise statistics becomes a named
+  build item before Phase 2 claims anything.
+
+  **P86 SCORED (2026-08-11, results/visual_p86_dial.json,
+  script src/p86_dial_pixels.py over the committed telemetry).**
+  Both clauses PASS. (a) Quality ratio 0.9653 on the last fifth
+  at overall admission share 0.192 — 96.5% of dense quality at
+  19.2% of the gradient spend, the dial carried to pixels
+  inside both bars. (b) Every post-warmup decile under 0.25,
+  and the trajectory reproduces P81's family shape in detail
+  nobody had looked at: after the ignition plateau the
+  admission rate crashes to 0.093 in decile 2 — the deepest
+  under-fire, roughly 2.7× below the 1−q target — then climbs
+  monotonically (0.147, 0.173, 0.202, 0.221, 0.234, 0.211,
+  0.234) to settle at 0.243, approaching 1−q from below and
+  never crossing it. The dial law is now measured on three
+  substrates — organism-core language, HSSLM language, and
+  pixels — with the same shape (transient under-fire, approach
+  from below) and substrate-specific amplitude each time. The
+  gate is a property of the training law, not of the data
+  type.
