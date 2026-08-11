@@ -3141,6 +3141,31 @@ artifact is a number about the defaults, not about the system.
   (c) fails ⇒ instrument break across the kernel refresh —
   bisect the two generations before anything else.
 
+  **P85c SCORED (2026-08-11,
+  results/grounding_bridge_p85c.json, five seeds × 96 episodes
+  × three arms, refreshed kernel, checkpoint hash identical in
+  every per-seed instrument block).** ALL THREE CLAUSES PASS —
+  the size is pinned. (a) PASS: pooled trained coverage 0.8417
+  vs pooled untrained 0.0292 on the three core axes — a
+  contrast of 28.9× against the 10× bar. (b) PASS: no seed
+  below the 0.5 floor; per-seed trained coverage 0.958 / 0.781
+  / 0.885 / 0.812 / 0.771. THE SIZE CLAIM, carried forward as
+  registered, whatever it is: the frame-prediction life's
+  learned encoder binds symbols at coverage ≈ 0.84 (seed range
+  0.77–0.96) where its untrained twin sits at 0.03 — and the
+  P85/P85b single-seed line at 0.917 is now explained: seed 3
+  is the top of the seed distribution, not the center. (c)
+  PASS: negative control rejected 15/15 arm-runs, binder
+  reference passes on all 5 seeds. One instrument note,
+  recorded not buried: the seed-3 rerun measured 0.958 where
+  P85 measured 0.917 on the nominally identical
+  configuration — 4 of 96 cases flipped, consistent with MPS
+  float nondeterminism at calibrated decision boundaries; the
+  clause-level conclusions are robust to this, exact per-seed
+  coverages carry a ±few-case jitter, and a CPU-deterministic
+  rerun is the instrument fix if a future claim ever needs
+  bit-stable per-case results.
+
 - **P86 — the dial law reaches pixels (registered 2026-08-11;
   ARTIFACT CLAUSE: the instrument is the three-arm visual run's
   own per-16-frame telemetry — results/visual_arm_a_residual_

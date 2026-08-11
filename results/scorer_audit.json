@@ -2655,12 +2655,14 @@
       "artifacts_named": [
         "results/grounding_bridge_four_arms.json",
         "results/grounding_bridge_p85.json",
-        "results/grounding_bridge_p85b.json"
+        "results/grounding_bridge_p85b.json",
+        "results/grounding_bridge_p85c.json"
       ],
       "artifacts_found": [
         "grounding_bridge_four_arms.json",
         "grounding_bridge_p85.json",
-        "grounding_bridge_p85b.json"
+        "grounding_bridge_p85b.json",
+        "grounding_bridge_p85c.json"
       ],
       "checks": [],
       "check_summary": {

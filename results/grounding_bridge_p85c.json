@@ -1,0 +1,937 @@
+{
+  "p85c_seeds": [
+    3,
+    5,
+    7,
+    11,
+    13
+  ],
+  "p85c_episodes_per_seed": 96,
+  "per_seed": {
+    "3": {
+      "p85_instrument": {
+        "ckpt_path": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt",
+        "ckpt_sha256": "b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd",
+        "projection_dim": 48,
+        "projection_seed": 1234,
+        "benchmark_seed": 3,
+        "episodes": 96
+      },
+      "arms": {
+        "binder": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "binder",
+          "passed": true,
+          "score": 1.2019055151779054,
+          "scope_hash": "17dd96d72e415f4887b2946a4b1121ea326a9ca058b4134463034504540107c1",
+          "certificate_hash": "d87b25d91d35bc8ff5ecd86f54c858e1720ea29a31bf34f0f58afa441eaa5cd0",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "nuisance_transfer": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "intervention_necessity": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "unseen_composition": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.19791666666666666,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_untrained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_untrained_proj48",
+          "passed": false,
+          "score": -1.423310942237668,
+          "scope_hash": "9dfb8533cf3ea331999585aff82e998a0f23379e06d72adecdbe2554a5f4e616",
+          "certificate_hash": "df76bca7623f6ca81407ff9c060be282a7c4f5dd8df84cc88938fca6d5de69a1",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.010416666666666666,
+              "lower_bound_95": 0.0018411702168162514,
+              "coverage": 0.020833333333333332,
+              "coverage_lower_bound_95": 0.005731969852430422,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.010416666666666666,
+              "lower_bound_95": 0.0018411702168162514,
+              "coverage": 0.020833333333333332,
+              "coverage_lower_bound_95": 0.005731969852430422,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.010416666666666666,
+              "lower_bound_95": 0.0018411702168162514,
+              "coverage": 0.020833333333333332,
+              "coverage_lower_bound_95": 0.005731969852430422,
+              "passed": false
+            },
+            "unseen_composition": {
+              "estimate": 0.375,
+              "lower_bound_95": 0.2847260813834064,
+              "coverage": 0.78125,
+              "coverage_lower_bound_95": 0.688620932638833,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.19791666666666666,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_trained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_trained_proj48",
+          "passed": false,
+          "score": -0.2598744097730358,
+          "scope_hash": "9dfb8533cf3ea331999585aff82e998a0f23379e06d72adecdbe2554a5f4e616",
+          "certificate_hash": "a4165a682a5e968c15f6398582ede454d3320df07ac79e9b709a20cba29078f8",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.8541666666666666,
+              "lower_bound_95": 0.7699818497355327,
+              "coverage": 0.9583333333333334,
+              "coverage_lower_bound_95": 0.897718085333419,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.8541666666666666,
+              "lower_bound_95": 0.7699818497355327,
+              "coverage": 0.9583333333333334,
+              "coverage_lower_bound_95": 0.897718085333419,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.8541666666666666,
+              "lower_bound_95": 0.7699818497355327,
+              "coverage": 0.9583333333333334,
+              "coverage_lower_bound_95": 0.897718085333419,
+              "passed": true
+            },
+            "unseen_composition": {
+              "estimate": 0.5208333333333334,
+              "lower_bound_95": 0.42203767706808926,
+              "coverage": 0.9375,
+              "coverage_lower_bound_95": 0.8702905349355853,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.19791666666666666,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        }
+      }
+    },
+    "5": {
+      "p85_instrument": {
+        "ckpt_path": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt",
+        "ckpt_sha256": "b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd",
+        "projection_dim": 48,
+        "projection_seed": 1234,
+        "benchmark_seed": 5,
+        "episodes": 96
+      },
+      "arms": {
+        "binder": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "binder",
+          "passed": true,
+          "score": 1.2019055151779054,
+          "scope_hash": "15f3705fd59295a779ebca60fe3372a1ab7b4a2fc23bf8b96438f8780f69919a",
+          "certificate_hash": "95c2309e01e41e3a74d806542d4cbcc2b433097544befa6dc480b31a7314c36e",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "nuisance_transfer": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "intervention_necessity": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "unseen_composition": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.125,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_untrained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_untrained_proj48",
+          "passed": false,
+          "score": -1.4285714285714286,
+          "scope_hash": "404414a11077ecbcbd42de8553497e59471e2d41f00384b1e6d71e162c282f73",
+          "certificate_hash": "2d4215edc2baf971a4706f33d3c1c096b81ae08fe3978bc802af741f21d2aebe",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.0,
+              "lower_bound_95": 0.0,
+              "coverage": 0.020833333333333332,
+              "coverage_lower_bound_95": 0.005731969852430422,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.0,
+              "lower_bound_95": 0.0,
+              "coverage": 0.020833333333333332,
+              "coverage_lower_bound_95": 0.005731969852430422,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.0,
+              "lower_bound_95": 0.0,
+              "coverage": 0.020833333333333332,
+              "coverage_lower_bound_95": 0.005731969852430422,
+              "passed": false
+            },
+            "unseen_composition": {
+              "estimate": 0.4375,
+              "lower_bound_95": 0.34256827475775026,
+              "coverage": 0.9166666666666666,
+              "coverage_lower_bound_95": 0.8441009676029042,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.125,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_trained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_trained_proj48",
+          "passed": false,
+          "score": -0.9049681787416614,
+          "scope_hash": "404414a11077ecbcbd42de8553497e59471e2d41f00384b1e6d71e162c282f73",
+          "certificate_hash": "f270ed8a05d9ab91a1ebca344ec0593cff7993ac3d7b7ed42ae97d7999e50eab",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.7395833333333334,
+              "lower_bound_95": 0.6437894471878515,
+              "coverage": 0.78125,
+              "coverage_lower_bound_95": 0.688620932638833,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.7395833333333334,
+              "lower_bound_95": 0.6437894471878515,
+              "coverage": 0.78125,
+              "coverage_lower_bound_95": 0.688620932638833,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.7395833333333334,
+              "lower_bound_95": 0.6437894471878515,
+              "coverage": 0.78125,
+              "coverage_lower_bound_95": 0.688620932638833,
+              "passed": false
+            },
+            "unseen_composition": {
+              "estimate": 0.3125,
+              "lower_bound_95": 0.2285095463775015,
+              "coverage": 0.6875,
+              "coverage_lower_bound_95": 0.589081200930873,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.125,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        }
+      }
+    },
+    "7": {
+      "p85_instrument": {
+        "ckpt_path": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt",
+        "ckpt_sha256": "b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd",
+        "projection_dim": 48,
+        "projection_seed": 1234,
+        "benchmark_seed": 7,
+        "episodes": 96
+      },
+      "arms": {
+        "binder": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "binder",
+          "passed": true,
+          "score": 1.2019055151779054,
+          "scope_hash": "2806f5f264b4f621f3cd806ceb8b77fa7fa3bbe248bc588432d16e0e8473314e",
+          "certificate_hash": "ff6539b81eab7f9f71f012c7ede069904beacb679aaa26e84fd2287c414fe4e5",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "nuisance_transfer": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "intervention_necessity": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "unseen_composition": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.22916666666666666,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_untrained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_untrained_proj48",
+          "passed": false,
+          "score": -1.4285714285714286,
+          "scope_hash": "dae1022cbc033659bf29659e4350d629be919d0f75aecf2e59ca03aec9cdacb0",
+          "certificate_hash": "4118f0dc6e9a0dd5050598e94d8176377e59799f00cc6a0331a1fdb1bd38d30f",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.0,
+              "lower_bound_95": 0.0,
+              "coverage": 0.0,
+              "coverage_lower_bound_95": 0.0,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.0,
+              "lower_bound_95": 0.0,
+              "coverage": 0.0,
+              "coverage_lower_bound_95": 0.0,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.0,
+              "lower_bound_95": 0.0,
+              "coverage": 0.0,
+              "coverage_lower_bound_95": 0.0,
+              "passed": false
+            },
+            "unseen_composition": {
+              "estimate": 0.3645833333333333,
+              "lower_bound_95": 0.27523940085174403,
+              "coverage": 0.7291666666666666,
+              "coverage_lower_bound_95": 0.6327365269279847,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.22916666666666666,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_trained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_trained_proj48",
+          "passed": false,
+          "score": -0.5572638961997316,
+          "scope_hash": "dae1022cbc033659bf29659e4350d629be919d0f75aecf2e59ca03aec9cdacb0",
+          "certificate_hash": "9976717bc1ce574e9fe9e589646e5431a41721be63ba4db4d4a6b53e34d4ba3c",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.8645833333333334,
+              "lower_bound_95": 0.7819886149785561,
+              "coverage": 0.8854166666666666,
+              "coverage_lower_bound_95": 0.8063737876272059,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.8645833333333334,
+              "lower_bound_95": 0.7819886149785561,
+              "coverage": 0.8854166666666666,
+              "coverage_lower_bound_95": 0.8063737876272059,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.8645833333333334,
+              "lower_bound_95": 0.7819886149785561,
+              "coverage": 0.8854166666666666,
+              "coverage_lower_bound_95": 0.8063737876272059,
+              "passed": true
+            },
+            "unseen_composition": {
+              "estimate": 0.4270833333333333,
+              "lower_bound_95": 0.3328208311400805,
+              "coverage": 0.8645833333333334,
+              "coverage_lower_bound_95": 0.7819886149785561,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.22916666666666666,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        }
+      }
+    },
+    "11": {
+      "p85_instrument": {
+        "ckpt_path": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt",
+        "ckpt_sha256": "b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd",
+        "projection_dim": 48,
+        "projection_seed": 1234,
+        "benchmark_seed": 11,
+        "episodes": 96
+      },
+      "arms": {
+        "binder": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "binder",
+          "passed": true,
+          "score": 1.2019055151779054,
+          "scope_hash": "fed92efb1f4759ab70d8125e3615bd51845282e7f0c3548da1540ba5b091bb76",
+          "certificate_hash": "63ceb5ecc776409d59be78b82dfed69a733e2a0eec32a829af9e873e9d29a840",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "nuisance_transfer": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "intervention_necessity": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "unseen_composition": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.15625,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_untrained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_untrained_proj48",
+          "passed": false,
+          "score": -1.4285714285714286,
+          "scope_hash": "5357621bbed28f5a7c34e50e2cdb70cde159fef9a3e12e0663c67bc42052b132",
+          "certificate_hash": "1e57310f91aae08e8ccdf66175b3aaceb31f5edef609a38b462f93dd92db7f59",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.0,
+              "lower_bound_95": 0.0,
+              "coverage": 0.010416666666666666,
+              "coverage_lower_bound_95": 0.0018411702168162514,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.0,
+              "lower_bound_95": 0.0,
+              "coverage": 0.010416666666666666,
+              "coverage_lower_bound_95": 0.0018411702168162514,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.0,
+              "lower_bound_95": 0.0,
+              "coverage": 0.010416666666666666,
+              "coverage_lower_bound_95": 0.0018411702168162514,
+              "passed": false
+            },
+            "unseen_composition": {
+              "estimate": 0.4479166666666667,
+              "lower_bound_95": 0.35235759304598196,
+              "coverage": 0.8958333333333334,
+              "coverage_lower_bound_95": 0.8187783586967836,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.15625,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_trained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_trained_proj48",
+          "passed": false,
+          "score": -0.6218232611166106,
+          "scope_hash": "5357621bbed28f5a7c34e50e2cdb70cde159fef9a3e12e0663c67bc42052b132",
+          "certificate_hash": "1d94044cdcf5c808541162558e74f51d171a852ffb38fb8d164ef6039ea0b6f2",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.6875,
+              "lower_bound_95": 0.589081200930873,
+              "coverage": 0.8125,
+              "coverage_lower_bound_95": 0.7229774574820691,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.6875,
+              "lower_bound_95": 0.589081200930873,
+              "coverage": 0.8125,
+              "coverage_lower_bound_95": 0.7229774574820691,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.6875,
+              "lower_bound_95": 0.589081200930873,
+              "coverage": 0.8125,
+              "coverage_lower_bound_95": 0.7229774574820691,
+              "passed": false
+            },
+            "unseen_composition": {
+              "estimate": 0.40625,
+              "lower_bound_95": 0.3134530216650168,
+              "coverage": 0.8645833333333334,
+              "coverage_lower_bound_95": 0.7819886149785561,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.15625,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        }
+      }
+    },
+    "13": {
+      "p85_instrument": {
+        "ckpt_path": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt",
+        "ckpt_sha256": "b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd",
+        "projection_dim": 48,
+        "projection_seed": 1234,
+        "benchmark_seed": 13,
+        "episodes": 96
+      },
+      "arms": {
+        "binder": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "binder",
+          "passed": true,
+          "score": 1.2019055151779054,
+          "scope_hash": "3d20b33a4d517e640b2817114073fe75f01f4ab7f9f05fc937b82c8047f63288",
+          "certificate_hash": "3577184bd01162302dd1829d9ec209bbb9095d4fcdb9246b150620694a048af7",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "nuisance_transfer": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "intervention_necessity": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "unseen_composition": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.14583333333333334,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_untrained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_untrained_proj48",
+          "passed": false,
+          "score": -1.423310942237668,
+          "scope_hash": "45b31037d2a60c7a1d5dd29f9b79bbd364f838972d282889a79d001ca0e0dd9f",
+          "certificate_hash": "466776367560f51917a0292caca6e0416e021fc99c57cd8708e0ce6afc16bc75",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.010416666666666666,
+              "lower_bound_95": 0.0018411702168162514,
+              "coverage": 0.09375,
+              "coverage_lower_bound_95": 0.05010810821214603,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.010416666666666666,
+              "lower_bound_95": 0.0018411702168162514,
+              "coverage": 0.09375,
+              "coverage_lower_bound_95": 0.05010810821214603,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.010416666666666666,
+              "lower_bound_95": 0.0018411702168162514,
+              "coverage": 0.09375,
+              "coverage_lower_bound_95": 0.05010810821214603,
+              "passed": false
+            },
+            "unseen_composition": {
+              "estimate": 0.5,
+              "lower_bound_95": 0.40192402452986303,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.14583333333333334,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        },
+        "bridge_trained_proj48": {
+          "benchmark_id": "ground-zero-v0",
+          "learner": "bridge_trained_proj48",
+          "passed": false,
+          "score": -0.6858077136353177,
+          "scope_hash": "45b31037d2a60c7a1d5dd29f9b79bbd364f838972d282889a79d001ca0e0dd9f",
+          "certificate_hash": "aac9758267c96fb56f12876f312f994041b20a0d0026e5e2f837393ad41c524d",
+          "axes": {
+            "token_remapping_equivariance": {
+              "estimate": 0.65625,
+              "lower_bound_95": 0.5568803111840909,
+              "coverage": 0.7708333333333334,
+              "coverage_lower_bound_95": 0.6773148946997618,
+              "passed": false
+            },
+            "nuisance_transfer": {
+              "estimate": 0.65625,
+              "lower_bound_95": 0.5568803111840909,
+              "coverage": 0.7708333333333334,
+              "coverage_lower_bound_95": 0.6773148946997618,
+              "passed": false
+            },
+            "intervention_necessity": {
+              "estimate": 0.65625,
+              "lower_bound_95": 0.5568803111840909,
+              "coverage": 0.7708333333333334,
+              "coverage_lower_bound_95": 0.6773148946997618,
+              "passed": false
+            },
+            "unseen_composition": {
+              "estimate": 0.3854166666666667,
+              "lower_bound_95": 0.29425768590940465,
+              "coverage": 0.78125,
+              "coverage_lower_bound_95": 0.688620932638833,
+              "passed": false
+            },
+            "honest_abstention": {
+              "estimate": 1.0,
+              "lower_bound_95": 0.9615244121423244,
+              "coverage": 1.0,
+              "coverage_lower_bound_95": 0.9615244121423244,
+              "passed": true
+            }
+          },
+          "controls": {
+            "static_pixels_no_action": {
+              "estimate": 0.14583333333333334,
+              "coverage": 1.0,
+              "rejected_as_grounder": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "pooled": {
+    "trained_axes": {
+      "token_remapping_equivariance": {
+        "mean_coverage": 0.8416666666666666,
+        "per_seed_coverage": [
+          0.9583333333333334,
+          0.78125,
+          0.8854166666666666,
+          0.8125,
+          0.7708333333333334
+        ],
+        "n_seeds": 5
+      },
+      "nuisance_transfer": {
+        "mean_coverage": 0.8416666666666666,
+        "per_seed_coverage": [
+          0.9583333333333334,
+          0.78125,
+          0.8854166666666666,
+          0.8125,
+          0.7708333333333334
+        ],
+        "n_seeds": 5
+      },
+      "intervention_necessity": {
+        "mean_coverage": 0.8416666666666666,
+        "per_seed_coverage": [
+          0.9583333333333334,
+          0.78125,
+          0.8854166666666666,
+          0.8125,
+          0.7708333333333334
+        ],
+        "n_seeds": 5
+      }
+    },
+    "untrained_axes": {
+      "token_remapping_equivariance": {
+        "mean_coverage": 0.029166666666666667,
+        "per_seed_coverage": [
+          0.020833333333333332,
+          0.020833333333333332,
+          0.0,
+          0.010416666666666666,
+          0.09375
+        ],
+        "n_seeds": 5
+      },
+      "nuisance_transfer": {
+        "mean_coverage": 0.029166666666666667,
+        "per_seed_coverage": [
+          0.020833333333333332,
+          0.020833333333333332,
+          0.0,
+          0.010416666666666666,
+          0.09375
+        ],
+        "n_seeds": 5
+      },
+      "intervention_necessity": {
+        "mean_coverage": 0.029166666666666667,
+        "per_seed_coverage": [
+          0.020833333333333332,
+          0.020833333333333332,
+          0.0,
+          0.010416666666666666,
+          0.09375
+        ],
+        "n_seeds": 5
+      }
+    },
+    "trained_pooled_mean_over_core_axes": 0.8416666666666665,
+    "untrained_pooled_mean_over_core_axes": 0.029166666666666664,
+    "contrast_ratio": 28.857142857142854,
+    "per_seed_min_core_coverage_trained": {
+      "3": 0.9583333333333334,
+      "5": 0.78125,
+      "7": 0.8854166666666666,
+      "11": 0.8125,
+      "13": 0.7708333333333334
+    },
+    "seeds_below_0.5_floor": [],
+    "clause_a_10x_contrast": true,
+    "clause_b_per_seed_floor_0.5": true
+  }
+}

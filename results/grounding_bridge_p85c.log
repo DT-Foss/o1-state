@@ -1,0 +1,116 @@
+[grounding_bridge][P85c] === seed 3 ===
+[grounding_bridge][P85] device=mps seed=3 episodes=96 projection_dim=48 projection_seed=1234 ckpt=/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt ckpt_sha256=b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd
+[grounding_bridge][P85] arm (1) binder -- reference, unmodified
+[grounding_bridge][P85] arm (2) bridge_untrained_proj48
+[grounding_bridge][P85] arm (3) bridge_trained_proj48
+[grounding_bridge][P85c] === seed 5 ===
+[grounding_bridge][P85] device=mps seed=5 episodes=96 projection_dim=48 projection_seed=1234 ckpt=/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt ckpt_sha256=b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd
+[grounding_bridge][P85] arm (1) binder -- reference, unmodified
+[grounding_bridge][P85] arm (2) bridge_untrained_proj48
+[grounding_bridge][P85] arm (3) bridge_trained_proj48
+[grounding_bridge][P85c] === seed 7 ===
+[grounding_bridge][P85] device=mps seed=7 episodes=96 projection_dim=48 projection_seed=1234 ckpt=/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt ckpt_sha256=b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd
+[grounding_bridge][P85] arm (1) binder -- reference, unmodified
+[grounding_bridge][P85] arm (2) bridge_untrained_proj48
+[grounding_bridge][P85] arm (3) bridge_trained_proj48
+[grounding_bridge][P85c] === seed 11 ===
+[grounding_bridge][P85] device=mps seed=11 episodes=96 projection_dim=48 projection_seed=1234 ckpt=/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt ckpt_sha256=b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd
+[grounding_bridge][P85] arm (1) binder -- reference, unmodified
+[grounding_bridge][P85] arm (2) bridge_untrained_proj48
+[grounding_bridge][P85] arm (3) bridge_trained_proj48
+[grounding_bridge][P85c] === seed 13 ===
+[grounding_bridge][P85] device=mps seed=13 episodes=96 projection_dim=48 projection_seed=1234 ckpt=/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt ckpt_sha256=b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd
+[grounding_bridge][P85] arm (1) binder -- reference, unmodified
+[grounding_bridge][P85] arm (2) bridge_untrained_proj48
+[grounding_bridge][P85] arm (3) bridge_trained_proj48
+
+====================================================================================================
+P85c MULTI-SEED SWEEP -- FROZEN INSTRUMENT
+====================================================================================================
+{
+  "trained_axes": {
+    "token_remapping_equivariance": {
+      "mean_coverage": 0.8416666666666666,
+      "per_seed_coverage": [
+        0.9583333333333334,
+        0.78125,
+        0.8854166666666666,
+        0.8125,
+        0.7708333333333334
+      ],
+      "n_seeds": 5
+    },
+    "nuisance_transfer": {
+      "mean_coverage": 0.8416666666666666,
+      "per_seed_coverage": [
+        0.9583333333333334,
+        0.78125,
+        0.8854166666666666,
+        0.8125,
+        0.7708333333333334
+      ],
+      "n_seeds": 5
+    },
+    "intervention_necessity": {
+      "mean_coverage": 0.8416666666666666,
+      "per_seed_coverage": [
+        0.9583333333333334,
+        0.78125,
+        0.8854166666666666,
+        0.8125,
+        0.7708333333333334
+      ],
+      "n_seeds": 5
+    }
+  },
+  "untrained_axes": {
+    "token_remapping_equivariance": {
+      "mean_coverage": 0.029166666666666667,
+      "per_seed_coverage": [
+        0.020833333333333332,
+        0.020833333333333332,
+        0.0,
+        0.010416666666666666,
+        0.09375
+      ],
+      "n_seeds": 5
+    },
+    "nuisance_transfer": {
+      "mean_coverage": 0.029166666666666667,
+      "per_seed_coverage": [
+        0.020833333333333332,
+        0.020833333333333332,
+        0.0,
+        0.010416666666666666,
+        0.09375
+      ],
+      "n_seeds": 5
+    },
+    "intervention_necessity": {
+      "mean_coverage": 0.029166666666666667,
+      "per_seed_coverage": [
+        0.020833333333333332,
+        0.020833333333333332,
+        0.0,
+        0.010416666666666666,
+        0.09375
+      ],
+      "n_seeds": 5
+    }
+  },
+  "trained_pooled_mean_over_core_axes": 0.8416666666666665,
+  "untrained_pooled_mean_over_core_axes": 0.029166666666666664,
+  "contrast_ratio": 28.857142857142854,
+  "per_seed_min_core_coverage_trained": {
+    "3": 0.9583333333333334,
+    "5": 0.78125,
+    "7": 0.8854166666666666,
+    "11": 0.8125,
+    "13": 0.7708333333333334
+  },
+  "seeds_below_0.5_floor": [],
+  "clause_a_10x_contrast": true,
+  "clause_b_per_seed_floor_0.5": true
+}
+
+[grounding_bridge][P85c] full results written: results/grounding_bridge_p85c.json
