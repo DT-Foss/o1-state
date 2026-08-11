@@ -1,0 +1,45 @@
+{
+  "vocab_5k_size": 5000,
+  "vocab_20k_size": 20000,
+  "lm_stream": {
+    "5k": {
+      "mean_oov_rate": 0.16679833043087933,
+      "median_oov_rate": 0.12631578947368421,
+      "pct_texts_zero_oov": 0.22193678966215163,
+      "n_texts": 12846
+    },
+    "20k": {
+      "mean_oov_rate": 0.03664405985312837,
+      "median_oov_rate": 0.01282051282051282,
+      "pct_texts_zero_oov": 0.4258134827962011,
+      "n_texts": 12846
+    }
+  },
+  "v2_pairs": {
+    "text_5k": {
+      "mean_oov_rate": 0.17704552114129768,
+      "median_oov_rate": 0.171875,
+      "pct_texts_zero_oov": 0.0005073211692878261,
+      "n_texts": 57163
+    },
+    "text_20k": {
+      "mean_oov_rate": 0.07621789881566748,
+      "median_oov_rate": 0.0625,
+      "pct_texts_zero_oov": 0.04448681839651523,
+      "n_texts": 57163
+    },
+    "structure_5k": {
+      "mean_oov_rate": 0.17598765676065795,
+      "median_oov_rate": 0.16666666666666666,
+      "pct_texts_zero_oov": 0.15627241397407413,
+      "n_texts": 57163
+    },
+    "structure_20k": {
+      "mean_oov_rate": 0.07300015955058108,
+      "median_oov_rate": 0.058823529411764705,
+      "pct_texts_zero_oov": 0.49101691653692076,
+      "n_texts": 57163
+    },
+    "n_pairs": 57163
+  }
+}

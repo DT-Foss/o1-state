@@ -1,0 +1,8 @@
+{
+  "n_raw": 65125,
+  "n_skipped_missing_coverage": 0,
+  "n_content_guard_rejected": 25206,
+  "n_junk_filtered": 4754,
+  "n_dupe_filtered": 14,
+  "n_final": 35151
+}
