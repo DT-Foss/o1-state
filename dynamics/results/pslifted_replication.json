@@ -1,0 +1,144 @@
+{
+  "pc": 0.95,
+  "ps": 0.003,
+  "tol": 0.01,
+  "n_trials": 5,
+  "graphs": {
+    "karate": {
+      "n": 34,
+      "edges": 78,
+      "pslifted": {
+        "rounds_mean": 12.2,
+        "rounds": [
+          10,
+          8,
+          16,
+          14,
+          13
+        ]
+      },
+      "uniform": {
+        "rounds_mean": 244.6,
+        "rounds": [
+          273,
+          168,
+          181,
+          303,
+          298
+        ]
+      },
+      "mh": {
+        "rounds_mean": 194.2,
+        "rounds": [
+          225,
+          180,
+          189,
+          163,
+          214
+        ]
+      }
+    },
+    "ba_100": {
+      "n": 100,
+      "edges": 291,
+      "pslifted": {
+        "rounds_mean": 14.0,
+        "rounds": [
+          19,
+          10,
+          9,
+          13,
+          19
+        ]
+      },
+      "uniform": {
+        "rounds_mean": 63.6,
+        "rounds": [
+          63,
+          61,
+          71,
+          57,
+          66
+        ]
+      },
+      "mh": {
+        "rounds_mean": 32.6,
+        "rounds": [
+          31,
+          32,
+          35,
+          32,
+          33
+        ]
+      }
+    },
+    "ba_1000": {
+      "n": 1000,
+      "edges": 2991,
+      "pslifted": {
+        "rounds_mean": 11.0,
+        "rounds": [
+          11,
+          11,
+          11,
+          11,
+          11
+        ]
+      },
+      "uniform": {
+        "rounds_mean": 235.0,
+        "rounds": [
+          237,
+          246,
+          210,
+          251,
+          231
+        ]
+      },
+      "mh": {
+        "rounds_mean": 60.2,
+        "rounds": [
+          63,
+          67,
+          64,
+          60,
+          47
+        ]
+      }
+    },
+    "ba_4000": {
+      "n": 4000,
+      "edges": 11991,
+      "pslifted": {
+        "rounds_mean": 11.0,
+        "rounds": [
+          11,
+          11,
+          10,
+          11,
+          12
+        ]
+      },
+      "uniform": {
+        "rounds_mean": 621.0,
+        "rounds": [
+          597,
+          608,
+          617,
+          661,
+          622
+        ]
+      },
+      "mh": {
+        "rounds_mean": 96.0,
+        "rounds": [
+          95,
+          99,
+          89,
+          101,
+          96
+        ]
+      }
+    }
+  }
+}
