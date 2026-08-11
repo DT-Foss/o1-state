@@ -3091,6 +3091,26 @@ artifact is a number about the defaults, not about the system.
   stable; what it still lacks is interval width, and only
   that.
 
+  **P85b SCORED (2026-08-11, results/grounding_bridge_p85b.json,
+  n=384, checkpoint hash identical to the registration).** The
+  scale-up the P85 score mandated — and this time clause (a)
+  FAILS on the OTHER pre-committed branch: coverage DROPPED to
+  0.8177 (314/384) on all three core axes, below the register's
+  0.85 line. The 24→96 agreement at 0.917 was an early-sample
+  plateau, not the asymptote; the tighter estimate is ≈0.82
+  (LCB 0.7649). The registered consequence binds: a MULTI-SEED
+  SWEEP becomes the instrument before any binding claim — no
+  claim carries forward from the single-seed line, including
+  yesterday's "interval width and only that", which this run
+  retires. What survives on its own clauses: (b) PASS —
+  untrained stays at chance, 0.0156 (6/384); the
+  trained-vs-untrained contrast now stands at 52× on 16× the
+  original data. (c) PASS — negative control rejected in every
+  arm, binder reference at coverage 1.0 / LCB 0.9901, frozen
+  instrument verified by hash. Net: the binding signal is real
+  beyond doubt against its own controls; its SIZE is not yet
+  pinned, and the sweep is what pins it.
+
 - **P86 — the dial law reaches pixels (registered 2026-08-11;
   ARTIFACT CLAUSE: the instrument is the three-arm visual run's
   own per-16-frame telemetry — results/visual_arm_a_residual_

@@ -1,0 +1,168 @@
+{
+  "p85_instrument": {
+    "ckpt_path": "/Users/bhkmie/Documents/Forschung/O1_juli/results/visual_arm_b_residual_nogate_ckpt.pt",
+    "ckpt_sha256": "b4fd00b8a04c413ae466bf53f09ab4de7baff2f650ab22f1026cd8c9d84e7ecd",
+    "projection_dim": 48,
+    "projection_seed": 1234,
+    "benchmark_seed": 3,
+    "episodes": 384
+  },
+  "arms": {
+    "binder": {
+      "benchmark_id": "ground-zero-v0",
+      "learner": "binder",
+      "passed": true,
+      "score": 1.2376191071979032,
+      "scope_hash": "5eee31318c9f9950ed52136a700a4d17a343d8501cfae87a289636ee1af68f93",
+      "certificate_hash": "825d4b6a9c842675500fe618b873fbb96cc6d884cb7aa566455d46e93fdadabc",
+      "axes": {
+        "token_remapping_equivariance": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9900952857583227,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9900952857583227,
+          "passed": true
+        },
+        "nuisance_transfer": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9900952857583227,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9900952857583227,
+          "passed": true
+        },
+        "intervention_necessity": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9900952857583227,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9900952857583227,
+          "passed": true
+        },
+        "unseen_composition": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9900952857583227,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9900952857583227,
+          "passed": true
+        },
+        "honest_abstention": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9900952857583227,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9900952857583227,
+          "passed": true
+        }
+      },
+      "controls": {
+        "static_pixels_no_action": {
+          "estimate": 0.19010416666666666,
+          "coverage": 1.0,
+          "rejected_as_grounder": true
+        }
+      }
+    },
+    "bridge_untrained_proj48": {
+      "benchmark_id": "ground-zero-v0",
+      "learner": "bridge_untrained_proj48",
+      "passed": false,
+      "score": -1.4969082746624476,
+      "scope_hash": "cd825281519ee90082d03648db2490860843a577e12493d2b42c1475debd98a6",
+      "certificate_hash": "c77afd8943057829e2fced3254ef23bc1ad4d9acf1702b7b8b54c27fc9ece399",
+      "axes": {
+        "token_remapping_equivariance": {
+          "estimate": 0.013020833333333334,
+          "lower_bound_95": 0.005574200268114405,
+          "coverage": 0.015625,
+          "coverage_lower_bound_95": 0.007180241793067183,
+          "passed": false
+        },
+        "nuisance_transfer": {
+          "estimate": 0.013020833333333334,
+          "lower_bound_95": 0.005574200268114405,
+          "coverage": 0.015625,
+          "coverage_lower_bound_95": 0.007180241793067183,
+          "passed": false
+        },
+        "intervention_necessity": {
+          "estimate": 0.013020833333333334,
+          "lower_bound_95": 0.005574200268114405,
+          "coverage": 0.015625,
+          "coverage_lower_bound_95": 0.007180241793067183,
+          "passed": false
+        },
+        "unseen_composition": {
+          "estimate": 0.07291666666666667,
+          "lower_bound_95": 0.05092751760126569,
+          "coverage": 0.15885416666666666,
+          "coverage_lower_bound_95": 0.12569710241300927,
+          "passed": false
+        },
+        "honest_abstention": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9900952857583227,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9900952857583227,
+          "passed": true
+        }
+      },
+      "controls": {
+        "static_pixels_no_action": {
+          "estimate": 0.19010416666666666,
+          "coverage": 1.0,
+          "rejected_as_grounder": true
+        }
+      }
+    },
+    "bridge_trained_proj48": {
+      "benchmark_id": "ground-zero-v0",
+      "learner": "bridge_trained_proj48",
+      "passed": false,
+      "score": -0.28575763532651266,
+      "scope_hash": "cd825281519ee90082d03648db2490860843a577e12493d2b42c1475debd98a6",
+      "certificate_hash": "3a50d78605a1d1cf3c59372a250ecbb5fa547a448c076ffdabbdf294d45bb5e8",
+      "axes": {
+        "token_remapping_equivariance": {
+          "estimate": 0.8072916666666666,
+          "lower_bound_95": 0.764875981334546,
+          "coverage": 0.8177083333333334,
+          "coverage_lower_bound_95": 0.7760087912161993,
+          "passed": false
+        },
+        "nuisance_transfer": {
+          "estimate": 0.8072916666666666,
+          "lower_bound_95": 0.764875981334546,
+          "coverage": 0.8177083333333334,
+          "coverage_lower_bound_95": 0.7760087912161993,
+          "passed": false
+        },
+        "intervention_necessity": {
+          "estimate": 0.8072916666666666,
+          "lower_bound_95": 0.764875981334546,
+          "coverage": 0.8177083333333334,
+          "coverage_lower_bound_95": 0.7760087912161993,
+          "passed": false
+        },
+        "unseen_composition": {
+          "estimate": 0.4635416666666667,
+          "lower_bound_95": 0.4142727094020462,
+          "coverage": 0.859375,
+          "coverage_lower_bound_95": 0.8210354568776838,
+          "passed": false
+        },
+        "honest_abstention": {
+          "estimate": 1.0,
+          "lower_bound_95": 0.9900952857583227,
+          "coverage": 1.0,
+          "coverage_lower_bound_95": 0.9900952857583227,
+          "passed": true
+        }
+      },
+      "controls": {
+        "static_pixels_no_action": {
+          "estimate": 0.19010416666666666,
+          "coverage": 1.0,
+          "rejected_as_grounder": true
+        }
+      }
+    }
+  }
+}
