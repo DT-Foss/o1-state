@@ -1,11 +1,11 @@
 {
   "generated_by": "src/score_predictions_v2.py",
   "predictions_file": "analysis/PREDICTIONS.md",
-  "n_predictions": 93,
+  "n_predictions": 95,
   "coverage_summary": {
     "full": 10,
     "partial": 8,
-    "prose": 48,
+    "prose": 50,
     "in_flight": 0,
     "withdrawn": 1,
     "registered": 26
@@ -2821,6 +2821,43 @@
       "status": "scored",
       "verdict_words": [
         "FALSIFIED"
+      ],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
+    },
+    "P95": {
+      "pid": "P95",
+      "title": "P96 \u2014 the formulas meet the organism (co-work session,\n  third wave; merged by the Lead 2026-08-11).",
+      "status": "scored",
+      "verdict_words": [
+        "CONFIRMED",
+        "FALSIFIED"
+      ],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
+    },
+    "P96": {
+      "pid": "P96",
+      "title": "",
+      "status": "scored",
+      "verdict_words": [
+        "CONFIRMED",
+        "FALSIFIED",
+        "PASS"
       ],
       "artifacts_named": [],
       "artifacts_found": [],

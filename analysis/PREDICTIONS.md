@@ -3348,3 +3348,54 @@ artifact is a number about the defaults, not about the system.
   learned language → foreign weights demonstrably works at
   frame 0; whether the 0.6 margin holds at life's end is the
   seed sweep's to decide. Nothing averaged; the 0.525 stands.
+
+- **P95–P96 — the formulas meet the organism (co-work session,
+  third wave; merged by the Lead 2026-08-11).** Two roads the
+  in-lab formula race does not take: independently REPLICATE
+  the deepest formula from the paper text alone, and race the
+  transferable dynamics inside the organism's own regime,
+  aimed at the measured wounds P87b (copy-last unbeaten) and
+  P88 (slow action-channel ignition). AUTHORITATIVE
+  PRE-REGISTRATION: dynamics/PREDICTIONS_DYNAMICS.md, merged
+  unchanged via bundle (ec4378d); honestly NOT transferred and
+  said so: BvN reshuffling (a life has no epochs),
+  gradient-consensus at B=1 (indistinguishable from the exact
+  mean — theater), fleet at n≤8 (the O(1) advantage needs
+  large n). 6/6 tests re-verified by the Lead on merge.
+
+  **P95 SCORED — Foss convergence replicates in a stranger's
+  hands.** A fresh implementation from the paper TEXT (two
+  underdetermined passages named in the docstring and carried
+  with the result), never from the reference code. (a)
+  CONFIRMED on the nose: Karate 12.2 rounds — the paper says
+  12; 15.9× faster than the best reversible baseline (bar 4×).
+  (b) core CONFIRMED: over a 40× span in n the round count is
+  constant-to-FALLING (14.0 → 11.0 → 11.0, ratio 0.79 against
+  the ≤2 bar) — the constant-vs-growing signature replicates
+  independently; the side clause FALSIFIED as written (MH grew
+  only 2.9× on BA expanders, ~n^0.29 — the bar was calibrated
+  for bottleneck graphs; uniform grew 9.8× and meets it; at
+  n=4000 PS-Lifted is 8.7× vs MH and 56× vs uniform). (c)
+  CONFIRMED: mass conservation held in every run. The
+  bottleneck-graph re-registration (SBM, path/ladder) is
+  named, not patched.
+
+  **P96 SCORED — the registered falsifier fires in full.** (a)
+  FALSIFIED: no formula dynamic closes the P87b wound — route
+  copy-last 0.0902, all four arms ≥ 0.0903, and adam
+  reproduces the wound to a tenth of a permille (1.001×): THE
+  BOTTLENECK IS NOT THE UPDATE DYNAMICS. (b) FALSIFIED: best
+  formula hit-AUC 1.026× adam vs the 1.15× bar. (c) CONFIRMED
+  formally, with the finding the protocol demanded: pure
+  Möbius momentum HARMS in the one-pass stream (life L1 1.38×
+  adam, worst arm on every metric) — hypothesis named:
+  rapidity accumulates over a nonstationary stream with no
+  epoch reset, tanh saturates, the Lorentz bound caps the step
+  size but not the stubbornness; the tau-Lorentz schedule
+  alone is harmless to hair-thin positive (−1.4%, within
+  noise). The honest answer to the FERTIG line, preformulated
+  in the falsifier: the lab-to-life transfer is not free — the
+  formula that replicates (P95) lives in consensus space; its
+  optimizer offshoots do not pay inside the organism yet.
+  Named next: rapidity DECAY (λw with λ<β₁) or reset-at-gate —
+  the stream-native form of Möbius momentum, if one exists.
