@@ -1,0 +1,5 @@
+clause_a {"lazy_mount_s": 2.204, "peak_rss_gb_after_mount": 0.115, "peak_rss_gb_final": 0.562, "bar_rss_le_8gb": true, "bar_wall_le_300s": true}
+degree_stats {"n_keys": 85468, "max": 2035, "p99": 25, "median": 1}
+clause_b {"n_uniform": 50, "n_hub": 20, "n_truncated_uniform": 15, "n_truncated_hub": 20, "bar_hub_truncates": true, "all_well_formed": true, "closure_calls": 0, "bar_zero_closures": true, "median_query_s": 0.032375}
+clause_c {"n_ground_truth_keys": 20, "base_mismatches": [], "bar_base_exact": true, "n_determinism_keys": 70, "determinism_mismatches": [], "bar_deterministic": true, "second_mount_closure_calls": 0}
+wrote /root/p84_result.json

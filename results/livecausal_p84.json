@@ -1,0 +1,483 @@
+{
+  "registered": "P84",
+  "store": "/root/p84_conceptnet_store_copy",
+  "seed": 84,
+  "node_budget": 5000,
+  "clause_a": {
+    "lazy_mount_s": 2.204,
+    "peak_rss_gb_after_mount": 0.115,
+    "peak_rss_gb_final": 0.562,
+    "bar_rss_le_8gb": true,
+    "bar_wall_le_300s": true
+  },
+  "degree_stats": {
+    "n_keys": 85468,
+    "max": 2035,
+    "p99": 25,
+    "median": 1
+  },
+  "clause_b": {
+    "n_uniform": 50,
+    "n_hub": 20,
+    "n_truncated_uniform": 15,
+    "n_truncated_hub": 20,
+    "bar_hub_truncates": true,
+    "all_well_formed": true,
+    "closure_calls": 0,
+    "bar_zero_closures": true,
+    "hub_degrees": [
+      2035,
+      1224,
+      330,
+      300,
+      289,
+      280,
+      240,
+      224,
+      222,
+      203,
+      202,
+      197,
+      189,
+      183,
+      169,
+      164,
+      156,
+      153,
+      149,
+      139
+    ],
+    "median_query_s": 0.032375
+  },
+  "clause_c": {
+    "n_ground_truth_keys": 20,
+    "base_mismatches": [],
+    "bar_base_exact": true,
+    "n_determinism_keys": 70,
+    "determinism_mismatches": [],
+    "bar_deterministic": true,
+    "second_mount_closure_calls": 0
+  },
+  "per_key": {
+    "horse tick": {
+      "n_edges": 60,
+      "truncated": false,
+      "wall_s": 0.000466,
+      "degree": 1
+    },
+    "attractive ladies": {
+      "n_edges": 4993,
+      "truncated": false,
+      "wall_s": 0.296811,
+      "degree": 1
+    },
+    "responsiveness": {
+      "n_edges": 3747,
+      "truncated": false,
+      "wall_s": 0.020989,
+      "degree": 2
+    },
+    "acidity": {
+      "n_edges": 1850,
+      "truncated": false,
+      "wall_s": 0.009801,
+      "degree": 2
+    },
+    "serve justice": {
+      "n_edges": 5,
+      "truncated": false,
+      "wall_s": 3.4e-05,
+      "degree": 5
+    },
+    "kingbird": {
+      "n_edges": 65,
+      "truncated": false,
+      "wall_s": 0.000253,
+      "degree": 1
+    },
+    "equal opportunity": {
+      "n_edges": 169,
+      "truncated": false,
+      "wall_s": 0.000675,
+      "degree": 1
+    },
+    "prime number": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.034618,
+      "degree": 1
+    },
+    "rough cut": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.342597,
+      "degree": 1
+    },
+    "spontaneous combustion": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.03679,
+      "degree": 1
+    },
+    "michigan state bird": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.032578,
+      "degree": 1
+    },
+    "twenty nine": {
+      "n_edges": 245,
+      "truncated": false,
+      "wall_s": 0.001134,
+      "degree": 1
+    },
+    "cynocephalus": {
+      "n_edges": 8,
+      "truncated": false,
+      "wall_s": 4.5e-05,
+      "degree": 1
+    },
+    "sounding": {
+      "n_edges": 1191,
+      "truncated": false,
+      "wall_s": 0.006809,
+      "degree": 2
+    },
+    "guggenheim museum": {
+      "n_edges": 1,
+      "truncated": false,
+      "wall_s": 1.7e-05,
+      "degree": 1
+    },
+    "shielding": {
+      "n_edges": 1598,
+      "truncated": false,
+      "wall_s": 0.009183,
+      "degree": 2
+    },
+    "public knowledge": {
+      "n_edges": 101,
+      "truncated": false,
+      "wall_s": 0.000442,
+      "degree": 1
+    },
+    "not using sunscreen": {
+      "n_edges": 1,
+      "truncated": false,
+      "wall_s": 1.1e-05,
+      "degree": 1
+    },
+    "legal representation": {
+      "n_edges": 4837,
+      "truncated": false,
+      "wall_s": 0.032375,
+      "degree": 1
+    },
+    "trichomanes": {
+      "n_edges": 8,
+      "truncated": false,
+      "wall_s": 6.4e-05,
+      "degree": 1
+    },
+    "flagon": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.438737,
+      "degree": 1
+    },
+    "common maidenhair": {
+      "n_edges": 5,
+      "truncated": false,
+      "wall_s": 6.9e-05,
+      "degree": 1
+    },
+    "quince": {
+      "n_edges": 5003,
+      "truncated": true,
+      "wall_s": 0.04403,
+      "degree": 4
+    },
+    "baking soda": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.034124,
+      "degree": 1
+    },
+    "scouting trip": {
+      "n_edges": 603,
+      "truncated": false,
+      "wall_s": 0.003158,
+      "degree": 1
+    },
+    "balbriggan": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.03381,
+      "degree": 1
+    },
+    "cutting room": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.530926,
+      "degree": 1
+    },
+    "barbarea": {
+      "n_edges": 7,
+      "truncated": false,
+      "wall_s": 6.6e-05,
+      "degree": 1
+    },
+    "rub": {
+      "n_edges": 5004,
+      "truncated": true,
+      "wall_s": 0.046731,
+      "degree": 5
+    },
+    "shrewishness": {
+      "n_edges": 90,
+      "truncated": false,
+      "wall_s": 0.000453,
+      "degree": 1
+    },
+    "icelander": {
+      "n_edges": 4936,
+      "truncated": false,
+      "wall_s": 0.034569,
+      "degree": 1
+    },
+    "sleeper cell": {
+      "n_edges": 4127,
+      "truncated": false,
+      "wall_s": 0.028261,
+      "degree": 1
+    },
+    "child seat": {
+      "n_edges": 1,
+      "truncated": false,
+      "wall_s": 3e-05,
+      "degree": 1
+    },
+    "air unit": {
+      "n_edges": 309,
+      "truncated": false,
+      "wall_s": 0.001932,
+      "degree": 1
+    },
+    "genus keteleeria": {
+      "n_edges": 8,
+      "truncated": false,
+      "wall_s": 5.3e-05,
+      "degree": 1
+    },
+    "execution": {
+      "n_edges": 3073,
+      "truncated": false,
+      "wall_s": 0.0204,
+      "degree": 8
+    },
+    "paranoid": {
+      "n_edges": 2224,
+      "truncated": false,
+      "wall_s": 0.014692,
+      "degree": 1
+    },
+    "coral vine": {
+      "n_edges": 427,
+      "truncated": false,
+      "wall_s": 0.002212,
+      "degree": 1
+    },
+    "if cat dead": {
+      "n_edges": 4254,
+      "truncated": false,
+      "wall_s": 0.607495,
+      "degree": 1
+    },
+    "cigarettes": {
+      "n_edges": 7,
+      "truncated": false,
+      "wall_s": 8.1e-05,
+      "degree": 4
+    },
+    "headman": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.04803,
+      "degree": 1
+    },
+    "cognac": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.038876,
+      "degree": 1
+    },
+    "chain store": {
+      "n_edges": 5000,
+      "truncated": true,
+      "wall_s": 0.053407,
+      "degree": 1
+    },
+    "soothing music": {
+      "n_edges": 1,
+      "truncated": false,
+      "wall_s": 3.4e-05,
+      "degree": 1
+    },
+    "boyfriend": {
+      "n_edges": 5001,
+      "truncated": true,
+      "wall_s": 0.029664,
+      "degree": 2
+    },
+    "protuberate": {
+      "n_edges": 795,
+      "truncated": false,
+      "wall_s": 0.003975,
+      "degree": 1
+    },
+    "sports bat": {
+      "n_edges": 5013,
+      "truncated": true,
+      "wall_s": 0.02846,
+      "degree": 14
+    },
+    "architectural style": {
+      "n_edges": 5,
+      "truncated": false,
+      "wall_s": 4.8e-05,
+      "degree": 1
+    },
+    "cryptogrammataceae": {
+      "n_edges": 1050,
+      "truncated": false,
+      "wall_s": 0.005323,
+      "degree": 1
+    },
+    "recomendation": {
+      "n_edges": 1505,
+      "truncated": false,
+      "wall_s": 0.008234,
+      "degree": 1
+    },
+    "person": {
+      "n_edges": 7003,
+      "truncated": true,
+      "wall_s": 0.746398,
+      "degree": 2035
+    },
+    "people": {
+      "n_edges": 6221,
+      "truncated": true,
+      "wall_s": 0.052552,
+      "degree": 1224
+    },
+    "child": {
+      "n_edges": 5299,
+      "truncated": true,
+      "wall_s": 0.045578,
+      "degree": 330
+    },
+    "water": {
+      "n_edges": 5297,
+      "truncated": true,
+      "wall_s": 0.039267,
+      "degree": 300
+    },
+    "cat": {
+      "n_edges": 5278,
+      "truncated": true,
+      "wall_s": 0.042539,
+      "degree": 289
+    },
+    "human": {
+      "n_edges": 5278,
+      "truncated": true,
+      "wall_s": 0.041662,
+      "degree": 280
+    },
+    "we": {
+      "n_edges": 5215,
+      "truncated": true,
+      "wall_s": 0.030315,
+      "degree": 240
+    },
+    "humans": {
+      "n_edges": 5221,
+      "truncated": true,
+      "wall_s": 0.844885,
+      "degree": 224
+    },
+    "children": {
+      "n_edges": 5196,
+      "truncated": true,
+      "wall_s": 0.04519,
+      "degree": 222
+    },
+    "dog": {
+      "n_edges": 5197,
+      "truncated": true,
+      "wall_s": 0.05335,
+      "degree": 203
+    },
+    "one": {
+      "n_edges": 5116,
+      "truncated": true,
+      "wall_s": 0.042611,
+      "degree": 202
+    },
+    "student": {
+      "n_edges": 5187,
+      "truncated": true,
+      "wall_s": 0.049388,
+      "degree": 197
+    },
+    "fungus": {
+      "n_edges": 5180,
+      "truncated": true,
+      "wall_s": 0.031021,
+      "degree": 189
+    },
+    "machine": {
+      "n_edges": 5165,
+      "truncated": true,
+      "wall_s": 0.033537,
+      "degree": 183
+    },
+    "mouse": {
+      "n_edges": 5168,
+      "truncated": true,
+      "wall_s": 0.032702,
+      "degree": 169
+    },
+    "teacher": {
+      "n_edges": 5159,
+      "truncated": true,
+      "wall_s": 1.068852,
+      "degree": 164
+    },
+    "crab": {
+      "n_edges": 5154,
+      "truncated": true,
+      "wall_s": 0.043949,
+      "degree": 156
+    },
+    "snake": {
+      "n_edges": 5150,
+      "truncated": true,
+      "wall_s": 0.045235,
+      "degree": 153
+    },
+    "potato": {
+      "n_edges": 5148,
+      "truncated": true,
+      "wall_s": 0.053202,
+      "degree": 149
+    },
+    "horse": {
+      "n_edges": 5138,
+      "truncated": true,
+      "wall_s": 0.036145,
+      "degree": 139
+    }
+  }
+}

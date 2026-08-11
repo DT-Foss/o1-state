@@ -3002,3 +3002,28 @@ artifact is a number about the defaults, not about the system.
   against the fosski-merge specifics (string doc_coords,
   evidence-key segment fallback) before anything else runs on
   ConceptNet.
+
+  **P84 SCORED (2026-08-11, results/livecausal_p84.json +
+  p84_run.log, x86 data host; instrument located, not rebuilt —
+  the full store already existed from the merge: 3,795 segments,
+  189,719 records, 85,468 distinct keys, no inferred cache ever
+  written, consistent with the OOM history; run on a copy under
+  the registered guards).** All three clauses PASS. (a) Lazy
+  mount 2.2s against the 300s bar; peak RSS 0.115GB at mount,
+  0.562GB across the entire run, against the 8GB bar — the
+  store class that killed eager materialization at 21GB now
+  mounts in about two seconds at under 3% of that memory. (b)
+  The hubs are real and the truncation contract finally gets
+  its workout: max out-degree 2,035 (p99 = 25, median = 1), all
+  20/20 hub keys truncate at node_budget=5000 WITH the flag up,
+  and 15/50 uniform keys truncate too — 35 visible truncations
+  on a real artifact, every answer well-formed, closure_calls
+  exactly 0. Median query 32ms. (c) Base-edge ground truth
+  exact on 20/20 keys against the raw-record scan; a second
+  lazy mount reproduces all 70 sampled answers identically,
+  also at 0 closures. With P83 this completes the organ's
+  claim: correct and bounded on the dense artifact, capable on
+  the impossible one. One number to carry forward: at budget
+  5000 nearly a third of UNIFORM ConceptNet keys truncate —
+  budget choice is a live policy variable on world-knowledge
+  graphs, not a corner case.
