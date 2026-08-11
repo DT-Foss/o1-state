@@ -408,6 +408,42 @@ def calibrate_surprise_threshold(words, stoi, unk, model, dev, torch_mod, quanti
 # ─────────────────────────────────────────────────────────────────────────
 #  Main consult loop
 # ─────────────────────────────────────────────────────────────────────────
+def calibrate_band(words, stoi, unk, model, dev, torch_mod, quantiles=(0.75, 0.92), n_calib_words=500):
+    """P82: the surprise BAND a --policy band run gates consultation on.
+    Reuses calibrate_surprise_threshold's exact calibration mechanics
+    (same first-n_calib_words prefix, same fresh-state read, same
+    quantile-index formula) but returns TWO cut points instead of one --
+    a caller then only consults gaps whose surprise falls in [lo, hi],
+    per P79/P80's finding that the MIDDLE surprise tercile beats both
+    the too-easy low tail and the too-hard high tail (that measured
+    result used tercile cuts at roughly 0.75/0.92 of the CALIBRATION
+    run's own distribution -- kept here only as the default, not
+    hardcoded: quantiles is a parameter so this works on any surprise
+    distribution, not just the one P79/P80 measured on).
+
+    quantiles=(lo_q, hi_q), lo_q < hi_q required. Returns (lo, hi) --
+    both are real values from the SAME calibration sample
+    calibrate_surprise_threshold draws its own single threshold from, so
+    a --policy always run's --surprise-thresh and a --policy band run's
+    band sit on directly comparable footing (same corpus prefix, same
+    model state, same read mechanics)."""
+    lo_q, hi_q = quantiles
+    if not (0.0 <= lo_q < hi_q <= 1.0):
+        raise ValueError("calibrate_band: quantiles must satisfy 0 <= lo_q < hi_q <= 1, got {}".format(quantiles))
+    calib_words = words[:n_calib_words]
+    ids = [stoi.get(w, unk) for w in calib_words]
+    if len(ids) < 2:
+        return (0.0, 1.0)  # degenerate corpus; any band is arbitrary here
+    surprises, _ = _read(model, ids, None, dev, torch_mod)
+    if not surprises:
+        return (0.0, 1.0)
+    surprises_sorted = sorted(surprises)
+    n = len(surprises_sorted)
+    lo_idx = min(n - 1, int(lo_q * (n - 1)))
+    hi_idx = min(n - 1, int(hi_q * (n - 1)))
+    return (surprises_sorted[lo_idx], surprises_sorted[hi_idx])
+
+
 def run_consult(
     graph,
     evidence_ledger,
@@ -425,6 +461,8 @@ def run_consult(
     canon=False,
     inject_form="outcome_text",
     inject_repeat=1,
+    policy="always",
+    band=None,
 ):
     """The loop itself, factored out of main() so tests can drive it
     directly. Returns the result dict (also the JSON payload's shape).
@@ -456,7 +494,25 @@ def run_consult(
     inject_repeat=1 (default): the injection text's tokens are pushed
     through the model once, same as every pre-P77 call. N>1 pushes the
     SAME token sequence through N times in a row before scoring resumes
-    (a dosed-replay analog to P55) -- applied identically to both arms."""
+    (a dosed-replay analog to P55) -- applied identically to both arms.
+
+    policy="always" (default): EXACT pre-P82 behavior -- every gap with a
+    queryable edge gets consulted, byte-identical to every call written
+    before this parameter existed. policy="band" additionally requires
+    `band` be set to a (lo, hi) tuple (see calibrate_band); a gap whose
+    gap_surprise falls OUTSIDE [lo, hi] is skipped -- counted in
+    n_spikes_total (it WAS a real spike with a queryable edge) and in the
+    new n_skipped_by_policy counter, but never enters `results`, never
+    logs a use entry, and never pays the injection's forward-pass cost
+    (P79/P80's finding: the middle surprise tercile is where consultation
+    pays off net-positive; skipping outside it is the policy itself, not
+    a measurement artifact). policy="band" with band=None raises
+    ValueError -- a caller bug (forgot to calibrate), not a silent
+    fallback to "always"."""
+    if policy == "band" and band is None:
+        raise ValueError("run_consult: policy='band' requires `band` to be set (see calibrate_band)")
+    band_lo, band_hi = band if band is not None else (None, None)
+
     rng = random.Random(seed)
     ids = [stoi.get(w, unk) for w in words]
     valid_segments = graph.store.segments()
@@ -467,6 +523,7 @@ def run_consult(
     # the with/without split is the read-side coverage number (P73 clause a):
     # how much of a live stream's gap vocabulary the store's exact-string
     # key space can answer at all.
+    n_skipped_by_policy = 0  # P82: spikes WITH a queryable edge that policy="band" declined to consult
     use_seq = use_ledger.max_seq()
 
     states = None
@@ -481,6 +538,12 @@ def run_consult(
             n_spikes_total += 1
             edge, outcome_text = best_edge_for_key(graph, evidence_ledger, valid_segments, w, canon=canon)
             is_gap = is_gap and edge is not None
+
+        if is_gap and policy == "band":
+            gs = gap_surprise[0]
+            if not (band_lo <= gs <= band_hi):
+                is_gap = False
+                n_skipped_by_policy += 1
 
         if not is_gap:
             states = _advance(model, ids[i:i + 1], states, dev, torch_mod)
@@ -573,6 +636,15 @@ def run_consult(
     mean_drop_real = sum(drops_real) / max(1, len(drops_real))
     mean_drop_random = (sum(drops_random) / len(drops_random)) if drops_random else None
     n_helped_real = sum(1 for d in drops_real if d > 0)
+    # P82: NET BALANCE -- the sum (not mean) of every consulted gap's
+    # drop_real, i.e. what this run's injections cost/bought IN TOTAL.
+    # A policy comparison (band vs always) is a comparison of THIS number,
+    # not of mean_delta_real -- mean answers "was the average consult
+    # worth it," net_balance_real answers "was doing ALL of this worth
+    # it," which is what a real deployment pays for. 0.0 (not None) when
+    # zero gaps were consulted -- an empty run genuinely spent/gained
+    # nothing, distinct from "unmeasured."
+    net_balance_real = round(sum(drops_real), 4)
 
     # Top-5 most-used edges by use_count, per the build brief's output spec.
     edge_use_counts = {}
@@ -584,10 +656,12 @@ def run_consult(
 
     return {
         "n_spikes": n_spikes_total,  # gaps that cleared the surprise threshold, edge or no edge
-        "n_consults": len(results),  # the subset of spikes whose gap word had a queryable edge
+        "n_consults": len(results),  # the subset of spikes whose gap word had a queryable edge AND was not skipped by policy
+        "n_skipped_by_policy": n_skipped_by_policy,  # P82: spikes with a queryable edge that policy="band" declined
         "coverage": round(len(results) / n_spikes_total, 4) if n_spikes_total else None,
         "mean_delta_real": round(mean_drop_real, 4),
         "mean_delta_random": round(mean_drop_random, 4) if mean_drop_random is not None else None,
+        "net_balance_real": net_balance_real,
         "n_helped_real": n_helped_real,
         "n_use_entries": n_use_entries,
         "top5_used_edges": [{"edge_key": list(k), "use_count": v} for k, v in top5],
@@ -766,6 +840,21 @@ def main():
                          "already lived through real training, a synthetic warmup on top would be "
                          "meaningless. Default (omitted): byte-identical to every pre-P78 "
                          "invocation, a fresh Organism is constructed exactly as before.")
+    ap.add_argument("--policy", default="always", choices=("always", "band"),
+                    help="P82: 'always' (default) consults every gap with a queryable edge, "
+                         "byte-identical to every pre-P82 invocation. 'band' additionally requires "
+                         "gap_surprise to fall within a SELF-CALIBRATED [lo, hi] window (see "
+                         "--band-quantiles) -- P79/P80's finding that the middle surprise tercile "
+                         "is where consultation nets positive, the too-easy and too-hard tails "
+                         "don't. Skipped gaps count in n_skipped_by_policy, never enter results, "
+                         "never pay the injection's forward-pass cost.")
+    ap.add_argument("--band-quantiles", type=float, nargs=2, default=[0.75, 0.92], metavar=("LO_Q", "HI_Q"),
+                    help="P82: the two quantiles (over the SAME calibration sample --surprise-thresh "
+                         "auto-calibration uses) that bound the --policy band consultation window. "
+                         "Default 0.75/0.92 mirrors P79/P80's measured tercile cuts as a STARTING "
+                         "point, not a hardcoded constant -- calibrate_band recomputes real cut "
+                         "values from THIS run's own surprise distribution, so the policy adapts to "
+                         "whatever corpus/reader is in front of it. Ignored when --policy=always.")
     args = ap.parse_args()
 
     smoke_dir = None
@@ -889,6 +978,14 @@ def main():
         print("[consult] auto-calibrated surprise_thresh={:.4f} (quantile={})".format(
             surprise_thresh, args.surprise_quantile), flush=True)
 
+    band = None
+    if args.policy == "band":
+        band = calibrate_band(
+            consult_words, stoi, unk, model, dev, torch, quantiles=tuple(args.band_quantiles)
+        )
+        print("[consult] auto-calibrated band=({:.4f}, {:.4f}) (quantiles={})".format(
+            band[0], band[1], tuple(args.band_quantiles)), flush=True)
+
     print("[consult] store={} words={} gaps<={}".format(args.store, len(consult_words), args.max_gaps), flush=True)
 
     base_kwargs = dict(
@@ -896,6 +993,8 @@ def main():
         max_gaps=args.max_gaps,
         seed=args.seed,
         canon=args.canon,
+        policy=args.policy,
+        band=band,
     )
 
     if args.grid:
@@ -932,9 +1031,11 @@ def main():
                 "lookahead": la,
                 "n_spikes": cell_result["n_spikes"],
                 "n_consults": cell_result["n_consults"],
+                "n_skipped_by_policy": cell_result["n_skipped_by_policy"],
                 "coverage": cell_result["coverage"],
                 "mean_delta_real": cell_result["mean_delta_real"],
                 "mean_delta_random": cell_result["mean_delta_random"],
+                "net_balance_real": cell_result["net_balance_real"],
                 "n_helped_real": cell_result["n_helped_real"],
             })
             print("[grid] form={:<17} repeat={} lookahead={:<3} -> real={:+.4f} random={}".format(
@@ -966,6 +1067,9 @@ def main():
             "canon_env_pin": graph.canon_env_pin if args.canon else None,
             "reader_ckpt": args.reader_ckpt,
             "reader_ckpt_config": reader_ckpt_config,
+            "policy": args.policy,
+            "band": list(band) if band is not None else None,
+            "band_quantiles": args.band_quantiles if args.policy == "band" else None,
             "grid": cells,
             "best_cell_by_real_minus_random": best_cell,
         }
@@ -1028,6 +1132,9 @@ def main():
         "reader_ckpt_config": reader_ckpt_config,
         "inject_form": args.inject_form[0],
         "inject_repeat": args.inject_repeat[0],
+        "policy": args.policy,
+        "band": list(band) if band is not None else None,
+        "band_quantiles": args.band_quantiles if args.policy == "band" else None,
         **result,
     }
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)

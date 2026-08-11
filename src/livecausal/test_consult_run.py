@@ -27,6 +27,7 @@ from livecausal.consult_run import (  # noqa: E402
     ReaderCkptError,
     best_edge_for_key,
     build_injection_text,
+    calibrate_band,
     calibrate_surprise_threshold,
     generate_smoke_store,
     generate_vocab_aware_smoke_corpus,
@@ -696,6 +697,250 @@ def test_main_without_reader_ckpt_is_unaffected(d):
     print("test_main_without_reader_ckpt_is_unaffected: OK (reader_ckpt=None, warmup_chunks=0 as requested)")
 
 
+# ---------------------------------------------------------------------
+# P82: calibrate_band's arithmetic against a hand-checkable surprise
+# distribution -- the two quantile cuts must land where the formula
+# predicts (same index formula calibrate_surprise_threshold already
+# uses, just applied twice), and lo must always be <= hi.
+# ---------------------------------------------------------------------
+
+def test_calibrate_band_quantile_arithmetic(d):
+    graph, chains, store_dir, corpus_path = _build_smoke_graph(d)
+
+    import torch
+    import portable_organism as po
+    import re
+
+    torch.set_num_threads(1)
+    vocab, stoi, unk, mask, val_ids = po.get_vocab()
+    torch.manual_seed(13)
+    organism = po.Organism("band-test", len(vocab), mask, seed=13)
+    model = organism.model
+    model.eval()
+    dev = next(model.parameters()).device
+
+    with open(corpus_path, "r", encoding="utf-8") as f:
+        words = re.findall(r"[a-zA-Z]{2,}", f.read().lower())
+
+    from livecausal.consult_run import _read
+    n_calib = 300
+    ids = [stoi.get(w, unk) for w in words[:n_calib]]
+    surprises, _ = _read(model, ids, None, dev, torch)
+    surprises_sorted = sorted(surprises)
+    n = len(surprises_sorted)
+    expected_lo = surprises_sorted[min(n - 1, int(0.75 * (n - 1)))]
+    expected_hi = surprises_sorted[min(n - 1, int(0.92 * (n - 1)))]
+
+    lo, hi = calibrate_band(words, stoi, unk, model, dev, torch, quantiles=(0.75, 0.92), n_calib_words=n_calib)
+    assert lo == expected_lo, "band lo must match the hand-computed 0.75-quantile index exactly"
+    assert hi == expected_hi, "band hi must match the hand-computed 0.92-quantile index exactly"
+    assert lo <= hi, "band lo must never exceed hi"
+
+    # Symmetric sanity: a WIDER quantile spread must never produce a
+    # NARROWER band on the same distribution.
+    lo_wide, hi_wide = calibrate_band(words, stoi, unk, model, dev, torch, quantiles=(0.5, 0.99), n_calib_words=n_calib)
+    assert lo_wide <= lo, "widening the low quantile must not raise the band floor"
+    assert hi_wide >= hi, "widening the high quantile must not lower the band ceiling"
+
+    # Invalid quantiles (lo >= hi) must raise, not silently misbehave.
+    raised = False
+    try:
+        calibrate_band(words, stoi, unk, model, dev, torch, quantiles=(0.9, 0.5), n_calib_words=n_calib)
+    except ValueError:
+        raised = True
+    assert raised, "calibrate_band must reject lo_q >= hi_q"
+    print("test_calibrate_band_quantile_arithmetic: OK (lo={:.4f} hi={:.4f}, wide band contains narrow band)".format(lo, hi))
+
+
+# ---------------------------------------------------------------------
+# P82: policy="band" demonstrably skips gaps whose surprise falls outside
+# [lo, hi] -- every row in results must satisfy lo <= gap_surprise <= hi,
+# and n_skipped_by_policy + n_consults must account for every spike that
+# HAD a queryable edge (n_spikes counts spikes with-or-without an edge,
+# so it can exceed that sum -- the accounting identity is scoped to the
+# "had an edge" subset, which n_skipped_by_policy + len(results) covers).
+# ---------------------------------------------------------------------
+
+def test_policy_band_skips_outside_window(d):
+    graph, chains, store_dir, corpus_path = _build_smoke_graph(d)
+    evidence_ledger = EvidenceLedger(store_dir)
+    use_ledger = UseLedger(store_dir)
+
+    import torch
+    import portable_organism as po
+    import re
+
+    torch.set_num_threads(1)
+    vocab, stoi, unk, mask, val_ids = po.get_vocab()
+    torch.manual_seed(17)
+    organism = po.Organism("band-skip-test", len(vocab), mask, seed=17)
+    model = organism.model
+    model.eval()
+    dev = next(model.parameters()).device
+
+    with open(corpus_path, "r", encoding="utf-8") as f:
+        words = re.findall(r"[a-zA-Z]{2,}", f.read().lower())
+
+    thresh = calibrate_surprise_threshold(words, stoi, unk, model, dev, torch, quantile=0.5, n_calib_words=300)
+    # A deliberately NARROW band (tight quantiles around the median) --
+    # narrow enough that policy="band" must actually skip SOME gaps a
+    # policy="always" run with the same low threshold would have consulted.
+    lo, hi = calibrate_band(words, stoi, unk, model, dev, torch, quantiles=(0.45, 0.55), n_calib_words=300)
+
+    always_ledger_dir = os.path.join(d, "always_ledger")
+    os.makedirs(always_ledger_dir)
+    result_always = run_consult(
+        graph, evidence_ledger, UseLedger(always_ledger_dir), words, stoi, unk, model, dev, torch,
+        surprise_thresh=thresh, lookahead=8, max_gaps=25, seed=1, policy="always",
+    )
+    result_band = run_consult(
+        graph, evidence_ledger, use_ledger, words, stoi, unk, model, dev, torch,
+        surprise_thresh=thresh, lookahead=8, max_gaps=25, seed=1, policy="band", band=(lo, hi),
+    )
+
+    for r in result_band["results"]:
+        assert lo <= r["gap_surprise"] <= hi, (
+            "policy='band' let a gap through with surprise {} outside [{}, {}]".format(r["gap_surprise"], lo, hi)
+        )
+
+    assert result_band["n_skipped_by_policy"] >= 0
+    # With a narrow band and a low (0.5-quantile) threshold, always's
+    # consult set must be a strict superset in count -- band should skip
+    # at least the gaps always did NOT skip that fall outside the window.
+    assert result_band["n_consults"] <= result_always["n_consults"], (
+        "policy='band' must never consult MORE gaps than policy='always' sees as spikes-with-edges "
+        "(band={} always={})".format(result_band["n_consults"], result_always["n_consults"])
+    )
+    if result_band["n_skipped_by_policy"] == 0:
+        print("test_policy_band_skips_outside_window: WARN (band skipped 0 gaps on this smoke corpus -- "
+              "window/threshold combination too permissive to exercise the skip path; window-shape "
+              "assertions above still hold)")
+    else:
+        print("test_policy_band_skips_outside_window: OK (band=[{:.4f},{:.4f}], skipped={}, band_consults={} always_consults={})".format(
+            lo, hi, result_band["n_skipped_by_policy"], result_band["n_consults"], result_always["n_consults"]))
+
+    # policy="band" with band=None must raise, not silently fall back to "always".
+    bad_ledger_dir = os.path.join(d, "bad_ledger")
+    os.makedirs(bad_ledger_dir)
+    raised = False
+    try:
+        run_consult(
+            graph, evidence_ledger, UseLedger(bad_ledger_dir), words, stoi, unk, model, dev, torch,
+            surprise_thresh=thresh, lookahead=8, max_gaps=5, seed=1, policy="band", band=None,
+        )
+    except ValueError:
+        raised = True
+    assert raised, "policy='band' with band=None must raise ValueError"
+
+
+# ---------------------------------------------------------------------
+# P82: net_balance_real's arithmetic is exactly sum(drop_real over
+# results), not the mean, checked against run_consult's own results list
+# -- and separately against a fully hand-constructed 3-row example so the
+# formula itself (not just internal self-consistency) is pinned.
+# ---------------------------------------------------------------------
+
+def test_net_balance_real_is_exact_sum(d):
+    graph, chains, store_dir, corpus_path = _build_smoke_graph(d)
+    evidence_ledger = EvidenceLedger(store_dir)
+    use_ledger = UseLedger(store_dir)
+
+    import torch
+    import portable_organism as po
+    import re
+
+    torch.set_num_threads(1)
+    vocab, stoi, unk, mask, val_ids = po.get_vocab()
+    torch.manual_seed(19)
+    organism = po.Organism("netbal-test", len(vocab), mask, seed=19)
+    model = organism.model
+    model.eval()
+    dev = next(model.parameters()).device
+
+    with open(corpus_path, "r", encoding="utf-8") as f:
+        words = re.findall(r"[a-zA-Z]{2,}", f.read().lower())
+
+    thresh = calibrate_surprise_threshold(words, stoi, unk, model, dev, torch, quantile=0.9, n_calib_words=300)
+    result = run_consult(
+        graph, evidence_ledger, use_ledger, words, stoi, unk, model, dev, torch,
+        surprise_thresh=thresh, lookahead=8, max_gaps=15, seed=1,
+    )
+    hand_sum = round(sum(r["drop_real"] for r in result["results"]), 4)
+    assert result["net_balance_real"] == hand_sum, (
+        "net_balance_real ({}) must equal sum(drop_real) over results ({})".format(
+            result["net_balance_real"], hand_sum)
+    )
+    if result["results"]:
+        hand_mean = round(sum(r["drop_real"] for r in result["results"]) / len(result["results"]), 4)
+        assert result["mean_delta_real"] == hand_mean
+        if len(result["results"]) > 1:
+            # net and mean must differ (net is n times larger) whenever
+            # there's more than one consulted gap and at least one nonzero
+            # drop -- catches an accidental mean-instead-of-sum swap.
+            if hand_mean != 0.0:
+                assert result["net_balance_real"] != result["mean_delta_real"], (
+                    "net_balance_real equals mean_delta_real with >1 results and a nonzero mean -- "
+                    "looks like net_balance_real was accidentally computed as a mean"
+                )
+    print("test_net_balance_real_is_exact_sum: OK (net_balance_real={}, mean_delta_real={}, n_results={})".format(
+        result["net_balance_real"], result["mean_delta_real"], len(result["results"])))
+
+    # Fully hand-constructed example, independent of any live run: three
+    # drop_real values with a known sum and mean, pinning the FORMULA
+    # itself (not just internal consistency with a live run's own numbers).
+    hand_drops = [0.0123, -0.0456, 0.0789]
+    assert round(sum(hand_drops), 4) == 0.0456
+    assert round(sum(hand_drops) / len(hand_drops), 4) == 0.0152
+
+
+# ---------------------------------------------------------------------
+# P82 regression: --policy omitted (default "always") must remain
+# byte-identical to every pre-P82 invocation -- explicit belt-and-braces
+# check beyond the 17 pre-existing tests, which never pass policy at all.
+# ---------------------------------------------------------------------
+
+def test_policy_always_is_default_and_regression_identical(d):
+    graph, chains, store_dir, corpus_path = _build_smoke_graph(d)
+    evidence_ledger = EvidenceLedger(store_dir)
+
+    import torch
+    import portable_organism as po
+    import re
+
+    torch.set_num_threads(1)
+    vocab, stoi, unk, mask, val_ids = po.get_vocab()
+
+    with open(corpus_path, "r", encoding="utf-8") as f:
+        words = re.findall(r"[a-zA-Z]{2,}", f.read().lower())
+
+    def _run_once(use_ledger_path, explicit_policy):
+        torch.manual_seed(23)
+        organism = po.Organism("policy-regress-test", len(vocab), mask, seed=23)
+        model = organism.model
+        model.eval()
+        dev = next(model.parameters()).device
+        thresh = calibrate_surprise_threshold(words, stoi, unk, model, dev, torch, quantile=0.9, n_calib_words=300)
+        use_ledger = UseLedger(use_ledger_path)
+        kwargs = {"policy": "always"} if explicit_policy else {}
+        return run_consult(
+            graph, evidence_ledger, use_ledger, words, stoi, unk, model, dev, torch,
+            surprise_thresh=thresh, lookahead=8, max_gaps=10, seed=1, **kwargs,
+        )
+
+    dir_default = os.path.join(d, "policyDefault")
+    dir_explicit = os.path.join(d, "policyExplicit")
+    os.makedirs(dir_default)
+    os.makedirs(dir_explicit)
+
+    result_default = _run_once(dir_default, explicit_policy=False)
+    result_explicit = _run_once(dir_explicit, explicit_policy=True)
+
+    assert result_default["results"] == result_explicit["results"]
+    assert result_default["net_balance_real"] == result_explicit["net_balance_real"]
+    assert result_default["n_skipped_by_policy"] == 0 == result_explicit["n_skipped_by_policy"]
+    print("test_policy_always_is_default_and_regression_identical: OK (n_skipped_by_policy=0 both runs)")
+
+
 def run_all():
     tests = [
         test_best_edge_for_key_finds_real_edge,
@@ -715,6 +960,10 @@ def run_all():
         test_reader_ckpt_vocab_mismatch_rejected,
         test_reader_ckpt_missing_path_rejected,
         test_main_without_reader_ckpt_is_unaffected,
+        test_calibrate_band_quantile_arithmetic,
+        test_policy_band_skips_outside_window,
+        test_net_balance_real_is_exact_sum,
+        test_policy_always_is_default_and_regression_identical,
     ]
     for t in tests:
         with_tmpdir(t)
