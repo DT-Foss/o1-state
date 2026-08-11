@@ -1,0 +1,39 @@
+{
+  "n_pairs": 2047,
+  "cadence": {
+    "substrate": "wt103",
+    "chunks": 3000,
+    "window_tokens": 128,
+    "d_model": 128,
+    "batch": 8,
+    "chunk_size": 64,
+    "seed": 42,
+    "q": 0.75,
+    "window": 500,
+    "min_window": 100,
+    "ignition_chunks": 100
+  },
+  "oov_stats": {
+    "text": {
+      "mean_oov_rate": 0.14395304103566195,
+      "median_oov_rate": 0.140625,
+      "pct_pairs_zero_oov": 0.0009770395701025891,
+      "mean_word_len": 64.0,
+      "min_word_len": 64,
+      "max_word_len": 64
+    },
+    "structure": {
+      "mean_oov_rate": 0.14359002451648414,
+      "median_oov_rate": 0.125,
+      "pct_pairs_zero_oov": 0.2330239374694675,
+      "mean_word_len": 10.303370786516854,
+      "min_word_len": 4,
+      "max_word_len": 21
+    }
+  },
+  "struct_tokens": {
+    "fact": "<fact>",
+    "say": "<say>",
+    "sep": " | "
+  }
+}
