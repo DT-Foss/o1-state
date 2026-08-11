@@ -140,6 +140,85 @@ def live_walk_chain(
     return hops
 
 
+def live_canon_walk_chain(
+    graph,               # src.livecausal.infer.LiveGraph instance, MUST be built with canon=True
+    store,                # src.livecausal.store.LiveStore instance (same store_dir as graph)
+    start_key: str,
+    n: int = 8,
+    tau: float = 0.3,
+    seed: Optional[int] = None,
+) -> List[Dict]:
+    """Canon-walk variant of live_walk_chain: steps over graph.canon_query()
+    instead of graph.query() -- the SAME base-only principle applies (one
+    real hop per step, no inferred shortcuts), but the adjacency joins
+    canonicalized keys, not raw exact strings.
+
+    Why this matters (measured on results/p72_store_local): the raw
+    string-keyed adjacency has only 40/1944 from_keys that are ALSO a
+    to_key somewhere else (2.1% chainable) -- most walks dead-end after one
+    hop because "the sign" and "The Sign," and "signs" never join as the
+    SAME node in exact-string space. The canon adjacency folds
+    morphological/casing variants onto one canon_key BEFORE building
+    edges, so the same underlying concept mentioned in different records
+    joins up: measured chainable overlap jumps from 40 to 444 (11x) on the
+    same store. _canon_base_edges never invents a hop -- it only changes
+    which from/to key STRING two already-real citations get filed under
+    (canon.canonical_key is a pinned, deterministic normalization: casing/
+    lemma folding, not semantic guessing), so "canon joins more, but never
+    fabricates an edge" holds structurally, the same honesty guarantee as
+    the raw walk.
+
+    Requires graph.canon_enabled (i.e. constructed as LiveGraph(store_dir,
+    canon=True)) -- raises the same RuntimeError as canon_query() itself
+    otherwise, no silent fallback to the raw walk.
+
+    Returns the SAME hop-dict shape as live_walk_chain:
+        {"from_key", "to_key", "mechanism", "citation": {"sha", "idx"}}
+    but from_key/to_key are now CANON keys (not the raw record strings).
+    The mechanism word still comes from the RAW cited record (canon_query's
+    derivation always cites raw (sha, idx) coordinates, canonicalization
+    never touches citations -- see canon_query's own docstring) via the
+    same _mechanism_for_citation lookup live_walk_chain uses.
+    """
+    if not graph.canon_enabled:
+        raise RuntimeError(
+            "live_canon_walk_chain requires LiveGraph(..., canon=True); "
+            "this graph was mounted with canon=False."
+        )
+
+    hops: List[Dict] = []
+    # canon_query() canonicalizes its input itself (idempotent on an
+    # already-canonical key, verified: canonical_key(canonical_key(x)) ==
+    # canonical_key(x) for the fallback normalizer this repo pins), so a
+    # raw start_key works on hop 0 and the already-canonical to_key from
+    # hop i works unchanged as the query key for hop i+1.
+    cur = start_key
+
+    for _ in range(n):
+        edges = [e for e in graph.canon_query(cur) if e["kind"] == "base"]
+        if not edges:
+            break  # honest dead end -- no further BASE edge in canon space either
+
+        weights = np.array([max(1, len(e["derivation"])) for e in edges], dtype=float)
+        logits = np.log(weights + 1e-9)
+        idx_choice = sampler.contraction_sample(logits, tau=tau, top_k=min(10, len(logits)))
+        chosen_edge = edges[int(idx_choice)]
+        to_key = chosen_edge["to_key"]
+
+        citation_sha, citation_idx = chosen_edge["derivation"][0]
+        mechanism = _mechanism_for_citation(store, citation_sha, citation_idx)
+
+        hops.append({
+            "from_key": chosen_edge["from_key"],
+            "to_key": to_key,
+            "mechanism": mechanism,
+            "citation": {"sha": citation_sha, "idx": citation_idx},
+        })
+        cur = to_key
+
+    return hops
+
+
 def verbalize_live_walk(hops: List[Dict]) -> str:
     """Verbalize a live_walk_chain() output using the SAME opener/polarity
     logic as pipeline.py's speech verbalizer, but reading mechanism/
