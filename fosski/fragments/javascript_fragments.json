@@ -1,0 +1,49 @@
+{
+  "js_fetch": "const response = await fetch('{url}');\nif (!response.ok) throw new Error(`HTTP ${response.status}`);\nconst data = await response.json();\nconsole.log(JSON.stringify(data, null, 2));",
+
+  "js_file_read": "const fs = require('fs');\nconst content = fs.readFileSync('{path}', 'utf8');\nconsole.log(content);",
+
+  "js_file_write": "const fs = require('fs');\nfs.writeFileSync('{output_path}', {data}, 'utf8');\nconsole.log(`Written to {output_path}`);",
+
+  "js_json_parse": "const fs = require('fs');\nconst raw = fs.readFileSync('{path}', 'utf8');\nconst data = JSON.parse(raw);\nconsole.log('Keys:', Object.keys(data));\nconsole.log(JSON.stringify(data, null, 2));",
+
+  "js_array_ops": "const arr = [{data}];\nconsole.log('Length:', arr.length);\nconsole.log('Sorted:', [...arr].sort());\nconsole.log('Unique:', [...new Set(arr)]);\nconsole.log('Sum:', arr.reduce((a, b) => a + b, 0));",
+
+  "js_string_ops": "const str = '{data}';\nconsole.log('Length:', str.length);\nconsole.log('Upper:', str.toUpperCase());\nconsole.log('Lower:', str.toLowerCase());\nconsole.log('Words:', str.split(/\\s+/).length);\nconsole.log('Trimmed:', str.trim());\nconsole.log('Reversed:', [...str].reverse().join(''));",
+
+  "js_regex": "const text = '{data}';\nconst pattern = /{pattern}/g;\nconst matches = text.matchAll(pattern);\nfor (const match of matches) {\n    console.log(`Match: ${match[0]} at index ${match.index}`);\n}",
+
+  "js_async_await": "async function main() {\n    try {\n        const response = await fetch('{url}');\n        const data = await response.json();\n        console.log(data);\n    } catch (error) {\n        console.error('Error:', error.message);\n    }\n}\nmain();",
+
+  "js_error_handling": "try {\n    {data}\n} catch (error) {\n    if (error instanceof TypeError) {\n        console.error('Type error:', error.message);\n    } else if (error instanceof RangeError) {\n        console.error('Range error:', error.message);\n    } else {\n        console.error('Unexpected error:', error);\n    }\n}",
+
+  "js_dom": "document.addEventListener('DOMContentLoaded', () => {\n    const el = document.querySelector('{data}');\n    if (el) {\n        el.textContent = 'Updated by FORGE';\n        el.style.color = '#333';\n        console.log('Element updated');\n    }\n});",
+
+  "js_events": "const el = document.querySelector('{data}');\nel.addEventListener('click', (event) => {\n    event.preventDefault();\n    console.log('Clicked:', event.target);\n});\nel.addEventListener('keyup', (event) => {\n    console.log('Key:', event.key);\n});",
+
+  "js_class": "class {data} {\n    constructor(name) {\n        this.name = name;\n        this.created = new Date();\n    }\n\n    toString() {\n        return `${this.constructor.name}(${this.name})`;\n    }\n\n    toJSON() {\n        return { name: this.name, created: this.created.toISOString() };\n    }\n}\n\nconst instance = new {data}('example');\nconsole.log(instance.toString());\nconsole.log(JSON.stringify(instance, null, 2));",
+
+  "js_functional": "const data = [{data}];\n\nconst result = data\n    .filter(item => item != null)\n    .map(item => typeof item === 'string' ? item.trim() : item)\n    .reduce((acc, item) => {\n        acc.push(item);\n        return acc;\n    }, []);\n\nconsole.log('Result:', result);\nconsole.log('Count:', result.length);",
+
+  "js_express": "const express = require('express');\nconst app = express();\nconst PORT = process.env.PORT || 3000;\n\napp.use(express.json());\n\napp.get('/', (req, res) => {\n    res.json({ status: 'ok', message: 'FORGE Express Server' });\n});\n\napp.get('/api/{data}', (req, res) => {\n    res.json({ data: '{data}', timestamp: new Date().toISOString() });\n});\n\napp.listen(PORT, () => console.log(`Server running on port ${PORT}`));",
+
+  "js_express_api": "const express = require('express');\nconst app = express();\napp.use(express.json());\n\nlet items = [];\n\napp.get('/api/items', (req, res) => res.json(items));\napp.post('/api/items', (req, res) => {\n    const item = { id: items.length + 1, ...req.body, created: new Date() };\n    items.push(item);\n    res.status(201).json(item);\n});\napp.delete('/api/items/:id', (req, res) => {\n    items = items.filter(i => i.id !== parseInt(req.params.id));\n    res.status(204).send();\n});\n\napp.listen(3000, () => console.log('API on :3000'));",
+
+  "js_websocket": "const WebSocket = require('ws');\nconst wss = new WebSocket.Server({ port: {port} });\n\nwss.on('connection', (ws) => {\n    console.log('Client connected');\n    ws.on('message', (msg) => {\n        console.log('Received:', msg.toString());\n        ws.send(JSON.stringify({ echo: msg.toString(), time: Date.now() }));\n    });\n    ws.on('close', () => console.log('Client disconnected'));\n});\n\nconsole.log('WebSocket server on :{port}');",
+
+  "js_sqlite": "const Database = require('better-sqlite3');\nconst db = new Database('{path}');\n\ndb.exec(`CREATE TABLE IF NOT EXISTS items (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    name TEXT NOT NULL,\n    created DATETIME DEFAULT CURRENT_TIMESTAMP\n)`);\n\ndb.prepare('INSERT INTO items (name) VALUES (?)').run('{data}');\nconst rows = db.prepare('SELECT * FROM items').all();\nconsole.log(JSON.stringify(rows, null, 2));",
+
+  "js_jest_test": "describe('{data}', () => {\n    test('should exist', () => {\n        expect(true).toBe(true);\n    });\n\n    test('should handle valid input', () => {\n        const result = {data}('test');\n        expect(result).toBeDefined();\n    });\n\n    test('should handle null input', () => {\n        expect(() => {data}(null)).not.toThrow();\n    });\n});",
+
+  "js_cli": "#!/usr/bin/env node\nconst args = process.argv.slice(2);\n\nif (args.includes('--help') || args.includes('-h')) {\n    console.log('Usage: node script.js [options]');\n    console.log('  --input, -i  Input file');\n    console.log('  --output, -o Output file');\n    console.log('  --help, -h   Show help');\n    process.exit(0);\n}\n\nconst input = args[args.indexOf('--input') + 1] || args[args.indexOf('-i') + 1];\nconst output = args[args.indexOf('--output') + 1] || args[args.indexOf('-o') + 1];\n\nconsole.log('Input:', input || '(stdin)');\nconsole.log('Output:', output || '(stdout)');",
+
+  "js_csv_parse": "const fs = require('fs');\nconst content = fs.readFileSync('{path}', 'utf8');\nconst lines = content.trim().split('\\n');\nconst headers = lines[0].split(',').map(h => h.trim());\nconst rows = lines.slice(1).map(line => {\n    const values = line.split(',');\n    return Object.fromEntries(headers.map((h, i) => [h, values[i]?.trim()]));\n});\nconsole.log(`Parsed ${rows.length} rows`);\nconsole.log(JSON.stringify(rows.slice(0, 5), null, 2));",
+
+  "js_crypto": "const crypto = require('crypto');\n\n// Hash\nconst hash = crypto.createHash('sha256').update('{data}').digest('hex');\nconsole.log('SHA-256:', hash);\n\n// HMAC\nconst hmac = crypto.createHmac('sha256', 'secret').update('{data}').digest('hex');\nconsole.log('HMAC:', hmac);\n\n// Random bytes\nconsole.log('Random:', crypto.randomBytes(16).toString('hex'));",
+
+  "js_child_process": "const { execSync, spawn } = require('child_process');\n\n// Sync execution\nconst output = execSync('{data}', { encoding: 'utf8' });\nconsole.log(output);\n\n// Async with streaming\nconst child = spawn('{data}', { shell: true });\nchild.stdout.on('data', (data) => process.stdout.write(data));\nchild.stderr.on('data', (data) => process.stderr.write(data));\nchild.on('close', (code) => console.log(`Exit: ${code}`));",
+
+  "js_streams": "const fs = require('fs');\nconst { Transform } = require('stream');\n\nconst transform = new Transform({\n    transform(chunk, encoding, callback) {\n        const upper = chunk.toString().toUpperCase();\n        callback(null, upper);\n    }\n});\n\nfs.createReadStream('{path}')\n    .pipe(transform)\n    .pipe(fs.createWriteStream('{output_path}'));\n\nconsole.log('Stream processing complete');",
+
+  "js_scraper": "const https = require('https');\n\nfunction fetchPage(url) {\n    return new Promise((resolve, reject) => {\n        https.get(url, (res) => {\n            let data = '';\n            res.on('data', (chunk) => data += chunk);\n            res.on('end', () => resolve(data));\n        }).on('error', reject);\n    });\n}\n\nasync function main() {\n    const html = await fetchPage('{url}');\n    const links = html.match(/href=\"([^\"]+)\"/g) || [];\n    console.log(`Found ${links.length} links`);\n    links.slice(0, 10).forEach(l => console.log(l));\n}\nmain();"
+}

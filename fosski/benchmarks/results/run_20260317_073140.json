@@ -1,0 +1,79 @@
+{
+  "babi": {
+    "benchmark": "babi_synthetic",
+    "total": 7,
+    "correct": 7,
+    "accuracy": 1.0,
+    "avg_ms": 0.0,
+    "results": [
+      {
+        "id": "babi_task1_0",
+        "question": "Where is Mary?",
+        "expected": "bathroom",
+        "got": "bathroom",
+        "correct": true,
+        "synthetic": true,
+        "time_ms": 0.0
+      },
+      {
+        "id": "babi_task1_1",
+        "question": "Where is Sandra?",
+        "expected": "office",
+        "got": "office",
+        "correct": true,
+        "synthetic": true,
+        "time_ms": 0.0
+      },
+      {
+        "id": "babi_task1_2",
+        "question": "Where is John?",
+        "expected": "garden",
+        "got": "garden",
+        "correct": true,
+        "synthetic": true,
+        "time_ms": 0.0
+      },
+      {
+        "id": "babi_task1_3",
+        "question": "Where is Daniel?",
+        "expected": "office",
+        "got": "office",
+        "correct": true,
+        "synthetic": true,
+        "time_ms": 0.0
+      },
+      {
+        "id": "babi_task1_4",
+        "question": "Where is Bob?",
+        "expected": "school",
+        "got": "school",
+        "correct": true,
+        "synthetic": true,
+        "time_ms": 0.0
+      },
+      {
+        "id": "babi_task3_0",
+        "question": "Where is the apple?",
+        "expected": "office",
+        "got": "office",
+        "correct": true,
+        "synthetic": true,
+        "time_ms": 0.0
+      },
+      {
+        "id": "babi_task3_1",
+        "question": "Where is the milk?",
+        "expected": "garden",
+        "got": "garden",
+        "correct": true,
+        "synthetic": true,
+        "time_ms": 0.0
+      }
+    ]
+  },
+  "_meta": {
+    "timestamp": "2026-03-17T07:31:40.959528",
+    "total_time_s": 1.2,
+    "limit": 50
+  }
+}

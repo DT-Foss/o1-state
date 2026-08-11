@@ -1,0 +1,71 @@
+{
+  "bash_file_ops": "#!/bin/bash\nset -euo pipefail\n\n# File operations\nif [ -f \"{path}\" ]; then\n    echo \"File exists: {path}\"\n    echo \"Size: $(stat -f%z \"{path}\" 2>/dev/null || stat -c%s \"{path}\" 2>/dev/null)\"\n    echo \"Lines: $(wc -l < \"{path}\")\"\nelse\n    echo \"File not found: {path}\"\n    exit 1\nfi",
+
+  "bash_text_process": "#!/bin/bash\nset -euo pipefail\n\n# Text processing pipeline\ncat \"{path}\" | \\\n    sed 's/[[:space:]]*$//' | \\\n    sort | \\\n    uniq -c | \\\n    sort -rn | \\\n    head -20",
+
+  "bash_sysadmin": "#!/bin/bash\nset -euo pipefail\n\necho \"=== System Information ===\"\necho \"Hostname: $(hostname)\"\necho \"Uptime: $(uptime -p 2>/dev/null || uptime)\"\necho \"Kernel: $(uname -r)\"\necho \"CPU: $(nproc) cores\"\necho \"Memory: $(free -h 2>/dev/null | awk '/^Mem:/{print $3\"/\"$2}' || vm_stat | head -5)\"\necho \"Disk: $(df -h / | awk 'NR==2{print $3\"/\"$2\" (\"$5\" used)\"}')\"\necho \"Load: $(cat /proc/loadavg 2>/dev/null || sysctl -n vm.loadavg 2>/dev/null)\"",
+
+  "bash_networking": "#!/bin/bash\nset -euo pipefail\n\nHOST=\"{url}\"\nPORT=\"${PORT:-80}\"\n\necho \"=== Network Check: $HOST ===\"\necho \"DNS: $(dig +short \"$HOST\" 2>/dev/null || nslookup \"$HOST\" 2>/dev/null | tail -2)\"\necho \"Ping: $(ping -c 3 \"$HOST\" 2>/dev/null | tail -1)\"\necho \"Port $PORT: $(nc -zw3 \"$HOST\" \"$PORT\" 2>&1 && echo 'OPEN' || echo 'CLOSED')\"",
+
+  "bash_process_mgmt": "#!/bin/bash\nset -euo pipefail\n\necho \"=== Top Processes (by CPU) ===\"\nps aux --sort=-%cpu 2>/dev/null | head -11 || ps aux | sort -nrk 3 | head -11\n\necho \"\"\necho \"=== Top Processes (by Memory) ===\"\nps aux --sort=-%mem 2>/dev/null | head -11 || ps aux | sort -nrk 4 | head -11",
+
+  "bash_string_ops": "#!/bin/bash\nset -euo pipefail\n\nSTR=\"{data}\"\n\necho \"Length: ${#STR}\"\necho \"Upper: ${STR^^}\"\necho \"Lower: ${STR,,}\"\necho \"First 10: ${STR:0:10}\"\necho \"Replace: ${STR//old/new}\"",
+
+  "bash_array_ops": "#!/bin/bash\nset -euo pipefail\n\n# Array operations\ndeclare -a ARR=({data})\n\necho \"Count: ${#ARR[@]}\"\necho \"First: ${ARR[0]}\"\necho \"Last: ${ARR[-1]}\"\necho \"All: ${ARR[*]}\"\n\n# Iterate\nfor item in \"${ARR[@]}\"; do\n    echo \"  - $item\"\ndone",
+
+  "bash_conditionals": "#!/bin/bash\nset -euo pipefail\n\nVALUE=\"{data}\"\n\nif [ -z \"$VALUE\" ]; then\n    echo \"Empty value\"\nelif [[ \"$VALUE\" =~ ^[0-9]+$ ]]; then\n    echo \"Numeric: $VALUE\"\nelif [ -f \"$VALUE\" ]; then\n    echo \"File: $VALUE\"\nelse\n    echo \"String: $VALUE\"\nfi",
+
+  "bash_loops": "#!/bin/bash\nset -euo pipefail\n\n# Loop through files\nfor f in {path}/*; do\n    [ -f \"$f\" ] || continue\n    echo \"Processing: $(basename \"$f\") ($(wc -c < \"$f\") bytes)\"\ndone",
+
+  "bash_functions": "#!/bin/bash\nset -euo pipefail\n\n# Function with error handling\nlog() {\n    echo \"[$(date '+%Y-%m-%d %H:%M:%S')] $*\"\n}\n\ndie() {\n    log \"ERROR: $*\" >&2\n    exit 1\n}\n\ncheck_deps() {\n    local deps=(\"$@\")\n    for dep in \"${deps[@]}\"; do\n        command -v \"$dep\" >/dev/null 2>&1 || die \"Missing: $dep\"\n    done\n}\n\nlog \"Starting...\"\ncheck_deps curl jq\nlog \"All dependencies found\"",
+
+  "bash_error_handling": "#!/bin/bash\nset -euo pipefail\ntrap 'echo \"ERROR on line $LINENO. Exit code: $?\" >&2' ERR\ntrap 'cleanup' EXIT\n\ncleanup() {\n    echo \"Cleaning up...\"\n    rm -f \"$TMPFILE\" 2>/dev/null || true\n}\n\nTMPFILE=$(mktemp)\necho \"Working in: $TMPFILE\"",
+
+  "bash_logging": "#!/bin/bash\nset -euo pipefail\n\nLOG_FILE=\"{output_path}\"\nLOG_LEVEL=\"${LOG_LEVEL:-INFO}\"\n\nlog() {\n    local level=\"$1\"; shift\n    echo \"$(date '+%Y-%m-%d %H:%M:%S') [$level] $*\" | tee -a \"$LOG_FILE\"\n}\n\nlog INFO \"Script started\"\nlog DEBUG \"Debug message\"\nlog WARN \"Warning message\"\nlog ERROR \"Error message\"",
+
+  "bash_input_validation": "#!/bin/bash\nset -euo pipefail\n\nusage() {\n    echo \"Usage: $0 <input_file> <output_file>\"\n    exit 1\n}\n\n[ $# -ge 2 ] || usage\n\nINPUT=\"$1\"\nOUTPUT=\"$2\"\n\n[ -f \"$INPUT\" ] || { echo \"Input not found: $INPUT\" >&2; exit 1; }\n[ -d \"$(dirname \"$OUTPUT\")\" ] || { echo \"Output dir missing\" >&2; exit 1; }",
+
+  "bash_cron": "#!/bin/bash\n# Cron job template\n# Add to crontab: */5 * * * * /path/to/this_script.sh\nset -euo pipefail\n\nLOCK_FILE=\"/tmp/$(basename \"$0\").lock\"\nif [ -f \"$LOCK_FILE\" ]; then\n    PID=$(cat \"$LOCK_FILE\")\n    if kill -0 \"$PID\" 2>/dev/null; then\n        echo \"Already running (PID: $PID)\"\n        exit 0\n    fi\nfi\necho $$ > \"$LOCK_FILE\"\ntrap 'rm -f \"$LOCK_FILE\"' EXIT\n\necho \"Cron task running at $(date)\"",
+
+  "bash_systemd": "[Unit]\nDescription={data}\nAfter=network.target\n\n[Service]\nType=simple\nUser=root\nWorkingDirectory={path}\nExecStart={path}/run.sh\nRestart=on-failure\nRestartSec=5\nStandardOutput=journal\nStandardError=journal\n\n[Install]\nWantedBy=multi-user.target",
+
+  "bash_disk_usage": "#!/bin/bash\nset -euo pipefail\n\necho \"=== Disk Usage Report ===\"\ndf -h | awk 'NR==1 || /^\\/dev/'\necho \"\"\necho \"=== Largest Directories ===\"\ndu -sh {path}/* 2>/dev/null | sort -rh | head -10\necho \"\"\necho \"=== Files > 100MB ===\"\nfind {path} -type f -size +100M -exec ls -lh {} \\; 2>/dev/null | awk '{print $5, $NF}'",
+
+  "bash_backup": "#!/bin/bash\nset -euo pipefail\n\nSOURCE=\"{path}\"\nBACKUP_DIR=\"{output_path}\"\nDATE=$(date '+%Y%m%d_%H%M%S')\nARCHIVE=\"$BACKUP_DIR/backup_$DATE.tar.gz\"\n\nmkdir -p \"$BACKUP_DIR\"\ntar -czf \"$ARCHIVE\" -C \"$(dirname \"$SOURCE\")\" \"$(basename \"$SOURCE\")\"\necho \"Backup created: $ARCHIVE ($(du -h \"$ARCHIVE\" | cut -f1))\"",
+
+  "bash_ssh_auto": "#!/bin/bash\nset -euo pipefail\n\nHOST=\"{url}\"\nUSER=\"${USER:-root}\"\nKEY=\"${SSH_KEY:-~/.ssh/id_ed25519}\"\n\nssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 -i \"$KEY\" \"$USER@$HOST\" '{data}'",
+
+  "bash_firewall": "#!/bin/bash\nset -euo pipefail\n\n# UFW firewall setup\necho \"Configuring firewall...\"\nufw default deny incoming\nufw default allow outgoing\nufw allow ssh\nufw allow 80/tcp\nufw allow 443/tcp\necho \"y\" | ufw enable\nufw status verbose",
+
+  "bash_docker": "#!/bin/bash\nset -euo pipefail\n\necho \"=== Docker Status ===\"\ndocker ps --format 'table {{.Names}}\\t{{.Status}}\\t{{.Ports}}'\necho \"\"\necho \"=== Images ===\"\ndocker images --format 'table {{.Repository}}\\t{{.Tag}}\\t{{.Size}}'\necho \"\"\necho \"=== Disk Usage ===\"\ndocker system df",
+
+  "bash_git_auto": "#!/bin/bash\nset -euo pipefail\n\ncd \"{path}\"\necho \"=== Git Status ===\"\ngit status --short\necho \"\"\necho \"=== Recent Commits ===\"\ngit log --oneline -10\necho \"\"\necho \"=== Branches ===\"\ngit branch -a",
+
+  "bash_curl_api": "#!/bin/bash\nset -euo pipefail\n\nURL=\"{url}\"\nRESPONSE=$(curl -sS -w '\\n%{http_code}' \"$URL\")\nHTTP_CODE=$(echo \"$RESPONSE\" | tail -1)\nBODY=$(echo \"$RESPONSE\" | sed '$d')\n\necho \"Status: $HTTP_CODE\"\nif command -v jq >/dev/null 2>&1; then\n    echo \"$BODY\" | jq .\nelse\n    echo \"$BODY\"\nfi",
+
+  "bash_json_parse": "#!/bin/bash\nset -euo pipefail\n\nJSON_FILE=\"{path}\"\n\nif command -v jq >/dev/null 2>&1; then\n    echo \"Keys: $(jq -r 'keys[]' \"$JSON_FILE\" 2>/dev/null | tr '\\n' ', ')\"\n    echo \"Pretty:\"\n    jq . \"$JSON_FILE\"\nelse\n    python3 -c \"import json,sys; print(json.dumps(json.load(open('$JSON_FILE')),indent=2))\"\nfi",
+
+  "bash_find_files": "#!/bin/bash\nset -euo pipefail\n\nSEARCH_DIR=\"{path}\"\nPATTERN=\"{data}\"\n\necho \"=== Files matching: $PATTERN ===\"\nfind \"$SEARCH_DIR\" -type f -name \"$PATTERN\" -print0 | \\\n    while IFS= read -r -d '' file; do\n        echo \"$(stat -f'%z' \"$file\" 2>/dev/null || stat -c'%s' \"$file\" 2>/dev/null) $file\"\n    done | sort -rn | head -20",
+
+  "bash_grep_search": "#!/bin/bash\nset -euo pipefail\n\nSEARCH_DIR=\"{path}\"\nPATTERN=\"{data}\"\n\necho \"=== Searching for: $PATTERN ===\"\ngrep -rn --color=auto \"$PATTERN\" \"$SEARCH_DIR\" 2>/dev/null | head -50",
+
+  "bash_sed_replace": "#!/bin/bash\nset -euo pipefail\n\nFILE=\"{path}\"\nOLD=\"{data}\"\nNEW=\"{output_path}\"\n\necho \"Replacing '$OLD' with '$NEW' in $FILE\"\nif [[ \"$OSTYPE\" == \"darwin\"* ]]; then\n    sed -i '' \"s/$OLD/$NEW/g\" \"$FILE\"\nelse\n    sed -i \"s/$OLD/$NEW/g\" \"$FILE\"\nfi\necho \"Done. Changes:\"\ngrep -n \"$NEW\" \"$FILE\" | head -10",
+
+  "bash_sort_unique": "#!/bin/bash\nset -euo pipefail\n\ncat \"{path}\" | sort | uniq -c | sort -rn | head -20",
+
+  "bash_compress": "#!/bin/bash\nset -euo pipefail\n\nSOURCE=\"{path}\"\nOUTPUT=\"{output_path}\"\n\nif [ -d \"$SOURCE\" ]; then\n    tar -czf \"$OUTPUT\" -C \"$(dirname \"$SOURCE\")\" \"$(basename \"$SOURCE\")\"\nelse\n    gzip -c \"$SOURCE\" > \"$OUTPUT\"\nfi\necho \"Compressed: $(du -h \"$OUTPUT\" | cut -f1)\"",
+
+  "bash_env_vars": "#!/bin/bash\nset -euo pipefail\n\n# Load .env file\nif [ -f .env ]; then\n    set -a\n    source .env\n    set +a\n    echo \"Loaded .env\"\nfi\n\n# Required vars check\nREQUIRED=(\"DB_HOST\" \"DB_PORT\" \"API_KEY\")\nfor var in \"${REQUIRED[@]}\"; do\n    if [ -z \"${!var:-}\" ]; then\n        echo \"Missing: $var\" >&2\n        exit 1\n    fi\ndone\necho \"All required vars present\"",
+
+  "bash_getopts": "#!/bin/bash\nset -euo pipefail\n\nVERBOSE=0\nOUTPUT=\"\"\nINPUT=\"\"\n\nusage() {\n    echo \"Usage: $0 [-v] [-o output] -i input\"\n    exit 1\n}\n\nwhile getopts \"vo:i:h\" opt; do\n    case $opt in\n        v) VERBOSE=1 ;;\n        o) OUTPUT=\"$OPTARG\" ;;\n        i) INPUT=\"$OPTARG\" ;;\n        h) usage ;;\n        *) usage ;;\n    esac\ndone\n\n[ -n \"$INPUT\" ] || usage\n[ $VERBOSE -eq 1 ] && echo \"Input: $INPUT, Output: $OUTPUT\"",
+
+  "bash_health_check": "#!/bin/bash\nset -euo pipefail\n\nSERVICES=({data})\nFAILED=0\n\nfor svc in \"${SERVICES[@]}\"; do\n    if systemctl is-active --quiet \"$svc\" 2>/dev/null; then\n        echo \"[OK] $svc\"\n    else\n        echo \"[FAIL] $svc\" >&2\n        FAILED=$((FAILED+1))\n    fi\ndone\n\nif [ $FAILED -gt 0 ]; then\n    echo \"$FAILED service(s) down\" >&2\n    exit 1\nfi\necho \"All services healthy\"",
+
+  "bash_monitoring": "#!/bin/bash\nset -euo pipefail\n\nINTERVAL=${1:-5}\nOUTPUT=\"{output_path}\"\n\nwhile true; do\n    TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')\n    CPU=$(top -bn1 2>/dev/null | grep 'Cpu' | awk '{print $2}' || echo 'N/A')\n    MEM=$(free -m 2>/dev/null | awk '/^Mem:/{printf \"%.1f%%\", $3/$2*100}' || echo 'N/A')\n    DISK=$(df -h / | awk 'NR==2{print $5}')\n    echo \"$TIMESTAMP CPU=$CPU MEM=$MEM DISK=$DISK\" | tee -a \"$OUTPUT\"\n    sleep \"$INTERVAL\"\ndone",
+
+  "bash_db_backup": "#!/bin/bash\nset -euo pipefail\n\nDB_PATH=\"{path}\"\nBACKUP_DIR=\"{output_path}\"\nDATE=$(date '+%Y%m%d_%H%M%S')\n\nmkdir -p \"$BACKUP_DIR\"\n\nif command -v sqlite3 >/dev/null 2>&1 && file \"$DB_PATH\" | grep -q SQLite; then\n    sqlite3 \"$DB_PATH\" \"VACUUM INTO '$BACKUP_DIR/db_$DATE.sqlite3'\"\nelif command -v pg_dump >/dev/null 2>&1; then\n    pg_dump -Fc > \"$BACKUP_DIR/db_$DATE.dump\"\nelif command -v mysqldump >/dev/null 2>&1; then\n    mysqldump --all-databases > \"$BACKUP_DIR/db_$DATE.sql\"\nfi\necho \"Backup complete: $BACKUP_DIR/db_$DATE.*\"",
+
+  "bash_deploy": "#!/bin/bash\nset -euo pipefail\n\nAPP_DIR=\"{path}\"\nSERVICE=\"{data}\"\n\necho \"=== Deploying $SERVICE ===\"\ncd \"$APP_DIR\"\ngit pull origin main\npip install -r requirements.txt -q 2>/dev/null || true\nsystemctl restart \"$SERVICE\"\nsleep 2\nif systemctl is-active --quiet \"$SERVICE\"; then\n    echo \"Deploy successful\"\nelse\n    echo \"Deploy FAILED\" >&2\n    systemctl status \"$SERVICE\" --no-pager\n    exit 1\nfi",
+
+  "bash_cleanup": "#!/bin/bash\nset -euo pipefail\n\necho \"=== Cleanup ===\"\necho \"Before: $(df -h / | awk 'NR==2{print $4}') free\"\n\n# Temp files older than 7 days\nfind /tmp -type f -mtime +7 -delete 2>/dev/null || true\n\n# Old logs\nfind /var/log -name '*.gz' -mtime +30 -delete 2>/dev/null || true\n\n# Docker cleanup\ndocker system prune -f 2>/dev/null || true\n\n# Package cache\napt-get clean 2>/dev/null || true\n\necho \"After: $(df -h / | awk 'NR==2{print $4}') free\""
+}
