@@ -27,17 +27,21 @@ PROMPT_HEAD = (
 
 def build_prompt(batch):
     lines = [PROMPT_HEAD]
-    for j, p in enumerate(batch):
+    for j, (_gidx, p) in enumerate(batch):
         lines.append(f'[{j}] structure: {p["structure"]}')
         lines.append(f'    text: {p["text"]}')
     return "\n".join(lines)
+
+
+MINI_SYSTEM = "你是严谨的语料质量评审员。只输出被要求的 JSON，不输出任何其他文字。"
 
 
 def call_swarm(prompt, api_key, timeout_s):
     env = dict(os.environ, DEEPSEEK_API_KEY=api_key)
     r = subprocess.run(
         ["pi", "--provider", "deepseek", "--model", "deepseek-v4-flash",
-         "--thinking", "max", "--no-tools", "--mode", "text"],
+         "--thinking", "max", "--no-tools", "--mode", "text",
+         "--system-prompt", MINI_SYSTEM],
         input=prompt, capture_output=True, text=True, timeout=timeout_s, env=env,
     )
     out = r.stdout
@@ -47,7 +51,7 @@ def call_swarm(prompt, api_key, timeout_s):
     return json.loads(out[a:b + 1])
 
 
-def grade_shard(shard_id, batch, base_idx, api_key, timeout_s):
+def grade_shard(shard_id, batch, _unused, api_key, timeout_s):
     prompt = build_prompt(batch)
     last_err = None
     for attempt in (1, 2):
@@ -57,7 +61,7 @@ def grade_shard(shard_id, batch, base_idx, api_key, timeout_s):
             for v in verdicts:
                 j = int(v["i"])
                 if 0 <= j < len(batch) and v.get("label") in ("clean", "wobbly", "broken"):
-                    rows.append({"pair_idx": base_idx + j, "label": v["label"],
+                    rows.append({"pair_idx": batch[j][0], "label": v["label"],
                                  "reason_code": v.get("reason_code", "?")})
             if len(rows) < 0.9 * len(batch):
                 raise ValueError(f"only {len(rows)}/{len(batch)} verdicts parsed")
@@ -90,11 +94,35 @@ def main():
             p = json.loads(line)
             pairs.append({"structure": p["structure"], "text": p["text"]})
 
+    # Resume: skip every pair index already graded in a prior run (any shard
+    # layout — coverage is by pair, not by shard id). Rebatch the remainder.
+    graded = set()
+    import glob
+    for fp in glob.glob(os.path.join(args.out_dir, "census_*_main.json")):
+        try:
+            r = json.load(open(fp))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for row in r.get("rows", []):
+            graded.add(row["pair_idx"])
+    todo = [(i, p) for i, p in enumerate(pairs) if i not in graded]
+    if graded:
+        print(f"[census] resume: {len(graded)} pairs already graded, {len(todo)} to go")
+
+    # Shard ids continue after the highest existing one so filenames never clash.
+    existing = [int(os.path.basename(fp).split("_")[1])
+                for fp in glob.glob(os.path.join(args.out_dir, "census_*_*.json"))]
+    s0 = (max(existing) + 1) if existing else 0
+
     shards = []
-    for s, start in enumerate(range(0, len(pairs), args.batch_size)):
-        shards.append((s, pairs[start:start + args.batch_size], start, False))
-        if args.overlap_every and s % args.overlap_every == 0:
-            shards.append((s, pairs[start:start + args.batch_size], start, True))
+    for k, start in enumerate(range(0, len(todo), args.batch_size)):
+        chunk = todo[start:start + args.batch_size]
+        s = s0 + k
+        # grade_shard derives pair_idx as base_idx + position; with a sparse
+        # todo list every batch carries its own explicit index map instead.
+        shards.append((s, chunk, None, False))
+        if args.overlap_every and k % args.overlap_every == 0:
+            shards.append((s, chunk, None, True))
     if args.limit_shards:
         shards = shards[: args.limit_shards]
 
