@@ -248,6 +248,8 @@ def main():
     ap.add_argument("--mix", type=float, default=0.5, help="fraction of chunks that are struct->text pairs")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--d-model", type=int, default=256, help="HSSLM d_model (d256 per lead's spec)")
+    ap.add_argument("--core", choices=["s6", "gssm"], default="s6",
+                     help="HSSLM core recurrence: s6 (Mamba-style, default) or gssm (GSSM-SELECTIVE)")
     ap.add_argument("--pairs", default=os.path.join(REPO_ROOT, "hsslm", "data", "graph_to_text_pairs.jsonl"))
     ap.add_argument("--out-prefix", default=os.path.join(REPO_ROOT, "results", "hsslm_speak"))
     ap.add_argument("--resume", default=None)
@@ -266,7 +268,8 @@ def main():
     metrics_path = args.out_prefix + "_metrics.jsonl"
 
     print("=" * 74)
-    print("SPEAK-TRAIN: HSSLM d{}  mix={}  chunks={}".format(args.d_model, args.mix, args.chunks))
+    print("SPEAK-TRAIN: HSSLM d{} core={}  mix={}  chunks={}".format(
+        args.d_model, args.core, args.mix, args.chunks))
     print("=" * 74)
 
     # --- Vocabulary + WT-103 text (for both arms) --------------------------
@@ -304,6 +307,7 @@ def main():
     config = HSSLMConfig()
     config.vocab_size = total_ids
     config.d_model = args.d_model
+    config.core = args.core
     config.hierarchical = False
     config.dropout = 0.0
     config.pad_token_id = -1

@@ -67,6 +67,7 @@ class HSSLM(nn.Module):
         self.dropout = config.get("dropout", 0.1)
         self.hierarchical = config.get("hierarchical", True)
         self.aux_loss_weight = config.get("aux_loss_weight", 0.1)
+        self.core_type = config.get("core", "s6")
 
         # 1. Embedding module
         self.embedding = HierarchicalEmbedding(
@@ -77,16 +78,32 @@ class HSSLM(nn.Module):
             padding_idx=0,
         )
 
-        # 2. Core SSM engine
-        self.core = StateSpaceCore(
-            n_layers=self.n_layers,
-            d_model=self.d_model,
-            d_state=self.d_state,
-            d_conv=self.d_conv,
-            expand=self.expand,
-            dt_rank=self.dt_rank,
-            dropout=self.dropout,
-        )
+        # 2. Core recurrence -- S6 (Mamba-style, default) or GSSM-SELECTIVE
+        # (geometric log-complement scan). Controlled comparison: identical
+        # embedding/composer/lm_head/streaming hull either way, see
+        # gssm_core.py's module docstring.
+        if self.core_type == "gssm":
+            from .gssm_core import GSSMCore
+            self.core = GSSMCore(
+                n_layers=self.n_layers,
+                d_model=self.d_model,
+                n_heads=config.get("gssm_n_heads", 4),
+                d_head=config.get("gssm_d_head", None),
+                dropout=self.dropout,
+                check_bounds=config.get("gssm_check_bounds", True),
+            )
+        elif self.core_type == "s6":
+            self.core = StateSpaceCore(
+                n_layers=self.n_layers,
+                d_model=self.d_model,
+                d_state=self.d_state,
+                d_conv=self.d_conv,
+                expand=self.expand,
+                dt_rank=self.dt_rank,
+                dropout=self.dropout,
+            )
+        else:
+            raise ValueError(f"Unknown core type: {self.core_type!r} (expected 's6' or 'gssm')")
 
         # 3. Hierarchical composer
         self.composer = HierarchicalComposer(

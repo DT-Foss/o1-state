@@ -31,6 +31,17 @@ class HSSLMConfig:
     hierarchical: bool = True
     aux_loss_weight: float = 0.1
 
+    # Core selection: 's6' (Mamba-style SelectiveSSM, core_engine.py, default)
+    # or 'gssm' (GSSM-SELECTIVE geometric scan, gssm_core.py). Controlled
+    # comparison arm -- same embedding/composer/lm_head/streaming hull,
+    # only the recurrence differs.
+    core: str = "s6"
+    # gssm-only: heads for the log-complement scan (core_engine.py's S6 has
+    # no head concept, so these are ignored when core='s6').
+    gssm_n_heads: int = 4
+    gssm_d_head: Optional[int] = None  # default: max(1, d_model // gssm_n_heads)
+    gssm_check_bounds: bool = True
+
     # Training hyperparameters
     learning_rate: float = 6e-4
     weight_decay: float = 0.1
