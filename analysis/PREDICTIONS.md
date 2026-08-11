@@ -2751,3 +2751,29 @@ artifact is a number about the defaults, not about the system.
   NOT family-generic in transient — a real F5 boundary, named and
   kept at full strength; the stationary-regime comparison then
   re-registers on longer runs.
+
+  **P81 SCORED (2026-08-11, hsslm/tests/dial_law_hsslm_scored.json
+  + dial_law_organism_scored.json, both arms seeds 44/45 on the
+  ARM machine beside the running d1024 extension; organism control
+  runs its own step_gated unmodified).** THE FALSIFIER FIRES AND
+  NAMES A REAL F5 BOUNDARY. (a) SPLIT: strict monotonicity of the
+  gate-rate curve HOLDS on both fresh HSSLM seeds — but the
+  cross-seed spread bar (0.03) tears at every q <= 0.75 (0.130 /
+  0.065 / 0.054), converging only at high q (0.011 at q=0.9). The
+  transient curve's SHAPE is reproducible; its low-q level is
+  seed-noisy at this horizon. (b) FAIL everywhere: the organism
+  sits roughly twice as close to 1-q as HSSLM at every point
+  (seed-averaged |delta_HSSLM - delta_organism| 0.057-0.116, max
+  single-cell 0.170, bar 0.05). What IS shared across the two
+  architectures, at full strength: the sign (both under-fire below
+  1-q in transient), the monotone form over q, and falling
+  surprise at every q. What is NOT family-generic: the transient
+  AMPLITUDE — how deeply the gate under-fires while surprise still
+  falls steeply is architecture-dependent (HSSLM ~2x deeper,
+  noisier at low q). The dial law's registered form (rate ~ 1-q,
+  organism-measured in quasi-stationary long runs) is hereby
+  bounded: it is a family law in shape, an architecture property
+  in transient depth. The stationary-regime comparison
+  re-registers on longer runs as the pre-committed follow-up, and
+  any future HSSLM deployment tunes q against ITS OWN measured
+  curve, not the organism's.
