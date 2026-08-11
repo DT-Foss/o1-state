@@ -2777,3 +2777,34 @@ artifact is a number about the defaults, not about the system.
   re-registers on longer runs as the pre-committed follow-up, and
   any future HSSLM deployment tunes q against ITS OWN measured
   curve, not the organism's.
+
+- **P82 — the band policy flips the bill (registered 2026-08-11,
+  BEFORE the run; policy organ committed with 21/21 tests, band
+  edges self-calibrated from the stream's own surprise
+  distribution, never hard-coded).** P79/P80 measured the shape
+  (the consult win lives in a middle surprise band, n=2); this
+  run tests whether a PROSPECTIVE policy — quantile band
+  calibrated on the stream before consulting, default (0.75,
+  0.92) — captures it. Setup: A3 reader (the gated life), canon
+  read side, fresh copies of the P72 store, WT-103, fresh seed
+  62, the winning cell (full_record_text x3 x6), 120,000 consult
+  words, max 500 consults; two arms on the identical stream:
+  --policy always vs --policy band.
+  (a) THE FLIP: net_balance_real(band) > 0 AND
+      net_balance_real(always) < 0 — the policy turns the
+      injection channel from net-negative to net-positive on the
+      same stream.
+  (b) EFFICIENCY: band's mean drop_real per consult exceeds
+      always' — the policy concentrates consultation where it
+      pays.
+  (c) DISCIPLINE: skipped gaps appear in n_skipped_by_policy and
+      nowhere else (no ledger entries, no injection cost), store
+      copies clean, per-row data in both artifacts.
+  Falsifiers: (a) fails on the band side => the tercile-derived
+  quantile window does not transfer prospectively — the policy
+  re-registers with A3-calibrated quantiles before any policy
+  code ships into the builder loop. (a) fails on the always side
+  (always >= 0) => the channel's net cost was seed luck — pool
+  across seeds before further policy claims. (b) fails => the
+  band selects volume, not value — the signal needs a second
+  feature (evidence_count, depth), stated at full strength.
