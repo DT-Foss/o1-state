@@ -35,7 +35,7 @@ Formal statements, each over the *class* of systems it applies to, in
 | F4 | **The two-system law** — sharp gated readouts have a capacity cliff, so unbounded accumulation belongs to an external index the stream writes and consults | cliff slope 1.32 vs 0.57 (§8); hybrid recall at P=16: base 0.10–0.20 → 0.41–0.62 (§12); reminded reads ~1.0 (§12); the frozen file answers by key (§18); the index is a living, canonicalized, delta-inferred file a lived reader consults with a ~175× stronger reaction than a fresh one (§20) |
 | F5 | **Family-generic operating modes** — every mode above attaches to the affine-scan operator class (Mamba/S6, S5, LRU), not to one architecture | family reduction ~1e-15 (§1); POS-on-S6 at 0.98× of POS-on-GSSM, GSSM ahead 0.156 nats head-to-head (§13) |
 | F6 | **Train short, deploy unbounded** — no absolute position + exactness ⇒ tiny training horizons, unbounded deployment | ×0.98 PPL at 4096×; 1B-token eval at flat 4.36 GB and a 10.0B+-token training LIFE at 0.69–0.83 GB, 0.80 GB at the ten-billion crossing (§4, §19; results/intel_10b_crossing.txt); recall flat across 8 detached boundaries (§10) |
-| F7 | **The portable organism** — the living system is a ~53 MB serializable asset; organs couple through kilobytes (spans, reminders, deltas), not activations: migratable, forkable, shardable, seedable, offline-capable | live ARM→x86 mid-stream migration behaviorally identical to six decimals (§15); stranger verification across ISAs, 19/20 bit-exact with the one divergence pinned to a ULP (§16); a 7.4B-token life forked and measured (§19); fork cost measured (twin, §9) |
+| F7 | **The portable organism** — the living system is a ~53 MB serializable asset; organs couple through kilobytes (spans, reminders, deltas), not activations: migratable, forkable, shardable, seedable, offline-capable | live ARM→x86 mid-stream migration behaviorally identical to six decimals (§15); stranger verification across ISAs, 19/20 bit-exact with the one divergence pinned to a ULP (§16); a life forked read-only at 7.4B tokens — the parent has since passed ten billion — and measured (§19); fork cost measured (twin, §9) |
 
 ---
 
@@ -298,22 +298,24 @@ raw run log is committed verbatim.
 result is *eval*. The same persistent state also makes *training* O(1), and lets the model remember
 across a pause in the input — two things a turn-based, KV-cache model structurally cannot do.
 
-**The 7-billion-token life (running).** A 1,713,673-parameter organism has now *learned online*
-through **more than 7.4 billion streamed tokens** in one continuous life — no dataset stored, no
-epochs, no growing context — at a process memory that never left the band **0.69–0.83 GB**. The
-stretch from 0.87B past 7B ran in a *single OS process* for ~12 days without any intervention; the
-one stall in the life (an upstream HF-stream hang) was self-healed from the run's own atomic
-checkpoint, resuming 51,200 tokens back with ~3 minutes of stream lost. The cost of having lived
-70,000 books is zero memory. (Stated plainly: at 1.7M parameters the loss EMA is at its capacity
-floor, 4.25 → 4.17 over the logged stretch — this artifact measures the *constancy of resources
-over experience*, not continued learning.) The life is now also an experimental substrate: its
-checkpoint was forked read-only at 7,442,664,960 tokens and measured against a fresh twin — the
-age axis, §19.
+**The ten-billion-token life (running).** A 1,713,673-parameter organism has passed
+**ten billion streamed tokens learned online in one continuous life** — 10,072,678,400 as of
+2026-08-11, and still running — no dataset stored, no epochs, no growing context — at a process
+memory that has never left the band **0.69–0.83 GB** (0.80 GB at the ten-billion crossing,
+`results/intel_10b_crossing.txt`). The stretch from 0.87B to here is a *single OS process*, ~430
+hours without intervention; the one stall in the life (an upstream HF-stream hang) was self-healed
+from the run's own atomic checkpoint, resuming 51,200 tokens back with ~3 minutes of stream lost.
+The cost of having lived 100,000 books is zero memory. (Stated plainly: at 1.7M parameters the
+loss EMA is at its capacity floor, 4.25 → 4.15 over the logged life — this artifact measures the
+*constancy of resources over experience*, not continued learning.) The life is also an
+experimental substrate: its checkpoint was forked read-only at 7,442,664,960 tokens and measured
+against a fresh twin — the age axis, §19.
 
-![The 7-billion-token life: constant memory across the whole of experience](plots/lifetime_7b.png)
+![The lifetime curve: constant memory across the whole of experience (drawn at the 7.4B mark; the run has since passed 10B)](plots/lifetime_7b.png)
 
-→ `results/lifetime_7b_curve.json`, `results/lifetime_7b_series.json`,
-`results/lifetime_billion_status.json` (the 1B crossing), `src/plot_lifetime_7b.py`
+→ `results/intel_10b_crossing.txt` (the 10B crossing), `results/lifetime_7b_curve.json`,
+`results/lifetime_7b_series.json`, `results/lifetime_billion_status.json` (the 1B crossing),
+`src/plot_lifetime_7b.py`
 
 ![Living-stream: constant-memory training and a bit carried through an input gap](plots/living_stream.png)
 
@@ -1092,13 +1094,69 @@ and one traced, minimal addition to `repl.py`'s query router (`_direct_kb_lookup
 covered `causes`).
 → `demo_e2e_loop.py`, `marie_curie_article.txt`
 
-**The knowledge engine's closure-wall is the next named organ.** The ConceptNet mount curve
-above is a second, independent measurement of P74's finding on real-world data at real scale —
-graph density is not scale-invariant, and dense regimes need bounded or lazy inference rather
-than an eager full closure at mount time. That is now a named next attack on the LIVE-CAUSAL
-engine itself, not a footnote: the same organ that will need to serve a full 500K-relation
-ConceptNet or any comparably dense corpus.
+**The closure-wall organ was built and measured — the wall is gone.** The named attack was
+executed as the lazy/bounded-inference mode of the engine: no closure is ever materialized,
+queries run a bounded DFS with *visible* truncation (a caller can always learn its answer may
+be an undercount — never a silent cap). Measured twice on real artifacts, both pre-registered:
+on the densest store we own (WT-103 full: 20,274 segments, density 1.628), lazy answers are
+**exactly equal to eager on 50/50 sampled keys** with zero closure calls and clean drops (P83);
+and on the store class that OOM'd eager materialization at 21GB — the full 189,719-record
+ConceptNet — the lazy mount takes **2.2 seconds at 0.56 GB end-to-end**, all 20 top-degree hubs
+truncate visibly at the default budget, base-edge ground truth is exact against a raw-record
+scan, and two mounts are deterministic across all 70 sampled answers (P84). Two companion laws
+came out of the same wave: the append-cost story collapsed to one number — per-append inferred
+yield ≈ k · density × new-base-edges with k=2.4–3.0 stable across the whole dense regime while
+the raw yield moves 6.7× (P76) — and the cost wall itself was localized to the *builder's*
+append loop (1.47s median per append at density 1.6), not the reader's mount (4.75s once).
+→ `src/livecausal/p83_run.py`, `src/livecausal/p84_run.py`, `src/livecausal/p76_yield.py`,
+`results/livecausal_p83.json`, `results/livecausal_p84.json`, `results/livecausal_p76_yield.json`
 → `fosski/experimental/livecausal/README.md`, `fosski/experimental/livecausal/DEMO.md`
+
+---
+
+## The speech track (`hsslm/` + `fertig/`) — §21
+
+The organism learns to speak, on its own architecture. `hsslm/` carries a d256 streaming
+speaker with two selectable recurrence cores — S6 (Mamba-style) and **GSSM-SELECTIVE**
+(log-complement rapidity, state provably bounded in [0,1], Theorem 2) — made streaming-exact
+(chunked == full forward to 4.77e-07) and surprise-gated like every other organ. Two 100k-chunk
+speak-lives run as a live A/B on WT-103 plus structure→text pairs mined from the living store
+(`<fact> trigger | mechanism | outcome <say>` → prose, citations carried); decode probes at
+checkpoints chart the growth (single-token babble → phrase-level units, with the structure arm's
+causal phrasing surfacing in free continuation). Early A/B signal at matched chunk position:
+the GSSM core runs under the S6 core on both losses at roughly 4× wall-clock speed — the
+controlled ablation is the named next step before any scored claim.
+
+`fertig/` is the deterministic language layer merged alongside: weight-free parsing,
+pattern-bank verbalization, and a **typed relation register** (RelationFamily/RelationSpec —
+unknown stays unknown, no fallback guessing; 5× the typed coverage of the old synonym table on
+the same sample with honest abstention on the rest). Its bridge walks the live store base-edges
+only and answers with `(sha, idx)` receipts inline; its teacher module
+(`hsslm/data/fertig_teacher.py`) verbalizes causal records into unlimited, deterministic,
+citation-carrying training sentences for the speaker — quality measured and traced (the broken
+quarter of teacher sentences maps 1:1 to old-extractor fragments the typed register now rejects).
+→ `hsslm/neural/gssm_core.py`, `hsslm/training/speak_train.py`, `hsslm/training/speak_probe.py`,
+`hsslm/data/fertig_teacher.py`, `fertig/fertig/primitives.py`, `results/speak_probe_*.json`
+
+## The vision track (`visual/`) — §22, and the grounding seam
+
+The same organism learns to see: a frame-prediction life (64×64, Linear→GSSMCore→Linear,
+residual parameterization) that beats its own copy-last instrument after the day-one gray
+collapse was fixed, with GIF growth charts along the stream. Two scored results carry the
+track: **the dial law reaches pixels** — 96.5% of dense quality at 19.2% of the gradient spend,
+and the admission-rate trajectory reproduces the language-side family shape in detail (ignition
+plateau, crash to 0.093, monotone approach to 1−q from below, never crossing): three substrates
+now share the shape, so the gate is a property of the training law, not the data type (P86).
+And **the grounding seam has its first measured signal**: behind a falsifiable
+certificate-based benchmark (five mandatory axes, Wilson lower bounds, a static-pixels negative
+control every arm must reject), the frame-life's learned encoder — random-projected to 48 dims —
+binds symbols at coverage **0.917, rock-stable from n=24 to n=96**, while the *untrained* twin
+of the same architecture under the *identical* projection stays at chance (0.021): the signal
+is the training. What remains is interval width, and only that (one axis bar already passed;
+n=384 running with the instrument frozen by checkpoint hash) — P85, with the benchmark vendored
+at `visual/grounding/` (146 tests, ADR: grounding is a certificate, not a vibe).
+→ `visual/frame_organism.py`, `visual/train_visual.py`, `visual/grounding_bridge.py`,
+`visual/grounding/`, `results/visual_p86_dial.json`, `results/grounding_bridge_p85.json`
 
 ---
 
@@ -1173,10 +1231,19 @@ o1-state/
 │   ├── chimera.py                                                the composed organism (§17)
 │   ├── knowledge_file_run.py, keyed_file_run.py, surprise_filter_run.py, filter_file_run.py   the knowledge file (§18)
 │   ├── aged_brain_run.py, age_ladder_run.py                      the age axis (§19)
-│   ├── livecausal/          the living knowledge file: store.py, infer.py, canon.py,
-│   │   canon_probe.py, scale_run.py, p75_run.py, consult_run.py, builder_run.py,
-│   │   evidence.py, demo.py + test_*.py                          LIVE-CAUSAL (§20)
+│   ├── livecausal/          the living knowledge file: store.py, infer.py (eager + lazy/bounded),
+│   │   canon.py, canon_probe.py, scale_run.py, p75_run.py, p76_yield.py, p83_run.py,
+│   │   p84_run.py, consult_run.py, builder_run.py, evidence.py, demo.py + test_*.py   LIVE-CAUSAL (§20)
+│   ├── p86_dial_pixels.py                                        dial law on pixels (§22)
 │   └── score_predictions_v2.py                                   the auto-falsifier
+├── hsslm/                   the speech track (§21): neural/ (S6 + GSSM cores, streaming, gating),
+│   ├── training/            speak_train.py (the speak-lives), speak_probe.py (decode probes)
+│   └── data/                graph_to_text*.py, fertig_teacher.py, key_filter.py, vocab.py
+├── fertig/                  deterministic language layer: typed relation register, pattern-bank
+│                            verbalization, live-store bridge with (sha,idx) receipts (§21)
+├── visual/                  the vision track (§22): frame_organism.py, train_visual.py,
+│   ├── grounding/           the vendored grounding-certificate benchmark (146 tests, ADR-0001)
+│   └── grounding_bridge.py  the encoder-behind-the-binder seam (P85)
 ├── vendor/fabel/            the .causal deterministic knowledge engine (the index)
 ├── fosski/experimental/livecausal/    the FOSS-KI merge onto the living store (converters, adapter,
 │   the cut/append and end-to-end-loop demos)                     the FOSS-KI merge
@@ -1185,7 +1252,8 @@ o1-state/
 └── plots/                   figures
 ```
 
-`reference/` = architecture · `src/` = experiments · `vendor/fabel/` = knowledge index ·
+`reference/` = architecture · `src/` = experiments · `hsslm/` + `fertig/` = the speech track ·
+`visual/` = the vision track · `vendor/fabel/` = knowledge index ·
 `fosski/experimental/livecausal/` = the merged answer engine · `analysis/` = theory ·
 `results/` = measured JSON · `plots/` = figures.
 
@@ -1201,8 +1269,8 @@ holographic write gives a bounded scalar state content-addressable recall at 5.7
 — the structural headline — the position-free variant holds **flat perplexity across 524,288×
 length extrapolation** (train T=32, eval to a single 16.7-million-token sequence at constant
 2.5 GB, perplexity *improving* the whole way), **streams a billion eval tokens at a flat
-4.36 GB — and has LIVED past 7.4 billion training tokens in one continuous process at
-0.69–0.83 GB**.
+4.36 GB — and has LIVED past ten billion training tokens in one continuous process at
+0.69–0.83 GB, 0.80 GB at the ten-billion crossing**.
 Out of the box, with no years-long tuning, the operator already **matches** years-tuned SOTA
 perplexity at the WikiText-2 data ceiling (135 PPL) — and on its own axes it does not compete, it
 stands alone: flat perplexity to 524,288× length and a billion-token stream at constant memory,
@@ -1264,6 +1332,23 @@ plus a 189,719-record slice of ConceptNet now live as sealed, cut-and-append-abl
 and the full system demo shows a running process forget a fact, refuse honestly, and recall
 it again after a byte-identical re-append — no restart, no rebuild, nine automated checks
 green.
+
+The current wave closed the density arc and opened two senses. The append-cost story is now
+**one number**: per-append inferred yield ≈ k · density × new base edges, k=2.4–3.0 stable
+across the whole dense regime while the raw yield moves 6.7× (P76, scored from the overnight
+builder's own 20,274-append telemetry). The **lazy/bounded organ** the wall demanded was built
+and measured on both real artifacts: exact agreement with eager on the densest store (P83), and
+the ConceptNet class that OOM'd eager at 21GB now mounts in **2.2s at 0.56 GB** with all 20
+real hubs truncating *visibly* at the default budget (P84) — the wall's true home is the
+builder's append loop, not the reader's mount. The **speech track** runs two 100k-chunk
+speak-lives as a live A/B (S6 vs GSSM cores) fed by store-mined structure→text pairs and a
+deterministic FERTIG teacher with citations; the **typed relation register** replaced synonym
+guessing with honest abstention. And the **vision track** produced two scored results: the
+dial law holds on pixels with the same transient shape as language — three substrates, one
+law (P86) — and the frame-life's learned encoder **binds symbols** on a certificate-based
+grounding benchmark at coverage 0.917 (stable 24→96 episodes) while its untrained twin under
+the identical projection stays at chance: the binding signal is the training, and what remains
+between it and a full pass is confidence-interval width alone (P85, n=384 in flight).
 
 Every number here is reproducible from the scripts in `src/`. The kernel reductions are exact
 identities; the recall result is 5-seed with the attention validity gate at 0.994; the threshold
