@@ -3261,3 +3261,90 @@ artifact is a number about the defaults, not about the system.
   calibrated ratio bar, momentum-aware attribution) is NAMED
   for the next registration, not patched into this one. (d)
   vacant (0 records).
+
+- **P91–P94 — the voice: the world book spoken (co-work
+  session, second wave; merged by the Lead 2026-08-11).** The
+  full circle across organs and INDIVIDUALS: A lives (8,000
+  frames, seeded random per the P88 lesson, 5,159 acted
+  records, provenance 5/5) → a speaker learns FROM VISION ALONE
+  (f_t, Δf — never the action) to utter what happened,
+  supervised only by A's own records → a fresh body B, which
+  never saw A's life, hears only the utterances and turns them
+  into labeled IMAGINATION on its own view → B acts, measured
+  on a fixed probe route in a separate world (which
+  constructively kills the P89c selection confound).
+  AUTHORITATIVE PRE-REGISTRATION: voice/PREDICTIONS_VOICE.md
+  (clauses committed after debug smokes on a 1,500-frame life,
+  before the scoring run), merged unchanged via the co-work
+  bundle (32289ec; the co-work proxy cannot push, delivery by
+  git bundle is the agreed path). B-arms are model-paired:
+  bit-identical init, identical real frame budget, identical
+  world and action sequence — the arms differ ONLY in what was
+  heard. 7/7 voice/test_voice.py re-verified by the Lead on
+  merge.
+
+  **P91 SCORED — the speaker speaks, and knows where to stay
+  silent.** (a) CONFIRMED with room: direction 0.991, magnitude
+  0.806, sentence 0.802 on 752 held-out consequence steps —
+  from vision alone. (d) CONFIRMED cleanly, the epistemics
+  clause: the action word sits at 0.992 where the consequence
+  was visible and at prior +0.009 where it was invisible
+  (silence said 1.000) — language reaches exactly as far as
+  the evidence, measured, and beating the prior there would
+  have been dissected as a leak, not celebrated. (b) FALSIFIED
+  decisively at 0.022 on 864 never-in-loss steps: the unseen
+  combination (right, 2) is NOT composable from (right,1/3)
+  and (left,2) although both heads softmax separately —
+  SYSTEMATICITY IS NOT FREE, and this number is now the bar
+  for every future "compositional" claim in the repo. (c)
+  narrowly FALSIFIED: flip 0.817 vs bar 0.85 at n=60,
+  σ≈0.05 — an n-budget finding, the mechanism far above
+  chance.
+
+  **P92 SCORED — hearsay accelerates real embodiment.** (a)
+  CONFIRMED: probe hit 0.333 at frame 0, before a single real
+  step (silent at 0.000 by tie-guard) — hearing alone creates
+  a real, correct action preference. (b) SPLIT: at the last
+  checkpoint CONFIRMED with room (0.594 vs 0.396, +0.198 ≫
+  +0.05); at the first checkpoint FALSIFIED — and the finding
+  is sharper than the clause: the SILENT life spikes to 0.521
+  at 512 and then decays monotonically to 0.396
+  (world-specialization), while every hearing arm holds.
+  HEARING INOCULATES against the decay. (c) FALSIFIED as a
+  metric artifact, dissected openly: first-crossing on a
+  96-step probe dies on exactly that transient spike; the
+  metric, not the mechanism. L1 clause CONFIRMED.
+
+  **P93 SCORED — the poison, and the autopsy that turns the
+  day.** (a) FALSIFIED: the registered scrambled arm helped —
+  and the post-hoc autopsy (poison_v2_diagnostic.json) found
+  the registered poison SELF-HEALING: in the codec the action
+  word derives from the direction word, so the direction lie
+  swaps action and shift-sign TOGETHER and leaves the
+  sensorimotor mapping intact (the lie was effectively only
+  about magnitudes). (b) therefore NOT ESTABLISHED — this run
+  could not separate content from regularization. The clearly
+  labeled DIAGNOSTIC arm poison_v2 (true action word, sign
+  flipped — the lie the bijection cannot heal; no registered
+  claim) shows the real structure: truth 0.333 > lie 0.208 >
+  silence 0.000 at frame 0, then the life washes the content
+  out and keeps the awakened channel (+0.125 over silent at
+  the end). Measured decomposition: channel awakening ≈
+  +0.13–0.16, truth margin on top ≈ +0.04–0.07 at probe
+  σ≈0.05 — direction right, significance absent at n=1. The
+  next registration is thereby dictated, not chosen: poison_v2
+  as a registered arm, seed sweep, longer probe.
+
+  **P94 SCORED — the full circle carries at the start.** (a)
+  FALSIFIED narrowly: benefit ratio 0.525 vs the 0.6 bar at
+  the last checkpoint — and the trajectory contradicts the
+  formal reading at its core: at frame 0 the LEARNED mouth
+  carries almost fully (0.323 vs codec truth 0.333), at 512 it
+  LEADS every arm in the whole experiment (0.688), and only
+  the final checkpoint decides the registered number — tail
+  noise at n=1, σ≈0.05. (b) the error accounting: sentence
+  accuracy 0.802 sits exactly on the 0.8 boundary. Honest
+  verdict as written in the artifact: lived knowledge →
+  learned language → foreign weights demonstrably works at
+  frame 0; whether the 0.6 margin holds at life's end is the
+  seed sweep's to decide. Nothing averaged; the 0.525 stands.
