@@ -1,0 +1,471 @@
+#!/usr/bin/env python3
+"""
+NEXUS — N agent sessions talk to each other.
+One shared JSON file. Change-wakeup (kqueue on macOS, mtime-poll on Linux).
+That's it.
+
+Extended from David's two-agent original (Desktop/nexus, March 2026):
+  - Linux-portable wakeup (kqueue is BSD-only; poll fallback)
+  - N agents instead of alpha/bravo (any session name works)
+  - rooms: NEXUS_FILE env var picks the bus file (default /tmp/nexus.json)
+  - atomic read-modify-write (single LOCK_EX around every mutation — the
+    original's separate load()/save() lost updates under many writers)
+  - a task queue with atomic claim (locks are for files; swarm work needs
+    claimable tasks): task-add / task-claim / task-done / tasks
+
+Agent commands:
+    nexus <name> say "message"        nexus <name> read
+    nexus <name> wait 30              nexus <name> status "text"
+    nexus <name> peek                 nexus <name> done "text"
+    nexus <name> lock path            nexus <name> unlock path
+    nexus <name> share path [s:e]     nexus <name> log [n]
+    nexus <name> ask "question?"      nexus <name> files
+    nexus <name> task-add "text"      nexus <name> task-claim
+    nexus <name> task-done <id>       nexus <name> tasks
+
+Human commands:
+    nexus watch | inject "msg" | goal <text> | state | clear | brief <name>
+"""
+
+import json, sys, time, os, fcntl, select
+
+NEXUS = os.environ.get("NEXUS_FILE", "/tmp/nexus.json")
+
+EMPTY = {"messages": [], "cursors": {}, "status": {}, "goal": "", "done": [],
+         "locks": {}, "tasks": [], "task_seq": 0}
+
+
+def _normalize(data):
+    for k, v in EMPTY.items():
+        data.setdefault(k, type(v)() if not isinstance(v, int) else 0)
+    return data
+
+
+def load():
+    if not os.path.exists(NEXUS):
+        return dict(EMPTY)
+    with open(NEXUS) as f:
+        fcntl.flock(f, fcntl.LOCK_SH)
+        try:
+            data = json.load(f)
+        except json.JSONDecodeError:
+            data = dict(EMPTY)
+        fcntl.flock(f, fcntl.LOCK_UN)
+        return _normalize(data)
+
+
+def update(mutate):
+    """Atomic read-modify-write: one LOCK_EX held across load+mutate+write.
+    Every mutation goes through here — N writers cannot lose updates."""
+    fd = os.open(NEXUS, os.O_RDWR | os.O_CREAT, 0o644)
+    with os.fdopen(fd, "r+") as f:
+        fcntl.flock(f, fcntl.LOCK_EX)
+        raw = f.read()
+        try:
+            data = json.loads(raw) if raw.strip() else dict(EMPTY)
+        except json.JSONDecodeError:
+            data = dict(EMPTY)
+        data = _normalize(data)
+        result = mutate(data)
+        f.seek(0)
+        f.truncate()
+        json.dump(data, f)
+        f.flush()
+        os.fsync(f.fileno())
+        fcntl.flock(f, fcntl.LOCK_UN)
+    return result
+
+
+def ts():
+    return time.strftime("%H:%M:%S")
+
+
+def get_unread(data, who):
+    cursor = data.get("cursors", {}).get(who, 0)
+    return [m for m in data["messages"][cursor:] if m["from"] != who]
+
+
+def add_msg(data, sender, text, kind="chat"):
+    data["messages"].append({"from": sender, "text": text, "ts": ts(), "kind": kind})
+
+
+def wait_for_change(timeout, who):
+    """Block until the bus file changes and has unread messages for `who`.
+    kqueue where available (macOS), mtime polling elsewhere (Linux)."""
+    if not os.path.exists(NEXUS):
+        update(lambda d: None)
+    deadline = time.time() + timeout
+    if hasattr(select, "kqueue"):
+        fd = os.open(NEXUS, os.O_RDONLY)
+        kq = select.kqueue()
+        ev = select.kevent(fd, filter=select.KQ_FILTER_VNODE,
+                           flags=select.KQ_EV_ADD | select.KQ_EV_CLEAR,
+                           fflags=select.KQ_NOTE_WRITE)
+        try:
+            while time.time() < deadline:
+                remaining = max(0.1, deadline - time.time())
+                events = kq.control([ev], 1, remaining)
+                if events:
+                    time.sleep(0.05)
+                    data = load()
+                    new = get_unread(data, who)
+                    if new:
+                        return data, new
+            return None, []
+        finally:
+            os.close(fd)
+            kq.close()
+    # poll fallback
+    last_mtime = 0.0
+    while time.time() < deadline:
+        try:
+            mtime = os.stat(NEXUS).st_mtime
+        except OSError:
+            mtime = 0.0
+        if mtime != last_mtime:
+            last_mtime = mtime
+            data = load()
+            new = get_unread(data, who)
+            if new:
+                return data, new
+        time.sleep(0.5)
+    return None, []
+
+
+def print_msgs(msgs):
+    for m in msgs:
+        kind = m.get("kind", "chat")
+        tag = {"human": "[DAVID] ", "goal": "[GOAL] ", "question": "[QUESTION] ",
+               "share": "[SHARE] "}.get(kind, "")
+        print(f"  [{m['ts']}] {m['from']}: {tag}{m['text']}")
+
+
+def main():
+    if len(sys.argv) < 2:
+        print(__doc__.strip())
+        sys.exit(1)
+
+    # -- Human commands (no session name) --
+
+    if sys.argv[1] == "watch":
+        print(f"NEXUS live ({NEXUS}) — Ctrl+C to stop")
+        print("-" * 40)
+        if not os.path.exists(NEXUS):
+            update(lambda d: None)
+        data = load()
+        print_msgs(data["messages"])
+        last_len = len(data["messages"])
+        last_mtime = 0.0
+        try:
+            while True:
+                try:
+                    mtime = os.stat(NEXUS).st_mtime
+                except OSError:
+                    mtime = 0.0
+                if mtime != last_mtime:
+                    last_mtime = mtime
+                    data = load()
+                    print_msgs(data["messages"][last_len:])
+                    sys.stdout.flush()
+                    last_len = len(data["messages"])
+                time.sleep(0.5)
+        except KeyboardInterrupt:
+            print("\nStopped.")
+        sys.exit(0)
+
+    if sys.argv[1] == "inject":
+        msg = " ".join(sys.argv[2:])
+        if not msg:
+            print("Inject what?"); sys.exit(1)
+        update(lambda d: add_msg(d, "DAVID", msg, "human"))
+        print(f"[{ts()}] DAVID: {msg}")
+        sys.exit(0)
+
+    if sys.argv[1] == "goal":
+        if len(sys.argv) > 2:
+            text = " ".join(sys.argv[2:])
+            def _set(d):
+                d["goal"] = text
+                add_msg(d, "DAVID", f"GOAL: {text}", "goal")
+            update(_set)
+            print(f"Goal: {text}")
+        else:
+            print(f"Goal: {load().get('goal') or 'not set'}")
+        sys.exit(0)
+
+    if sys.argv[1] == "state":
+        data = load()
+        print(f"Bus: {NEXUS}")
+        print(f"Goal: {data.get('goal') or 'not set'}")
+        print(f"Messages: {len(data['messages'])}")
+        print(f"Sessions: {', '.join(data.get('status', {}).keys()) or 'none'}")
+        for name, s in data.get("status", {}).items():
+            print(f"  [{name}] {s['text']}  ({s['ts']})")
+        locks = data.get("locks", {})
+        if locks:
+            print("Locked files:")
+            for path, info in locks.items():
+                print(f"  {path} -> {info['by']}  ({info['ts']})")
+        tasks = data.get("tasks", [])
+        if tasks:
+            print("Tasks:")
+            for t in tasks:
+                owner = f" @{t['by']}" if t.get("by") else ""
+                print(f"  #{t['id']} [{t['status']}]{owner} {t['text']}")
+        done = data.get("done", [])
+        if done:
+            print("Completed:")
+            for d in done[-10:]:
+                print(f"  [{d['ts']}] {d['from']}: {d['text']}")
+        sys.exit(0)
+
+    if sys.argv[1] == "clear":
+        update(lambda d: d.clear() or d.update(json.loads(json.dumps(EMPTY))))
+        print("Cleared.")
+        sys.exit(0)
+
+    if sys.argv[1] == "brief":
+        name = sys.argv[2] if len(sys.argv) > 2 else "worker1"
+        n = os.path.abspath(__file__)
+        team = ", ".join(k for k in load().get("status", {}) if k != name) or "the other workers"
+        print(f"""You are {name.upper()} on a NEXUS multi-agent bus ({NEXUS}). Teammates: {team}.
+
+NEXUS COMMANDS — use these to coordinate:
+  {n} {name} read              check messages (marks read)
+  {n} {name} say "msg"         message the team
+  {n} {name} wait 120          block until someone writes (max 120s)
+  {n} {name} peek              team status + unread count
+  {n} {name} status "text"     tell the team what you're doing
+  {n} {name} done "text"       mark your part finished
+  {n} {name} log [n]           last n messages WITHOUT marking read
+  {n} {name} ask "question?"   tagged question
+  {n} {name} lock path         claim a file        {n} {name} unlock path
+  {n} {name} files             show locked files
+  {n} {name} share path [s:e]  send file content through the bus
+  {n} {name} task-claim        atomically claim the next open task
+  {n} {name} task-done <id>    mark a claimed task done
+  {n} {name} tasks             list the task queue
+
+PROTOCOL:
+1. First: `{n} {name} read`, then `{n} {name} task-claim` to get work.
+2. Work the task. Lock files before editing. Short messages, facts only.
+3. `task-done <id>` + `say` a one-line result. Claim the next task.
+4. No open tasks and nothing to coordinate: `done` and stop.
+5. Messages from DAVID have priority.""")
+        sys.exit(0)
+
+    # -- Agent commands --
+
+    if len(sys.argv) < 3:
+        print("nexus <session> <cmd> [args]")
+        sys.exit(1)
+
+    who = sys.argv[1]
+    cmd = sys.argv[2]
+
+    if cmd == "say":
+        msg = " ".join(sys.argv[3:])
+        if not msg:
+            print("Say what?"); sys.exit(1)
+        update(lambda d: add_msg(d, who, msg))
+        print(f"[{ts()}] {who}: {msg}")
+
+    elif cmd == "read":
+        def _read(d):
+            new = get_unread(d, who)
+            d.setdefault("cursors", {})[who] = len(d["messages"])
+            return new
+        new = update(_read)
+        if not new:
+            print("Nothing new.")
+        else:
+            print_msgs(new)
+
+    elif cmd == "wait":
+        timeout = int(sys.argv[3]) if len(sys.argv) > 3 else 60
+        def _read(d):
+            new = get_unread(d, who)
+            d.setdefault("cursors", {})[who] = len(d["messages"])
+            return new
+        new = update(_read)
+        if new:
+            print_msgs(new)
+            sys.exit(0)
+        data, new = wait_for_change(timeout, who)
+        if new:
+            update(_read)
+            print_msgs(new)
+        else:
+            print("No message within timeout.")
+
+    elif cmd == "status":
+        if len(sys.argv) > 3:
+            text = " ".join(sys.argv[3:])
+            update(lambda d: d.setdefault("status", {}).update({who: {"text": text, "ts": ts()}}))
+            print(f"[{who}] {text}")
+        else:
+            for name, s in load().get("status", {}).items():
+                print(f"  [{name}] {s['text']}  ({s['ts']})")
+
+    elif cmd == "peek":
+        data = load()
+        others = {k: v for k, v in data.get("status", {}).items() if k != who}
+        if not others:
+            print("No other session.")
+        else:
+            for name, s in others.items():
+                print(f"  [{name}] {s['text']}  ({s['ts']})")
+        new = get_unread(data, who)
+        if new:
+            print(f"  + {len(new)} unread")
+        if data.get("goal"):
+            print(f"  Goal: {data['goal']}")
+        n_open = sum(1 for t in data.get("tasks", []) if t["status"] == "open")
+        if n_open:
+            print(f"  Open tasks: {n_open}")
+
+    elif cmd == "done":
+        text = " ".join(sys.argv[3:]) if len(sys.argv) > 3 else "task completed"
+        def _done(d):
+            d.setdefault("done", []).append({"from": who, "text": text, "ts": ts()})
+            add_msg(d, who, f"DONE: {text}", "done")
+        update(_done)
+        print(f"[{ts()}] {who} DONE: {text}")
+
+    elif cmd == "log":
+        n = int(sys.argv[3]) if len(sys.argv) > 3 else 20
+        data = load()
+        print_msgs(data["messages"][-n:]) if data["messages"] else print("Empty.")
+
+    elif cmd == "ask":
+        question = " ".join(sys.argv[3:])
+        if not question:
+            print("Ask what?"); sys.exit(1)
+        update(lambda d: add_msg(d, who, question, "question"))
+        print(f"[{ts()}] {who} asks: {question}")
+
+    elif cmd == "lock":
+        if len(sys.argv) < 4:
+            print("Lock what?"); sys.exit(1)
+        path = " ".join(sys.argv[3:])
+        def _lock(d):
+            locks = d.setdefault("locks", {})
+            if path in locks and locks[path]["by"] != who:
+                return locks[path]
+            locks[path] = {"by": who, "ts": ts()}
+            add_msg(d, who, f"LOCKED: {path}", "lock")
+            return None
+        holder = update(_lock)
+        if holder:
+            print(f"BLOCKED — {path} is locked by {holder['by']} since {holder['ts']}")
+            sys.exit(1)
+        print(f"Locked: {path}")
+
+    elif cmd == "unlock":
+        if len(sys.argv) < 4:
+            print("Unlock what?"); sys.exit(1)
+        path = " ".join(sys.argv[3:])
+        def _unlock(d):
+            locks = d.setdefault("locks", {})
+            if path not in locks:
+                return "absent"
+            owner = locks[path]["by"]
+            del locks[path]
+            add_msg(d, who, f"UNLOCKED: {path}", "unlock")
+            return owner
+        owner = update(_unlock)
+        if owner == "absent":
+            print(f"{path} was not locked.")
+        else:
+            if owner != who:
+                print(f"WARNING: {path} was locked by {owner} — force-unlocked")
+            print(f"Unlocked: {path}")
+
+    elif cmd == "files":
+        locks = load().get("locks", {})
+        if not locks:
+            print("No files locked.")
+        else:
+            for path, info in locks.items():
+                owner = "YOU" if info["by"] == who else info["by"]
+                print(f"  {path} -> {owner}  ({info['ts']})")
+
+    elif cmd == "share":
+        if len(sys.argv) < 4:
+            print("Share what?"); sys.exit(1)
+        filepath = sys.argv[3]
+        line_range = sys.argv[4] if len(sys.argv) > 4 else None
+        if not os.path.exists(filepath):
+            print(f"File not found: {filepath}"); sys.exit(1)
+        with open(filepath) as f:
+            lines = f.readlines()
+        if line_range and ":" in line_range:
+            a, b = line_range.split(":")
+            lines = lines[(int(a) - 1 if a else 0):(int(b) if b else len(lines))]
+            label = f"{filepath} [{line_range}]"
+        elif len(lines) > 60:
+            lines, label = lines[:60], f"{filepath} [first 60 lines]"
+        else:
+            label = filepath
+        content = "".join(lines).rstrip()
+        update(lambda d: add_msg(d, who, f"SHARE {label}:\n{content}", "share"))
+        print(f"Shared {label} ({len(lines)} lines)")
+
+    elif cmd == "task-add":
+        text = " ".join(sys.argv[3:])
+        if not text:
+            print("Add what?"); sys.exit(1)
+        def _add(d):
+            d["task_seq"] = d.get("task_seq", 0) + 1
+            t = {"id": d["task_seq"], "text": text, "status": "open", "by": None, "ts": ts()}
+            d.setdefault("tasks", []).append(t)
+            return t["id"]
+        tid = update(_add)
+        print(f"Task #{tid} added.")
+
+    elif cmd == "task-claim":
+        def _claim(d):
+            for t in d.get("tasks", []):
+                if t["status"] == "open":
+                    t["status"] = "claimed"
+                    t["by"] = who
+                    t["ts"] = ts()
+                    add_msg(d, who, f"CLAIMED #{t['id']}: {t['text']}", "task")
+                    return t
+            return None
+        t = update(_claim)
+        if t:
+            print(f"CLAIMED #{t['id']}: {t['text']}")
+        else:
+            print("No open tasks.")
+
+    elif cmd == "task-done":
+        if len(sys.argv) < 4:
+            print("Which id?"); sys.exit(1)
+        tid = int(sys.argv[3])
+        def _finish(d):
+            for t in d.get("tasks", []):
+                if t["id"] == tid:
+                    t["status"] = "done"
+                    t["ts"] = ts()
+                    add_msg(d, who, f"TASK-DONE #{tid}: {t['text']}", "task")
+                    return True
+            return False
+        ok = update(_finish)
+        print(f"Task #{tid} done." if ok else f"No task #{tid}.")
+
+    elif cmd == "tasks":
+        tasks = load().get("tasks", [])
+        if not tasks:
+            print("No tasks.")
+        else:
+            for t in tasks:
+                owner = f" @{t['by']}" if t.get("by") else ""
+                print(f"  #{t['id']} [{t['status']}]{owner} {t['text']}")
+
+    else:
+        print(f"Unknown: {cmd}")
+
+
+if __name__ == "__main__":
+    main()
