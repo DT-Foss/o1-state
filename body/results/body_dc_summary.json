@@ -1,0 +1,79 @@
+{
+  "source": "vizdoom",
+  "policy": "curiosity",
+  "seed": 42,
+  "frames": 2000,
+  "n_chunks": 125,
+  "gate": {
+    "n_chunks": 125,
+    "n_bwd": 44,
+    "gate_rate": 0.352,
+    "window_len": 125
+  },
+  "l1_first10": [
+    0.06198,
+    0.08174,
+    0.06873,
+    0.07361,
+    0.0674,
+    0.06435,
+    0.07461,
+    0.06718,
+    0.06512,
+    0.06808
+  ],
+  "l1_last10": [
+    0.04636,
+    0.03333,
+    0.05974,
+    0.0238,
+    0.05819,
+    0.0475,
+    0.05188,
+    0.06316,
+    0.06166,
+    0.0583
+  ],
+  "l1_late_mean": 0.049924,
+  "cf_separation_early": 5e-06,
+  "cf_separation_late": 1.2e-05,
+  "cf_hit_rate_late": 0.6,
+  "cf_hit_chance": 0.3333,
+  "action_counts": [
+    684,
+    544,
+    772
+  ],
+  "final_probs": [
+    0.1264,
+    0.7586,
+    0.115
+  ],
+  "final_lp": [
+    -0.011778,
+    0.002283,
+    -0.012668
+  ],
+  "episode_boundaries": 38,
+  "acted_records": {
+    "n_seen": 2000,
+    "n_records": 0,
+    "n_skipped_boundary": 38
+  },
+  "records_segment_sha": null,
+  "provenance": {
+    "picks": [],
+    "exact": "0/0",
+    "pass": false,
+    "note": "no records to verify"
+  },
+  "wall_s": 38.0,
+  "gifs": [
+    "/home/claude/o1-state/body/gifs/body_vizdoom_curiosity_seed42_f544.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_vizdoom_curiosity_seed42_f544.gif",
+    "/home/claude/o1-state/body/gifs/body_vizdoom_curiosity_seed42_f1040.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_vizdoom_curiosity_seed42_f1040.gif",
+    "/home/claude/o1-state/body/gifs/body_vizdoom_curiosity_seed42_f1536.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_vizdoom_curiosity_seed42_f1536.gif"
+  ]
+}

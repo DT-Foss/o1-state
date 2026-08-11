@@ -1,14 +1,14 @@
 {
   "generated_by": "src/score_predictions_v2.py",
   "predictions_file": "analysis/PREDICTIONS.md",
-  "n_predictions": 85,
+  "n_predictions": 89,
   "coverage_summary": {
     "full": 10,
     "partial": 8,
-    "prose": 39,
-    "in_flight": 2,
+    "prose": 44,
+    "in_flight": 0,
     "withdrawn": 1,
-    "registered": 25
+    "registered": 26
   },
   "n_mismatches": 0,
   "mismatches": [],
@@ -2099,7 +2099,7 @@
     "P68": {
       "pid": "P68",
       "title": "the crossing deepens, or it plateaus (registered\n  2026-08-10, BEFORE the resume).",
-      "status": "in_flight",
+      "status": "registered",
       "verdict_words": [],
       "artifacts_named": [],
       "artifacts_found": [],
@@ -2109,13 +2109,12 @@
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "none",
-      "note": "artifact pos_d1024_status.json reports phase=running \u2014 skipped"
+      "coverage": "prose-only (not yet scored)"
     },
     "P69": {
       "pid": "P69",
       "title": "the valley is a shape, or it is a q-artifact (registered\n  2026-08-10, BEFORE the launch).",
-      "status": "in_flight",
+      "status": "registered",
       "verdict_words": [],
       "artifacts_named": [],
       "artifacts_found": [],
@@ -2125,8 +2124,7 @@
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "none",
-      "note": "artifact pos_d1024_status.json reports phase=running \u2014 skipped"
+      "coverage": "prose-only (not yet scored)"
     },
     "P70": {
       "pid": "P70",
@@ -2649,19 +2647,28 @@
     "P85": {
       "pid": "P85",
       "title": "the binding signal survives statistics (registered\n  2026-08-11, BEFORE the run).",
-      "status": "registered",
-      "verdict_words": [],
-      "artifacts_named": [
-        "results/grounding_bridge_four_arms.json"
+      "status": "scored",
+      "verdict_words": [
+        "CONFIRMED",
+        "PASS"
       ],
-      "artifacts_found": [],
+      "artifacts_named": [
+        "results/grounding_bridge_four_arms.json",
+        "results/grounding_bridge_p85.json",
+        "results/grounding_bridge_p85b.json"
+      ],
+      "artifacts_found": [
+        "grounding_bridge_four_arms.json",
+        "grounding_bridge_p85.json",
+        "grounding_bridge_p85b.json"
+      ],
       "checks": [],
       "check_summary": {
         "MATCH": 0,
         "MISMATCH": 0,
         "UNPARSEABLE": 0
       },
-      "coverage": "prose-only (not yet scored)"
+      "coverage": "prose-only (no clause fields in artifact)"
     },
     "P86": {
       "pid": "P86",
@@ -2683,6 +2690,77 @@
         "UNPARSEABLE": 0
       },
       "coverage": "prose-only (no clause fields in artifact)"
+    },
+    "P87": {
+      "pid": "P87",
+      "title": "P90 \u2014 the body organ (co-work session, merged by the\n  Lead 2026-08-11).",
+      "status": "scored",
+      "verdict_words": [
+        "FALSIFIED"
+      ],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
+    },
+    "P88": {
+      "pid": "P88",
+      "title": "",
+      "status": "scored",
+      "verdict_words": [
+        "CONFIRMED",
+        "FALSIFIED"
+      ],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
+    },
+    "P89": {
+      "pid": "P89",
+      "title": "",
+      "status": "scored",
+      "verdict_words": [
+        "CONFIRMED",
+        "FALSIFIED"
+      ],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
+    },
+    "P90": {
+      "pid": "P90",
+      "title": "",
+      "status": "scored",
+      "verdict_words": [
+        "CONFIRMED",
+        "FALSIFIED"
+      ],
+      "artifacts_named": [],
+      "artifacts_found": [],
+      "checks": [],
+      "check_summary": {
+        "MATCH": 0,
+        "MISMATCH": 0,
+        "UNPARSEABLE": 0
+      },
+      "coverage": "prose-only (no loadable json artifact)"
     }
   }
 }

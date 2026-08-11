@@ -1,0 +1,20 @@
+[body] source=acted_synthetic A=3 (['PAN_LEFT', 'PAN_RIGHT', 'HOLD']) policy=random frames=6000 q=0.75 seed=42 gate=True
+[body] GIFs at frame 544: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f544.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f544.gif
+[body] GIFs at frame 1040: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f1040.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f1040.gif
+[body] GIFs at frame 1536: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f1536.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f1536.gif
+[body] GIFs at frame 2032: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f2032.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f2032.gif
+[body] GIFs at frame 2544: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f2544.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f2544.gif
+[body] GIFs at frame 3040: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f3040.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f3040.gif
+[body] GIFs at frame 3536: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f3536.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f3536.gif
+[body] GIFs at frame 4032: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f4032.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f4032.gif
+[body] GIFs at frame 4544: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f4544.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f4544.gif
+[body] GIFs at frame 5040: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f5040.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f5040.gif
+[body] GIFs at frame 5536: /home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f5536.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f5536.gif
+[provenance] ep 0 frame 4693 action pan_left dx -3 -> BIT-EXACT
+[provenance] ep 0 frame 2676 action pan_right dx +3 -> BIT-EXACT
+[provenance] ep 0 frame 3984 action pan_right dx +3 -> BIT-EXACT
+[provenance] ep 0 frame 540 action pan_left dx -3 -> BIT-EXACT
+[provenance] ep 0 frame 2628 action pan_left dx -3 -> BIT-EXACT
+======================================================================
+[body] DONE 6000 frames | l1 late 0.093677 | sep 1.9e-05 -> 8.7e-05 | hit 0.6533 (chance 0.3333) | records 3834 (prov 5/5) | actions [2002, 1961, 2037]
+[body] summary: body/results/body_sr_summary.json

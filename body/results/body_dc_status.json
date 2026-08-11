@@ -1,0 +1,19 @@
+{
+  "frame_idx": 2000,
+  "target_frames": 2000,
+  "n_chunks": 125,
+  "n_bwd": 44,
+  "gate_rate": 0.352,
+  "last_l1": 0.058303,
+  "cf_separation": 1.2e-05,
+  "hit_rate_recent": 0.46,
+  "action_counts": [
+    684,
+    544,
+    772
+  ],
+  "n_records": 0,
+  "wall_s": 37.2,
+  "source": "vizdoom",
+  "policy": "curiosity"
+}

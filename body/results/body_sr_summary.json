@@ -1,0 +1,125 @@
+{
+  "source": "acted_synthetic",
+  "policy": "random",
+  "seed": 42,
+  "frames": 6000,
+  "n_chunks": 375,
+  "gate": {
+    "n_chunks": 375,
+    "n_bwd": 125,
+    "gate_rate": 0.3333333333333333,
+    "window_len": 200
+  },
+  "l1_first10": [
+    0.10804,
+    0.12653,
+    0.1058,
+    0.11641,
+    0.14676,
+    0.12158,
+    0.1365,
+    0.13014,
+    0.08712,
+    0.0862
+  ],
+  "l1_last10": [
+    0.06359,
+    0.08015,
+    0.09488,
+    0.0806,
+    0.09082,
+    0.08922,
+    0.06709,
+    0.10242,
+    0.15725,
+    0.07364
+  ],
+  "l1_late_mean": 0.093677,
+  "cf_separation_early": 1.9e-05,
+  "cf_separation_late": 8.7e-05,
+  "cf_hit_rate_late": 0.6533,
+  "cf_hit_chance": 0.3333,
+  "action_counts": [
+    2002,
+    1961,
+    2037
+  ],
+  "final_probs": [
+    0.3333,
+    0.3333,
+    0.3333
+  ],
+  "final_lp": [
+    null,
+    null,
+    null
+  ],
+  "episode_boundaries": 0,
+  "acted_records": {
+    "n_seen": 6000,
+    "n_records": 3834,
+    "n_skipped_boundary": 0
+  },
+  "records_segment_sha": "d75a9fe35bc0618f17e17d4b161b603270792c4548f110827e087b134c33df61",
+  "provenance": {
+    "picks": [
+      {
+        "episode": 0,
+        "frame": 4693,
+        "exact": true,
+        "dx_redetected": true
+      },
+      {
+        "episode": 0,
+        "frame": 2676,
+        "exact": true,
+        "dx_redetected": true
+      },
+      {
+        "episode": 0,
+        "frame": 3984,
+        "exact": true,
+        "dx_redetected": true
+      },
+      {
+        "episode": 0,
+        "frame": 540,
+        "exact": true,
+        "dx_redetected": true
+      },
+      {
+        "episode": 0,
+        "frame": 2628,
+        "exact": true,
+        "dx_redetected": true
+      }
+    ],
+    "exact": "5/5",
+    "pass": true
+  },
+  "wall_s": 51.9,
+  "gifs": [
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f544.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f544.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f1040.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f1040.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f1536.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f1536.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f2032.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f2032.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f2544.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f2544.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f3040.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f3040.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f3536.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f3536.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f4032.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f4032.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f4544.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f4544.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f5040.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f5040.gif",
+    "/home/claude/o1-state/body/gifs/body_acted_synthetic_random_seed42_f5536.gif",
+    "/home/claude/o1-state/body/gifs/body_cf_acted_synthetic_random_seed42_f5536.gif"
+  ]
+}

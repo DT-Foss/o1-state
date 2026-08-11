@@ -1,0 +1,19 @@
+{
+  "frame_idx": 6000,
+  "target_frames": 6000,
+  "n_chunks": 375,
+  "n_bwd": 89,
+  "gate_rate": 0.2373,
+  "last_l1": 0.030514,
+  "cf_separation": 3e-05,
+  "hit_rate_recent": 0.46,
+  "action_counts": [
+    1642,
+    1536,
+    2822
+  ],
+  "n_records": 1522,
+  "wall_s": 48.2,
+  "source": "acted_synthetic",
+  "policy": "curiosity"
+}

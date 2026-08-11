@@ -1,0 +1,20 @@
+[body] source=acted_synthetic A=3 (['PAN_LEFT', 'PAN_RIGHT', 'HOLD']) policy=curiosity frames=6000 q=0.75 seed=42 gate=True
+[body] GIFs at frame 544: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f544.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f544.gif
+[body] GIFs at frame 1040: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f1040.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f1040.gif
+[body] GIFs at frame 1536: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f1536.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f1536.gif
+[body] GIFs at frame 2032: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f2032.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f2032.gif
+[body] GIFs at frame 2544: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f2544.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f2544.gif
+[body] GIFs at frame 3040: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f3040.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f3040.gif
+[body] GIFs at frame 3536: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f3536.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f3536.gif
+[body] GIFs at frame 4032: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f4032.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f4032.gif
+[body] GIFs at frame 4544: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f4544.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f4544.gif
+[body] GIFs at frame 5040: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f5040.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f5040.gif
+[body] GIFs at frame 5536: /home/claude/o1-state/body/gifs/body_acted_synthetic_curiosity_seed42_f5536.gif | /home/claude/o1-state/body/gifs/body_cf_acted_synthetic_curiosity_seed42_f5536.gif
+[provenance] ep 0 frame 4644 action pan_right dx +3 -> BIT-EXACT
+[provenance] ep 0 frame 2317 action pan_right dx +3 -> BIT-EXACT
+[provenance] ep 0 frame 3855 action pan_right dx +3 -> BIT-EXACT
+[provenance] ep 0 frame 219 action pan_right dx +3 -> BIT-EXACT
+[provenance] ep 0 frame 2287 action pan_left dx -3 -> BIT-EXACT
+======================================================================
+[body] DONE 6000 frames | l1 late 0.042928 | sep 1.9e-05 -> 3.1e-05 | hit 0.5333 (chance 0.3333) | records 1522 (prov 5/5) | actions [1642, 1536, 2822]
+[body] summary: body/results/body_sc_summary.json

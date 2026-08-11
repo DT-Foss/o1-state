@@ -3194,3 +3194,70 @@ artifact is a number about the defaults, not about the system.
   from below) and substrate-specific amplitude each time. The
   gate is a property of the training law, not of the data
   type.
+
+- **P87–P90 — the body organ (co-work session, merged by the
+  Lead 2026-08-11).** The acting body: action-conditioned frame
+  prediction + a learning-progress curiosity policy + acted
+  events sealed as causal records. AUTHORITATIVE
+  PRE-REGISTRATION: body/PREDICTIONS_BODY.md, written in the
+  register's discipline (clauses and falsifiers committed after
+  a 400-frame debug run, before the 6,000/2,000-frame scoring
+  runs), merged into the repo unchanged; the blocks below are
+  the Lead's English summary of record, verdicts verbatim from
+  the artifact. Instrument: body/run_body.py on
+  acted_synthetic (curiosity arm S-C, random arm S-R, seed 42,
+  6,000 frames) and vizdoom (D-C, 2,000 frames); 7/7
+  body/test_body.py re-verified by the Lead on merge.
+
+  **P87 SCORED — the body runs on the stack.** (a) SPLIT: S-C
+  learns over the lifetime (ignition plateau 0.1060 → late
+  0.0429, a 59.5% drop, bar 30%); S-R fails the bar (11.6%) —
+  with the confound named: the curiosity policy selects
+  HOLD-heavy, easy frames, so S-C's low L1 is partly selection.
+  (b) FALSIFIED in both arms as registered: late L1 does not
+  beat copy-last yet (1.10× / 1.02× against the 0.8× bar) — at
+  6,000 frames the body does not out-predict the spectator
+  baseline in raw L1; a budget finding, not a mechanism death,
+  because P88(b) shows the action channel IS alive.
+
+  **P88 SCORED — the action arrived in the model.** (a)
+  FALSIFIED as registered: counterfactual separation grew only
+  1.63× (bar 5×) on S-C. (b) CONFIRMED: cf hit rate 0.533
+  against chance 0.333 — the prediction under the TAKEN action
+  fits reality best; the action input is used, not ignored. The
+  sharper cross-arm finding: the RANDOM arm teaches the action
+  channel FASTER (separation ×4.6, hit 0.653) — the
+  context-free learning-progress bandit starves exactly the
+  actions whose consequences the embedding still has to learn
+  (exploration starvation, measured). The state-conditional
+  curiosity head is thereby a measured necessity, not a wish.
+
+  **P89 SCORED — curiosity as policy.** (a) CONFIRMED at
+  ceiling: 360/360 post-ignition chunks outside the uniform
+  band — a preference exists (HOLD-dominant). (b) FALSIFIED as
+  registered on the thirds-means bar (argmax constant,
+  shrinkage 6.5% < 30%) — while the END snapshot shows the turn
+  the bar was too coarse to catch: final policy [0.09, 0.69,
+  0.22], the pan action takes over exactly when the embedding
+  starts making pans explainable; budget finding, trajectory
+  open in body/body_curves.png. (c) CONFIRMED (0.0429 ≤ 1.05 ×
+  0.0937) with the selection confound explicitly attached;
+  the clean instrument — policy comparison on a shared probe
+  route — is named for the next wave, not smuggled into this
+  one.
+
+  **P90 SCORED — the eye writes into the world book.** (a)
+  CONFIRMED: 1,522 acted-event records in S-C, ZERO
+  contradictions against world ground truth across ALL records.
+  (b) CONFIRMED: 5/5 bit-exact replay (frame hashes + dx
+  re-detection) in both arms — provenance holds under a LEARNED
+  policy because the full action trace travels with the record.
+  (c) FALSIFIED as registered, the falsifier firing cleanly: 0
+  Doom records, diagnosed to (i) nearest-neighbor downsampling
+  destroying shift coherence and (ii) Doom movement momentum
+  making the consequence of a key state-dependent; the sign
+  structure is visible in forced probes — the mechanism lives,
+  the organ is too coarse. The v2 organ (block-mean downsample,
+  calibrated ratio bar, momentum-aware attribution) is NAMED
+  for the next registration, not patched into this one. (d)
+  vacant (0 records).
