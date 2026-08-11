@@ -1,0 +1,39 @@
+{
+  "pid": 4161906,
+  "phase": "done",
+  "config": {
+    "chunks": 100000,
+    "chunk_size": 32,
+    "mix": 0.5,
+    "seed": 42,
+    "d_model": 256,
+    "core": "gssm",
+    "pairs": "/root/o1lab/hsslm/data/graph_to_text_pairs.jsonl",
+    "out_prefix": "results/speak_life_gssm",
+    "resume": null,
+    "ckpt_every_chunks": 2000,
+    "status_every_s": 10.0,
+    "gate_q": 0.75,
+    "sample_after_smoke": false
+  },
+  "started_utc": "2026-08-11T09:06:37Z",
+  "wall_s": 10203.4,
+  "n_chunks_done": 100000,
+  "n_chunks_total": 100000,
+  "rss_gb": 0.002,
+  "disk_free_gb": 47.7,
+  "arms": {
+    "lm": {
+      "n_chunks": 50000,
+      "n_bwd": 12768,
+      "grad_tokens": 408576,
+      "gate_rate": 0.25536
+    },
+    "struct": {
+      "n_chunks": 50000,
+      "n_pairs_total": 2047
+    }
+  },
+  "lm_loss_recent": 5.984486103057861,
+  "struct_loss_recent": 4.470522403717041
+}

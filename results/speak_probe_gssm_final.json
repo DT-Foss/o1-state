@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "core": "gssm",
+    "struct_idx": 50000,
+    "wall_s": 10203.4
+  },
+  "seen_pairs": [
+    {
+      "idx": 0,
+      "structure": "<fact> its predecessors | is caused by | story <say>",
+      "target_head": "as its predecessors , the story runs parallel to the first game and follows the",
+      "decoded": "song s own and a number of her own and is a number of her own and was a number of her own and is a number of her own and a number of her own and a number of",
+      "unk_mass": 0.1188
+    },
+    {
+      "idx": 500,
+      "structure": "<fact> land boundaries ecosystem | stretches | across the <say>",
+      "target_head": "into streams , rivers and lakes , impact the natural fresh @-@ water ecosystems and",
+      "decoded": "and a number of her own and it was a song for a number of her own and was a number of her own and it was a number of her own and in her own and a number of",
+      "unk_mass": 0.118
+    },
+    {
+      "idx": 1500,
+      "structure": "<fact> actress jasika nicole | developed | fear <say>",
+      "target_head": "December 2012 interview , actress Jasika Nicole stated that she developed a fear of butterflies",
+      "decoded": "song s own and is a number of her own and was released on her own and in her own and a number of her own and it was a number of her own and is a number of her",
+      "unk_mass": 0.1167
+    }
+  ],
+  "novel": [
+    {
+      "structure": "<fact> heavy rain | flooded | the river valley <say>",
+      "decoded": "her own and a number of her own and in and it was a number of her own and is a number of her own and it was a number of her own and is a number of her own",
+      "unk_mass": 0.1126
+    },
+    {
+      "structure": "<fact> the new engine | improved | fuel efficiency <say>",
+      "decoded": "her own and a number of her own and in and it was a number of her own and is a number of her own and it was a number of her own and is a number of her own",
+      "unk_mass": 0.1122
+    },
+    {
+      "structure": "<fact> the treaty | ended | the long war <say>",
+      "decoded": "her own and a number of her own and in and it was a number of her own and is a number of her own and it was a number of her own and is a number of her own",
+      "unk_mass": 0.1112
+    }
+  ],
+  "lm": {
+    "prompt": "the game was released in",
+    "continuation": "and a number of her own and <say> song s own and s own and is a number of her own and is a number of her own and it was a number of her own and is a number",
+    "unk_mass": 0.1212
+  }
+}
