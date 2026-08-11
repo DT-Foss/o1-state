@@ -2808,3 +2808,27 @@ artifact is a number about the defaults, not about the system.
   across seeds before further policy claims. (b) fails => the
   band selects volume, not value — the signal needs a second
   feature (evidence_count, depth), stated at full strength.
+
+  **P82 SCORED (2026-08-11, results/livecausal_p82_always.json +
+  livecausal_p82_band.json, both arms 500 consults, identical
+  stream, seed 62, A3 reader).** (a) FAIL: no flip. always
+  net_balance -28.73 (negative as bet), but band net_balance
+  -25.85 — also negative. Cause located in the within-band
+  distribution: the prospective quantile window (0.75, 0.92) maps
+  to surprise [7.62, 10.11] on this stream, and its lower third
+  (7.6-8.2) runs -0.165 per consult while only the middle third
+  (8.2-9.0) is positive (+0.012, 89/166 helps) and the upper
+  third is flat (-0.003). The tercile-derived window from P79/P80
+  was computed over already-thresholded consults; transferred
+  prospectively it admits too much of the low-surprise region.
+  The paying region is narrower than the registered window.
+  Consequence as pre-committed: the policy re-registers with
+  tightened, A3-calibrated quantiles before any policy code ships
+  into the builder loop. (b) PASS: per-consult mean -0.0517 vs
+  -0.0575 — the band selects better consults, the margin is small
+  because of the low-third contamination. (c) PASS: 248 gaps
+  skipped by policy with no ledger entries and no injection cost,
+  source store clean, per-row data in both artifacts. Net
+  reading: the policy mechanism works (skips are free, selection
+  improves the per-consult average), the window placement is the
+  open variable — one number to move, not a mechanism to rebuild.
