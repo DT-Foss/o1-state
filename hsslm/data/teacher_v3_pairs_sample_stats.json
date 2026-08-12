@@ -1,0 +1,40 @@
+{
+  "n_total": 500,
+  "n_verified": 478,
+  "n_rejected": 22,
+  "acceptance_rate": 0.956,
+  "per_family": {
+    "unknown": {
+      "verified": 437,
+      "rejected": 20,
+      "total": 457,
+      "acceptance_rate": 0.9562363238512035
+    },
+    "function": {
+      "verified": 7,
+      "rejected": 0,
+      "total": 7,
+      "acceptance_rate": 1.0
+    },
+    "causal": {
+      "verified": 34,
+      "rejected": 2,
+      "total": 36,
+      "acceptance_rate": 0.9444444444444444
+    }
+  },
+  "char_len": {
+    "min": 109,
+    "max": 225,
+    "mean": 150.907949790795
+  },
+  "word_len": {
+    "min": 22,
+    "max": 44,
+    "mean": 30.730125523012553
+  },
+  "distinct_texts": 478,
+  "distinct_ratio": 1.0,
+  "n_prompt_echo_only": 0,
+  "prompt_echo_only_ratio": 0.0
+}
