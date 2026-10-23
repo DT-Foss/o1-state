@@ -1,7 +1,7 @@
 # Unification: GSSM-Selective as an Input-Controlled Reproducing Kernel over the Linear-SSM Family
 
 **Project:** GSSM — *From Markov Chains to Minkowski Space* (Foss 2026)
-**Disclosed:** 2026-06-26 · Apache-2.0
+**Disclosed:** 2026-06-26 · PolyForm Noncommercial 1.0.0
 **Companion derivation:** `analysis/RKHS_CHARACTERIZATION.md`
 **Scan integration + benchmarks:** `src/parallel_scan_integration.py` (results `src/parallel_scan_integration_results.json`)
 

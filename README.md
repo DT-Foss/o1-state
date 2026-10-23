@@ -2,7 +2,7 @@
 
 **An O(1)-state sequence model that consumes an unbounded stream at constant memory, decides from its own surprise when to learn, carries keyed holographic memory through silence, consolidates in dosed sleep, and consults an external knowledge index at runtime.**
 
-**Author:** David Tom Foss · **First disclosed:** 2026-06-26, extended continuously (commit timestamps are the record) · **License:** Apache-2.0
+**Author:** David Tom Foss · **First disclosed:** 2026-06-26, extended continuously (commit timestamps are the record) · **License:** PolyForm Noncommercial 1.0.0
 
 > This README is a **timestamped public disclosure** (prior art). Every claim below is a
 > number we measured, with the exact script that reproduces it. The dates, the code, and the
@@ -1358,7 +1358,7 @@ controls (random/shuffle) are null across 3 seeds.
 
 ## License
 
-Apache License 2.0. See `LICENSE`.
+PolyForm Noncommercial License 1.0.0. See [LICENSE](LICENSE). Commercial licenses: Wirkung Inc. (d.foss@ieee.org).
 
 ## Citation
 

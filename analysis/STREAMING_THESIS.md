@@ -1,6 +1,6 @@
 # Constant-memory consumption of an unbounded stream
 
-**Timestamped public disclosure (prior art).** Author: David Tom Foss · 2026 · Apache-2.0.
+**Timestamped public disclosure (prior art).** Author: David Tom Foss · 2026 · PolyForm Noncommercial 1.0.0.
 
 This note states a thesis and the mechanism that makes it true. The mechanism is proven and
 reproducible (script + numbers below). The thesis is the consequence that mechanism forces.

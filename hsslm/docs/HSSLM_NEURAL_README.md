@@ -249,4 +249,4 @@ See [SPEC.md](SPEC.md) for:
 
 ## License
 
-MIT License - Free for research and commercial use.
+PolyForm Noncommercial License 1.0.0 - free for noncommercial research; commercial licenses: Wirkung Inc. (d.foss@ieee.org).

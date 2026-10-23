@@ -1,6 +1,6 @@
 # Recall-Climb Dead-Ends Log — every negative is a search-space cut
 
-**Disclosed:** 2026-06-26 · Apache-2.0 · last updated 2026-06-25
+**Disclosed:** 2026-06-26 · PolyForm Noncommercial 1.0.0 · last updated 2026-06-25
 
 > A log of what did NOT work climbing GSSM holographic recall past the ~9% wall,
 > and WHY. Each negative narrows the search and leaves a breadcrumb. Nothing lost —
